@@ -174,7 +174,7 @@ return asyncJobManager;
 µBlock.updateBadgeAsync = (function(){
     var µb = µBlock;
 
-    // Cache callback definition, it was a bad idea to define this one inside 
+    // Cache callback definition, it was a bad idea to define this one inside
     // updateBadgeAsync
     var updateBadge = function(tabId) {
         var pageStore = µb.pageStoreFromTabId(tabId);
@@ -184,7 +184,7 @@ return asyncJobManager;
         }
         µb.XAL.setIcon(
             tabId,
-            { '19': 'img/browsericons/icon19-off.png', '38': 'img/browsericons/icon38-off.png' },
+            { '16': 'img/icon16-off.png', '32': 'img/icon32-off.png' },
             ''
         );
     };
