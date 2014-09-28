@@ -184,7 +184,7 @@ return asyncJobManager;
         }
         µb.XAL.setIcon(
             tabId,
-            { '16': 'img/icon16-off.png', '32': 'img/icon32-off.png' },
+            { '19': 'img/browsericons/icon19-off.png', '38': 'img/browsericons/icon38-off.png' },
             ''
         );
     };

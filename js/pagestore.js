@@ -410,8 +410,8 @@ PageStore.prototype.boolFromResult = function(result) {
 PageStore.prototype.updateBadge = function() {
     var netFiltering = this.getNetFilteringSwitch();
     var iconPaths = netFiltering ?
-        { '16': 'img/icon16.png',     '32': 'img/icon32.png' } :
-        { '16': 'img/icon16-off.png', '32': 'img/icon32-off.png' };
+        { '19': 'img/browsericons/icon19.png',     '38': 'img/browsericons/icon38.png' } :
+        { '19': 'img/browsericons/icon19-off.png', '38': 'img/browsericons/icon38-off.png' };
 
     var iconStr = '';
     if ( µb.userSettings.showIconBadge && netFiltering && this.perLoadBlockedRequestCount ) {
