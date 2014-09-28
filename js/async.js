@@ -174,7 +174,7 @@ return asyncJobManager;
 µBlock.updateBadgeAsync = (function(){
     var µb = µBlock;
 
-    // Cache callback definition, it was a bad idea to define this one inside 
+    // Cache callback definition, it was a bad idea to define this one inside
     // updateBadgeAsync
     var updateBadge = function(tabId) {
         var pageStore = µb.pageStoreFromTabId(tabId);
