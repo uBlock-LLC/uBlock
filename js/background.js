@@ -54,7 +54,7 @@ return {
     userSettings: {
         autoUpdate: true,
         collapseBlocked: true,
-        contextMenuEnabled: false,
+        contextMenuEnabled: true,
         experimentalEnabled: false,
         externalLists: defaultExternalLists,
         logRequests: false,
@@ -92,8 +92,7 @@ return {
             group: 'default'
         },
         'assets/ublock/privacy.txt': {
-            off: true,
-            title: 'µBlock filters - Privacy',
+            title: 'µBlock filters – Privacy',
             group: 'default'
         }
     },
