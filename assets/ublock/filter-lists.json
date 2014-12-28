@@ -70,6 +70,12 @@
         "group": "social",
         "homeURL": "https://easylist-downloads.adblockplus.org/fanboy-social.txt"
         },
+    "mute.bradconte.com/mute.txt": {
+        "off": true,
+        "title": "Mute: Hide Comments",
+        "group": "social",
+        "homeURL": "http://mute.bradconte.com/mute.txt"
+        },
     "someonewhocares.org/hosts/hosts": {
         "off": true,
         "title": "Dan Pollock’s hosts file",

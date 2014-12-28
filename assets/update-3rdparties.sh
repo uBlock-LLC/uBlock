@@ -14,7 +14,7 @@ THIRDPARTY_REMOTEURLS=(
     'http://hosts-file.net/.%5Cad_servers.txt'
     'http://someonewhocares.org/hosts/hosts'
     'http://winhelp2002.mvps.org/hosts.txt'
-    'http://spam404bl.com/spam404scamlist.txt'    
+    'http://spam404bl.com/spam404scamlist.txt'
     'https://publicsuffix.org/list/effective_tld_names.dat'
     'https://easylist-downloads.adblockplus.org/easylist.txt'
     'https://easylist-downloads.adblockplus.org/easylist_noelemhide.txt'
@@ -55,6 +55,7 @@ THIRDPARTY_REMOTEURLS=(
     'https://www.void.gr/kargig/void-gr-filters.txt'
     'http://abp.mozilla-hispano.org/nauscopio/filtros.txt'
     'https://gitorious.org/adblock-latvian/adblock-latvian/raw/master%3Alists/latvian-list.txt'
+    'http://mute.bradconte.com/mute.txt'
     )
 
 THIRDPARTY_LOCALURLS=(
@@ -65,7 +66,7 @@ THIRDPARTY_LOCALURLS=(
     'thirdparties/hosts-file.net/ad-servers'
     'thirdparties/someonewhocares.org/hosts/hosts'
     'thirdparties/winhelp2002.mvps.org/hosts.txt'
-    'thirdparties/spam404bl.com/spam404scamlist.txt'    
+    'thirdparties/spam404bl.com/spam404scamlist.txt'
     'thirdparties/publicsuffix.org/list/effective_tld_names.dat'
     'thirdparties/easylist-downloads.adblockplus.org/easylist.txt'
     'thirdparties/easylist-downloads.adblockplus.org/easylist_noelemhide.txt'
@@ -106,6 +107,7 @@ THIRDPARTY_LOCALURLS=(
     'thirdparties/www.void.gr/kargig/void-gr-filters.txt'
     'thirdparties/abp.mozilla-hispano.org/nauscopio/filtros.txt'
     'thirdparties/gitorious.org/adblock-latvian/adblock-latvian/raw/master_lists/latvian-list.txt'
+    'thirdparties/mute.bradconte.com/mute.txt'
     )
 
 ENTRY_INDEX=0
