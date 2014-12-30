@@ -1,0 +1,140 @@
+[Adblock Plus 2.0]
+! Title: Mute
+! Last Modified: 2014-07-04 @ 00:31:38 PDT
+! Checksum: u2DIuLrTmBlMu5K196PHKg
+! Expires: 5 days
+!
+! Author: Brad Conte (B-Con) @ http://bradconte.com
+! Homepage: mute.bradconte.com
+! Bug Tracker: https://github.com/B-Con/mute/issues
+!
+~disqus.com##iframe[src*=disqus\.com\/embed\/comments]
+~disqus.com##div#disqus_thread
+~disqus.com##div.dsq-widget
+~kinja.com##div.replies-wrapper
+~kinja.com##div.js_replies
+~facebook.com##fb\:comments
+~facebook.com##iframe[src*=facebook\.com\/plugins\/comments]
+~facebook.com##div.fb_iframe_widget
+~facebook.com##div.fb-comments
+~intensedebate.com##div#idc-container-parent
+~jive.com##div#jive-comments
+~livefyre.com##div.fyre-widget
+~livefyre.com##div#livefyre
+~realtidbits.com##div#realtidbits-comments
+~realtidbits.com##div#rtb-comments
+~realtidbits.com##div.rtb-apps-comments-container
+~thyme.comcastnets.net##div#thyme_comment
+~vanillaforums.com##iframe[id^=vanilla]
+~vanillaforums.com##body#vanilla_discussion_embed
+~viafoura.com##.viafoura
+abc.net.au,arstechnica.com,businessinsider.com,blogspot.com,denverpost.com,forbes.com,mtv.com###comments
+propublica.org,nwaonline.com,si.com,techcrunch.com,theadvocate.com,theverge.com,wordpress.com###comments
+cracked.com###Comments
+msnbc.com##.comments
+##[class~=commentlist]
+##[class~=commentList]
+##[id~=commentlist]
+##[id~=commentList]
+##[class~=comment-list]
+##[id~=comment-list]
+~quora.com##[class~=comment_list]
+##[id~=comment_list]
+##[class~=commentslist]
+##[class~=commentsList]
+##[id~=commentslist]
+##[id~=commentsList]
+##[class~=comments-list]
+~flickr.com##[id~=comments-list]
+##[class~=comments_list]
+##[id~=comments_list]
+##div#comments-title
+~stackexchange.com,~stackoverflow.com##a.comments-link
+##ol.comments
+##ol#comments
+~wikia.com##ul.comments
+##ul#comments
+##div#watch-discussion
+##iframe[src*=google\.com\/_\/widget\/render\/comments]
+##div.post-outer > div#comments, div.post-outer > div.comments
+##div#comments > dl#comments-block
+##div.comments > div[id^=comment]:not(.forumComment)
+~archlinux.org##div#comments> div.comment
+##div#comments div.comment-wrapper
+##div.comments-body
+##div.serendipity_comments
+##.userComment
+###userComments
+##.blog_comments
+##.CommentBox
+##div#commentblock
+schneier.com##div.commentbody
+##section#comments,section.coments
+imgur.com##div#under-image
+##.SB_Comments
+##.commentBoxStyle
+##.c5t_comment_list
+##h3.comments-header
+##div#tpc_thread
+##div#Discussions_Container
+##div#commentsContainer
+##div#commentsWell
+##div#CommentsContainer
+##div[id^=echo_container_]
+##div#story-comments
+##div#tugs_story_display
+##ul#Posts
+##div#commentLink
+##div#commentLinks
+##div#commentsWrapper
+###commentList
+##div.commentList
+##div#commentsDiv
+##div#commentspage
+##div#pluckCommentsContainer
+##div#iupload_comments
+##div.comment_main
+##div#discussionThreadBox
+##div[class*=postcomments]
+##div#postComments
+##div[id*=comments_block]
+##div.comment-rig
+##div#inferno-comments
+##div#commentsView
+##div#kmcom_content_bereich
+##div.readers_comments
+##div#readersComments
+##div#comments.comment-wrapper
+##div.dna-comments_module
+###responses
+###socialcomments
+##iframe[src*=commentpage]
+##div#reader-comments
+###comments-area
+##.view-comments
+###comments_queue
+##div#comments-only
+##div#commentsTab
+##div.pluck-wrap
+##div#discourse
+##div#CommentsShort
+##div.articleComments
+##div.article_comments
+##div#article-comments
+##div.b-comments_page
+##div#article_comment_box
+##div#yom-comments
+##div#comments-fullwrapper
+##div#fsn_v3_comments
+##div#scplatformComments
+##div#usercomments
+##div.j-comment-thread
+##div#echo-comments
+##div.comments-new-article
+##div#aol-comments
+##div.hdn-comments
+###article-comments
+##div#hl-comments
+##div.discussionContainer
+###liste_reactions
+~nexusmods.com##.comment-thread
