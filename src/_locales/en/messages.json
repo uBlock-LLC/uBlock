@@ -259,6 +259,10 @@
     "message":"Apply changes",
     "description":"English: Apply changes"
   },
+  "3pGroupDefault":{
+    "message":"Default",
+    "description":"English: Default"
+  },
   "3pGroupAds":{
     "message":"Ads",
     "description":"English: Ads"
