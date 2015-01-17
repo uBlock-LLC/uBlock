@@ -8,10 +8,10 @@ script: ./tools/make-${BROWSER}.sh all
 deploy:
   provider: releases
   api_key:
-    secure: BCCzIkUFHKotFPABHqPHHyPP8O6ZTPmtt6Ja/JltfO9XBwf6pk9jRiNuRmx5AeETGE2BpojvfqW622q9lCOpgtBit6xkHQC/r2NKt35qMBIPgGCb7GUr5KK7lHNTVOviK9gsOuxcVTeYw3w+zmGLUTpjieELgn4tyz9E8DcOeHE=
+    secure: FknPhrs+Y3fXAhXiK9feaSvfHrfEoa4Gxv5iOu13JHaZN0RVmnbTAkx376LU786lEtuG1RJPumkMJ0Bc0U/sgy9dz3iWkwXtXTSa4BAvuJOQA4oeeDLXoHiy0b41VFMbMKUGlUaskW5X3Q7cxpHKEZrm5HRU+dO1jemTTSlI0P0=
   file: dist/build/uBlock.${BROWSER}.${EXT}
   skip_cleanup: true
   on:
-    repo: gorhill/uBlock
+    repo: fwalch/uBlock
     tags: true
     all_branches: true
