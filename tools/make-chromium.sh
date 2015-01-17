@@ -1,9 +1,9 @@
-#!/bin/bash
+#!/bin/bash -e
 #
 # This script assumes a linux environment
 
-echo "*** uBlock.chromium: Creating web store package"
-echo "*** uBlock.chromium: Copying files"
+echo "*** uBlock.chromium: Creating web store package."
+echo "*** uBlock.chromium: Copying files."
 
 DES=dist/build/uBlock.chromium
 rm -rf $DES
@@ -25,9 +25,18 @@ cp LICENSE.txt $DES/
 
 if [ "$1" = all ]; then
     echo "*** uBlock.chromium: Creating package..."
-    pushd $(dirname $DES/)
-    zip uBlock.chromium.zip -qr $(basename $DES/)/*
-    popd
+    # Get timestamp of latest commit and change
+    # files in $DES to have this timestamp.
+    timestamp="$(git log -1 --pretty=format:"%cD")"
+    find $DES/ -exec touch -d "$timestamp" {} +
+
+    cd "$(dirname $DES/)"
+    rm -f uBlock.chromium.zip
+    find "$(basename $DES/)" -type f -print |
+      sort -d -f |
+      zip -qX0@ uBlock.chromium.zip
+    echo "*** uBlock.chromium: Created $(dirname "$DES")/uBlock.chromium.zip."
+    echo "*** uBlock.chromium: SHA $(sha256sum uBlock.chromium.zip | cut -f1 -d' ')."
 fi
 
 echo "*** uBlock.chromium: Package done."
