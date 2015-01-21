@@ -72,7 +72,7 @@ var jobCallback = function() {
             }
         }
 
-        // console.log('µBlock.updater> all is up to date');
+        
     };
 
     µb.assets.metadata(onMetadataReady);
