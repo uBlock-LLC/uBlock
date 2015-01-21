@@ -279,9 +279,9 @@
         "group": "regions",
         "homeURL": "https://www.fanboy.co.nz/fanboy-vietnam.txt"
         }    
-        "www.zoso.ro/pages/rolist.txt": {
+    "www.zoso.ro/pages/rolist.txt": {
         "off": true,
-        "title": "ROM: Romanian websites list",
+        "title": "ROU: Romanian websites list",
         "group": "regions",
         "homeURL": "http://www.zoso.ro/pages/rolist.txt"
         }
