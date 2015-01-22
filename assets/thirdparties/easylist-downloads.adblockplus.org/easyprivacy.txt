@@ -7990,7 +7990,6 @@ http://utm.
 ||stats.paypal.com^
 ||stats.piaggio.com^
 ||stats.propublica.org^
-||stats.pusher.com^
 ||stats.radiostreamlive.com^
 ||stats.searchftps.org^
 ||stats.searchsight.com^
