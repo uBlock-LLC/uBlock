@@ -72,7 +72,9 @@ var onMessage = function(request, sender, callback) {
             break;
 
         case 'reloadTab':
-            vAPI.tabs.reload(request.tabId);
+            if ( vAPI.isNoTabId(request.tabId) === false ) {
+                vAPI.tabs.reload(request.tabId);
+            }
             break;
 
         case 'userSettings':
@@ -195,11 +197,46 @@ var getStats = function(tabId) {
         r.hostnameDict = getHostnameDict(pageStore.hostnameToCountMap);
         r.contentLastModified = pageStore.contentLastModified;
         r.dynamicFilterRules = getDynamicFilterRules(pageStore.pageHostname, r.hostnameDict);
+        r.canElementPicker = r.pageHostname.indexOf('.') !== -1;
+        r.canRequestLog = canRequestLog;
     } else {
         r.hostnameDict = {};
         r.dynamicFilterRules = getDynamicFilterRules();
     }
     return r;
+};
+
+// Not the most elegant approach, but it does keep everything simple:
+// This will be set by getTargetTabId() and used by getStats().
+var canRequestLog = true;
+
+/******************************************************************************/
+
+var getTargetTabId = function(tab) {
+    canRequestLog = true;
+
+    if ( !tab ) {
+        return '';
+    }
+
+    if ( tab.url.lastIndexOf(vAPI.getURL('devtools.html'), 0) !== 0 ) {
+        return tab.id;
+    }
+
+    // If the URL is that of the network request logger, fill the popup with
+    // the data from the tab being observed by the logger.
+    // This allows a user to actually modify filtering profile for
+    // behind-the-scene requests.
+
+    canRequestLog = false;
+
+    // Extract the target tab id from the URL
+    var matches = tab.url.match(/[\?&]tabId=([^&]+)/);
+    if ( matches && matches.length === 2 ) {
+        return matches[1];
+    }
+
+    return tab.id;
 };
 
 /******************************************************************************/
@@ -209,8 +246,7 @@ var onMessage = function(request, sender, callback) {
     switch ( request.what ) {
         case 'getPopupData':
             vAPI.tabs.get(null, function(tab) {
-                var tabId = tab && tab.id;
-                callback(getStats(tabId));
+                callback(getStats(getTargetTabId(tab)));
             });
             return;
 
@@ -241,12 +277,11 @@ var onMessage = function(request, sender, callback) {
             break;
 
         case 'toggleNetFiltering':
-            µb.toggleNetFilteringSwitch(
-                request.url,
-                request.scope,
-                request.state
-            );
-            µb.updateBadgeAsync(request.tabId);
+            var pageStore = µb.pageStoreFromTabId(request.tabId);
+            if ( pageStore ) {
+                pageStore.toggleNetFilteringSwitch(request.url, request.scope, request.state);
+                µb.updateBadgeAsync(request.tabId);
+            }
             break;
 
         default:
@@ -751,7 +786,7 @@ vAPI.messaging.listen('whitelist.js', onMessage);
 /******************************************************************************/
 /******************************************************************************/
 
-// stats.js
+// devtools.js
 
 (function() {
 
@@ -767,20 +802,35 @@ var getPageDetails = function(callback) {
     var out = {};
     var tabIds = Object.keys(µb.pageStores);
 
-    var countdown = tabIds.length;
-    if ( countdown === 0 ) {
+    // Special case: behind-the-scene virtual tab (does not really exist)
+    var pos = tabIds.indexOf(vAPI.noTabId);
+    if ( pos !== -1 ) {
+        tabIds.splice(pos, 1);
+        out[vAPI.noTabId] = vAPI.i18n('logBehindTheScene');
+    }
+
+    // This can happen
+    if ( tabIds.length === 0 ) {
         callback(out);
         return;
     }
 
-    var onTabDetails = function(tab) {
-        if ( tab ) {
-            out[tab.id] = tab.title;
-        }
+    var countdown = tabIds.length;
+    var doCountdown = function() {
         countdown -= 1;
         if ( countdown === 0 ) {
             callback(out);
         }
+    };
+
+    // Let's not populate the page selector with reference to self
+    var devtoolsURL = vAPI.getURL('devtools.html');
+
+    var onTabDetails = function(tab) {
+        if ( tab && tab.url.lastIndexOf(devtoolsURL, 0) !== 0 ) {
+            out[tab.id] = tab.title;
+        }
+        doCountdown();
     };
 
     var i = countdown;
@@ -813,7 +863,7 @@ var onMessage = function(request, sender, callback) {
     callback(response);
 };
 
-vAPI.messaging.listen('stats.js', onMessage);
+vAPI.messaging.listen('devtools.js', onMessage);
 
 /******************************************************************************/
 
@@ -861,6 +911,7 @@ var restoreUserData = function(userData) {
 
     var onAllRemoved = function() {
         // Be sure to adjust `countdown` if adding/removing anything below
+        µb.XAL.keyvalSetOne('version', userData.version);
         µBlock.saveLocalSettings(onCountdown);
         µb.XAL.keyvalSetMany(userData.userSettings, onCountdown);
         µb.XAL.keyvalSetOne('remoteBlacklists', userData.filterLists, onCountdown);

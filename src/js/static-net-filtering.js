@@ -68,6 +68,7 @@ var typeNameToTypeValue = {
      'inline-script': 14 << 4,
              'popup': 15 << 4
 };
+var typeOtherToTypeValue = typeNameToTypeValue.other;
 
 const BlockAnyTypeAnyParty = BlockAction | AnyType | AnyParty;
 const BlockAnyType = BlockAction | AnyType;
@@ -1754,9 +1755,11 @@ FilterContainer.prototype.matchStringExactType = function(context, requestURL, r
     // This will be used by hostname-based filters
     pageHostname = context.pageHostname || '';
 
-    var type = typeNameToTypeValue[requestType];
-    var categories = this.categories;
+    // Be prepared to support unknown types
+    var bf = false;
     var bucket;
+    var categories = this.categories;
+    var type = typeNameToTypeValue[requestType] || typeOtherToTypeValue;
 
     // Tokenize only once
     this.tokenize(url);
@@ -1777,7 +1780,6 @@ FilterContainer.prototype.matchStringExactType = function(context, requestURL, r
     }
 
     // Test against block filters
-    bf = false;
     if ( bucket = categories[this.makeCategoryKey(BlockAnyParty | type)] ) {
         bf = this.matchTokens(bucket, url);
     }
@@ -1814,7 +1816,8 @@ FilterContainer.prototype.matchStringExactType = function(context, requestURL, r
 FilterContainer.prototype.matchString = function(context) {
     // https://github.com/gorhill/uBlock/issues/519
     // Use exact type match for anything beyond `other`
-    var type = typeNameToTypeValue[context.requestType];
+    // Also, be prepared to support unknown types
+    var type = typeNameToTypeValue[context.requestType] || typeOtherToTypeValue;
     if ( type > 8 << 4 ) {
         return this.matchStringExactType(context, context.requestURL, context.requestType);
     }
@@ -1852,11 +1855,12 @@ FilterContainer.prototype.matchString = function(context) {
     // This will be used by hostname-based filters
     pageHostname = context.pageHostname || '';
 
+    var bf, bucket;
     var categories = this.categories;
-    var bucket;
 
     // Tokenize only once
     this.tokenize(url);
+
 
     // https://github.com/gorhill/uBlock/issues/139
     // Test against important block filters.

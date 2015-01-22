@@ -67,7 +67,6 @@ var logEntryJunkyardMax = 100;
 LogEntry.prototype.init = function(details, result) {
     this.tstamp = Date.now();
     this.url = details.requestURL;
-    this.domain = details.requestDomain;
     this.hostname = details.requestHostname;
     this.type = details.requestType;
     this.result = result;
@@ -77,7 +76,7 @@ LogEntry.prototype.init = function(details, result) {
 /******************************************************************************/
 
 LogEntry.prototype.dispose = function() {
-    this.url = this.domain = this.hostname = this.type = this.result = '';
+    this.url = this.hostname = this.type = this.result = '';
     if ( logEntryJunkyard.length < logEntryJunkyardMax ) {
         logEntryJunkyard.push(this);
     }
@@ -262,7 +261,6 @@ NetFilteringResultCacheEntry.factory = function(result, type) {
 /******************************************************************************/
 
 // To mitigate memory churning
-var uidGenerator = 1;
 var netFilteringCacheJunkyard = [];
 var netFilteringCacheJunkyardMax = 10;
 
@@ -297,18 +295,7 @@ NetFilteringResultCache.prototype.init = function() {
 /******************************************************************************/
 
 NetFilteringResultCache.prototype.dispose = function() {
-    for ( var key in this.urls ) {
-        if ( this.urls.hasOwnProperty(key) === false ) {
-            continue;
-        }
-        this.urls[key].dispose();
-    }
-    this.urls = {};
-    this.count = 0;
-    if ( this.timer !== null ) {
-        clearTimeout(this.timer);
-        this.timer = null;
-    }
+    this.empty();
     this.boundPruneAsyncCallback = null;
     if ( netFilteringCacheJunkyard.length < netFilteringCacheJunkyardMax ) {
         netFilteringCacheJunkyard.push(this);
@@ -337,8 +324,19 @@ NetFilteringResultCache.prototype.add = function(context, result) {
 
 /******************************************************************************/
 
-NetFilteringResultCache.prototype.fetchAll = function() {
-    return this.urls;
+NetFilteringResultCache.prototype.empty = function() {
+    for ( var key in this.urls ) {
+        if ( this.urls.hasOwnProperty(key) === false ) {
+            continue;
+        }
+        this.urls[key].dispose();
+    }
+    this.urls = {};
+    this.count = 0;
+    if ( this.timer !== null ) {
+        clearTimeout(this.timer);
+        this.timer = null;
+    }
 };
 
 /******************************************************************************/
@@ -606,6 +604,13 @@ PageStore.prototype.getNetFilteringSwitch = function() {
 PageStore.prototype.getCosmeticFilteringSwitch = function() {
     return this.getNetFilteringSwitch() !== false &&
            this.skipCosmeticFiltering === false;
+};
+
+/******************************************************************************/
+
+PageStore.prototype.toggleNetFilteringSwitch = function(url, scope, state) {
+    µb.toggleNetFilteringSwitch(url, scope, state);
+    this.netFilteringCache.empty();
 };
 
 /******************************************************************************/

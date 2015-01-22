@@ -19,7 +19,7 @@
     Home: https://github.com/gorhill/uBlock
 */
 
-/* global µBlock, SafariBrowserTab */
+/* global self, safari, SafariBrowserTab, µBlock */
 
 // For background page
 
@@ -184,6 +184,14 @@ vAPI.tabs = {
     stack: {},
     stackId: 1
 };
+
+/******************************************************************************/
+
+vAPI.isNoTabId = function(tabId) {
+    return tabId.toString() === '-1';
+};
+
+vAPI.noTabId = '-1';
 
 /******************************************************************************/
 
@@ -352,7 +360,7 @@ vAPI.tabs.injectScript = function(tabId, details, callback) {
     }
 
     if ( details.file ) {
-        var xhr = new XMLHttpRequest;
+        var xhr = new XMLHttpRequest();
         xhr.overrideMimeType('application/x-javascript;charset=utf-8');
         xhr.open('GET', details.file, false);
         xhr.send();
@@ -583,6 +591,8 @@ vAPI.net = {};
 /******************************************************************************/
 
 vAPI.net.registerListeners = function() {
+    var µb = µBlock;
+
     // Since it's not used
     this.onBeforeSendHeaders = null;
     this.onHeadersReceived = null;
@@ -607,9 +617,11 @@ vAPI.net.registerListeners = function() {
         }
 
         if ( e.message.isURLWhiteListed ) {
-            block = µBlock.URI.hostnameFromURI(e.message.isURLWhiteListed);
-            block = µBlock.URI.domainFromHostname(block) || block;
-            e.message = !!µBlock.netWhitelist[block];
+            block = µb.URI.hostnameFromURI(e.message.isURLWhiteListed);
+            block = µb.URI.domainFromHostname(block) || block;
+
+            // TODO: revise, this can't work properly
+            e.message = !!µb.netWhitelist[block];
             return e.message;
         }
 
@@ -651,6 +663,7 @@ vAPI.net.registerListeners = function() {
             return true;
         }
 
+        e.message.hostname = µb.URI.hostnameFromURI(e.message.url);
         e.message.tabId = vAPI.tabs.getTabId(e.target);
         block = onBeforeRequest(e.message);
 

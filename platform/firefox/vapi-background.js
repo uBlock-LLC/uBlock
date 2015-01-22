@@ -19,7 +19,8 @@
     Home: https://github.com/gorhill/uBlock
 */
 
-/* global punycode */
+/* jshint esnext: true, bitwise: false */
+/* global self, Components, punycode */
 
 // For background page
 
@@ -45,7 +46,7 @@ vAPI.firefox = true;
 // TODO: read these data from somewhere...
 vAPI.app = {
     name: 'µBlock',
-    version: '0.8.5.7'
+    version: '0.8.6.0'
 };
 
 /******************************************************************************/
@@ -143,7 +144,7 @@ vAPI.storage = {
 
     sqlWhere: function(col, params) {
         if ( params > 0 ) {
-            params = Array(params + 1).join('?, ').slice(0, -2);
+            params = new Array(params + 1).join('?, ').slice(0, -2);
             return ' WHERE ' + col + ' IN (' + params + ')';
         }
 
@@ -307,25 +308,37 @@ var tabsProgressListener = {
 
         var tabId = vAPI.tabs.getTabId(browser);
 
+        // LOCATION_CHANGE_SAME_DOCUMENT = "did not load a new document"
         if ( flags & 1 ) {
             vAPI.tabs.onUpdated(tabId, {url: location.asciiSpec}, {
                 frameId: 0,
                 tabId: tabId,
                 url: browser.currentURI.asciiSpec
             });
-        } else if ( location.schemeIs('http') || location.schemeIs('https') ) {
-            vAPI.tabs.onNavigation({
-                frameId: 0,
-                tabId: tabId,
-                url: location.asciiSpec
-            });
+            return;
         }
+
+        // https://github.com/gorhill/uBlock/issues/105
+        // Allow any kind of pages
+        vAPI.tabs.onNavigation({
+            frameId: 0,
+            tabId: tabId,
+            url: location.asciiSpec
+        });
     }
 };
 
 /******************************************************************************/
 
 vAPI.tabs = {};
+
+/******************************************************************************/
+
+vAPI.isNoTabId = function(tabId) {
+    return tabId.toString() === '_';
+};
+
+vAPI.noTabId = '_';
 
 /******************************************************************************/
 
@@ -777,6 +790,7 @@ var httpObserver = {
     contractID: '@' + location.host + '/net-channel-event-sinks;1',
     ABORT: Components.results.NS_BINDING_ABORTED,
     ACCEPT: Components.results.NS_SUCCEEDED,
+    // Request types: https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIContentPolicy#Constants
     MAIN_FRAME: Ci.nsIContentPolicy.TYPE_DOCUMENT,
     VALID_CSP_TARGETS: 1 << Ci.nsIContentPolicy.TYPE_DOCUMENT |
                        1 << Ci.nsIContentPolicy.TYPE_SUBDOCUMENT,
@@ -787,7 +801,9 @@ var httpObserver = {
         5: 'object',
         6: 'main_frame',
         7: 'sub_frame',
-        11: 'xmlhttprequest'
+        11: 'xmlhttprequest',
+        12: 'object',
+        14: 'font'
     },
     lastRequest: {
         url: null,
@@ -884,11 +900,12 @@ var httpObserver = {
         }
 
         var result = onBeforeRequest.callback({
-            url: channel.URI.asciiSpec,
-            type: type,
-            tabId: details.tabId,
             frameId: details.frameId,
-            parentFrameId: details.parentFrameId
+            hostname: channel.URI.asciiHost,
+            parentFrameId: details.parentFrameId,
+            tabId: details.tabId,
+            type: type,
+            url: channel.URI.asciiSpec
         });
 
         if ( !result || typeof result !== 'object' ) {
@@ -898,7 +915,9 @@ var httpObserver = {
         if ( result.cancel === true ) {
             channel.cancel(this.ABORT);
             return true;
-        } else if ( result.redirectUrl ) {
+        }
+
+        if ( result.redirectUrl ) {
             channel.redirectionLimit = 1;
             channel.redirectTo(
                 Services.io.newURI(result.redirectUrl, null, null)
@@ -946,10 +965,11 @@ var httpObserver = {
             }
 
             result = vAPI.net.onHeadersReceived.callback({
-                url: URI.asciiSpec,
-                tabId: channelData[1],
+                hostname: URI.asciiHost,
                 parentFrameId: channelData[0] === this.MAIN_FRAME ? -1 : 0,
-                responseHeaders: result ? [{name: topic, value: result}] : []
+                responseHeaders: result ? [{name: topic, value: result}] : [],
+                tabId: channelData[1],
+                url: URI.asciiSpec
             });
 
             if ( result ) {
@@ -985,7 +1005,7 @@ var httpObserver = {
 
                 // Probably isn't the best method to identify the source tab
                 if ( tabURI.spec !== lastRequest.openerURL ) {
-                    continue
+                    continue;
                 }
 
                 sourceTabId = vAPI.tabs.getTabId(tab);
@@ -1090,11 +1110,11 @@ vAPI.net.registerListeners = function() {
         // data: and about:blank
         if ( details.url.charAt(0) !== 'h' ) {
             vAPI.net.onBeforeRequest.callback({
-                url: 'http://' + details.url.slice(0, details.url.indexOf(':')),
-                type: 'main_frame',
-                tabId: vAPI.tabs.getTabId(e.target),
                 frameId: details.frameId,
-                parentFrameId: details.parentFrameId
+                parentFrameId: details.parentFrameId,
+                tabId: vAPI.tabs.getTabId(e.target),
+                type: 'main_frame',
+                url: 'http://' + details.url.slice(0, details.url.indexOf(':'))
             });
             return;
         }
@@ -1343,6 +1363,8 @@ vAPI.contextMenu.displayMenuItem = function(e) {
     var menuitem = doc.getElementById(vAPI.contextMenu.menuItemId);
     var currentURI = gContextMenu.browser.currentURI;
 
+    // https://github.com/gorhill/uBlock/issues/105
+    // TODO: Should the element picker works on any kind of pages?
     if ( !currentURI.schemeIs('http') && !currentURI.schemeIs('https') ) {
         menuitem.hidden = true;
         return;
