@@ -1,0 +1,49 @@
+Blocker yang efisien: mudah pada memori dan CPU jejak, namun dapat memuat dan menegakkan ribuan filter dari blocker populer lainnya di luar sana. Gambaran ilustrasi efisiensi: https://github.com/gorhill/uBlock/wiki/%C2%B5Block-vs.-ABP:-efficiency-compared
+
+Penggunaan: Tombol daya besar di popup adalah untuk menonaktifkan secara permanen / mengaktifkan μBlock untuk situs web saat ini. Ini berlaku untuk situs web saat ini saja, itu bukan tombol power global.
+
+***
+
+Fleksibel, itu lebih dari sebuah "ad blocker": juga dapat membaca dan membuat filter dari file host.
+
+Keluar dari kotak, daftar ini filter dimuat dan ditegakkan:
+
+- EasyList
+- Daftar Server Ad Peter Lowe
+- EasyPrivacy
+- Domain Malware
+- Domain malware berumur panjang
+- Daftar Malware Domain
+
+Daftar lebih tersedia bagi Anda untuk memilih jika Anda ingin:
+
+- Peningkatan Daftar Pelacakan fanboy itu
+- File host Dan Pollock
+Iklan dan pelacakan server hpHosts ini -
+- HOSTS MVPS
+- Spam404
+- Dan banyak lainnya
+
+Tentu saja, semakin banyak filter aktif, semakin tinggi jejak memori. Namun, bahkan setelah menambahkan dua daftar extra fanboy itu, Ad dan pelacakan server hpHosts itu, μBlock masih memiliki jejak memori lebih rendah dari blocker yang sangat populer lainnya di luar sana.
+
+Perlu diketahui juga bahwa memilih beberapa dari daftar ekstra dapat menyebabkan kemungkinan lebih tinggi dari situs web kerusakan - terutama daftar yang biasanya digunakan sebagai file host.
+
+***
+
+Tanpa daftar preset filter, ekstensi ini adalah apa-apa. Jadi, jika Anda pernah benar-benar ingin menyumbangkan sesuatu, berpikir tentang orang-orang yang bekerja keras untuk mempertahankan daftar filter yang Anda gunakan, yang dibuat tersedia untuk digunakan oleh semua gratis.
+
+***
+
+Gratis.
+Open source dengan lisensi publik (GPLv3)
+Untuk pengguna oleh pengguna.
+
+Kontributor @ Github: https://github.com/gorhill/uBlock/graphs/contributors
+Kontributor @ Crowdin: https://crowdin.net/project/ublock
+
+***
+
+Ini cukup versi awal, ingatlah ini ketika Anda meninjau.
+
+Log perubahan proyek:
+https://github.com/gorhill/uBlock/releases
