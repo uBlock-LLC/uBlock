@@ -5,7 +5,7 @@
 echo "*** uBlock.firefox: Copying files"
 
 DES=dist/build/uBlock.firefox
-rm -r $DES
+rm -rf $DES
 mkdir -p $DES
 
 cp -R assets $DES/
@@ -25,7 +25,7 @@ cp platform/firefox/install.rdf $DES/
 cp LICENSE.txt $DES/
 
 echo "*** uBlock.firefox: Generating meta..."
-python tools/make-firefox-meta.py $DES/
+python3 tools/make-firefox-meta.py $DES/
 
 if [ "$1" = all ]; then
     echo "*** uBlock.firefox: Creating package..."
