@@ -18,6 +18,7 @@
 * [Wiki](https://github.com/gorhill/uBlock/wiki)
 
 ![Build](https://travis-ci.org/gorhill/uBlock.svg?branch=master)
+[![Inline docs](http://inch-ci.org/github/gorhill/uBlock.svg?branch=master)](http://inch-ci.org/github/gorhill/uBlock)
 
 ## Philosophy
 
