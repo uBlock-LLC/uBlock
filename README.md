@@ -4,16 +4,16 @@
 **支持多浏览器的高效过滤工具，快速、有效且简洁。**
 
 * [用途和常规信息](#基本观点)
-* [性能和运行效率](#performance)
-  * [内存占用](#memory)
-  * [CPU](#cpu)
-  * [Blocking](#blocking)
-  * [快速测试](#quick-tests)
-* [安装](#installation)
+* [性能和运行效率](#性能比较)
+  * [内存占用](#内存占用)
+  * [CPU 占用](#cpu-占用)
+  * [屏蔽能力](#屏蔽能力)
+  * [快速测试](#快速测试)
+* [安装](#安装)
   * [Chromium](#chromium)
   * [Firefox](#firefox)
   * [Safari](#safari)
-* [发布历史](#release-history)
+* [发布历史](#发布历史)
 * [Wiki](https://github.com/fang5566/uBlock/wiki)
 
 # ![Build](https://travis-ci.org/gorhill/uBlock.svg?branch=master)
@@ -28,9 +28,9 @@ Ads, "unintrusive" or not, are just the visible portions of privacy-invading app
 
 _EasyList_, _Peter Lowe's Adservers_, _EasyPrivacy_ are enabled by default when you install µBlock. Many more lists are readily available to block trackers, analytics, and more. Hosts files are also supported.
 
-## Performance
+## 性能比较
 
-#### Memory
+#### 内存占用
 
 <div align="center">
 从平均值来看，µBlock <b>的确</b>让你的浏览器运行起来更轻巧。<sup>[1]</sup><br><br>
@@ -50,7 +50,7 @@ Safari<br>
 
 <sup>[2] 重要提示：目前[Chromium 39+ 存在一个每次打开扩展弹出界面时会产生新的内存泄漏的 bug](https://code.google.com/p/chromium/issues/detail?id=441500)，会影响<i>所有</i>扩展，在测量 Chromium 的内存占用时别忘了这点。我自己在测试中已避免完全打开弹出界面。</sup><br>
 
-#### CPU
+#### CPU 占用
 
 <p align="center">
 µBlock 也让 CPU 更省心<br>
@@ -58,7 +58,7 @@ Safari<br>
 <sup>基准测试详细情况参见：<a href="https://github.com/gorhill/uBlock/blob/master/doc/benchmarks/cpu-usage-overall-20141226.ods">这个 LibreOffice spreadsheet</a>。</sup>
 </p>
 
-#### Blocking
+#### 屏蔽能力
 
 <p align="center">
 变得简洁高效并不意味着屏蔽得少<br>
@@ -67,13 +67,13 @@ Safari<br>
 <a href="https://github.com/fang5566/uBlock/wiki/%C2%B5Block-and-others:-Blocking-ads,-trackers,-malwares">µBlock and others: Blocking ads, trackers, malwares</a>。
 </p>
 
-#### Quick tests
+#### 快速测试
 
 - [Index](http://raymondhill.net/ublock/tests.html)
 - [Web page components](http://raymondhill.net/ublock/tiles1.html)
 - [Popups](http://raymondhill.net/ublock/popup.html)
 
-## Installation
+## 安装
 
 你可以随意阅读一下 [about the extension's required permissions](https://github.com/gorhill/uBlock/wiki/About-the-required-permissions)。
 
@@ -95,15 +95,15 @@ Safari<br>
 
 <sup>早于 Safari 8.0 的版本存在一个在 μBlock 安装过程中会崩溃的 bug，所以不建议你使用这些版本安装 μBlock（*如果你一定要安装，请自担风险*）。</sup>
 
-#### Note for all browsers
+#### 所有浏览器的注意事项
 
 为了能够真正感受到 µBlock 的高效，建议你不要同时安装其他的广告过滤工具，比如 AdBlock 或 Adblock Plus，因为 µBlock [绝不逊色于](#blocking)这些流行的广告过滤工具。
 
-## Release History
+## 发布历史
 
 你可以打开[发布页面](https://github.com/gorhill/uBlock/releases)了解所有发布历史以及每次发布时的关键更新。
 
-## Documentation
+## 文档
 
 [Quick guide: popup user interface](https://github.com/fang5566/uBlock/wiki/Quick-guide:-popup-user-interface)
 
@@ -111,7 +111,7 @@ Safari<br>
 
 你还可以了解[动态过滤](https://github.com/gorhill/uBlock/wiki/Dynamic-filtering:-quick-guide)等高级功能，更多的高级用法参见 [µBlock 的 wiki 页面](https://github.com/gorhill/uBlock/wiki)。
 
-## About
+## 关于
 
 它是免费、开源的，属于用户也来自用户，无需任何捐助。
 
@@ -119,6 +119,6 @@ Safari<br>
 
 你可以通过协助翻译我们的项目来尽一份力，项目托管在 [Crowdin](https://crowdin.net/project/ublock)，你可以在这里参与 μBlock 的本地化工作。
 
-## License
+## 许可协议
 
 [GPLv3](https://github.com/gorhill/uBlock/blob/master/LICENSE.txt)
