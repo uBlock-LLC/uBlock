@@ -3,22 +3,22 @@
 
 **支持多浏览器的高效过滤工具，快速、有效且简洁。**
 
-* [Purpose & General Info](#philosophy)
-* [Performance and Efficiency](#performance)
-  * [Memory](#memory)
+* [用途和常规信息](#基本观点)
+* [性能和运行效率](#performance)
+  * [内存占用](#memory)
   * [CPU](#cpu)
   * [Blocking](#blocking)
-  * [Quick tests](#quick-tests)
-* [Installation](#installation)
+  * [快速测试](#quick-tests)
+* [安装](#installation)
   * [Chromium](#chromium)
   * [Firefox](#firefox)
   * [Safari](#safari)
-* [Release History](#release-history)
-* [Wiki](https://github.com/gorhill/uBlock/wiki)
+* [发布历史](#release-history)
+* [Wiki](https://github.com/fang5566/uBlock/wiki)
 
 # ![Build](https://travis-ci.org/gorhill/uBlock.svg?branch=master)
 
-## Philosophy
+## 基本观点
 
 µBlock 不是一个*广告过滤工具*，它是具有一般性用途的过滤工具，屏蔽广告的功能是通过支持 [Adblock Plus 过滤规则语法](https://adblockplus.org/en/filters)实现的。µBlock 还[扩充](https://github.com/gorhill/uBlock/wiki/Filter-syntax-extensions)了语法，开发伊始就支持自定义过滤规则。
 
