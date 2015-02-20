@@ -46,7 +46,7 @@ Safari<br>
 
 </div>
 
-<sup>[1] 基准测试详细情况参见： <a href="https://github.com/gorhill/uBlock/wiki/Firefox-version:-benchmarking-memory-footprint">Firefox version: benchmarking memory footprint</a>.</sup><br>
+<sup>[1] 基准测试详细情况参见： <a href="https://github.com/fang5566/uBlock/wiki/Firefox-version:-benchmarking-memory-footprint">Firefox version: benchmarking memory footprint</a>。</sup><br>
 
 <sup>[2] 重要提示：目前[Chromium 39+ 存在一个每次打开扩展弹出界面时会产生新的内存泄漏的 bug](https://code.google.com/p/chromium/issues/detail?id=441500)，会影响<i>所有</i>扩展，在测量 Chromium 的内存占用时别忘了这点。我自己在测试中已避免完全打开弹出界面。</sup><br>
 
@@ -55,16 +55,16 @@ Safari<br>
 <p align="center">
 µBlock 也让 CPU 更省心<br>
 <img src="https://raw.githubusercontent.com/gorhill/uBlock/master/doc/benchmarks/cpu-usage-overall-chart-20141226.png" /><br>
-<sup>基准测试详细情况参见：<a href="https://github.com/gorhill/uBlock/blob/master/doc/benchmarks/cpu-usage-overall-20141226.ods">this LibreOffice spreadsheet</a>.</sup>
+<sup>基准测试详细情况参见：<a href="https://github.com/gorhill/uBlock/blob/master/doc/benchmarks/cpu-usage-overall-20141226.ods">这个 LibreOffice spreadsheet</a>。</sup>
 </p>
 
 #### Blocking
 
 <p align="center">
-Being lean and efficient doesn't mean blocking less<br>
+变得简洁高效并不意味着屏蔽得少<br>
 <img src="https://raw.githubusercontent.com/gorhill/uBlock/master/doc/benchmarks/privex-201409-30.png" /><br>
-<sup>For details of benchmark, see 
-<a href="https://github.com/gorhill/uBlock/wiki/%C2%B5Block-and-others:-Blocking-ads,-trackers,-malwares">µBlock and others: Blocking ads, trackers, malwares</a>.
+<sup>基准测试详细情况参见： 
+<a href="https://github.com/fang5566/uBlock/wiki/%C2%B5Block-and-others:-Blocking-ads,-trackers,-malwares">µBlock and others: Blocking ads, trackers, malwares</a>。
 </p>
 
 #### Quick tests
@@ -75,25 +75,25 @@ Being lean and efficient doesn't mean blocking less<br>
 
 ## Installation
 
-Feel free to read [about the extension's required permissions](https://github.com/gorhill/uBlock/wiki/About-the-required-permissions).
+你可以随意阅读一下 [about the extension's required permissions](https://github.com/gorhill/uBlock/wiki/About-the-required-permissions)。
 
 #### Chromium
 
-You can install the latest version [manually](https://github.com/gorhill/uBlock/tree/master/dist#install), from the [Chrome Web Store](https://chrome.google.com/webstore/detail/cjpalhdlnbpafiamejdnhcphjbkeiagm), or from the [Opera store](https://addons.opera.com/en-gb/extensions/details/ublock/).
+你可以打开[Chrome 网上应用店](https://chrome.google.com/webstore/detail/cjpalhdlnbpafiamejdnhcphjbkeiagm)或 [Opera 商店](https://addons.opera.com/en-gb/extensions/details/ublock/)来[手动](https://github.com/gorhill/uBlock/tree/master/dist#install)安装最新的版本。
 
 #### Firefox
 
-Install from [Firefox Add-ons homepage](https://addons.mozilla.org/en-US/firefox/addon/ublock/), or you can install by downloading the latest [uBlock.firefox.xpi](https://github.com/gorhill/uBlock/releases) file, and by dragging the downloaded `xpi` file to your add-on page.
+你可以到 [Firefox 附加组件主页](https://addons.mozilla.org/en-US/firefox/addon/ublock/)安装，或直接下载最新版本的 [uBlock.firefox.xpi](https://github.com/gorhill/uBlock/releases) 文件，将下载好的 `xpi` 文件拖动到附加组件管理器安装。
 
 #### Safari
 
-##### 8.0 or newer only
+##### 仅支持 8.0 或更新的版本
 
-You can get and install the latest µBlock for Safari [right here](https://chrismatic.io/ublock).
+你可以到[这里](https://chrismatic.io/ublock)安装最新版本的 µBlock for Safari。
 
-µBlock is also available on the [Safari Extension Gallery](https://extensions.apple.com/details/?id=net.gorhill.uBlock-96G4BAKDQ9), although that's not guaranteed to be the latest version.
+你还可以在 [Safari Extension Gallery](https://extensions.apple.com/details/?id=net.gorhill.uBlock-96G4BAKDQ9) 下载 μBlock，不过不能保证你下载的是最新的版本。
 
-<sup>Safari versions prior to 8.0 have a bug triggering a crash during µBlock installation. It's not recommended that you attempt to install µBlock on them (*if you must, do it at your own risk*).</sup>
+<sup>早于 Safari 8.0 的版本存在一个在 μBlock 安装过程中会崩溃的 bug，所以不建议你使用这些版本安装 μBlock（*如果你一定要安装，请自担风险*）。</sup>
 
 #### Note for all browsers
 
