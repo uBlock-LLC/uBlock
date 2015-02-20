@@ -97,7 +97,7 @@ Safari<br>
 
 #### 所有浏览器的注意事项
 
-为了能够真正感受到 µBlock 的高效，建议你不要同时安装其他的广告过滤工具，比如 AdBlock 或 Adblock Plus，因为 µBlock [绝不逊色于](#blocking)这些流行的广告过滤工具。
+为了能够真正感受到 µBlock 的高效，建议你不要同时安装其他的广告过滤工具，比如 AdBlock 或 Adblock Plus，因为 µBlock [绝不逊色于](#屏蔽能力)这些流行的广告过滤工具。
 
 ## 发布历史
 
