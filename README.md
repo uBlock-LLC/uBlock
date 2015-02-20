@@ -97,32 +97,28 @@ Safari<br>
 
 #### Note for all browsers
 
-To benefit from µBlock's higher efficiency, it's advised that you don't use other inefficient blockers at the same time (such as AdBlock or Adblock Plus). µBlock will do [as well or better](#blocking) than most popular ad blockers.
+为了能够真正感受到 µBlock 的高效，建议你不要同时安装其他的广告过滤工具，比如 AdBlock 或 Adblock Plus，因为 µBlock [绝不逊色于](#blocking)这些流行的广告过滤工具。
 
 ## Release History
 
-See the [releases pages](https://github.com/gorhill/uBlock/releases) for a history of releases and highlights for each release.
+你可以打开[发布页面](https://github.com/gorhill/uBlock/releases)了解所有发布历史以及每次发布时的关键更新。
 
 ## Documentation
 
-[Quick guide: popup user interface](https://github.com/gorhill/uBlock/wiki/Quick-guide:-popup-user-interface)
+[Quick guide: popup user interface](https://github.com/fang5566/uBlock/wiki/Quick-guide:-popup-user-interface)
 
 ![Popup](https://raw.githubusercontent.com/gorhill/uBlock/master/doc/img/popup-1.png)
 
-For advanced usage, read about [dynamic filtering](https://github.com/gorhill/uBlock/wiki/Dynamic-filtering:-quick-guide) and more on [µBlock's wiki](https://github.com/gorhill/uBlock/wiki).
+你还可以了解[动态过滤](https://github.com/gorhill/uBlock/wiki/Dynamic-filtering:-quick-guide)等高级功能，更多的高级用法参见 [µBlock 的 wiki 页面](https://github.com/gorhill/uBlock/wiki)。
 
 ## About
 
-Free. Open source. For users by users. No donations sought.
+它是免费、开源的，属于用户也来自用户，无需任何捐助。
 
-Without the preset lists of filters, this extension is nothing. So if ever you
-really do want to contribute something, think about the people working hard
-to maintain the filter lists you are using, which were made available to use by
-all for free.
+没有预置的规则列表，扩展什么事也做不到，所以如果你真心想尽一份力，不妨记住那些维护规则列表的人，是他们的努力才让我们能免费用上这些规则列表。
 
-You can contribute by helping to translate this project. There's an
-[entry on Crowdin](https://crowdin.net/project/ublock) where you may contribute to µBlock's localization.
+你可以通过协助翻译我们的项目来尽一份力，项目托管在 [Crowdin](https://crowdin.net/project/ublock)，你可以在这里参与 μBlock 的本地化工作。
 
 ## License
 
-[GPLv3](https://github.com/gorhill/uBlock/blob/master/LICENSE.txt).
+[GPLv3](https://github.com/gorhill/uBlock/blob/master/LICENSE.txt)
