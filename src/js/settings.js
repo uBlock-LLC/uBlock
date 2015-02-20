@@ -39,7 +39,7 @@ var exportToFile = function() {
             return;
         }
         var now = new Date();
-        var filename = vAPI.i18n('aboutBackupFilename')
+        var filename = getBrowser() + vAPI.i18n('aboutBackupFilename')
             .replace('{{datetime}}', now.toLocaleString())
             .replace(/ +/g, '_');
         vAPI.download({
@@ -50,6 +50,22 @@ var exportToFile = function() {
 
     messager.send({ what: 'getUserData' }, onUserDataReady);
 };
+
+var getBrowser = function(){
+    var userAgent = navigator.userAgent;
+
+    if(userAgent.indexOf("Chrome") > -1){
+        return "(Google Chrome) ";
+    }
+    if(userAgent.indexOf("Safari") > -1){
+        return "(Apple Safari) ";
+    }
+    if(userAgent.indexOf("Firefox") > -1){
+        return "(Mozilla Firefox) ";
+    }
+
+    return "";
+}
 
 /******************************************************************************/
 
