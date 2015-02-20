@@ -1,5 +1,5 @@
 # <sub>![logo](https://raw.githubusercontent.com/gorhill/uBlock/master/src/img/browsericons/icon38.png)</sub> µBlock
-<sub>pronounce _you-block_ as in "you decide what enters your browser" / see the "µ" as a stylish "u", to emphasize small resource footprint<br></sub><sup>sorry for the dubious name, we are coders, not marketers</sup>
+<sub>请将它读作 _you-block_，意思是"你来决定什么可以进入你的浏览器"，"µ" 可以看作是换装后的 "u"，为的是强调它的低资源占用。<br></sub><sup>请原谅我们取了这么个含糊的名字，毕竟我们是写代码的，而不是搞营销的。</sup>
 
 **支持多浏览器的高效过滤工具，快速、有效且简洁。**
 
