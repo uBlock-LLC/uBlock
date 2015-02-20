@@ -1,7 +1,7 @@
 # <sub>![logo](https://raw.githubusercontent.com/gorhill/uBlock/master/src/img/browsericons/icon38.png)</sub> µBlock
 <sub>pronounce _you-block_ as in "you decide what enters your browser" / see the "µ" as a stylish "u", to emphasize small resource footprint<br></sub><sup>sorry for the dubious name, we are coders, not marketers</sup>
 
-**支持多浏览器的高效过滤工具，快速、有效且精益求精。**
+**支持多浏览器的高效过滤工具，快速、有效且简洁。**
 
 * [Purpose & General Info](#philosophy)
 * [Performance and Efficiency](#performance)
@@ -33,7 +33,7 @@ _EasyList_, _Peter Lowe's Adservers_, _EasyPrivacy_ are enabled by default when 
 #### Memory
 
 <div align="center">
-On average, µBlock <b>really</b> does make your browser run leaner. <sup>[1]</sup><br><br>
+从平均值来看，µBlock <b>的确</b>让你的浏览器运行起来更轻巧。<sup>[1]</sup><br><br>
 
 Chromium <sup>[2]</sup><br>
 <img src="https://raw.githubusercontent.com/gorhill/uBlock/master/doc/benchmarks/mem-usage-overall-chart-20141224.png" /><br><br>
@@ -46,9 +46,9 @@ Safari<br>
 
 </div>
 
-<sup>[1] Details of the benchmark available at <a href="https://github.com/gorhill/uBlock/wiki/Firefox-version:-benchmarking-memory-footprint">Firefox version: benchmarking memory footprint</a>.</sup><br>
+<sup>[1] 基准测试详细情况参见： <a href="https://github.com/gorhill/uBlock/wiki/Firefox-version:-benchmarking-memory-footprint">Firefox version: benchmarking memory footprint</a>.</sup><br>
 
-<sup>[2] Important note: There is currently a [bug in Chromium 39+ which causes a new memory leak each time the popup UI of an extension is opened](https://code.google.com/p/chromium/issues/detail?id=441500). This affects <i>all</i> extensions. Keep this in mind when measuring Chromium's memory usage. In the benchmarks, I avoided opening the popups completely.</sup><br>
+<sup>[2] 重要提示：目前[Chromium 39+ 存在一个每次打开扩展弹出界面时会产生新的内存泄漏的 bug](https://code.google.com/p/chromium/issues/detail?id=441500)，会影响<i>所有</i>扩展，在测量 Chromium 的内存占用时别忘了这点。我自己在测试中已避免完全打开弹出界面。</sup><br>
 
 #### CPU
 
