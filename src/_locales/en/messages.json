@@ -532,8 +532,8 @@
     "description":"English: {{value}} minutes ago"
   },
   "elapsedOneHourAgo":{
-    "message":"a hour ago",
-    "description":"English: a hour ago"
+    "message":"an hour ago",
+    "description":"English: an hour ago"
   },
   "elapsedManyHoursAgo":{
     "message":"{{value}} hours ago",
