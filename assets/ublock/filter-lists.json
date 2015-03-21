@@ -149,6 +149,12 @@
         "group": "regions",
         "homeURL": "http://abp.mozilla-hispano.org/nauscopio/filtros.txt"
         },
+    "adblock.ee/estonian-list.txt": {
+        "off": true,
+        "title": "EST: Estonian Adblock list",
+        "group": "regions",
+        "homeURL": "http://adblock.ee/list.php"
+        },
     "https://raw.githubusercontent.com/liamja/Prebake/master/obtrusive.txt": {
         "off": true,
         "title": "EU: Prebake - Filter Obtrusive Cookie Notices",
