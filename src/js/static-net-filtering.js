@@ -1,6 +1,6 @@
 /*******************************************************************************
 
-    µBlock - a browser extension to block requests.
+    uBlock - a browser extension to block requests.
     Copyright (C) 2014 Raymond Hill
 
     This program is free software: you can redistribute it and/or modify
@@ -20,17 +20,17 @@
 */
 
 /* jshint bitwise: false, esnext: true, boss: true */
-/* global punycode, µBlock */
+/* global punycode, uBlock */
 
 /******************************************************************************/
 
-µBlock.staticNetFilteringEngine = (function(){
+uBlock.staticNetFilteringEngine = (function(){
 
 'use strict';
 
 /******************************************************************************/
 
-var µb = µBlock;
+var ub = uBlock;
 
 // fedcba9876543210
 // |      |   | |||
@@ -188,7 +188,7 @@ var strToRegex = function(s, anchor) {
         reStr += reStr + '$';
     }
 
-    //console.debug('µBlock.staticNetFilteringEngine: created RegExp("%s")', reStr);
+    //console.debug('uBlock.staticNetFilteringEngine: created RegExp("%s")', reStr);
     return new RegExp(reStr);
 };
 
@@ -1366,7 +1366,7 @@ FilterParser.prototype.parse = function(raw) {
             var matches = this.reIsolateHostname.exec(s);
             if ( matches && matches.length === 3 ) {
                 s = punycode.toASCII(matches[1]) + matches[2];
-                //console.debug('µBlock.staticNetFilteringEngine/FilterParser.parse():', raw, '=', s);
+                //console.debug('uBlock.staticNetFilteringEngine/FilterParser.parse():', raw, '=', s);
             }
         }
     }
@@ -2003,7 +2003,7 @@ FilterContainer.prototype.matchStringExactType = function(context, requestURL, r
 
     // These registers will be used by various filters
     pageHostnameRegister = context.pageHostname || '';
-    requestHostnameRegister = µb.URI.hostnameFromURI(requestURL);
+    requestHostnameRegister = ub.URI.hostnameFromURI(requestURL);
 
     var party = isFirstParty(context.pageDomain, requestHostnameRegister) ? FirstParty : ThirdParty;
 

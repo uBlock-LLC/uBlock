@@ -20,11 +20,11 @@
 */
 
 /* global vAPI */
-/* exported µBlock */
+/* exported uBlock */
 
 /******************************************************************************/
 
-var µBlock = (function() {
+var uBlock = (function() {
 
 'use strict';
 

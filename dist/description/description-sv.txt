@@ -7,7 +7,7 @@ Användning: Den stora strömbrytarikonen i popuprutan är till för att avaktiv
 
 ***
 
-µBlock är inte enbart en "reklamblockerare": den kan också läsa och skapa filter från hosts-filer.
+uBlock är inte enbart en "reklamblockerare": den kan också läsa och skapa filter från hosts-filer.
 
 Som standard är följande filterlistor laddade och applicerade:
 
@@ -31,7 +31,7 @@ Tänk på att genom att aktivera vissa av dessa extra filterlistor finns det st�
 
 ***
 
-µBlock vore ingenting utan filterlistorna. Så om du vill bidra med någonting, tänk på människorna som arbetar hårt med att upprätthålla de filterlistor du använder, vilka är fritt tillgängliga för allas användning.
+uBlock vore ingenting utan filterlistorna. Så om du vill bidra med någonting, tänk på människorna som arbetar hårt med att upprätthålla de filterlistor du använder, vilka är fritt tillgängliga för allas användning.
 
 ***
 

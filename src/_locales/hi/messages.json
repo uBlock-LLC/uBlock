@@ -8,7 +8,7 @@
     "description":"this will be in the chrome web store: must be 132 characters or less"
   },
   "dashboardName":{
-    "message":"µBlock — डैशबोर्ड",
+    "message":"uBlock — डैशबोर्ड",
     "description":"English: uBlock — Dashboard"
   },
   "settingsPageName":{

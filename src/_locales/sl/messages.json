@@ -8,7 +8,7 @@
     "description":"this will be in the chrome web store: must be 132 characters or less"
   },
   "dashboardName":{
-    "message":"µBlock — Nadzorna plošča",
+    "message":"uBlock — Nadzorna plošča",
     "description":"English: uBlock — Dashboard"
   },
   "settingsPageName":{
@@ -40,7 +40,7 @@
     "description":"appears as tab name in dashboard"
   },
   "popupPowerSwitchInfo":{
-    "message":"Klik: onemogoči\/omogoči µBlock za to stran.\n\nCtrl+klik: onemogoči µBlock samo na tej strani.",
+    "message":"Klik: onemogoči\/omogoči uBlock za to stran.\n\nCtrl+klik: onemogoči uBlock samo na tej strani.",
     "description":"English: Click: disable\/enable uBlock for this site.\n\nCtrl+click: disable uBlock only on this page."
   },
   "popupBlockedRequestPrompt":{
@@ -520,7 +520,7 @@
     "description":"Message to display when an error occurred during restore"
   },
   "aboutResetDataConfirm":{
-    "message":"Vse vaše spremembe bodo izbrisane, µBlock pa se bo ponovno zagnal.\n\nPonastavim µBlock na tovarniške nastavitve?",
+    "message":"Vse vaše spremembe bodo izbrisane, uBlock pa se bo ponovno zagnal.\n\nPonastavim uBlock na tovarniške nastavitve?",
     "description":"Message asking user to confirm reset"
   },
   "errorCantConnectTo":{

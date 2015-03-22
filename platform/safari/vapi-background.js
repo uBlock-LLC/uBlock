@@ -19,7 +19,7 @@
     Home: https://github.com/gorhill/uBlock
 */
 
-/* global self, safari, SafariBrowserTab, µBlock */
+/* global self, safari, SafariBrowserTab, uBlock */
 
 // For background page
 
@@ -68,7 +68,7 @@
     /******************************************************************************/
 
     vAPI.app.restart = function() {
-        µBlock.restart();
+        uBlock.restart();
     };
 
     /******************************************************************************/
@@ -614,7 +614,7 @@
             return;
         }
 
-        console.error('µBlock> messaging > unknown request: %o', request.message);
+        console.error('uBlock> messaging > unknown request: %o', request.message);
 
         // Unhandled:
         // Need to callback anyways in case caller expected an answer, or
@@ -677,7 +677,7 @@
     /******************************************************************************/
 
     vAPI.net.registerListeners = function() {
-        var µb = µBlock;
+        var ub = uBlock;
 
         // Until Safari has more specific events, those are instead handled
         // in the onBeforeRequestAdapter; clean them up so they're garbage-collected
@@ -723,7 +723,7 @@
                     });
                     break;
                 default:
-                    e.message.hostname = µb.URI.hostnameFromURI(e.message.url);
+                    e.message.hostname = ub.URI.hostnameFromURI(e.message.url);
                     e.message.tabId = vAPI.tabs.getTabId(e.target);
                     var blockVerdict = onBeforeRequestClient(e.message);
                     if(blockVerdict && blockVerdict.cancel) {

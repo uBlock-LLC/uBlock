@@ -40,7 +40,7 @@
     "description":"appears as tab name in dashboard"
   },
   "popupPowerSwitchInfo":{
-    "message":"Klik: trajno onemogućiti\/omogućiti uBlock za ovaj sajt.\n\nCtrl+klik: onemogućiti µBlock samo za ovu stranicu.",
+    "message":"Klik: trajno onemogućiti\/omogućiti uBlock za ovaj sajt.\n\nCtrl+klik: onemogućiti uBlock samo za ovu stranicu.",
     "description":"English: Click: disable\/enable uBlock for this site.\n\nCtrl+click: disable uBlock only on this page."
   },
   "popupBlockedRequestPrompt":{
@@ -520,7 +520,7 @@
     "description":"Message to display when an error occurred during restore"
   },
   "aboutResetDataConfirm":{
-    "message":"Sve vaše postavke će biti obrisane i uBlock će se ponovno pokrenuti.  \n\nVraćanje µBlock tvorničkih postavki?",
+    "message":"Sve vaše postavke će biti obrisane i uBlock će se ponovno pokrenuti.  \n\nVraćanje uBlock tvorničkih postavki?",
     "description":"Message asking user to confirm reset"
   },
   "errorCantConnectTo":{

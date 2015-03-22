@@ -1,6 +1,6 @@
 /*******************************************************************************
 
-    µBlock - a browser extension to block requests.
+    uBlock - a browser extension to block requests.
     Copyright (C) 2014 Raymond Hill
 
     This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
     Home: https://github.com/gorhill/uBlock
 */
 
-/* global vAPI, µBlock */
+/* global vAPI, uBlock */
 
 /******************************************************************************/
 
@@ -64,7 +64,7 @@ var matchWhitelistDirective = function(url, hostname, directive) {
 
 /******************************************************************************/
 
-µBlock.getNetFilteringSwitch = function(url) {
+uBlock.getNetFilteringSwitch = function(url) {
     var netWhitelist = this.netWhitelist;
     var buckets, i;
     var pos = url.indexOf('#');
@@ -93,7 +93,7 @@ var matchWhitelistDirective = function(url, hostname, directive) {
 
 /******************************************************************************/
 
-µBlock.toggleNetFilteringSwitch = function(url, scope, newState) {
+uBlock.toggleNetFilteringSwitch = function(url, scope, newState) {
     var currentState = this.getNetFilteringSwitch(url);
     if ( newState === undefined ) {
         newState = !currentState;
@@ -154,7 +154,7 @@ var matchWhitelistDirective = function(url, hostname, directive) {
 
 /******************************************************************************/
 
-µBlock.stringFromWhitelist = function(whitelist) {
+uBlock.stringFromWhitelist = function(whitelist) {
     var r = {};
     var i, bucket;
     for ( var key in whitelist ) {
@@ -172,7 +172,7 @@ var matchWhitelistDirective = function(url, hostname, directive) {
 
 /******************************************************************************/
 
-µBlock.whitelistFromString = function(s) {
+uBlock.whitelistFromString = function(s) {
     var whitelist = {
         '#': []
     };
@@ -225,7 +225,7 @@ var matchWhitelistDirective = function(url, hostname, directive) {
 
 // Return all settings if none specified.
 
-µBlock.changeUserSettings = function(name, value) {
+uBlock.changeUserSettings = function(name, value) {
     if ( name === undefined ) {
         return this.userSettings;
     }
@@ -278,14 +278,14 @@ var matchWhitelistDirective = function(url, hostname, directive) {
 
 /******************************************************************************/
 
-µBlock.elementPickerExec = function(tabId, targetElement) {
+uBlock.elementPickerExec = function(tabId, targetElement) {
     this.epickerTarget = targetElement || '';
     vAPI.tabs.injectScript(tabId, { file: 'js/element-picker.js' });
 };
 
 /******************************************************************************/
 
-µBlock.toggleFirewallRule = function(details) {
+uBlock.toggleFirewallRule = function(details) {
     var changed = false;
     if ( details.action !== 0 ) {
         this.sessionFirewall.setCellZ(details.srcHostname, details.desHostname, details.requestType, details.action);
@@ -309,13 +309,13 @@ var matchWhitelistDirective = function(url, hostname, directive) {
 
 /******************************************************************************/
 
-µBlock.isBlockResult = function(result) {
+uBlock.isBlockResult = function(result) {
     return typeof result === 'string' && result.charAt(1) === 'b';
 };
 
 /******************************************************************************/
 
-µBlock.isAllowResult = function(result) {
+uBlock.isAllowResult = function(result) {
     return typeof result !== 'string' || result.charAt(1) !== 'b';
 };
 

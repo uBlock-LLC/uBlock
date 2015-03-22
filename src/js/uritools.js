@@ -1,6 +1,6 @@
 /*******************************************************************************
 
-    µBlock - a browser extension to block requests.
+    uBlock - a browser extension to block requests.
     Copyright (C) 2014 Raymond Hill
 
     This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
     Home: https://github.com/gorhill/uBlock
 */
 
-/* global µBlock, publicSuffixList */
+/* global uBlock, publicSuffixList */
 
 /*******************************************************************************
 
@@ -31,7 +31,7 @@ Naming convention from https://en.wikipedia.org/wiki/URI_scheme#Examples
 
 /******************************************************************************/
 
-µBlock.URI = (function() {
+uBlock.URI = (function() {
 
 'use strict';
 
@@ -163,7 +163,7 @@ URI.set = function(uri) {
     this.fragment = matches[5] !== undefined ? matches[5].slice(1) : '';
 
     // Assume very simple authority, i.e. just a hostname (highest likelihood
-    // case for µBlock)
+    // case for uBlock)
     if ( reHostFromNakedAuthority.test(this.authority) ) {
         this.hostname = this.authority;
         this.port = '';
@@ -258,7 +258,7 @@ URI.hostnameFromURI = function(uri) {
         return '';
     }
     var authority = matches[1].slice(2);
-    // Assume very simple authority (most common case for µBlock)
+    // Assume very simple authority (most common case for uBlock)
     if ( reHostFromNakedAuthority.test(authority) ) {
         return authority.toLowerCase();
     }
@@ -382,7 +382,7 @@ URI.domainFromURI = function(uri) {
 
 /******************************************************************************/
 
-// Normalize the way µBlock expects it
+// Normalize the way uBlock expects it
 
 URI.normalizedURI = function() {
     // Will be removed:

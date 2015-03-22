@@ -1,6 +1,6 @@
 /*******************************************************************************
 
-    µBlock - a browser extension to block requests.
+    uBlock - a browser extension to block requests.
     Copyright (C) 2014 Raymond Hill
 
     This program is free software: you can redistribute it and/or modify
@@ -20,17 +20,17 @@
 */
 
 /* jshint bitwise: false */
-/* global µBlock */
+/* global uBlock */
 
 /******************************************************************************/
 
-µBlock.cosmeticFilteringEngine = (function(){
+uBlock.cosmeticFilteringEngine = (function(){
 
 'use strict';
 
 /******************************************************************************/
 
-var µb = µBlock;
+var ub = uBlock;
 
 /******************************************************************************/
 
@@ -450,7 +450,7 @@ var makeHash = function(unhide, token, mask) {
     // Ref: Given a URL, returns a unique 4-character long hash string
     // Based on: FNV32a
     // http://www.isthe.com/chongo/tech/comp/fnv/index.html#FNV-reference-source
-    // The rest is custom, suited for µBlock.
+    // The rest is custom, suited for uBlock.
     var i1 = token.length;
     var i2 = i1 >> 1;
     var i4 = i1 >> 2;
@@ -523,7 +523,7 @@ var FilterContainer = function() {
 
 FilterContainer.prototype.reset = function() {
     this.parser.reset();
-    this.µburi = µb.URI;
+    this.uburi = ub.URI;
     this.frozen = false;
     this.acceptedCount = 0;
     this.duplicateCount = 0;
@@ -722,7 +722,7 @@ FilterContainer.prototype.compileHostnameSelector = function(hostname, parsed, o
     // https://github.com/gorhill/uBlock/issues/188
     // If not a real domain as per PSL, assign a synthetic one
     var hash;
-    var domain = this.µburi.domainFromHostname(hostname);
+    var domain = this.uburi.domainFromHostname(hostname);
     if ( domain === '' ) {
         hash = unhide === 0 ? this.type0NoDomainHash : this.type1NoDomainHash;
     } else {
@@ -1140,7 +1140,7 @@ FilterContainer.prototype.retrieveGenericSelectors = function(request) {
     //quickProfiler.stop();
 
     //console.log(
-    //    'µBlock> abp-hide-filters.js: %d selectors in => %d selectors out',
+    //    'uBlock> abp-hide-filters.js: %d selectors in => %d selectors out',
     //    request.selectors.length,
     //    r.hide.length + r.donthide.length
     //);
@@ -1157,8 +1157,8 @@ FilterContainer.prototype.retrieveDomainSelectors = function(request) {
 
     //quickProfiler.start('FilterContainer.retrieve()');
 
-    var hostname = µb.URI.hostnameFromURI(request.locationURL);
-    var domain = µb.URI.domainFromHostname(hostname) || hostname;
+    var hostname = ub.URI.hostnameFromURI(request.locationURL);
+    var domain = ub.URI.domainFromHostname(hostname) || hostname;
     var pos = domain.indexOf('.');
 
     // https://github.com/gorhill/uBlock/issues/587
@@ -1173,7 +1173,7 @@ FilterContainer.prototype.retrieveDomainSelectors = function(request) {
         cosmeticHide: [],
         cosmeticDonthide: [],
         netHide: [],
-        netCollapse: µb.userSettings.collapseBlocked
+        netCollapse: ub.userSettings.collapseBlocked
     };
 
     var hash, bucket;
@@ -1210,7 +1210,7 @@ FilterContainer.prototype.retrieveDomainSelectors = function(request) {
     //quickProfiler.stop();
 
     //console.log(
-    //    'µBlock> abp-hide-filters.js: "%s" => %d selectors out',
+    //    'uBlock> abp-hide-filters.js: "%s" => %d selectors out',
     //    request.locationURL,
     //    r.cosmeticHide.length + r.cosmeticDonthide.length
     //);

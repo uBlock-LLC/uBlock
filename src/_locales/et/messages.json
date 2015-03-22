@@ -520,7 +520,7 @@
     "description":"Message to display when an error occurred during restore"
   },
   "aboutResetDataConfirm":{
-    "message":"Kõik seaded kustutatakse ning uBlock taaskäivitatakse.\n\nTaastan µBlock'i algseadetele?",
+    "message":"Kõik seaded kustutatakse ning uBlock taaskäivitatakse.\n\nTaastan uBlock'i algseadetele?",
     "description":"Message asking user to confirm reset"
   },
   "errorCantConnectTo":{

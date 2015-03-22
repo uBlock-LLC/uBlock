@@ -1,6 +1,6 @@
 /*******************************************************************************
 
-    µBlock - a browser extension to block requests.
+    uBlock - a browser extension to block requests.
     Copyright (C) 2014 Raymond Hill
 
     This program is free software: you can redistribute it and/or modify
@@ -52,7 +52,7 @@ var quickProfiler = (function() {
         count += 1;
         time += (now - tstart);
         if ( (now - lastlog) >= period ) {
-            console.log('µBlock> %s: %s ms (%d samples)', prompt, avg().toFixed(3), count);
+            console.log('uBlock> %s: %s ms (%d samples)', prompt, avg().toFixed(3), count);
             lastlog = now;
         }
     };

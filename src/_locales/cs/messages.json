@@ -40,7 +40,7 @@
     "description":"appears as tab name in dashboard"
   },
   "popupPowerSwitchInfo":{
-    "message":"Kliknutí: trvale zakázat uBlock pro celý tento web.\n\nCtrl+kliknutí: zakázat µBlock pouze pro tuto stránku.",
+    "message":"Kliknutí: trvale zakázat uBlock pro celý tento web.\n\nCtrl+kliknutí: zakázat uBlock pouze pro tuto stránku.",
     "description":"English: Click: disable\/enable uBlock for this site.\n\nCtrl+click: disable uBlock only on this page."
   },
   "popupBlockedRequestPrompt":{
