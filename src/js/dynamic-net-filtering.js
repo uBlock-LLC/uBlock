@@ -1,6 +1,6 @@
 /*******************************************************************************
 
-    µBlock - a browser extension to black/white list requests.
+    uBlock - a browser extension to black/white list requests.
     Copyright (C) 2014  Raymond Hill
 
     This program is free software: you can redistribute it and/or modify
@@ -19,12 +19,12 @@
     Home: https://github.com/gorhill/uBlock
 */
 
-/* global punycode, µBlock */
+/* global punycode, uBlock */
 /* jshint bitwise: false */
 
 /******************************************************************************/
 
-µBlock.Firewall = (function() {
+uBlock.Firewall = (function() {
 
 'use strict';
 
@@ -330,7 +330,7 @@ var is3rdParty = function(srcHostname, desHostname) {
            desHostname.charAt(desHostname.length - srcDomain.length - 1) !== '.';
 };
 
-var domainFromHostname = µBlock.URI.domainFromHostname;
+var domainFromHostname = uBlock.URI.domainFromHostname;
 
 /******************************************************************************/
 
@@ -631,7 +631,7 @@ return Matrix;
 
 /******************************************************************************/
 
-µBlock.sessionFirewall = new µBlock.Firewall();
-µBlock.permanentFirewall = new µBlock.Firewall();
+uBlock.sessionFirewall = new uBlock.Firewall();
+uBlock.permanentFirewall = new uBlock.Firewall();
 
 /******************************************************************************/

@@ -1,6 +1,6 @@
 /*******************************************************************************
 
-    µBlock - a browser extension to block requests.
+    uBlock - a browser extension to block requests.
     Copyright (C) 2014 Raymond Hill
 
     This program is free software: you can redistribute it and/or modify
@@ -19,13 +19,13 @@
     Home: https://github.com/gorhill/uBlock
 */
 
-/* global µBlock, vAPI */
+/* global uBlock, vAPI */
 
 /******************************************************************************/
 
 // Start isolation from global scope
 
-µBlock.webRequest = (function() {
+uBlock.webRequest = (function() {
 
 'use strict';
 
@@ -43,8 +43,8 @@ var mostRecentRootDocURL = '';
 // Intercept and filter web requests.
 
 var onBeforeRequest = function(details) {
-    //console.debug('µBlock.webRequest/onBeforeRequest(): "%s": %o', details.url, details);
-    //console.debug('µBlock.webRequest/onBeforeRequest(): "type=%s, id=%d, parent id=%d, url=%s', details.type, details.frameId, details.parentFrameId, details.url);
+    //console.debug('uBlock.webRequest/onBeforeRequest(): "%s": %o', details.url, details);
+    //console.debug('uBlock.webRequest/onBeforeRequest(): "type=%s, id=%d, parent id=%d, url=%s', details.type, details.frameId, details.parentFrameId, details.url);
 
     // Special handling for root document.
     // https://github.com/gorhill/uBlock/issues/1001
@@ -62,8 +62,8 @@ var onBeforeRequest = function(details) {
     }
 
     // Lookup the page store associated with this tab id.
-    var µb = µBlock;
-    var pageStore = µb.pageStoreFromTabId(tabId);
+    var ub = uBlock;
+    var pageStore = ub.pageStoreFromTabId(tabId);
     if ( !pageStore ) {
         // https://github.com/gorhill/uBlock/issues/1025
         // Google Hangout popup opens without a root frame. So for now we will
@@ -79,7 +79,7 @@ var onBeforeRequest = function(details) {
         // nothing at all.
         if ( mostRecentRootDocURL !== '' ) {
             vAPI.tabs.onNavigation({ tabId: tabId, frameId: 0, url: mostRecentRootDocURL });
-            pageStore = µb.pageStoreFromTabId(tabId);
+            pageStore = ub.pageStoreFromTabId(tabId);
         }
         // If all else fail at finding a page store, re-categorize the
         // request as behind-the-scene. At least this ensures that ultimately
@@ -121,7 +121,7 @@ var onBeforeRequest = function(details) {
     // Possible outcomes: blocked, allowed-passthru, allowed-mirror
 
     // Not blocked
-    if ( µb.isAllowResult(result) ) {
+    if ( ub.isAllowResult(result) ) {
         //console.debug('traffic.js > onBeforeRequest(): ALLOW "%s" (%o) because "%s"', details.url, details, result);
 
         // https://github.com/gorhill/uBlock/issues/114
@@ -157,8 +157,8 @@ var onBeforeRequest = function(details) {
 
     // https://github.com/gorhill/uBlock/issues/905#issuecomment-76543649
     // No point updating the badge if it's not being displayed.
-    if ( µb.userSettings.showIconBadge ) {
-        µb.updateBadgeAsync(tabId);
+    if ( ub.userSettings.showIconBadge ) {
+        ub.updateBadgeAsync(tabId);
     }
 
     // https://github.com/gorhill/uBlock/issues/18
@@ -176,7 +176,7 @@ var onBeforeRootFrameRequest = function(details) {
     // This must be executed regardless of whether the request is
     // behind-the-scene
     var requestURL = details.url;
-    var pageStore = µBlock.bindTabToPageStats(details.tabId, requestURL, 'beforeRequest');
+    var pageStore = uBlock.bindTabToPageStats(details.tabId, requestURL, 'beforeRequest');
     if ( pageStore !== null ) {
         pageStore.requestURL = requestURL;
         pageStore.requestHostname = pageStore.pageHostname;
@@ -194,8 +194,8 @@ var onBeforeRootFrameRequest = function(details) {
 var onBeforeBehindTheSceneRequest = function(details) {
     //console.debug('traffic.js > onBeforeBehindTheSceneRequest(): "%s": %o', details.url, details);
 
-    var µb = µBlock;
-    var pageStore = µb.pageStoreFromTabId(vAPI.noTabId);
+    var ub = uBlock;
+    var pageStore = ub.pageStoreFromTabId(vAPI.noTabId);
     if ( !pageStore ) {
         return;
     }
@@ -209,14 +209,14 @@ var onBeforeBehindTheSceneRequest = function(details) {
     // working properly, etc.
     // So we filter if and only if the "advanced user" mode is selected
     var result = '';
-    if ( µb.userSettings.advancedUserEnabled ) {
+    if ( ub.userSettings.advancedUserEnabled ) {
         result = pageStore.filterRequestNoCache(pageStore);
     }
 
     pageStore.logRequest(pageStore, result);
 
     // Not blocked
-    if ( µb.isAllowResult(result) ) {
+    if ( ub.isAllowResult(result) ) {
         //console.debug('traffic.js > onBeforeBehindTheSceneRequest(): ALLOW "%s" (%o) because "%s"', details.url, details, result);
         return;
     }
@@ -241,11 +241,11 @@ var onHeadersReceived = function(details) {
     var requestURL = details.url;
 
     // Lookup the page store associated with this tab id.
-    var µb = µBlock;
-    var pageStore = µb.pageStoreFromTabId(tabId);
+    var ub = uBlock;
+    var pageStore = ub.pageStoreFromTabId(tabId);
     if ( !pageStore ) {
         if ( details.type === 'main_frame' ) {
-            pageStore = µb.bindTabToPageStats(tabId, requestURL, 'beforeRequest');
+            pageStore = ub.bindTabToPageStats(tabId, requestURL, 'beforeRequest');
         }
         if ( !pageStore ) {
             return;
@@ -270,7 +270,7 @@ var onHeadersReceived = function(details) {
     // inline scripts.
     var context;
     if ( details.parentFrameId === -1 ) {
-        var contextDomain = µb.URI.domainFromHostname(requestHostname);
+        var contextDomain = ub.URI.domainFromHostname(requestHostname);
         context = {
             rootHostname: requestHostname,
             rootDomain: contextDomain,
@@ -294,11 +294,11 @@ var onHeadersReceived = function(details) {
     pageStore.logRequest(context, result);
 
     // Don't block
-    if ( µb.isAllowResult(result) ) {
+    if ( ub.isAllowResult(result) ) {
         return;
     }
 
-    µb.updateBadgeAsync(tabId);
+    ub.updateBadgeAsync(tabId);
 
     details.responseHeaders.push({
         'name': 'Content-Security-Policy',

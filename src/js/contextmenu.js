@@ -1,6 +1,6 @@
 /*******************************************************************************
 
-    µBlock - a browser extension to block requests.
+    uBlock - a browser extension to block requests.
     Copyright (C) 2014 Raymond Hill
 
     This program is free software: you can redistribute it and/or modify
@@ -19,18 +19,18 @@
     Home: https://github.com/gorhill/uBlock
 */
 
-/* global vAPI, µBlock */
+/* global vAPI, uBlock */
 'use strict';
 
 /******************************************************************************/
 
 // New namespace
 
-µBlock.contextMenu = (function() {
+uBlock.contextMenu = (function() {
 
 /******************************************************************************/
 
-var µb = µBlock;
+var ub = uBlock;
 var enabled = false;
 
 /******************************************************************************/
@@ -64,7 +64,7 @@ var onContextMenuClicked = function(details, tab) {
         }
     }
 
-    µb.elementPickerExec(tab.id, tagName + '\t' + src);
+    ub.elementPickerExec(tab.id, tagName + '\t' + src);
 };
 
 /******************************************************************************/

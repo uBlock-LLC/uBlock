@@ -1,6 +1,6 @@
 /*******************************************************************************
 
-    µBlock - a browser extension to block requests.
+    uBlock - a browser extension to block requests.
     Copyright (C) 2014 Raymond Hill
 
     This program is free software: you can redistribute it and/or modify
@@ -20,7 +20,7 @@
 */
 
 /* jshint bitwise: false */
-/* global vAPI, µBlock */
+/* global vAPI, uBlock */
 
 /*******************************************************************************
 
@@ -34,13 +34,13 @@ To create a log of net requests
 /******************************************************************************/
 /******************************************************************************/
 
-µBlock.PageStore = (function() {
+uBlock.PageStore = (function() {
 
 'use strict';
 
 /******************************************************************************/
 
-var µb = µBlock;
+var ub = uBlock;
 
 /******************************************************************************/
 /******************************************************************************/
@@ -416,11 +416,11 @@ FrameStore.factory = function(rootHostname, frameURL) {
 /******************************************************************************/
 
 FrameStore.prototype.init = function(rootHostname, frameURL) {
-    var µburi = µb.URI;
-    this.pageHostname = µburi.hostnameFromURI(frameURL);
-    this.pageDomain = µburi.domainFromHostname(this.pageHostname) || this.pageHostname;
+    var uburi = ub.URI;
+    this.pageHostname = uburi.hostnameFromURI(frameURL);
+    this.pageDomain = uburi.domainFromHostname(this.pageHostname) || this.pageHostname;
     this.rootHostname = rootHostname;
-    this.rootDomain = µburi.domainFromHostname(rootHostname) || rootHostname;
+    this.rootDomain = uburi.domainFromHostname(rootHostname) || rootHostname;
     // This is part of the filtering evaluation context
     this.requestURL = this.requestHostname = this.requestType = '';
 
@@ -469,11 +469,11 @@ PageStore.factory = function(tabId, pageURL) {
 PageStore.prototype.init = function(tabId, pageURL) {
     this.tabId = tabId;
     this.pageURL = pageURL;
-    this.pageHostname = µb.URI.hostnameFromURI(pageURL);
+    this.pageHostname = ub.URI.hostnameFromURI(pageURL);
 
     // https://github.com/gorhill/uBlock/issues/185
     // Use hostname if no domain can be extracted
-    this.pageDomain = µb.URI.domainFromHostname(this.pageHostname) || this.pageHostname;
+    this.pageDomain = ub.URI.domainFromHostname(this.pageHostname) || this.pageHostname;
     this.rootHostname = this.pageHostname;
     this.rootDomain = this.pageDomain;
 
@@ -492,7 +492,7 @@ PageStore.prototype.init = function(tabId, pageURL) {
 
     // Support `elemhide` filter option. Called at this point so the required
     // context is all setup at this point.
-    this.skipCosmeticFiltering = µb.staticNetFilteringEngine
+    this.skipCosmeticFiltering = ub.staticNetFilteringEngine
                                    .matchStringExactType(this, pageURL, 'cosmetic-filtering')
                                    .charAt(1) === 'b';
 
@@ -521,8 +521,8 @@ PageStore.prototype.reuse = function(pageURL, context) {
     // was flushed from memory, while not really being flushed on the page.
     if ( context === 'tabUpdated' ) {
         this.pageURL = pageURL;
-        this.pageHostname = µb.URI.hostnameFromURI(pageURL);
-        this.pageDomain = µb.URI.domainFromHostname(this.pageHostname) || this.pageHostname;
+        this.pageHostname = ub.URI.hostnameFromURI(pageURL);
+        this.pageDomain = ub.URI.domainFromHostname(this.pageHostname) || this.pageHostname;
         this.rootHostname = this.pageHostname;
         this.rootDomain = this.pageDomain;
 
@@ -594,8 +594,8 @@ PageStore.prototype.setFrame = function(frameId, frameURL) {
 /******************************************************************************/
 
 PageStore.prototype.getNetFilteringSwitch = function() {
-    if ( this.netFilteringReadTime < µb.netWhitelistModifyTime ) {
-        this.netFiltering = µb.getNetFilteringSwitch(this.pageURL);
+    if ( this.netFilteringReadTime < ub.netWhitelistModifyTime ) {
+        this.netFiltering = ub.getNetFilteringSwitch(this.pageURL);
         this.netFilteringReadTime = Date.now();
     }
     return this.netFiltering;
@@ -605,8 +605,8 @@ PageStore.prototype.getNetFilteringSwitch = function() {
 
 PageStore.prototype.getSpecificCosmeticFilteringSwitch = function() {
     return this.getNetFilteringSwitch() &&
-           (µb.userSettings.advancedUserEnabled &&
-            µb.sessionFirewall.mustAllowCellZY(this.rootHostname, this.rootHostname, '*')) === false;
+           (ub.userSettings.advancedUserEnabled &&
+            ub.sessionFirewall.mustAllowCellZY(this.rootHostname, this.rootHostname, '*')) === false;
 };
 
 /******************************************************************************/
@@ -614,14 +614,14 @@ PageStore.prototype.getSpecificCosmeticFilteringSwitch = function() {
 PageStore.prototype.getGenericCosmeticFilteringSwitch = function() {
     return this.getNetFilteringSwitch() &&
            this.skipCosmeticFiltering === false &&
-           (µb.userSettings.advancedUserEnabled &&
-            µb.sessionFirewall.mustAllowCellZY(this.rootHostname, this.rootHostname, '*')) === false;
+           (ub.userSettings.advancedUserEnabled &&
+            ub.sessionFirewall.mustAllowCellZY(this.rootHostname, this.rootHostname, '*')) === false;
 };
 
 /******************************************************************************/
 
 PageStore.prototype.toggleNetFilteringSwitch = function(url, scope, state) {
-    µb.toggleNetFilteringSwitch(url, scope, state);
+    ub.toggleNetFilteringSwitch(url, scope, state);
     this.netFilteringCache.empty();
 };
 
@@ -649,8 +649,8 @@ PageStore.prototype.filterRequest = function(context) {
     // - Evaluating dynamic filtering is much faster than static filtering
     // We evaluate dynamic filtering first, and hopefully we can skip
     // evaluation of static filtering.
-    if ( µb.userSettings.advancedUserEnabled ) {
-        var df = µb.sessionFirewall.evaluateCellZY(context.rootHostname, context.requestHostname, context.requestType);
+    if ( ub.userSettings.advancedUserEnabled ) {
+        var df = ub.sessionFirewall.evaluateCellZY(context.rootHostname, context.requestHostname, context.requestType);
         if ( df.mustBlockOrAllow() ) {
             result = df.toFilterString();
         }
@@ -658,7 +658,7 @@ PageStore.prototype.filterRequest = function(context) {
 
     // Static filtering never override dynamic filtering
     if ( result === '' ) {
-        result = µb.staticNetFilteringEngine.matchString(context);
+        result = ub.staticNetFilteringEngine.matchString(context);
     }
 
     //console.debug('cache MISS: PageStore.filterRequest("%s")', context.requestURL);
@@ -690,8 +690,8 @@ PageStore.prototype.filterRequestNoCache = function(context) {
     // - Evaluating dynamic filtering is much faster than static filtering
     // We evaluate dynamic filtering first, and hopefully we can skip
     // evaluation of static filtering.
-    if ( µb.userSettings.advancedUserEnabled ) {
-        var df = µb.sessionFirewall.evaluateCellZY(context.rootHostname, context.requestHostname, context.requestType);
+    if ( ub.userSettings.advancedUserEnabled ) {
+        var df = ub.sessionFirewall.evaluateCellZY(context.rootHostname, context.requestHostname, context.requestType);
         if ( df.mustBlockOrAllow() ) {
             result = df.toFilterString();
         }
@@ -699,7 +699,7 @@ PageStore.prototype.filterRequestNoCache = function(context) {
 
     // Static filtering never override dynamic filtering
     if ( result === '' ) {
-        result = µb.staticNetFilteringEngine.matchString(context);
+        result = ub.staticNetFilteringEngine.matchString(context);
     }
 
     return result;
@@ -724,13 +724,13 @@ PageStore.prototype.logRequest = function(context, result) {
     if ( c === '' || c === 'a' ) {
         this.hostnameToCountMap[requestHostname] += 0x00010000;
         this.perLoadAllowedRequestCount++;
-        µb.localSettings.allowedRequestCount++;
+        ub.localSettings.allowedRequestCount++;
     } else /* if ( c === 'b' ) */ {
         this.hostnameToCountMap[requestHostname] += 0x00000001;
         this.perLoadBlockedRequestCount++;
-        µb.localSettings.blockedRequestCount++;
+        ub.localSettings.blockedRequestCount++;
     }
-    µb.localSettingsModifyTime = now;
+    ub.localSettingsModifyTime = now;
     this.logBuffer.writeOne(context, result);
 };
 
@@ -739,7 +739,7 @@ PageStore.prototype.logRequest = function(context, result) {
 PageStore.prototype.toMirrorURL = function(requestURL) {
     // https://github.com/gorhill/uBlock/issues/351
     // Bypass experimental features when uBlock is disabled for a site
-    if ( µb.userSettings.experimentalEnabled === false ||
+    if ( ub.userSettings.experimentalEnabled === false ||
          this.getNetFilteringSwitch() === false ||
          this.skipLocalMirroring ) {
         return '';
@@ -747,7 +747,7 @@ PageStore.prototype.toMirrorURL = function(requestURL) {
 
     // https://code.google.com/p/chromium/issues/detail?id=387198
     // Not all redirects will succeed, until bug above is fixed.
-    return µb.mirrors.toURL(requestURL, true);
+    return ub.mirrors.toURL(requestURL, true);
 };
 
 /******************************************************************************/
@@ -755,8 +755,8 @@ PageStore.prototype.toMirrorURL = function(requestURL) {
 PageStore.prototype.updateBadge = function() {
     var netFiltering = this.getNetFilteringSwitch();
     var badge = '';
-    if ( µb.userSettings.showIconBadge && netFiltering && this.perLoadBlockedRequestCount ) {
-        badge = µb.utils.formatCount(this.perLoadBlockedRequestCount);
+    if ( ub.userSettings.showIconBadge && netFiltering && this.perLoadBlockedRequestCount ) {
+        badge = ub.utils.formatCount(this.perLoadBlockedRequestCount);
     }
     vAPI.setIcon(this.tabId, netFiltering ? 'on' : 'off', badge);
 };

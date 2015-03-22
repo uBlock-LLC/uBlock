@@ -1,6 +1,6 @@
 /*******************************************************************************
 
-    µBlock - a browser extension to block requests.
+    uBlock - a browser extension to block requests.
     Copyright (C) 2014 Raymond Hill
 
     This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
     Home: https://github.com/gorhill/uBlock
 */
 
-/* global vAPI, µBlock */
+/* global vAPI, uBlock */
 
 /******************************************************************************/
 /******************************************************************************/
@@ -30,7 +30,7 @@
 
 /******************************************************************************/
 
-var µb = µBlock;
+var ub = uBlock;
 
 /******************************************************************************/
 /******************************************************************************/
@@ -42,7 +42,7 @@ vAPI.tabs.onNavigation = function(details) {
     if ( details.frameId !== 0 ) {
         return;
     }
-    var pageStore = µb.bindTabToPageStats(details.tabId, details.url, 'afterNavigate');
+    var pageStore = ub.bindTabToPageStats(details.tabId, details.url, 'afterNavigate');
 
     // https://github.com/gorhill/uBlock/issues/630
     // The hostname of the bound document must always be present in the
@@ -69,7 +69,7 @@ vAPI.tabs.onUpdated = function(tabId, changeInfo, tab) {
     if ( !changeInfo.url ) {
         return;
     }
-    µb.bindTabToPageStats(tabId, changeInfo.url, 'tabUpdated');
+    ub.bindTabToPageStats(tabId, changeInfo.url, 'tabUpdated');
 };
 
 /******************************************************************************/
@@ -78,7 +78,7 @@ vAPI.tabs.onClosed = function(tabId) {
     if ( tabId < 0 ) {
         return;
     }
-    µb.unbindTabFromPageStats(tabId);
+    ub.unbindTabFromPageStats(tabId);
 };
 
 /******************************************************************************/
@@ -88,7 +88,7 @@ vAPI.tabs.onClosed = function(tabId) {
 vAPI.tabs.onPopup = function(details) {
     //console.debug('vAPI.tabs.onPopup: details = %o', details);
 
-    var pageStore = µb.pageStoreFromTabId(details.openerTabId);
+    var pageStore = ub.pageStoreFromTabId(details.openerTabId);
     var openerURL = details.openerURL || '';
 
     if ( openerURL === '' && pageStore ) {
@@ -99,9 +99,9 @@ vAPI.tabs.onPopup = function(details) {
         return;
     }
 
-    var µburi = µb.URI;
-    var openerHostname = µburi.hostnameFromURI(openerURL);
-    var openerDomain = µburi.domainFromHostname(openerHostname);
+    var uburi = ub.URI;
+    var openerHostname = uburi.hostnameFromURI(openerURL);
+    var openerDomain = uburi.domainFromHostname(openerHostname);
 
     var context = {
         pageHostname: openerHostname,
@@ -115,28 +115,28 @@ vAPI.tabs.onPopup = function(details) {
 
     // https://github.com/gorhill/uBlock/issues/323
     // If popup URL is whitelisted, do not block it
-    if ( µb.getNetFilteringSwitch(targetURL) ) {
-        result = µb.staticNetFilteringEngine.matchStringExactType(context, targetURL, 'popup');
+    if ( ub.getNetFilteringSwitch(targetURL) ) {
+        result = ub.staticNetFilteringEngine.matchStringExactType(context, targetURL, 'popup');
     }
 
     // https://github.com/gorhill/uBlock/issues/91
     if ( pageStore ) {
         pageStore.logRequest({
             requestURL: targetURL,
-            requestHostname: µb.URI.hostnameFromURI(targetURL),
+            requestHostname: ub.URI.hostnameFromURI(targetURL),
             requestType: 'popup'
         }, result);
     }
 
     // Not blocked
-    if ( µb.isAllowResult(result) ) {
+    if ( ub.isAllowResult(result) ) {
         return;
     }
 
     // Blocked
 
     // It is a popup, block and remove the tab.
-    µb.unbindTabFromPageStats(details.targetTabId);
+    ub.unbindTabFromPageStats(details.targetTabId);
     vAPI.tabs.remove(details.targetTabId);
 
     return true;
@@ -150,14 +150,14 @@ vAPI.tabs.registerListeners();
 // https://github.com/gorhill/httpswitchboard/issues/303
 // Some kind of trick going on here:
 //   Any scheme other than 'http' and 'https' is remapped into a fake
-//   URL which trick the rest of µBlock into being able to process an
-//   otherwise unmanageable scheme. µBlock needs web page to have a proper
+//   URL which trick the rest of uBlock into being able to process an
+//   otherwise unmanageable scheme. uBlock needs web page to have a proper
 //   hostname to work properly, so just like the 'chromium-behind-the-scene'
 //   fake domain name, we map unknown schemes into a fake '{scheme}-scheme'
 //   hostname. This way, for a specific scheme you can create scope with
 //   rules which will apply only to that scheme.
 
-µb.normalizePageURL = function(tabId, pageURL) {
+ub.normalizePageURL = function(tabId, pageURL) {
     if ( vAPI.isNoTabId(tabId) ) {
         return 'http://behind-the-scene/';
     }
@@ -180,7 +180,7 @@ vAPI.tabs.registerListeners();
 
 // Create an entry for the tab if it doesn't exist.
 
-µb.bindTabToPageStats = function(tabId, pageURL, context) {
+ub.bindTabToPageStats = function(tabId, pageURL, context) {
     this.updateBadgeAsync(tabId);
 
     // https://github.com/gorhill/httpswitchboard/issues/303
@@ -215,8 +215,8 @@ vAPI.tabs.registerListeners();
     return pageStore;
 };
 
-µb.unbindTabFromPageStats = function(tabId) {
-    //console.debug('µBlock> unbindTabFromPageStats(%d)', tabId);
+ub.unbindTabFromPageStats = function(tabId) {
+    //console.debug('uBlock> unbindTabFromPageStats(%d)', tabId);
     var pageStore = this.pageStores[tabId];
     if ( pageStore !== undefined ) {
         pageStore.dispose();
@@ -226,19 +226,19 @@ vAPI.tabs.registerListeners();
 
 /******************************************************************************/
 
-µb.pageUrlFromTabId = function(tabId) {
+ub.pageUrlFromTabId = function(tabId) {
     var pageStore = this.pageStores[tabId];
     return pageStore ? pageStore.pageURL : '';
 };
 
-µb.pageUrlFromPageStats = function(pageStats) {
+ub.pageUrlFromPageStats = function(pageStats) {
     if ( pageStats ) {
         return pageStats.pageURL;
     }
     return '';
 };
 
-µb.pageStoreFromTabId = function(tabId) {
+ub.pageStoreFromTabId = function(tabId) {
     return this.pageStores[tabId];
 };
 
@@ -246,9 +246,9 @@ vAPI.tabs.registerListeners();
 
 // Permanent page store for behind-the-scene requests. Must never be removed.
 
-µb.pageStores[vAPI.noTabId] = µb.PageStore.factory(
+ub.pageStores[vAPI.noTabId] = ub.PageStore.factory(
     vAPI.noTabId,
-    µb.normalizePageURL(vAPI.noTabId)
+    ub.normalizePageURL(vAPI.noTabId)
 );
 
 /******************************************************************************/
@@ -263,12 +263,12 @@ var pageStoreJanitorSampleSize = 10;
 
 var pageStoreJanitor = function() {
     var vapiTabs = vAPI.tabs;
-    var tabIds = Object.keys(µb.pageStores).sort();
+    var tabIds = Object.keys(ub.pageStores).sort();
     var checkTab = function(tabId) {
         vapiTabs.get(tabId, function(tab) {
             if ( !tab ) {
-                //console.error('tab.js> pageStoreJanitor(): stale page store found:', µb.pageUrlFromTabId(tabId));
-                µb.unbindTabFromPageStats(tabId);
+                //console.error('tab.js> pageStoreJanitor(): stale page store found:', ub.pageUrlFromTabId(tabId));
+                ub.unbindTabFromPageStats(tabId);
             }
         });
     };

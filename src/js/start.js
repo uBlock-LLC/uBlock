@@ -1,6 +1,6 @@
 /*******************************************************************************
 
-    µBlock - a browser extension to block requests.
+    uBlock - a browser extension to block requests.
     Copyright (C) 2014-2015 Raymond Hill
 
     This program is free software: you can redistribute it and/or modify
@@ -19,13 +19,13 @@
     Home: https://github.com/gorhill/uBlock
 */
 
-/* global publicSuffixList, vAPI, µBlock */
+/* global publicSuffixList, vAPI, uBlock */
 
 /******************************************************************************/
 
 // Load all: executed once.
 
-µBlock.restart = (function() {
+uBlock.restart = (function() {
 
 'use strict';
 
@@ -33,7 +33,7 @@
 
 /******************************************************************************/
 
-var µb = µBlock;
+var ub = uBlock;
 
 /******************************************************************************/
 
@@ -44,14 +44,14 @@ var µb = µBlock;
 var onAllReady = function() {
     // https://github.com/gorhill/uBlock/issues/184
     // Check for updates not too far in the future.
-    µb.assetUpdater.onStart.addEventListener(µb.updateStartHandler.bind(µb));
-    µb.assetUpdater.onCompleted.addEventListener(µb.updateCompleteHandler.bind(µb));
-    µb.assetUpdater.onAssetUpdated.addEventListener(µb.assetUpdatedHandler.bind(µb));
-    µb.assets.onAssetCacheRemoved.addEventListener(µb.assetCacheRemovedHandler.bind(µb));
+    ub.assetUpdater.onStart.addEventListener(ub.updateStartHandler.bind(ub));
+    ub.assetUpdater.onCompleted.addEventListener(ub.updateCompleteHandler.bind(ub));
+    ub.assetUpdater.onAssetUpdated.addEventListener(ub.assetUpdatedHandler.bind(ub));
+    ub.assets.onAssetCacheRemoved.addEventListener(ub.assetCacheRemovedHandler.bind(ub));
 
     // Important: remove barrier to remote fetching, this was useful only
     // for launch time.
-    µb.assets.remoteFetchBarrier -= 1;
+    ub.assets.remoteFetchBarrier -= 1;
 
     //quickProfiler.stop(0);
 
@@ -64,7 +64,7 @@ var onAllReady = function() {
 // - PSL
 
 var onPSLReady = function() {
-    µb.loadFilterLists(onAllReady);
+    ub.loadFilterLists(onAllReady);
 };
 
 /******************************************************************************/
@@ -74,12 +74,12 @@ var onPSLReady = function() {
 var onVersionReady = function(lastVersion) {
     // Whitelist some key scopes by default
     if ( lastVersion.localeCompare('0.8.6.0') < 0 ) {
-        µb.netWhitelist = µb.whitelistFromString(
-            µb.stringFromWhitelist(µb.netWhitelist) +
+        ub.netWhitelist = ub.whitelistFromString(
+            ub.stringFromWhitelist(ub.netWhitelist) +
             '\n' +
-            µb.netWhitelistDefault
+            ub.netWhitelistDefault
         );
-        µb.saveWhitelist();
+        ub.saveWhitelist();
     }
     if ( lastVersion !== vAPI.app.version ) {
         vAPI.storage.set({ version: vAPI.app.version });
@@ -89,16 +89,16 @@ var onVersionReady = function(lastVersion) {
 /******************************************************************************/
 
 var onSelfieReady = function(selfie) {
-    if ( selfie === null || selfie.magic !== µb.systemSettings.selfieMagic ) {
+    if ( selfie === null || selfie.magic !== ub.systemSettings.selfieMagic ) {
         return false;
     }
     if ( publicSuffixList.fromSelfie(selfie.publicSuffixList) !== true ) {
         return false;
     }
     //console.log('start.js/onSelfieReady: selfie looks good');
-    µb.remoteBlacklists = selfie.filterLists;
-    µb.staticNetFilteringEngine.fromSelfie(selfie.staticNetFilteringEngine);
-    µb.cosmeticFilteringEngine.fromSelfie(selfie.cosmeticFilteringEngine);
+    ub.remoteBlacklists = selfie.filterLists;
+    ub.staticNetFilteringEngine.fromSelfie(selfie.staticNetFilteringEngine);
+    ub.cosmeticFilteringEngine.fromSelfie(selfie.cosmeticFilteringEngine);
     return true;
 };
 
@@ -110,8 +110,8 @@ var onSelfieReady = function(selfie) {
 // gorhill 2014-12-15: not anymore
 
 var onNetWhitelistReady = function(netWhitelistRaw) {
-    µb.netWhitelist = µb.whitelistFromString(netWhitelistRaw);
-    µb.netWhitelistModifyTime = Date.now();
+    ub.netWhitelist = ub.whitelistFromString(netWhitelistRaw);
+    ub.netWhitelistModifyTime = Date.now();
 };
 
 /******************************************************************************/
@@ -119,28 +119,28 @@ var onNetWhitelistReady = function(netWhitelistRaw) {
 // User settings are in memory
 
 var onUserSettingsReady = function(fetched) {
-    var userSettings = µb.userSettings;
+    var userSettings = ub.userSettings;
 
     fromFetch(userSettings, fetched);
 
     // https://github.com/gorhill/uBlock/issues/426
     // Important: block remote fetching for when loading assets at launch
     // time.
-    µb.assets.autoUpdate = userSettings.autoUpdate;
-    µb.assets.autoUpdateDelay = µb.updateAssetsEvery;
+    ub.assets.autoUpdate = userSettings.autoUpdate;
+    ub.assets.autoUpdateDelay = ub.updateAssetsEvery;
 
     // https://github.com/gorhill/uBlock/issues/540
     // Disabling local mirroring for the time being
     userSettings.experimentalEnabled = false;
-    µb.mirrors.toggle(false /* userSettings.experimentalEnabled */);
+    ub.mirrors.toggle(false /* userSettings.experimentalEnabled */);
 
-    µb.contextMenu.toggle(userSettings.contextMenuEnabled);
-    µb.permanentFirewall.fromString(userSettings.dynamicFilteringString);
-    µb.sessionFirewall.assign(µb.permanentFirewall);
+    ub.contextMenu.toggle(userSettings.contextMenuEnabled);
+    ub.permanentFirewall.fromString(userSettings.dynamicFilteringString);
+    ub.sessionFirewall.assign(ub.permanentFirewall);
 
     // Remove obsolete setting
     delete userSettings.logRequests;
-    µb.XAL.keyvalRemoveOne('logRequests');
+    ub.XAL.keyvalRemoveOne('logRequests');
 };
 
 /******************************************************************************/
@@ -149,17 +149,17 @@ var onUserSettingsReady = function(fetched) {
 
 var onSystemSettingsReady = function(fetched) {
     var mustSaveSystemSettings = false;
-    if ( fetched.compiledMagic !== µb.systemSettings.compiledMagic ) {
-        µb.assets.purge(/^cache:\/\/compiled-/);
+    if ( fetched.compiledMagic !== ub.systemSettings.compiledMagic ) {
+        ub.assets.purge(/^cache:\/\/compiled-/);
         mustSaveSystemSettings = true;
     }
-    if ( fetched.selfieMagic !== µb.systemSettings.selfieMagic ) {
+    if ( fetched.selfieMagic !== ub.systemSettings.selfieMagic ) {
         mustSaveSystemSettings = true;
     }
     if ( mustSaveSystemSettings ) {
         fetched.selfie = null;
-        µb.destroySelfie();
-        vAPI.storage.set(µb.systemSettings, µb.noopFunc);
+        ub.destroySelfie();
+        vAPI.storage.set(ub.systemSettings, ub.noopFunc);
     }
 };
 
@@ -168,9 +168,9 @@ var onSystemSettingsReady = function(fetched) {
 var onFirstFetchReady = function(fetched) {
     // Order is important -- do not change:
     onSystemSettingsReady(fetched);
-    fromFetch(µb.localSettings, fetched);
+    fromFetch(ub.localSettings, fetched);
     onUserSettingsReady(fetched);
-    fromFetch(µb.restoreBackupSettings, fetched);
+    fromFetch(ub.restoreBackupSettings, fetched);
     onNetWhitelistReady(fetched.netWhitelist);
     onVersionReady(fetched.version);
 
@@ -180,7 +180,7 @@ var onFirstFetchReady = function(fetched) {
         return;
     }
 
-    µb.loadPublicSuffixList(onPSLReady);
+    ub.loadPublicSuffixList(onPSLReady);
 };
 
 /******************************************************************************/
@@ -210,7 +210,7 @@ var fromFetch = function(to, fetched) {
 
 return function() {
     // Forbid remote fetching of assets
-    µb.assets.remoteFetchBarrier += 1;
+    ub.assets.remoteFetchBarrier += 1;
 
     var fetchableProps = {
         'compiledMagic': '',
@@ -224,9 +224,9 @@ return function() {
         'version': '0.0.0.0'
     };
 
-    toFetch(µb.localSettings, fetchableProps);
-    toFetch(µb.userSettings, fetchableProps);
-    toFetch(µb.restoreBackupSettings, fetchableProps);
+    toFetch(ub.localSettings, fetchableProps);
+    toFetch(ub.userSettings, fetchableProps);
+    toFetch(ub.restoreBackupSettings, fetchableProps);
 
     vAPI.storage.get(fetchableProps, onFirstFetchReady);
 };
@@ -237,4 +237,4 @@ return function() {
 
 /******************************************************************************/
 
-µBlock.restart();
+uBlock.restart();

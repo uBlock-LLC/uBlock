@@ -1,6 +1,6 @@
 /*******************************************************************************
 
-    µBlock - a browser extension to block requests.
+    uBlock - a browser extension to block requests.
     Copyright (C) 2014 Raymond Hill
 
     This program is free software: you can redistribute it and/or modify
@@ -19,14 +19,14 @@
     Home: https://github.com/gorhill/uBlock
 */
 
-/* global µBlock */
+/* global uBlock */
 'use strict';
 
 /******************************************************************************/
 
 // Async job queue module
 
-µBlock.asyncJobs = (function() {
+uBlock.asyncJobs = (function() {
 
 /******************************************************************************/
 
@@ -172,13 +172,13 @@ return asyncJobManager;
 // Update visual of extension icon.
 // A time out is used to coalesce adjacent requests to update badge.
 
-µBlock.updateBadgeAsync = (function(){
-    var µb = µBlock;
+uBlock.updateBadgeAsync = (function(){
+    var ub = uBlock;
 
     // Cache callback definition, it was a bad idea to define this one inside
     // updateBadgeAsync
     var updateBadge = function(tabId) {
-        var pageStore = µb.pageStoreFromTabId(tabId);
+        var pageStore = ub.pageStoreFromTabId(tabId);
         if ( pageStore ) {
             pageStore.updateBadge();
             return;
@@ -190,7 +190,7 @@ return asyncJobManager;
         if ( vAPI.isNoTabId(tabId) ) {
             return;
         }
-        µb.asyncJobs.add('updateBadge-' + tabId, tabId, updateBadge, 250);
+        ub.asyncJobs.add('updateBadge-' + tabId, tabId, updateBadge, 250);
     };
 
     return updateBadgeAsync;

@@ -1,6 +1,6 @@
 /*******************************************************************************
 
-    µBlock - a browser extension to block requests.
+    uBlock - a browser extension to block requests.
     Copyright (C) 2014-2015 Raymond Hill
 
     This program is free software: you can redistribute it and/or modify
@@ -19,18 +19,18 @@
     Home: https://github.com/gorhill/uBlock
 */
 
-/* global YaMD5, µBlock, vAPI, punycode, publicSuffixList */
+/* global YaMD5, uBlock, vAPI, punycode, publicSuffixList */
 
 'use strict';
 
 /******************************************************************************/
 
-µBlock.getBytesInUse = function(callback) {
+uBlock.getBytesInUse = function(callback) {
     if ( typeof callback !== 'function' ) {
         callback = this.noopFunc;
     }
     var getBytesInUseHandler = function(bytesInUse) {
-        µBlock.storageUsed = bytesInUse;
+        uBlock.storageUsed = bytesInUse;
         callback(bytesInUse);
     };
     vAPI.storage.getBytesInUse(null, getBytesInUseHandler);
@@ -38,7 +38,7 @@
 
 /******************************************************************************/
 
-µBlock.saveLocalSettings = function(force) {
+uBlock.saveLocalSettings = function(force) {
     if ( force ) {
         this.localSettingsModifyTime = Date.now();
     }
@@ -53,30 +53,30 @@
 
 // Save local settings regularly. Not critical.
 
-µBlock.asyncJobs.add(
+uBlock.asyncJobs.add(
     'autoSaveLocalSettings',
     null,
-    µBlock.saveLocalSettings.bind(µBlock),
+    uBlock.saveLocalSettings.bind(uBlock),
     4 * 60 * 1000,
     true
 );
 
 /******************************************************************************/
 
-µBlock.saveUserSettings = function() {
+uBlock.saveUserSettings = function() {
     vAPI.storage.set(this.userSettings);
 };
 
 /******************************************************************************/
 
-µBlock.savePermanentFirewallRules = function() {
+uBlock.savePermanentFirewallRules = function() {
     this.userSettings.dynamicFilteringString = this.permanentFirewall.toString();
     this.XAL.keyvalSetOne('dynamicFilteringString', this.userSettings.dynamicFilteringString);
 };
 
 /******************************************************************************/
 
-µBlock.saveWhitelist = function() {
+uBlock.saveWhitelist = function() {
     var bin = {
         'netWhitelist': this.stringFromWhitelist(this.netWhitelist)
     };
@@ -86,43 +86,43 @@
 
 /******************************************************************************/
 
-µBlock.saveUserFilters = function(content, callback) {
+uBlock.saveUserFilters = function(content, callback) {
     return this.assets.put(this.userFiltersPath, content, callback);
 };
 
 /******************************************************************************/
 
-µBlock.loadUserFilters = function(callback) {
+uBlock.loadUserFilters = function(callback) {
     return this.assets.get(this.userFiltersPath, callback);
 };
 
 /******************************************************************************/
 
-µBlock.appendUserFilters = function(filter) {
+uBlock.appendUserFilters = function(filter) {
     if ( filter.length === 0 ) {
         return;
     }
 
-    var µb = this;
+    var ub = this;
 
     var onCompiledListLoaded = function(details) {
-        var snfe = µb.staticNetFilteringEngine;
-        var cfe = µb.cosmeticFilteringEngine;
+        var snfe = ub.staticNetFilteringEngine;
+        var cfe = ub.cosmeticFilteringEngine;
         var acceptedCount = snfe.acceptedCount + cfe.acceptedCount;
         var duplicateCount = snfe.duplicateCount + cfe.duplicateCount;
-        µb.applyCompiledFilters(details.content);
-        var entry = µb.remoteBlacklists[µb.userFiltersPath];
+        ub.applyCompiledFilters(details.content);
+        var entry = ub.remoteBlacklists[ub.userFiltersPath];
         entry.entryCount = snfe.acceptedCount + cfe.acceptedCount - acceptedCount;
         entry.entryUsedCount = entry.entryCount - snfe.duplicateCount - cfe.duplicateCount + duplicateCount;
-        µb.staticNetFilteringEngine.freeze();
-        µb.cosmeticFilteringEngine.freeze();
+        ub.staticNetFilteringEngine.freeze();
+        ub.cosmeticFilteringEngine.freeze();
     };
 
     var onSaved = function(details) {
         if ( details.error ) {
             return;
         }
-        µb.getCompiledFilterList(µb.userFiltersPath, onCompiledListLoaded);
+        ub.getCompiledFilterList(ub.userFiltersPath, onCompiledListLoaded);
     };
 
     var onLoaded = function(details) {
@@ -133,7 +133,7 @@
         // If we reached this point, the filter quite probably needs to be
         // added for sure: do not try to be too smart, trying to avoid
         // duplicates at this point may lead to more issues.
-        µb.saveUserFilters(details.content.trim() + '\n\n' + filter.trim(), onSaved);
+        ub.saveUserFilters(details.content.trim() + '\n\n' + filter.trim(), onSaved);
     };
 
     this.loadUserFilters(onLoaded);
@@ -141,7 +141,7 @@
 
 /******************************************************************************/
 
-µBlock.getAvailableLists = function(callback) {
+uBlock.getAvailableLists = function(callback) {
     var availableLists = {};
     var relocationMap = {};
 
@@ -156,7 +156,7 @@
 
     // selected lists
     var onSelectedListsLoaded = function(store) {
-        var µb = µBlock;
+        var ub = uBlock;
         var lists = store.remoteBlacklists;
         var locations = Object.keys(lists);
         var location, availableEntry, storedEntry;
@@ -165,16 +165,16 @@
             storedEntry = lists[location];
             // New location?
             if ( relocationMap.hasOwnProperty(location) ) {
-                µb.purgeFilterList(location);
+                ub.purgeFilterList(location);
                 location = relocationMap[location];
             }
             availableEntry = availableLists[location];
             if ( availableEntry === undefined ) {
-                µb.purgeFilterList(location);
+                ub.purgeFilterList(location);
                 continue;
             }
             availableEntry.off = storedEntry.off || false;
-            µb.assets.setHomeURL(location, availableEntry.homeURL);
+            ub.assets.setHomeURL(location, availableEntry.homeURL);
             if ( storedEntry.entryCount !== undefined ) {
                 availableEntry.entryCount = storedEntry.entryCount;
             }
@@ -262,20 +262,20 @@
 
 /******************************************************************************/
 
-µBlock.createShortUniqueId = function(path) {
+uBlock.createShortUniqueId = function(path) {
     var md5 = YaMD5.hashStr(path);
     return md5.slice(0, 4) + md5.slice(-4);
 };
 
-µBlock.createShortUniqueId.idLength = 8;
+uBlock.createShortUniqueId.idLength = 8;
 
 /******************************************************************************/
 
-µBlock.loadFilterLists = function(callback) {
+uBlock.loadFilterLists = function(callback) {
 
-    //quickProfiler.start('µBlock.loadFilterLists()');
+    //quickProfiler.start('uBlock.loadFilterLists()');
 
-    var µb = this;
+    var ub = this;
     var filterlistsCount = 0;
 
     if ( typeof callback !== 'function' ) {
@@ -284,32 +284,32 @@
 
     // Never fetch from remote servers when we load filter lists: this has to
     // be as fast as possible.
-    µb.assets.remoteFetchBarrier += 1;
+    ub.assets.remoteFetchBarrier += 1;
 
     var onDone = function() {
         // Remove barrier to remote fetching
-        µb.assets.remoteFetchBarrier -= 1;
+        ub.assets.remoteFetchBarrier -= 1;
 
-        µb.staticNetFilteringEngine.freeze();
-        µb.cosmeticFilteringEngine.freeze();
-        vAPI.storage.set({ 'remoteBlacklists': µb.remoteBlacklists });
+        ub.staticNetFilteringEngine.freeze();
+        ub.cosmeticFilteringEngine.freeze();
+        vAPI.storage.set({ 'remoteBlacklists': ub.remoteBlacklists });
 
         //quickProfiler.stop(0);
 
         vAPI.messaging.broadcast({ what: 'allFilterListsReloaded' });
         callback();
 
-        µb.toSelfieAsync();
+        ub.toSelfieAsync();
     };
 
     var applyCompiledFilters = function(path, compiled) {
-        var snfe = µb.staticNetFilteringEngine;
-        var cfe = µb.cosmeticFilteringEngine;
+        var snfe = ub.staticNetFilteringEngine;
+        var cfe = ub.cosmeticFilteringEngine;
         var acceptedCount = snfe.acceptedCount + cfe.acceptedCount;
         var duplicateCount = snfe.duplicateCount + cfe.duplicateCount;
-        µb.applyCompiledFilters(compiled);
-        if ( µb.remoteBlacklists.hasOwnProperty(path) ) {
-            var entry = µb.remoteBlacklists[path];
+        ub.applyCompiledFilters(compiled);
+        if ( ub.remoteBlacklists.hasOwnProperty(path) ) {
+            var entry = ub.remoteBlacklists[path];
             entry.entryCount = snfe.acceptedCount + cfe.acceptedCount - acceptedCount;
             entry.entryUsedCount = entry.entryCount - (snfe.duplicateCount + cfe.duplicateCount - duplicateCount);
         }
@@ -324,11 +324,11 @@
     };
 
     var onFilterListsReady = function(lists) {
-        µb.remoteBlacklists = lists;
+        ub.remoteBlacklists = lists;
 
-        µb.cosmeticFilteringEngine.reset();
-        µb.staticNetFilteringEngine.reset();
-        µb.destroySelfie();
+        ub.cosmeticFilteringEngine.reset();
+        ub.staticNetFilteringEngine.reset();
+        ub.destroySelfie();
 
         // We need to build a complete list of assets to pull first: this is
         // because it *may* happens that some load operations are synchronous:
@@ -352,7 +352,7 @@
 
         var i = toLoad.length;
         while ( i-- ) {
-            µb.getCompiledFilterList(toLoad[i], onCompiledListLoaded);
+            ub.getCompiledFilterList(toLoad[i], onCompiledListLoaded);
         }
     };
 
@@ -361,19 +361,19 @@
 
 /******************************************************************************/
 
-µBlock.getCompiledFilterListPath = function(path) {
+uBlock.getCompiledFilterListPath = function(path) {
     return 'cache://compiled-filter-list:' + this.createShortUniqueId(path);
 };
 
 /******************************************************************************/
 
-µBlock.getCompiledFilterList = function(path, callback) {
+uBlock.getCompiledFilterList = function(path, callback) {
     var compiledPath = this.getCompiledFilterListPath(path);
-    var µb = this;
+    var ub = this;
 
     var onRawListLoaded = function(details) {
         if ( details.content !== '' ) {
-            var listMeta = µb.remoteBlacklists[path];
+            var listMeta = ub.remoteBlacklists[path];
             if ( listMeta && listMeta.title === '' ) {
                 var matches = details.content.slice(0, 1024).match(/(?:^|\n)!\s*Title:([^\n]+)/i);
                 if ( matches !== null ) {
@@ -381,20 +381,20 @@
                 }
             }
 
-            //console.debug('µBlock.getCompiledFilterList/onRawListLoaded: compiling "%s"', path);
-            details.content = µb.compileFilters(details.content);
-            µb.assets.put(compiledPath, details.content);
+            //console.debug('uBlock.getCompiledFilterList/onRawListLoaded: compiling "%s"', path);
+            details.content = ub.compileFilters(details.content);
+            ub.assets.put(compiledPath, details.content);
         }
         callback(details);
     };
 
     var onCompiledListLoaded = function(details) {
         if ( details.content === '' ) {
-            //console.debug('µBlock.getCompiledFilterList/onCompiledListLoaded: no compiled version for "%s"', path);
-            µb.assets.get(path, onRawListLoaded);
+            //console.debug('uBlock.getCompiledFilterList/onCompiledListLoaded: no compiled version for "%s"', path);
+            ub.assets.get(path, onRawListLoaded);
             return;
         }
-        //console.debug('µBlock.getCompiledFilterList/onCompiledListLoaded: using compiled version for "%s"', path);
+        //console.debug('uBlock.getCompiledFilterList/onCompiledListLoaded: using compiled version for "%s"', path);
         details.path = path;
         callback(details);
     };
@@ -404,20 +404,20 @@
 
 /******************************************************************************/
 
-µBlock.purgeCompiledFilterList = function(path) {
+uBlock.purgeCompiledFilterList = function(path) {
     this.assets.purge(this.getCompiledFilterListPath(path));
 };
 
 /******************************************************************************/
 
-µBlock.purgeFilterList = function(path) {
+uBlock.purgeFilterList = function(path) {
     this.purgeCompiledFilterList(path);
     this.assets.purge(path);
 };
 
 /******************************************************************************/
 
-µBlock.compileFilters = function(rawText) {
+uBlock.compileFilters = function(rawText) {
     var rawEnd = rawText.length;
     var compiledFilters = [];
 
@@ -511,7 +511,7 @@
 
 /******************************************************************************/
 
-µBlock.applyCompiledFilters = function(rawText) {
+uBlock.applyCompiledFilters = function(rawText) {
     var skipCosmetic = !this.userSettings.parseAllABPHideFilters;
     var staticNetFilteringEngine = this.staticNetFilteringEngine;
     var cosmeticFilteringEngine = this.cosmeticFilteringEngine;
@@ -527,7 +527,7 @@
 
 // `switches` contains the filter lists for which the switch must be revisited.
 
-µBlock.selectFilterLists = function(switches) {
+uBlock.selectFilterLists = function(switches) {
     switches = switches || {};
 
     // Only the lists referenced by the switches are touched.
@@ -557,14 +557,14 @@
 
 // Plain reload of all filters.
 
-µBlock.reloadAllFilters = function() {
-    var µb = this;
+uBlock.reloadAllFilters = function() {
+    var ub = this;
 
     // We are just reloading the filter lists: we do not want assets to update.
     this.assets.autoUpdate = false;
 
     var onFiltersReady = function() {
-        µb.assets.autoUpdate = µb.userSettings.autoUpdate;
+        ub.assets.autoUpdate = ub.userSettings.autoUpdate;
     };
 
     this.loadFilterLists(onFiltersReady);
@@ -572,9 +572,9 @@
 
 /******************************************************************************/
 
-µBlock.loadPublicSuffixList = function(callback) {
-    var µb = this;
-    var path = µb.pslPath;
+uBlock.loadPublicSuffixList = function(callback) {
+    var ub = this;
+    var path = ub.pslPath;
     var compiledPath = 'cache://compiled-publicsuffixlist';
 
     if ( typeof callback !== 'function' ) {
@@ -582,20 +582,20 @@
     }
     var onRawListLoaded = function(details) {
         if ( details.content !== '' ) {
-            //console.debug('µBlock.loadPublicSuffixList/onRawListLoaded: compiling "%s"', path);
+            //console.debug('uBlock.loadPublicSuffixList/onRawListLoaded: compiling "%s"', path);
             publicSuffixList.parse(details.content, punycode.toASCII);
-            µb.assets.put(compiledPath, JSON.stringify(publicSuffixList.toSelfie()));
+            ub.assets.put(compiledPath, JSON.stringify(publicSuffixList.toSelfie()));
         }
         callback();
     };
 
     var onCompiledListLoaded = function(details) {
         if ( details.content === '' ) {
-            //console.debug('µBlock.loadPublicSuffixList/onCompiledListLoaded: no compiled version for "%s"', path);
-            µb.assets.get(path, onRawListLoaded);
+            //console.debug('uBlock.loadPublicSuffixList/onCompiledListLoaded: no compiled version for "%s"', path);
+            ub.assets.get(path, onRawListLoaded);
             return;
         }
-        //console.debug('µBlock.loadPublicSuffixList/onCompiledListLoaded: using compiled version for "%s"', path);
+        //console.debug('uBlock.loadPublicSuffixList/onCompiledListLoaded: using compiled version for "%s"', path);
         publicSuffixList.fromSelfie(JSON.parse(details.content));
         callback();
     };
@@ -605,7 +605,7 @@
 
 /******************************************************************************/
 
-µBlock.toSelfie = function() {
+uBlock.toSelfie = function() {
     var selfie = {
         magic: this.systemSettings.selfieMagic,
         publicSuffixList: publicSuffixList.toSelfie(),
@@ -614,14 +614,14 @@
         cosmeticFilteringEngine: this.cosmeticFilteringEngine.toSelfie()
     };
     vAPI.storage.set({ selfie: selfie });
-    //console.debug('storage.js > µBlock.toSelfie()');
+    //console.debug('storage.js > uBlock.toSelfie()');
 };
 
 // This is to be sure the selfie is generated in a sane manner: the selfie will
 // be generated if the user doesn't change his filter lists selection for
 // some set time.
 
-µBlock.toSelfieAsync = function(after) {
+uBlock.toSelfieAsync = function(after) {
     if ( typeof after !== 'number' ) {
         after = this.selfieAfter;
     }
@@ -636,16 +636,16 @@
 
 /******************************************************************************/
 
-µBlock.destroySelfie = function() {
+uBlock.destroySelfie = function() {
     vAPI.storage.remove('selfie');
     this.asyncJobs.remove('toSelfie');
-    //console.debug('µBlock.destroySelfie()');
+    //console.debug('uBlock.destroySelfie()');
 };
 
 /******************************************************************************/
 
-µBlock.updateStartHandler = function(callback) {
-    var µb = this;
+uBlock.updateStartHandler = function(callback) {
+    var ub = this;
     var onListsReady = function(lists) {
         var assets = {};
         for ( var location in lists ) {
@@ -657,7 +657,7 @@
             }
             assets[location] = true;
         }
-        assets[µb.pslPath] = true;
+        assets[ub.pslPath] = true;
         assets['assets/ublock/mirror-candidates.txt'] = true;
         callback(assets);
     };
@@ -667,7 +667,7 @@
 
 /******************************************************************************/
 
-µBlock.assetUpdatedHandler = function(details) {
+uBlock.assetUpdatedHandler = function(details) {
     var path = details.path || '';
     if ( this.remoteBlacklists.hasOwnProperty(path) === false ) {
         return;
@@ -677,7 +677,7 @@
         return;
     }
     // Compile the list while we have the raw version in memory
-    //console.debug('µBlock.getCompiledFilterList/onRawListLoaded: compiling "%s"', path);
+    //console.debug('uBlock.getCompiledFilterList/onRawListLoaded: compiling "%s"', path);
     this.assets.put(
         this.getCompiledFilterListPath(path),
         this.compileFilters(details.content)
@@ -686,22 +686,22 @@
 
 /******************************************************************************/
 
-µBlock.updateCompleteHandler = function(details) {
-    var µb = this;
+uBlock.updateCompleteHandler = function(details) {
+    var ub = this;
     var updatedCount = details.updatedCount;
 
     // Assets are supposed to have been all updated, prevent fetching from
     // remote servers.
-    µb.assets.remoteFetchBarrier += 1;
+    ub.assets.remoteFetchBarrier += 1;
 
     var onFiltersReady = function() {
-        µb.assets.remoteFetchBarrier -= 1;
+        ub.assets.remoteFetchBarrier -= 1;
     };
 
     var onPSLReady = function() {
         if ( updatedCount !== 0 ) {
-            //console.debug('storage.js > µBlock.updateCompleteHandler: reloading filter lists');
-            µb.loadFilterLists(onFiltersReady);
+            //console.debug('storage.js > uBlock.updateCompleteHandler: reloading filter lists');
+            ub.loadFilterLists(onFiltersReady);
         } else {
             onFiltersReady();
         }
@@ -712,7 +712,7 @@
     }
 
     if ( details.hasOwnProperty(this.pslPath) ) {
-        //console.debug('storage.js > µBlock.updateCompleteHandler: reloading PSL');
+        //console.debug('storage.js > uBlock.updateCompleteHandler: reloading PSL');
         this.loadPublicSuffixList(onPSLReady);
         updatedCount -= 1;
     } else {
@@ -722,7 +722,7 @@
 
 /******************************************************************************/
 
-µBlock.assetCacheRemovedHandler = (function() {
+uBlock.assetCacheRemovedHandler = (function() {
     var barrier = false;
 
     var handler = function(paths) {
@@ -735,12 +735,12 @@
         while ( i-- ) {
             path = paths[i];
             if ( this.remoteBlacklists.hasOwnProperty(path) ) {
-                //console.debug('µBlock.assetCacheRemovedHandler: decompiling "%s"', path);
+                //console.debug('uBlock.assetCacheRemovedHandler: decompiling "%s"', path);
                 this.purgeCompiledFilterList(path);
                 continue;
             }
             if ( path === this.pslPath ) {
-                //console.debug('µBlock.assetCacheRemovedHandler: decompiling "%s"', path);
+                //console.debug('uBlock.assetCacheRemovedHandler: decompiling "%s"', path);
                 this.assets.purge('cache://compiled-publicsuffixlist');
                 continue;
             }

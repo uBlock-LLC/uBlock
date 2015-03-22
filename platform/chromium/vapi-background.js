@@ -1,7 +1,7 @@
 /*******************************************************************************
 
-    µBlock - a browser extension to block requests.
-    Copyright (C) 2014 The µBlock authors
+    uBlock - a browser extension to block requests.
+    Copyright (C) 2014 The uBlock authors
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
     Home: https://github.com/gorhill/uBlock
 */
 
-/* global self, µBlock */
+/* global self, uBlock */
 
 // For background page
 
@@ -415,7 +415,7 @@ vAPI.messaging.onPortMessage = function(request, port) {
         return;
     }
 
-    console.error('µBlock> messaging > unknown request: %o', request);
+    console.error('uBlock> messaging > unknown request: %o', request);
 
     // Unhandled:
     // Need to callback anyways in case caller expected an answer, or
@@ -534,21 +534,21 @@ vAPI.net = {};
 /******************************************************************************/
 
 vAPI.net.registerListeners = function() {
-    var µb = µBlock;
-    var µburi = µb.URI;
+    var ub = uBlock;
+    var uburi = ub.URI;
 
     var normalizeRequestDetails = function(details) {
-        µburi.set(details.url);
+        uburi.set(details.url);
 
         details.tabId = details.tabId.toString();
-        details.hostname = µburi.hostnameFromURI(details.url);
+        details.hostname = uburi.hostnameFromURI(details.url);
 
         // The rest of the function code is to normalize type
         if ( details.type !== 'other' ) {
             return;
         }
 
-        var tail = µburi.path.slice(-6);
+        var tail = uburi.path.slice(-6);
         var pos = tail.lastIndexOf('.');
 
         // https://github.com/gorhill/uBlock/issues/862
@@ -667,11 +667,11 @@ vAPI.onLoadAllCompleted = function() {
         }, function(){ scriptEnd(tabId); });
     };
     var bindToTabs = function(tabs) {
-        var µb = µBlock;
+        var ub = uBlock;
         var i = tabs.length, tab;
         while ( i-- ) {
             tab = tabs[i];
-            µb.bindTabToPageStats(tab.id, tab.url);
+            ub.bindTabToPageStats(tab.id, tab.url);
             // https://github.com/gorhill/uBlock/issues/129
             scriptStart(tab.id);
         }

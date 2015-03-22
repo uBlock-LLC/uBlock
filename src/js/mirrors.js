@@ -1,6 +1,6 @@
 /*******************************************************************************
 
-    µBlock - a browser extension to block requests.
+    uBlock - a browser extension to block requests.
     Copyright (C) 2014 Raymond Hill
 
     This program is free software: you can redistribute it and/or modify
@@ -20,13 +20,13 @@
 */
 
 /* jshint bitwise: false */
-/* global vAPI, µBlock, YaMD5 */
+/* global vAPI, uBlock, YaMD5 */
 
 /******************************************************************************/
 
 // Low-level asset files manager
 
-µBlock.mirrors = (function() {
+uBlock.mirrors = (function() {
 
 'use strict';
 
@@ -550,7 +550,7 @@ var load = function() {
     };
 
     vAPI.storage.get({ 'mirrors_metadata': metadata }, onMetadataReady);
-    µBlock.assets.get('assets/ublock/mirror-candidates.txt', onMirrorCandidatesReady);
+    uBlock.assets.get('assets/ublock/mirror-candidates.txt', onMirrorCandidatesReady);
 };
 
 /******************************************************************************/

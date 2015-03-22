@@ -1,12 +1,12 @@
 Một công cụ chặn quảng cáo hiệu quả: sử dụng ít bộ nhớ, CPU và có thể nạp, áp dụng hàng ngàn bộ lọc so với những công cụ chặn quảng cáo hiện nay.
 
-Minh hoạ tổng quan về tính hiệu quả của µBlock: https://github.com/gorhill/uBlock/wiki/uBlock-vs.-ABP:-efficiency-compared
+Minh hoạ tổng quan về tính hiệu quả của uBlock: https://github.com/gorhill/uBlock/wiki/uBlock-vs.-ABP:-efficiency-compared
 
 Sử dụng: Nút nguồn lớn trong hộp thoại popup để vô hiệu/kích hoạt vĩnh viễn uBlock cho website hiện tại. Nó chỉ áp dụng cho trang hiện tại, không phải tất cả website.
 
 ***
 
-Linh hoạt, hơn cả một "công cụ chặn quảng cáo": µBlock có thể đọc và tạo bộ lọc từ tập tin hosts.
+Linh hoạt, hơn cả một "công cụ chặn quảng cáo": uBlock có thể đọc và tạo bộ lọc từ tập tin hosts.
 
 Ngay lập tức, những bộ lọc này được nạp và áp dụng:
 

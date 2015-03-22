@@ -1,7 +1,7 @@
 /*******************************************************************************
 
-    µBlock - a browser extension to block requests.
-    Copyright (C) 2014 The µBlock authors
+    uBlock - a browser extension to block requests.
+    Copyright (C) 2014 The uBlock authors
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
 */
 
 /* jshint esnext: true, bitwise: false */
-/* global self, Components, punycode, µBlock */
+/* global self, Components, punycode, uBlock */
 
 // For background page
 
@@ -1910,7 +1910,7 @@ vAPI.lastError = function() {
 // the web pages before uBlock was ready.
 
 vAPI.onLoadAllCompleted = function() {
-    var µb = µBlock;
+    var ub = uBlock;
     for ( var tab of this.tabs.getAll() ) {
         // We're insterested in only the tabs that were already loaded
         if ( !vAPI.fennec && tab.hasAttribute('pending') ) {
@@ -1919,7 +1919,7 @@ vAPI.onLoadAllCompleted = function() {
 
         var tabId = this.tabs.getTabId(tab);
         var browser = getBrowserForTab(tab);
-        µb.bindTabToPageStats(tabId, browser.currentURI.asciiSpec);
+        ub.bindTabToPageStats(tabId, browser.currentURI.asciiSpec);
         browser.messageManager.sendAsyncMessage(
             location.host + '-load-completed'
         );

@@ -1,6 +1,6 @@
 /*******************************************************************************
 
-    µBlock - a browser extension to block requests.
+    uBlock - a browser extension to block requests.
     Copyright (C) 2014 Raymond Hill
 
     This program is free software: you can redistribute it and/or modify
@@ -105,7 +105,7 @@ var messager = vAPI.messaging.channel('contentscript-end.js');
 
     var retrieveGenericSelectors = function() {
         if ( lowGenericSelectors.length !== 0 || highGenerics === null ) {
-            //console.log('µBlock> ABP cosmetic filters: retrieving CSS rules using %d selectors', lowGenericSelectors.length);
+            //console.log('uBlock> ABP cosmetic filters: retrieving CSS rules using %d selectors', lowGenericSelectors.length);
             messager.send({
                     what: 'retrieveGenericCosmeticSelectors',
                     pageURL: window.location.href,
@@ -165,7 +165,7 @@ var messager = vAPI.messaging.channel('contentscript-end.js');
 
     var nextRetrieveHandler = function(selectors) {
         //var tStart = timer.now();
-        //console.debug('µBlock> contextNodes = %o', contextNodes);
+        //console.debug('uBlock> contextNodes = %o', contextNodes);
         var hideSelectors = [];
         if ( selectors && selectors.hide.length ) {
             processLowGenerics(selectors.hide, hideSelectors);
@@ -210,7 +210,7 @@ var messager = vAPI.messaging.channel('contentscript-end.js');
             hostname: window.location.hostname,
             selectors: selectors
         });
-        //console.debug('µBlock> generic cosmetic filters: injecting %d CSS rules:', selectors.length, text);
+        //console.debug('uBlock> generic cosmetic filters: injecting %d CSS rules:', selectors.length, text);
     };
 
     /*

@@ -1,6 +1,6 @@
 /*******************************************************************************
 
-    µBlock - a browser extension to block requests.
+    uBlock - a browser extension to block requests.
     Copyright (C) 2014 Raymond Hill
 
     This program is free software: you can redistribute it and/or modify
@@ -19,14 +19,14 @@
     Home: https://github.com/gorhill/uBlock
 */
 
-/* global µBlock */
+/* global uBlock */
 'use strict';
 
 /******************************************************************************/
 
-// This will inserted as a module in the µBlock object.
+// This will inserted as a module in the uBlock object.
 
-µBlock.utils = (function() {
+uBlock.utils = (function() {
 
 /******************************************************************************/
 

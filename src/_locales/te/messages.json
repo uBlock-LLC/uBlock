@@ -1,6 +1,6 @@
 {
   "extName":{
-    "message":"µబ్లాక్",
+    "message":"uబ్లాక్",
     "description":"extension name."
   },
   "extShortDesc":{
@@ -8,7 +8,7 @@
     "description":"this will be in the chrome web store: must be 132 characters or less"
   },
   "dashboardName":{
-    "message":"µబ్లాక్ — నియంత్రణా వేదిక",
+    "message":"uబ్లాక్ — నియంత్రణా వేదిక",
     "description":"English: uBlock — Dashboard"
   },
   "settingsPageName":{
@@ -32,7 +32,7 @@
     "description":"appears as tab name in dashboard"
   },
   "statsPageName":{
-    "message":"µబ్లాక్ — నెట్వర్క్ అభ్యర్ధనల పట్టిక",
+    "message":"uబ్లాక్ — నెట్వర్క్ అభ్యర్ధనల పట్టిక",
     "description":"Title for the network request log window"
   },
   "aboutPageName":{
