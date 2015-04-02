@@ -1,7 +1,7 @@
 /*******************************************************************************
 
 YaMD5 - Yet another MD5 hasher.
-home: https://github.com/chrisaljoudi/yamd5.js
+home: https://github.com/gorhill/yamd5.js
 
 I needed an MD5 hasher, and as usual I want small code base, and fast.
 

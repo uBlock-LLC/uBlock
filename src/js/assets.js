@@ -113,7 +113,7 @@ var cachedAssetsManager = (function() {
             return;
         }
         // Flush cached non-user assets if these are from a prior version.
-        // https://github.com/chrisaljoudi/httpswitchboard/issues/212
+        // https://github.com/gorhill/httpswitchboard/issues/212
         var onLastVersionRead = function(store) {
             var currentVersion = vAPI.app.version;
             var lastVersion = store.extensionLastVersion || '0.0.0.0';
@@ -123,7 +123,7 @@ var cachedAssetsManager = (function() {
             callback(entries);
         };
         var onLoaded = function(bin) {
-            // https://github.com/chrisaljoudi/httpswitchboard/issues/381
+            // https://github.com/gorhill/httpswitchboard/issues/381
             // Maybe the index was requested multiple times and already
             // fetched by one of the occurrences.
             if ( entries === null ) {
@@ -285,7 +285,7 @@ var cachedAssetsManager = (function() {
 var getTextFileFromURL = function(url, onLoad, onError) {
     // console.log('µBlock.assets/getTextFileFromURL("%s"):', url);
 
-    // https://github.com/chrisaljoudi/uMatrix/issues/15
+    // https://github.com/gorhill/uMatrix/issues/15
     var onResponseReceived = function() {
         this.onload = this.onerror = this.ontimeout = null;
         // xhr for local files gives status 0, but actually succeeds
@@ -553,7 +553,7 @@ var readRepoFile = function(path, callback) {
 
     var onRepoFileLoaded = function() {
         //console.log('µBlock> readRepoFile("%s") / onRepoFileLoaded()', path);
-        // https://github.com/chrisaljoudi/httpswitchboard/issues/263
+        // https://github.com/gorhill/httpswitchboard/issues/263
         if ( this.status === 200 ) {
             reportBack(this.responseText);
         } else {

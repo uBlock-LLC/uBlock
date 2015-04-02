@@ -19,7 +19,7 @@
 
 */
 
-/*! Home: https://github.com/chrisaljoudi/publicsuffixlist.js */
+/*! Home: https://github.com/gorhill/publicsuffixlist.js */
 
 /*
     This code is mostly dumb: I consider this to be lower-level code, thus

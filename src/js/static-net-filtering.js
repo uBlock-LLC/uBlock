@@ -2127,7 +2127,7 @@ FilterContainer.prototype.matchString = function(context) {
         return this.matchStringExactType(context, context.requestURL, context.requestType);
     }
 
-    // https://github.com/chrisaljoudi/httpswitchboard/issues/239
+    // https://github.com/gorhill/httpswitchboard/issues/239
     // Convert url to lower case:
     //     `match-case` option not supported, but then, I saw only one
     //     occurrence of it in all the supported lists (bulgaria list).

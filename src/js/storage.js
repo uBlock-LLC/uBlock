@@ -510,7 +510,7 @@
             line = line.slice(0, pos).trim();
         }
 
-        // https://github.com/chrisaljoudi/httpswitchboard/issues/15
+        // https://github.com/gorhill/httpswitchboard/issues/15
         // Ensure localhost et al. don't end up in the ubiquitous blacklist.
         // With hosts files, we need to remove local IP redirection
         if ( reMaybeLocalIp.test(c) ) {

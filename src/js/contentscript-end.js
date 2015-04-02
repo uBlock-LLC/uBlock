@@ -682,7 +682,7 @@ var uBlockCollapser = (function() {
         }
     };
 
-    // https://github.com/chrisaljoudi/httpswitchboard/issues/176
+    // https://github.com/gorhill/httpswitchboard/issues/176
     var treeObserver = new MutationObserver(treeMutationObservedHandlerAsync);
     treeObserver.observe(document.body, {
         childList: true,

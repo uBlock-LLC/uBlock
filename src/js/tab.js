@@ -166,7 +166,7 @@ vAPI.tabs.registerListeners();
 /******************************************************************************/
 /******************************************************************************/
 
-// https://github.com/chrisaljoudi/httpswitchboard/issues/303
+// https://github.com/gorhill/httpswitchboard/issues/303
 // Some kind of trick going on here:
 //   Any scheme other than 'http' and 'https' is remapped into a fake
 //   URL which trick the rest of µBlock into being able to process an
@@ -202,7 +202,7 @@ vAPI.tabs.registerListeners();
 µb.bindTabToPageStats = function(tabId, pageURL, context) {
     this.updateBadgeAsync(tabId);
 
-    // https://github.com/chrisaljoudi/httpswitchboard/issues/303
+    // https://github.com/gorhill/httpswitchboard/issues/303
     // Normalize page URL
     var normalURL = this.normalizePageURL(tabId, pageURL);
 

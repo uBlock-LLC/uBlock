@@ -270,7 +270,7 @@ FilterParser.prototype.parse = function(s) {
     this.suffix = matches[3];
 
     // 2014-05-23:
-    // https://github.com/chrisaljoudi/httpswitchboard/issues/260
+    // https://github.com/gorhill/httpswitchboard/issues/260
     // Any sequence of `#` longer than one means the line is not a valid
     // cosmetic filter.
     if ( this.suffix.indexOf('##') !== -1 ) {
