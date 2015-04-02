@@ -9,7 +9,7 @@
     <key>CFBundleDisplayName</key>
     <string>{name}</string>
     <key>CFBundleIdentifier</key>
-    <string>net.gorhill.uBlock</string>
+    <string>net.chrisaljoudi.uBlock</string>
     <key>CFBundleInfoDictionaryVersion</key>
     <string>6.0</string>
     <key>CFBundleShortVersionString</key>
