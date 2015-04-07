@@ -637,12 +637,18 @@ PageStore.prototype.toggleNetFilteringSwitch = function(url, scope, state) {
 /******************************************************************************/
 
 PageStore.prototype.filterRequest = function(context) {
-
-    if ( this.getNetFilteringSwitch() === false ) {
-        if ( collapsibleRequestTypes.indexOf(context.requestType) !== -1 ) {
-            this.netFilteringCache.add(context, '');
+    if (context !== this) {
+        // filterRequest coming through for a different URL, don't check the filtering switch for this pageStore, but rather for the context URL.
+        if (µb.getNetFilteringSwitch(context.requestURL) === false) {
+            return '';
         }
-        return '';
+    } else {
+        if ( this.getNetFilteringSwitch() === false ) {
+            if ( collapsibleRequestTypes.indexOf(context.requestType) !== -1 ) {
+                this.netFilteringCache.add(context, '');
+            }
+            return '';
+        }
     }
 
     var entry = this.netFilteringCache.lookup(context);
