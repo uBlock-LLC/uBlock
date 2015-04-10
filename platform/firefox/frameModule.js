@@ -16,7 +16,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see {http://www.gnu.org/licenses/}.
 
-    Home: https://github.com/gorhill/uBlock
+    Home: https://github.com/chrisaljoudi/uBlock
 */
 
 'use strict';
@@ -293,6 +293,15 @@ const contentObserver = {
         let docReady = (e) => {
             let doc = e.target;
             doc.removeEventListener(e.type, docReady, true);
+
+            // It is possible, in some cases (#1140) for document-element-inserted to occur *before* nsIWebProgressListener.onLocationChange, so ensure that the URL is correct before continuing
+            let messageManager = doc.docShell.getInterface(Ci.nsIContentFrameMessageManager);
+
+            messageManager.sendSyncMessage(locationChangedMessageName, {
+                url: loc.href,
+                noRefresh: true, // If the URL is the same, then don't refresh it so that if this occurs after onLocationChange, no the block count isn't reset
+            });
+
             lss(this.contentBaseURI + 'contentscript-end.js', sandbox);
 
             if ( doc.querySelector('a[href^="abp:"]') ) {

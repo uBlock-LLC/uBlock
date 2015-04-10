@@ -16,7 +16,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see {http://www.gnu.org/licenses/}.
 
-    Home: https://github.com/gorhill/uBlock
+    Home: https://github.com/chrisaljoudi/uBlock
 */
 
 /* exported quickProfiler */
@@ -27,6 +27,9 @@ var quickProfiler = (function() {
     'use strict';
 
     var timer = window.performance || Date;
+    if(typeof timer.now === "undefined") {
+        timer.now = timer.webkitNow;
+    }
     var time = 0;
     var count = 0;
     var tstart = 0;

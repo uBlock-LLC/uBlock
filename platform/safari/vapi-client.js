@@ -16,7 +16,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see {http://www.gnu.org/licenses/}.
 
-    Home: https://github.com/gorhill/uBlock
+    Home: https://github.com/chrisaljoudi/uBlock
 */
 /******************************************************************************/
 // For non background pages
@@ -247,6 +247,7 @@ xo = XMLHttpRequest.prototype.open,\
 img = Image;\
 Image = function() {\
 var x = new img();\
+try{\
 Object.defineProperty(x, 'src', {\
 get: function() {\
 return x.getAttribute('src');\
@@ -255,6 +256,7 @@ set: function(val) {\
 x.setAttribute('src', block(val, 'image') ? 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACwAAAAAAQABAAACAkQBADs=' : val);\
 }\
 });\
+}\catch(e){}\
 return x;\
 };\
 open = function(u) {\

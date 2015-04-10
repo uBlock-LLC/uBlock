@@ -16,7 +16,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see {http://www.gnu.org/licenses/}.
 
-    Home: https://github.com/gorhill/uBlock
+    Home: https://github.com/chrisaljoudi/uBlock
 */
 
 /* global uDom */
@@ -32,7 +32,7 @@
 var resizeFrame = function() {
     var navRect = document.getElementById('dashboard-nav').getBoundingClientRect();
     var viewRect = document.documentElement.getBoundingClientRect();
-    document.getElementById('iframe').style.setProperty('height', (viewRect.height - navRect.height) + 'px');
+    document.getElementById('iframe').style.setProperty('height', (viewRect.bottom - navRect.bottom) + 'px');
 };
 
 /******************************************************************************/

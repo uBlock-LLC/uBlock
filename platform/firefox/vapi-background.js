@@ -16,7 +16,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see {http://www.gnu.org/licenses/}.
 
-    Home: https://github.com/gorhill/uBlock
+    Home: https://github.com/chrisaljoudi/uBlock
 */
 
 /* jshint esnext: true, bitwise: false */
@@ -65,7 +65,7 @@ vAPI.app.restart = function() {
 var cleanupTasks = [];
 
 // This must be updated manually, every time a new task is added/removed
-var expectedNumberOfCleanups = 7;
+var expectedNumberOfCleanups = 6; // 7 instances of cleanupTasks.push, but one is unique to fennec, and one to desktop.
 
 window.addEventListener('unload', function() {
     for ( var cleanup of cleanupTasks ) {
@@ -1325,8 +1325,16 @@ vAPI.net.registerListeners = function() {
     var locationChangedListener = function(e) {
         var details = e.data;
         var browser = e.target;
-        var tabId = vAPI.tabs.getTabId(browser);
         
+        if (details.noRefresh && details.url === browser.currentURI.asciiSpec) { // If the location changed message specified not to refresh, and the URL is the same, no need to do anything
+            //console.debug("nsIWebProgressListener: ignoring onLocationChange: " + details.url);
+            return;
+        }
+
+        var tabId = vAPI.tabs.getTabId(browser);
+        if (tabId === vAPI.noTabId) {
+            return; // Do not navigate for behind the scenes
+        }
         //console.debug("nsIWebProgressListener: onLocationChange: " + details.url + " (" + details.flags + ")");        
 
         // LOCATION_CHANGE_SAME_DOCUMENT = "did not load a new document"
@@ -1339,7 +1347,7 @@ vAPI.net.registerListeners = function() {
             return;
         }
 
-        // https://github.com/gorhill/uBlock/issues/105
+        // https://github.com/chrisaljoudi/uBlock/issues/105
         // Allow any kind of pages
         vAPI.tabs.onNavigation({
             frameId: 0,
@@ -1617,7 +1625,7 @@ vAPI.toolbarButton.onBeforeCreated = function(doc) {
         updateTimer = null;
         var body = iframe.contentDocument.body;
         panel.parentNode.style.maxWidth = 'none';
-        // https://github.com/gorhill/uBlock/issues/730
+        // https://github.com/chrisaljoudi/uBlock/issues/730
         // Voodoo programming: this recipe works
         panel.style.height = iframe.style.height = body.clientHeight.toString() + 'px';
         panel.style.width = iframe.style.width = body.clientWidth.toString() + 'px';
@@ -1713,7 +1721,7 @@ vAPI.contextMenu.displayMenuItem = function({target}) {
     var menuitem = doc.getElementById(vAPI.contextMenu.menuItemId);
     var currentURI = gContextMenu.browser.currentURI;
 
-    // https://github.com/gorhill/uBlock/issues/105
+    // https://github.com/chrisaljoudi/uBlock/issues/105
     // TODO: Should the element picker works on any kind of pages?
     if ( !currentURI.schemeIs('http') && !currentURI.schemeIs('https') ) {
         menuitem.hidden = true;

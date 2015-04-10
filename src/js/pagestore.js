@@ -16,7 +16,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see {http://www.gnu.org/licenses/}.
 
-    Home: https://github.com/gorhill/uBlock
+    Home: https://github.com/chrisaljoudi/uBlock
 */
 
 /* jshint bitwise: false */
@@ -417,12 +417,15 @@ FrameStore.factory = function(rootHostname, frameURL) {
 
 FrameStore.prototype.init = function(rootHostname, frameURL) {
     var µburi = µb.URI;
+    this.pageURL = frameURL;
     this.pageHostname = µburi.hostnameFromURI(frameURL);
     this.pageDomain = µburi.domainFromHostname(this.pageHostname) || this.pageHostname;
     this.rootHostname = rootHostname;
     this.rootDomain = µburi.domainFromHostname(rootHostname) || rootHostname;
     // This is part of the filtering evaluation context
     this.requestURL = this.requestHostname = this.requestType = '';
+    this.netFiltering = true;
+    this.netFilteringReadTime = 0;
 
     return this;
 };
@@ -440,6 +443,15 @@ FrameStore.prototype.dispose = function() {
 };
 
 /******************************************************************************/
+
+FrameStore.prototype.getNetFilteringSwitch = function() {
+    if ( this.netFilteringReadTime < µb.netWhitelistModifyTime ) {
+        this.netFiltering = µb.getNetFilteringSwitch(this.pageURL);
+        this.netFilteringReadTime = Date.now();
+    }
+    return this.netFiltering;
+};
+
 /******************************************************************************/
 
 // To mitigate memory churning
@@ -472,7 +484,7 @@ PageStore.prototype.init = function(tabId, rawURL, pageURL) {
     this.pageURL = pageURL;
     this.pageHostname = µb.URI.hostnameFromURI(pageURL);
 
-    // https://github.com/gorhill/uBlock/issues/185
+    // https://github.com/chrisaljoudi/uBlock/issues/185
     // Use hostname if no domain can be extracted
     this.pageDomain = µb.URI.domainFromHostname(this.pageHostname) || this.pageHostname;
     this.rootHostname = this.pageHostname;
@@ -530,7 +542,7 @@ PageStore.prototype.reuse = function(rawURL, pageURL, context) {
         this.rawURL = rawURL;
         this.pageURL = pageURL;
 
-        // As part of https://github.com/gorhill/uBlock/issues/405
+        // As part of https://github.com/chrisaljoudi/uBlock/issues/405
         // URL changed, force a re-evaluation of filtering switch
         this.netFilteringReadTime = 0;
 
@@ -598,7 +610,7 @@ PageStore.prototype.setFrame = function(frameId, frameURL) {
 /******************************************************************************/
 
 PageStore.prototype.getNetFilteringSwitch = function() {
-    // https://github.com/gorhill/uBlock/issues/1078
+    // https://github.com/chrisaljoudi/uBlock/issues/1078
     // Use both the raw and normalized URLs.
     if ( this.netFilteringReadTime < µb.netWhitelistModifyTime ) {
         this.netFiltering = µb.getNetFilteringSwitch(this.pageURL);
@@ -637,8 +649,15 @@ PageStore.prototype.toggleNetFilteringSwitch = function(url, scope, state) {
 /******************************************************************************/
 
 PageStore.prototype.filterRequest = function(context) {
-
-    if ( this.getNetFilteringSwitch() === false ) {
+    if(context.preNavigationHeader) {                   // sometimes we get inline-script queries before being
+                                                        // informed of navigation
+        if(µb.getNetFilteringSwitch(context.requestURL) === false) {
+            return '';
+        }
+    }
+    if(this.getNetFilteringSwitch() === false ||        // if we're turned off (whitelisted)
+        (typeof context.getNetFilteringSwitch === "function" &&         // or we're in a frame that's whitelisted
+           context.getNetFilteringSwitch() === false)) {
         if ( collapsibleRequestTypes.indexOf(context.requestType) !== -1 ) {
             this.netFilteringCache.add(context, '');
         }
@@ -659,7 +678,7 @@ PageStore.prototype.filterRequest = function(context) {
     // We evaluate dynamic filtering first, and hopefully we can skip
     // evaluation of static filtering.
     if ( µb.userSettings.advancedUserEnabled ) {
-        var df = µb.sessionFirewall.evaluateCellZY(context.rootHostname, context.requestHostname, context.requestType);
+        var df = µb.sessionFirewall.evaluateCellZY(context.pageHostname, context.requestHostname, context.requestType);
         if ( df.mustBlockOrAllow() ) {
             result = df.toFilterString();
         }
@@ -687,8 +706,15 @@ var collapsibleRequestTypes = 'image sub_frame object';
 /******************************************************************************/
 
 PageStore.prototype.filterRequestNoCache = function(context) {
-
-    if ( this.getNetFilteringSwitch() === false ) {
+    if(context.preNavigationHeader) {                   // sometimes we get inline-script queries before being
+                                                        // informed of navigation
+        if(µb.getNetFilteringSwitch(context.requestURL) === false) {
+            return '';
+        }
+    }
+    if(this.getNetFilteringSwitch() === false ||        // if we're turned off (whitelisted)
+        (typeof context.getNetFilteringSwitch === "function" &&         // or we're in a frame that's whitelisted
+           context.getNetFilteringSwitch() === false)) {
         return '';
     }
 
@@ -700,7 +726,7 @@ PageStore.prototype.filterRequestNoCache = function(context) {
     // We evaluate dynamic filtering first, and hopefully we can skip
     // evaluation of static filtering.
     if ( µb.userSettings.advancedUserEnabled ) {
-        var df = µb.sessionFirewall.evaluateCellZY(context.rootHostname, context.requestHostname, context.requestType);
+        var df = µb.sessionFirewall.evaluateCellZY(context.pageHostname, context.requestHostname, context.requestType);
         if ( df.mustBlockOrAllow() ) {
             result = df.toFilterString();
         }
@@ -746,7 +772,7 @@ PageStore.prototype.logRequest = function(context, result) {
 /******************************************************************************/
 
 PageStore.prototype.toMirrorURL = function(requestURL) {
-    // https://github.com/gorhill/uBlock/issues/351
+    // https://github.com/chrisaljoudi/uBlock/issues/351
     // Bypass experimental features when uBlock is disabled for a site
     if ( µb.userSettings.experimentalEnabled === false ||
          this.getNetFilteringSwitch() === false ||

@@ -16,7 +16,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see {http://www.gnu.org/licenses/}.
 
-    Home: https://github.com/gorhill/uBlock
+    Home: https://github.com/chrisaljoudi/uBlock
 */
 
 // For non background pages
@@ -34,7 +34,7 @@
 var vAPI = self.vAPI = self.vAPI || {};
 var chrome = self.chrome;
 
-// https://github.com/gorhill/uBlock/issues/456
+// https://github.com/chrisaljoudi/uBlock/issues/456
 // Already injected?
 if ( vAPI.vapiClientInjected ) {
     //console.debug('vapi-client.js already injected: skipping.');
@@ -45,6 +45,20 @@ vAPI.vapiClientInjected = true;
 vAPI.sessionId = String.fromCharCode(Date.now() % 25 + 97) +
     Math.random().toString(36).slice(2);
 vAPI.chrome = true;
+
+/******************************************************************************/
+
+if (!chrome.runtime) {
+    // Chrome 20-21
+    chrome.runtime = chrome.extension;
+}
+else if(!chrome.runtime.onMessage) {
+    // Chrome 22-25
+    chrome.runtime.onMessage = chrome.extension.onMessage;
+    chrome.runtime.sendMessage = chrome.extension.sendMessage;
+    chrome.runtime.onConnect = chrome.extension.onConnect;
+    chrome.runtime.connect = chrome.extension.connect;
+}
 
 /******************************************************************************/
 

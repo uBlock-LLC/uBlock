@@ -2,7 +2,7 @@
     "manifest_version": 2,
 
     "name": "uBlock",
-    "version": "0.9.2.4",
+    "version": "0.9.3.5",
 
     "default_locale": "en",
     "description": "__MSG_extShortDesc__",
@@ -12,10 +12,7 @@
     },
 
     "browser_action": {
-        "default_icon": {
-            "19": "img/browsericons/icon19-off.png",
-            "38": "img/browsericons/icon38-off.png"
-        },
+        "default_icon": "img/browsericons/icon19-off.png",
         "default_title": "uBlock",
         "default_popup": "popup.html"
     },

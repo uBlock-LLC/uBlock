@@ -16,7 +16,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see {http://www.gnu.org/licenses/}.
 
-    Home: https://github.com/gorhill/uBlock
+    Home: https://github.com/chrisaljoudi/uBlock
 */
 
 /* jshint bitwise: false */
@@ -115,7 +115,7 @@ var resizePopup = function() {
 /******************************************************************************/
 
 var onPopupLoaded = function() {
-    resizePopup();
+    setTimeout(resizePopup, 0);
 
     if ( popupObserver !== null ) {
         popupObserver.disconnect();

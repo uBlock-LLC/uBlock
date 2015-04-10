@@ -16,7 +16,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see {http://www.gnu.org/licenses/}.
 
-    Home: https://github.com/gorhill/uBlock
+    Home: https://github.com/chrisaljoudi/uBlock
 */
 
 /* global self, safari, SafariBrowserTab, µBlock */
@@ -262,6 +262,7 @@
             if(vAPI.tabs.onPopup(details)) {
                 e.preventDefault();
                 if(vAPI.tabs.stack[details.openerTabId]) {
+                    vAPI.tabs.popupCandidate = false;
                     vAPI.tabs.stack[details.openerTabId].activate();
                 }
             }

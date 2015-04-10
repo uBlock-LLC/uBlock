@@ -16,7 +16,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see {http://www.gnu.org/licenses/}.
 
-    Home: https://github.com/gorhill/uBlock
+    Home: https://github.com/chrisaljoudi/uBlock
 */
 
 /* global APP_SHUTDOWN, APP_STARTUP */
@@ -60,6 +60,12 @@ function startup(data, reason) {
         }
 
         let hiddenDoc = appShell.hiddenDOMWindow.document;
+
+        if ( hiddenDoc.readyState === 'loading' ) {
+            hiddenDoc.addEventListener('DOMContentLoaded', onReady);
+            return;
+        }
+
         bgProcess = hiddenDoc.documentElement.appendChild(
             hiddenDoc.createElementNS('http://www.w3.org/1999/xhtml', 'iframe')
         );
