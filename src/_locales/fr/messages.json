@@ -160,7 +160,7 @@
     "description":"English: Make use of context menu where appropriate"
   },
   "settingsAdvancedUserPrompt":{
-    "message":"Activer le mode pour personnes expérimentées (<a href='https:\/\/github.com\/chrisaljoudi\/uBlock\/wiki\/Advanced-user-features'>À lire<\/a>, page en Anglais)",
+    "message":"Activer le mode pour personnes expérimentées (<a href='https:\/\/github.com\/chrisaljoudi\/uBlock\/wiki\/Advanced-user-features'>À lire</a>, page en Anglais)",
     "description":"English: "
   },
   "settingsExperimentalPrompt":{
