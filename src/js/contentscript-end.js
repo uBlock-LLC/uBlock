@@ -178,7 +178,7 @@ var uBlockCollapser = (function() {
 
             // https://github.com/chrisaljoudi/uBlock/issues/399
             // Never remove elements from the DOM, just hide them
-            target.style.setProperty('display', 'none', 'important');
+            // target.style.setProperty('display', 'none', 'important');
 
             // https://github.com/chrisaljoudi/uBlock/issues/1048
             // Use attribute to construct CSS rule
@@ -429,15 +429,16 @@ var uBlockCollapser = (function() {
 
     var addStyleTag = function(selectors) {
         var selectorStr = selectors.join(',\n');
+        console.log(selectorStr);
         hideElements(selectorStr);
-        var style = document.createElement('style');
-        // The linefeed before the style block is very important: do no remove!
-        style.appendChild(document.createTextNode(selectorStr + '\n{display:none !important;}'));
-        var parent = document.body || document.documentElement;
-        if ( parent ) {
-            parent.appendChild(style);
-            vAPI.styles.push(style);
-        }
+        // var style = document.createElement('style');
+        // // The linefeed before the style block is very important: do no remove!
+        // style.appendChild(document.createTextNode(selectorStr + '\n{display:none !important;}'));
+        // var parent = document.body || document.documentElement;
+        // if ( parent ) {
+        //     parent.appendChild(style);
+        //     vAPI.styles.push(style);
+        // }
         messager.send({
             what: 'cosmeticFiltersInjected',
             type: 'cosmetic',
@@ -461,7 +462,18 @@ var uBlockCollapser = (function() {
         var elems = document.querySelectorAll(selectors);
         var i = elems.length;
         while ( i-- ) {
-            elems[i].style.setProperty('display', 'none', 'important');
+            // Measure the element. If it takes up room, replace it. Otherwise, get rid of it.
+            var target = elems[i];
+            // target.style.setProperty('display', 'inline-block', 'important');
+            if (target.offsetHeight > 0 && target.offsetWidth > 0) {
+              console.log('Adding elephant to this element:');
+              console.log(target);
+              target.innerHTML += '<img width="100px" src="http://tabforacause-west.s3.amazonaws.com/static-1/img/sad-elephant.png">';
+            } else {
+              target.style.setProperty('display', 'none', 'important');
+            }
+
+            // elems[i].style.setProperty('display', 'none', 'important');
         }
     };
 
