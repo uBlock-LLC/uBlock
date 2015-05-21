@@ -464,11 +464,13 @@ var uBlockCollapser = (function() {
         while ( i-- ) {
             // Measure the element. If it takes up room, replace it. Otherwise, get rid of it.
             var target = elems[i];
-            // target.style.setProperty('display', 'inline-block', 'important');
+            // Just for dev, to make sure hidden divs (where we blocked the ad)
+            // are shown.
+            target.style.setProperty('display', 'inline-block', 'important');
             if (target.offsetHeight > 0 && target.offsetWidth > 0) {
               console.log('Adding elephant to this element:');
               console.log(target);
-              target.innerHTML += '<img width="100px" src="http://tabforacause-west.s3.amazonaws.com/static-1/img/sad-elephant.png">';
+              target.innerHTML += '<img style="width: 50px; position: absolute; bottom: 0px; left: 0px;" src="http://tabforacause-west.s3.amazonaws.com/static-1/img/sad-elephant.png">';
             } else {
               target.style.setProperty('display', 'none', 'important');
             }
