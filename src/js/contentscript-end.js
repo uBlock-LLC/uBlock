@@ -466,16 +466,18 @@ var uBlockCollapser = (function() {
             var target = elems[i];
             // Just for dev, to make sure hidden divs (where we blocked the ad)
             // are shown.
-            var targetDisplayAttr = window.getComputedStyle(target).getPropertyValue('display');
-            if (targetDisplayAttr == 'none') {
-              target.style.setProperty('display', 'inline-block', 'important');
-            }
+            // var targetDisplayAttr = window.getComputedStyle(target).getPropertyValue('display');
+            // if (targetDisplayAttr == 'none') {
+            //   target.style.setProperty('display', 'inline-block', 'important');
+            // }
+
+            // Gladly added elephant to every ad.
             if (target.offsetHeight > 0 && target.offsetWidth > 0) {
               console.log('Adding elephant to this element:');
               console.log(target);
-              target.innerHTML += '<img style="width: 50px; position: absolute; bottom: 0px; left: 0px;" src="http://tabforacause-west.s3.amazonaws.com/static-1/img/sad-elephant.png">';
+              target.innerHTML += '<img style="width: 50px; position: absolute; bottom: 0px; left: 0px; z-index: 1000000" src="http://tabforacause-west.s3.amazonaws.com/static-1/img/sad-elephant.png">';
             } else {
-              target.style.setProperty('display', 'none', 'important');
+              // target.style.setProperty('display', 'none', 'important');
             }
 
             // elems[i].style.setProperty('display', 'none', 'important');
@@ -697,6 +699,7 @@ var uBlockCollapser = (function() {
     idsFromNodeList(document.querySelectorAll('[id]'));
     classesFromNodeList(document.querySelectorAll('[class]'));
     retrieveGenericSelectors();
+    console.log('---------------- content script end ---------------- ');
 
     //console.debug('%f: uBlock: survey time', timer.now() - tStart);
 

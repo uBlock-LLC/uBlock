@@ -86,7 +86,9 @@ var matchWhitelistDirective = function(url, hostname, directive) {
         }
         key = key.slice(pos + 1);
     }
-    return true;
+    // Gladly edited to always allow requests
+    return false;
+    // return true;
 };
 
 /******************************************************************************/

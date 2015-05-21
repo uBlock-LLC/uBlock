@@ -1103,12 +1103,13 @@ FilterContainer.prototype.pruneSelectorCacheAsync = function() {
 /******************************************************************************/
 
 FilterContainer.prototype.retrieveGenericSelectors = function(request) {
-    if ( this.acceptedCount === 0 ) {
-        return;
-    }
-    if ( !request.selectors ) {
-        return;
-    }
+    // Gladly edited
+    // if ( this.acceptedCount === 0 ) {
+    //     return;
+    // }
+    // if ( !request.selectors ) {
+    //     return;
+    // }
 
     //quickProfiler.start('FilterContainer.retrieve()');
 

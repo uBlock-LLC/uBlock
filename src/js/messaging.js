@@ -408,9 +408,13 @@ var onMessage = function(request, sender, callback) {
 
     switch ( request.what ) {
         case 'retrieveDomainCosmeticSelectors':
-            if ( pageStore && pageStore.getSpecificCosmeticFilteringSwitch() ) {
-                response = µb.cosmeticFilteringEngine.retrieveDomainSelectors(request);
-            }
+            // Gladly edited
+            response = µb.cosmeticFilteringEngine.retrieveDomainSelectors(request);
+            console.log(response);
+            
+            // if ( pageStore && pageStore.getSpecificCosmeticFilteringSwitch() ) {
+            //     response = µb.cosmeticFilteringEngine.retrieveDomainSelectors(request);
+            // }
             break;
 
         default:
@@ -502,12 +506,15 @@ var onMessage = function(request, sender, callback) {
     switch ( request.what ) {
         case 'retrieveGenericCosmeticSelectors':
             response = {
-                shutdown: !pageStore || !pageStore.getNetFilteringSwitch(),
+                // Gladly edited
+                shutdown: false,
+                // shutdown: !pageStore || !pageStore.getNetFilteringSwitch(),
                 result: null
             };
             if ( !response.shutdown && pageStore.getGenericCosmeticFilteringSwitch() ) {
                 response.result = µb.cosmeticFilteringEngine.retrieveGenericSelectors(request);
             }
+            // console.log(response);
             break;
 
         // Evaluate many requests
