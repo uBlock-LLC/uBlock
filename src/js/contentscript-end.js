@@ -466,7 +466,10 @@ var uBlockCollapser = (function() {
             var target = elems[i];
             // Just for dev, to make sure hidden divs (where we blocked the ad)
             // are shown.
-            target.style.setProperty('display', 'inline-block', 'important');
+            var targetDisplayAttr = window.getComputedStyle(target).getPropertyValue('display');
+            if (targetDisplayAttr == 'none') {
+              target.style.setProperty('display', 'inline-block', 'important');
+            }
             if (target.offsetHeight > 0 && target.offsetWidth > 0) {
               console.log('Adding elephant to this element:');
               console.log(target);
