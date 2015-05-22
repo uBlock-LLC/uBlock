@@ -487,6 +487,16 @@ var uBlockCollapser = (function() {
         return false;
     }
 
+    var noElephantInAncestors = function(elem) {
+      while(elem.parentNode) {
+          if (elem.parentNode.dataset && elem.parentNode.dataset.elephant) {
+              return false;
+          }
+          elem = elem.parentNode;
+      }
+      return true;
+    }
+
     var findIframes = function(elem) {
       if (elem.nodeName.toLowerCase() == 'iframe') {
         return [elem];
@@ -511,12 +521,12 @@ var uBlockCollapser = (function() {
 
     var elephantsEverywhere = function(nodes) {
       // Do some magic
-      nodes.filter(function(elem) {
-        return !isContainedByAny(nodes, elem);
-      }).reduce(function(prev, curr) {
+      nodes.reduce(function(prev, curr) {
         return prev.concat(findIframes(curr)); // Find all iframes
       }, []).map(function(elem, i) {
         return elem.parentNode;      // Go up to parent of iframes
+      }).filter(function(elem) {
+        return !isContainedByAny(nodes, elem) && noElephantInAncestors(elem);
       }).forEach(function(elem, i, array) {
           // pass in the target node, as well as the observer options
           // makeObserver().observe(elem, {
@@ -526,8 +536,11 @@ var uBlockCollapser = (function() {
           if (!elem.dataset.elephant) {
             console.log('Adding elephant to: ', elem);
             // elem.style.position = 'relative';
-            elem.innerHTML += '<div style="margin-top: -48px; opacity: 0.99; text-align:left;"><img style="width: 50px; z-index: 1000000" src="http://tabforacause-west.s3.amazonaws.com/static-1/img/sad-elephant.png"></div>';
+            var elephantElem = document.createElement('div');
+            elephantElem.setAttribute('style', 'margin-top: -48px; opacity: 0.99; text-align:left;');
+            elephantElem.innerHTML = '<img style="width: 50px; z-index: 1000000" src="http://tabforacause-west.s3.amazonaws.com/static-1/img/sad-elephant.png">';
             elem.dataset.elephant = "true";
+            elem.appendChild(elephantElem);
           }
       });
     }
