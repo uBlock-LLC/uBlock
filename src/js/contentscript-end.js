@@ -429,7 +429,7 @@ var uBlockCollapser = (function() {
 
     var addStyleTag = function(selectors) {
         var selectorStr = selectors.join(',\n');
-        console.log(selectorStr);
+        // console.log(selectorStr);
         hideElements(selectorStr);
         // var style = document.createElement('style');
         // // The linefeed before the style block is very important: do no remove!
@@ -448,6 +448,90 @@ var uBlockCollapser = (function() {
         //console.debug('µBlock> generic cosmetic filters: injecting %d CSS rules:', selectors.length, text);
     };
 
+    // var getElementTreeXPath = function(element) {
+    //     var paths = [];
+    //     // Use nodeName (instead of localName) so namespace prefix is included (if any).
+    //     for (; element && element.nodeType == 1; element = element.parentNode)
+    //     {
+    //         var index = 0;
+    //         for (var sibling = element.previousSibling; sibling; sibling = sibling.previousSibling) {
+    //             // Ignore document type declaration.
+    //             if (sibling.nodeType == Node.DOCUMENT_TYPE_NODE)
+    //                 continue;
+    //             if (sibling.nodeName == element.nodeName)
+    //                 ++index;
+    //         }
+    //         var tagName = element.nodeName.toLowerCase();
+    //         var pathIndex = (index ? "[" + (index+1) + "]" : "");
+    //         paths.splice(0, 0, tagName + pathIndex);
+    //     }
+    //     return paths.length ? "/" + paths.join("/") : null;
+    // };
+
+    var isParentOf = function(parent, child) {
+        while(child.parentNode) {
+            if (child.parentNode == parent) {
+                return true;
+            }
+            child = child.parentNode;
+        }
+        return false;
+    }
+
+    var isContainedByAny = function(parents, child) {
+        for (var i = 0; i < parents.length; i++) {
+            if (isParentOf(parents[i], child)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    var findIframes = function(elem) {
+      if (elem.nodeName.toLowerCase() == 'iframe') {
+        return [elem];
+      }
+      var toReturn = [];
+      for (var i = 0; i < elem.childNodes.length; i++) {
+        toReturn = toReturn.concat(findIframes(elem.childNodes[i]));
+      }
+      return toReturn;
+    }
+
+    // create an observer instance
+    var makeObserver = function() {
+      return new MutationObserver(function(mutations, observer) {
+          mutations.forEach(function(mutation) {
+              console.log('MUTATION: ' + mutation.type);
+              observer.disconnect();
+
+              console.log('Adding elephant to this element:', mutation.target);
+              elephantsEverywhere([mutation.target]);
+          });
+      });
+    }
+
+    var elephantsEverywhere = function(nodes) {
+      // Do some magic
+      nodes.reduce(function(prev, curr) {
+        return prev.concat(findIframes(curr)); // Find all iframes
+      }, []).map(function(elem, i) {
+        return elem.parentNode;      // Go up to parent of iframes
+      }).forEach(function(elem, i, array) {
+          // pass in the target node, as well as the observer options
+          // makeObserver().observe(elem, {
+          //     childList: true,
+          //     subtree: true
+          // });
+          if (!elem.dataset.elephant) {
+            console.log('Found parent of IFRAME:', elem);
+            // elem.style.position = 'relative';
+            elem.innerHTML += '<div style="margin-top: -48px; opacity: 0.99; text-align:left;"><img style="width: 50px; z-index: 1000000" src="http://tabforacause-west.s3.amazonaws.com/static-1/img/sad-elephant.png"></div>';
+            elem.dataset.elephant = "true";
+          }
+      });
+    }
+
     var hideElements = function(selectors) {
         // https://github.com/chrisaljoudi/uBlock/issues/207
         // Do not call querySelectorAll() using invalid CSS selectors
@@ -461,6 +545,7 @@ var uBlockCollapser = (function() {
         // Using CSSStyleDeclaration.setProperty is more reliable
         var elems = document.querySelectorAll(selectors);
         var i = elems.length;
+        var nodes = [];
         while ( i-- ) {
             // Measure the element. If it takes up room, replace it. Otherwise, get rid of it.
             var target = elems[i];
@@ -470,18 +555,19 @@ var uBlockCollapser = (function() {
             // if (targetDisplayAttr == 'none') {
             //   target.style.setProperty('display', 'inline-block', 'important');
             // }
-
             // Gladly added elephant to every ad.
-            if (target.offsetHeight > 0 && target.offsetWidth > 0) {
-              console.log('Adding elephant to this element:');
-              console.log(target);
-              target.innerHTML += '<img style="width: 50px; position: absolute; bottom: 0px; left: 0px; z-index: 1000000" src="http://tabforacause-west.s3.amazonaws.com/static-1/img/sad-elephant.png">';
-            } else {
-              // target.style.setProperty('display', 'none', 'important');
-            }
-
+            // if (target.offsetHeight > 0 || target.offsetWidth > 0) {
+            // } else {
+            //   // target.style.setProperty('display', 'none', 'important');
+            // }
             // elems[i].style.setProperty('display', 'none', 'important');
+            nodes.push(target);
+            makeObserver().observe(target, {
+              subtree: true,
+              childList: true
+            });
         }
+        elephantsEverywhere(nodes);
     };
 
     // Extract and return the staged nodes which (may) match the selectors.
@@ -699,7 +785,7 @@ var uBlockCollapser = (function() {
     idsFromNodeList(document.querySelectorAll('[id]'));
     classesFromNodeList(document.querySelectorAll('[class]'));
     retrieveGenericSelectors();
-    console.log('---------------- content script end ---------------- ');
+    // console.log('---------------- content script end ---------------- ');
 
     //console.debug('%f: uBlock: survey time', timer.now() - tStart);
 

@@ -712,7 +712,7 @@ FilterContainer.prototype.rePlainSelector = /^([#.][\w-]+)/;
 FilterContainer.prototype.reHighLow = /^[a-z]*\[(?:alt|title)="[^"]+"\]$/;
 FilterContainer.prototype.reHighMedium = /^\[href\^="https?:\/\/([^"]{8})[^"]*"\]$/;
 
-/******************************************************************************/
+/*"*****************************************************************************/
 
 FilterContainer.prototype.compileHostnameSelector = function(hostname, parsed, out) {
     // https://github.com/chrisaljoudi/uBlock/issues/145
