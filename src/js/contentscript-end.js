@@ -534,12 +534,21 @@ var uBlockCollapser = (function() {
           //     subtree: true
           // });
           if (!elem.dataset.elephant) {
-            console.log('Adding elephant to: ', elem);
+            // console.log('Adding elephant to: ', elem);
             // elem.style.position = 'relative';
             var elephantElem = document.createElement('div');
             elephantElem.setAttribute('style', 'margin-top: -48px; opacity: 0.99; text-align:left;');
             elephantElem.innerHTML = '<img style="width: 50px; z-index: 1000000" src="http://tabforacause-west.s3.amazonaws.com/static-1/img/sad-elephant.png">';
             elem.dataset.elephant = "true";
+            for (var i = 0; i < elem.childNodes.length; i++) {
+              if (elem.childNodes[i].style && elem.childNodes[i].clientWidth) {
+                elephantElem.style['margin-left'] = elem.childNodes[i].style['margin-left'];
+                elephantElem.style['margin-right'] = elem.childNodes[i].style['margin-right'];
+
+                // TODO: figure out how to copy width here!
+                elephantElem.style.width = elem.childNodes[i].clientWidth;
+              }
+            }
             elem.appendChild(elephantElem);
           }
       });
