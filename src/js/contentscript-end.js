@@ -504,8 +504,6 @@ var uBlockCollapser = (function() {
           mutations.forEach(function(mutation) {
               console.log('MUTATION: ' + mutation.type);
               observer.disconnect();
-
-              console.log('Adding elephant to this element:', mutation.target);
               elephantsEverywhere([mutation.target]);
           });
       });
@@ -513,7 +511,9 @@ var uBlockCollapser = (function() {
 
     var elephantsEverywhere = function(nodes) {
       // Do some magic
-      nodes.reduce(function(prev, curr) {
+      nodes.filter(function(elem) {
+        return !isContainedByAny(nodes, elem);
+      }).reduce(function(prev, curr) {
         return prev.concat(findIframes(curr)); // Find all iframes
       }, []).map(function(elem, i) {
         return elem.parentNode;      // Go up to parent of iframes
@@ -524,7 +524,7 @@ var uBlockCollapser = (function() {
           //     subtree: true
           // });
           if (!elem.dataset.elephant) {
-            console.log('Found parent of IFRAME:', elem);
+            console.log('Adding elephant to: ', elem);
             // elem.style.position = 'relative';
             elem.innerHTML += '<div style="margin-top: -48px; opacity: 0.99; text-align:left;"><img style="width: 50px; z-index: 1000000" src="http://tabforacause-west.s3.amazonaws.com/static-1/img/sad-elephant.png"></div>';
             elem.dataset.elephant = "true";
