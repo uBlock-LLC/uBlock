@@ -585,14 +585,6 @@ var uBlockCollapser = (function() {
             // if (targetDisplayAttr == 'none') {
             //   target.style.setProperty('display', 'inline-block', 'important');
             // }
-            // Gladly added elephant to every ad.
-            if (target.offsetHeight > 0 && target.offsetWidth > 0) {
-              // console.log('Adding elephant to this element:');
-              // console.log(target);
-              target.innerHTML += '<img style="width: 50px; position: absolute; bottom: 0px; left: 0px; z-index: 1000000" src="http://tabforacause-west.s3.amazonaws.com/static-1/img/sad-elephant.png">';
-            } else {
-              // target.style.setProperty('display', 'none', 'important');
-            }
             // elems[i].style.setProperty('display', 'none', 'important');
             nodes.push(target);
             makeObserver().observe(target, {
