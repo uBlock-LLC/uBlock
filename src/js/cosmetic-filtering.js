@@ -1103,7 +1103,7 @@ FilterContainer.prototype.pruneSelectorCacheAsync = function() {
 /******************************************************************************/
 
 FilterContainer.prototype.retrieveGenericSelectors = function(request) {
-    // Gladly edited
+    // Gladly edited.
     // if ( this.acceptedCount === 0 ) {
     //     return;
     // }

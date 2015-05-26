@@ -70,6 +70,7 @@ var cosmeticFilters = function(details) {
     var hideCosmeticFilters = {};
     var donthide = details.cosmeticDonthide;
     var hide = details.cosmeticHide;
+    // console.log('Cached generic hide filters', hide);
     var i;
     if ( donthide.length !== 0 ) {
         i = donthide.length;
@@ -104,7 +105,9 @@ var cosmeticFilters = function(details) {
         // }
     }
     vAPI.donthideCosmeticFilters = donthideCosmeticFilters;
-    vAPI.hideCosmeticFilters = hideCosmeticFilters;
+    // Gladly edited.
+    // vAPI.hideCosmeticFilters = hideCosmeticFilters;
+    vAPI.hideCosmeticFilters = {};
 };
 
 var netFilters = function(details) {

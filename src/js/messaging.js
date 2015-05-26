@@ -410,7 +410,7 @@ var onMessage = function(request, sender, callback) {
         case 'retrieveDomainCosmeticSelectors':
             // Gladly edited
             response = µb.cosmeticFilteringEngine.retrieveDomainSelectors(request);
-            console.log(response);
+            // console.log(response);
             
             // if ( pageStore && pageStore.getSpecificCosmeticFilteringSwitch() ) {
             //     response = µb.cosmeticFilteringEngine.retrieveDomainSelectors(request);
@@ -458,12 +458,13 @@ var tagNameToRequestTypeMap = {
 
 var filterRequests = function(pageStore, details) {
     var requests = details.requests;
-    if ( !pageStore || !pageStore.getNetFilteringSwitch() ) {
-        return requests;
-    }
-    if ( µb.userSettings.collapseBlocked === false ) {
-        return requests;
-    }
+    // Gladly edited to not filter any requests.
+    // if ( !pageStore || !pageStore.getNetFilteringSwitch() ) {
+    //     return requests;
+    // }
+    // if ( µb.userSettings.collapseBlocked === false ) {
+    //     return requests;
+    // }
 
     //console.debug('messaging.js/contentscript-end.js: processing %d requests', requests.length);
 
@@ -479,9 +480,11 @@ var filterRequests = function(pageStore, details) {
         context.requestURL = vAPI.punycodeURL(request.url);
         context.requestHostname = µburi.hostnameFromURI(request.url);
         context.requestType = tagNameToRequestTypeMap[request.tagName];
-        if ( isBlockResult(pageStore.filterRequest(context)) ) {
-            request.collapse = true;
-        }
+        // Gladly edited.
+        request.collapse = true;
+        // if ( isBlockResult(pageStore.filterRequest(context)) ) {
+        //     request.collapse = true;
+        // }
     }
     return requests;
 };
@@ -514,12 +517,16 @@ var onMessage = function(request, sender, callback) {
             if ( !response.shutdown && pageStore.getGenericCosmeticFilteringSwitch() ) {
                 response.result = µb.cosmeticFilteringEngine.retrieveGenericSelectors(request);
             }
-            // console.log(response);
+            // console.log('retrieveGenericCosmeticSelectors response', response);
             break;
 
         // Evaluate many requests
         case 'filterRequests':
             response = {
+                // Gladly edited
+                // TODO: figure out why setting shutdown to false
+                // breaks adding elephants.
+                // shutdown: false,
                 shutdown: !pageStore || !pageStore.getNetFilteringSwitch(),
                 result: null
             };

@@ -68,7 +68,7 @@ var shutdownJobs = (function() {
             jobs.push(job);
         },
         exec: function() {
-            //console.debug('Shutting down...');
+            console.debug('Shutting down filtering...');
             var job;
             while ( job = jobs.pop() ) {
                 job();
@@ -161,6 +161,7 @@ var uBlockCollapser = (function() {
         var i = requests.length;
         var request, entry, target, value;
         while ( i-- ) {
+            // console.log('Processing a filtering request.');
             request = requests[i];
             if ( pendingRequests.hasOwnProperty(request.id) === false ) {
                 continue;
@@ -195,8 +196,9 @@ var uBlockCollapser = (function() {
             });
             var selectorStr = selectors.join(',\n'),
                 style = document.createElement('style');
-            // The linefeed before the style block is very important: do no remove!
-            style.appendChild(document.createTextNode(selectorStr + '\n{display:none !important;}'));
+            // The linefeed before the style block is very important: do not remove!
+            // Gladly edited.
+            // style.appendChild(document.createTextNode(selectorStr + '\n{display:none !important;}'));
             var parent = document.body || document.documentElement;
             if ( parent ) {
                 parent.appendChild(style);
@@ -330,6 +332,7 @@ var uBlockCollapser = (function() {
     var retrieveGenericSelectors = function() {
         if ( lowGenericSelectors.length !== 0 || highGenerics === null ) {
             //console.log('µBlock> ABP cosmetic filters: retrieving CSS rules using %d selectors', lowGenericSelectors.length);
+            // console.log('lowGenericSelectors', lowGenericSelectors);
             messager.send({
                     what: 'retrieveGenericCosmeticSelectors',
                     pageURL: window.location.href,
@@ -357,6 +360,7 @@ var uBlockCollapser = (function() {
         // rhill 2014-11-16: not sure this is needed anymore. Test case in
         //  above issue was fine without the line below..
         var selectors = vAPI.hideCosmeticFilters;
+        // console.log('hideCosmeticFilters', selectors);
         if ( typeof selectors === 'object' ) {
             injectedSelectors = selectors;
             hideElements(Object.keys(selectors));
@@ -394,12 +398,15 @@ var uBlockCollapser = (function() {
             shutdownJobs.exec();
             return;
         }
+        // console.log('nextRetrieveHandler');
+        // console.log(response);
 
         //var tStart = timer.now();
         //console.debug('µBlock> contextNodes = %o', contextNodes);
         var result = response && response.result;
         var hideSelectors = [];
         if ( result && result.hide.length ) {
+            // console.log('Selectors to hide: ', response.result.hide);
             processLowGenerics(result.hide, hideSelectors);
         }
         if ( highGenerics ) {
@@ -413,7 +420,9 @@ var uBlockCollapser = (function() {
                 processHighHighGenericsAsync();
             }
         }
+        // console.log('hideSelectors', hideSelectors);
         if ( hideSelectors.length !== 0 ) {
+            // console.log('Hiding selectors!');
             addStyleTag(hideSelectors);
         }
         contextNodes.length = 0;
@@ -429,7 +438,6 @@ var uBlockCollapser = (function() {
 
     var addStyleTag = function(selectors) {
         var selectorStr = selectors.join(',\n');
-        console.log(selectorStr);
         hideElements(selectorStr);
         // var style = document.createElement('style');
         // // The linefeed before the style block is very important: do no remove!
@@ -473,8 +481,8 @@ var uBlockCollapser = (function() {
 
             // Gladly added elephant to every ad.
             if (target.offsetHeight > 0 && target.offsetWidth > 0) {
-              console.log('Adding elephant to this element:');
-              console.log(target);
+              // console.log('Adding elephant to this element:');
+              // console.log(target);
               target.innerHTML += '<img style="width: 50px; position: absolute; bottom: 0px; left: 0px; z-index: 1000000" src="http://tabforacause-west.s3.amazonaws.com/static-1/img/sad-elephant.png">';
             } else {
               // target.style.setProperty('display', 'none', 'important');
@@ -515,7 +523,10 @@ var uBlockCollapser = (function() {
         var selector;
         while ( i-- ) {
             selector = generics[i];
+            // console.log('processLowGenerics selector', selector);
+            // Don't process the element if we already have.
             if ( injectedSelectors.hasOwnProperty(selector) ) {
+                // console.log('processLowGenerics already found', selector);
                 continue;
             }
             injectedSelectors[selector] = true;
@@ -699,7 +710,6 @@ var uBlockCollapser = (function() {
     idsFromNodeList(document.querySelectorAll('[id]'));
     classesFromNodeList(document.querySelectorAll('[class]'));
     retrieveGenericSelectors();
-    console.log('---------------- content script end ---------------- ');
 
     //console.debug('%f: uBlock: survey time', timer.now() - tStart);
 
@@ -747,6 +757,7 @@ var uBlockCollapser = (function() {
         }
         addedNodeListsTimer = null;
         if ( contextNodes.length !== 0 ) {
+            // console.log('Filtering page after tree mutation change.');
             idsFromNodeList(selectNodes('[id]'));
             classesFromNodeList(selectNodes('[class]'));
             retrieveGenericSelectors();
@@ -757,6 +768,8 @@ var uBlockCollapser = (function() {
     // https://github.com/chrisaljoudi/uBlock/issues/205
     // Do not handle added node directly from within mutation observer.
     var treeMutationObservedHandlerAsync = function(mutations) {
+        // console.log('Tree mutation change.');
+        // console.log('Mutation added nodes:', mutations);
         var iMutation = mutations.length;
         var nodeList;
         while ( iMutation-- ) {
@@ -765,6 +778,7 @@ var uBlockCollapser = (function() {
                 addedNodeLists.push(nodeList);
             }
         }
+        console.log('Mutation; added node lists', addedNodeLists);
         if ( addedNodeListsTimer === null ) {
             // I arbitrarily chose 100 ms for now:
             // I have to compromise between the overhead of processing too few
@@ -782,10 +796,14 @@ var uBlockCollapser = (function() {
 
     // https://github.com/gorhill/uMatrix/issues/144
     shutdownJobs.add(function() {
-        treeObserver.disconnect();
-        if ( addedNodeListsTimer !== null ) {
-            clearTimeout(addedNodeListsTimer);
-        }
+        // Gladly edited: don't shut down the mutation observer.
+        // We use it to watch for new nodes since we can't listen
+        // for blocked requests when we're not filtering ad requests.
+
+        // treeObserver.disconnect();
+        // if ( addedNodeListsTimer !== null ) {
+        //     clearTimeout(addedNodeListsTimer);
+        // }
     });
 })();
 
