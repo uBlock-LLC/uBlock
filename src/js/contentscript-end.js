@@ -516,16 +516,17 @@ var uBlockCollapser = (function() {
       return toReturn;
     }
 
-    // create an observer instance
-    var makeObserver = function() {
-      return new MutationObserver(function(mutations, observer) {
-          mutations.forEach(function(mutation) {
-              console.log('MUTATION: ' + mutation.type);
-              observer.disconnect();
-              elephantsEverywhere([mutation.target]);
-          });
-      });
-    }
+    // // create an observer instance
+    // var makeObserver = function() {
+    //   return new MutationObserver(function(mutations, observer) {
+    //       mutations.forEach(function(mutation) {
+    //           console.log('MUTATION: ' + mutation.type);
+    //           observer.disconnect();
+    //           elephantsEverywhere([mutation.target]);
+    //       });
+    //   });
+    // }
+    // }
 
     var elephantsEverywhere = function(nodes) {
       // Do some magic
@@ -587,10 +588,10 @@ var uBlockCollapser = (function() {
             // }
             // elems[i].style.setProperty('display', 'none', 'important');
             nodes.push(target);
-            makeObserver().observe(target, {
-              subtree: true,
-              childList: true
-            });
+            // makeObserver().observe(target, {
+            //   subtree: true,
+            //   childList: true
+            // });
         }
         elephantsEverywhere(nodes);
     };
