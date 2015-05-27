@@ -311,6 +311,26 @@ var uBlockCollapser = (function() {
 /******************************************************************************/
 /******************************************************************************/
 
+// Gladly
+
+var gladly = (function() {
+  // Elements Gladly has processed.
+  var elemsProcessed = [];
+
+  var addProcessedNodes = function(nodes) {
+    elemsProcessed = elemsProcessed.concat(nodes);
+  }
+
+  var getProcessedNodes = function() {
+    return elemsProcessed;
+  }
+
+  return {
+    addProcessedNodes: addProcessedNodes,
+    getProcessedNodes: getProcessedNodes,
+  };
+})();
+
 // Cosmetic filters
 
 (function() {
@@ -546,13 +566,17 @@ var uBlockCollapser = (function() {
     // Returns an array of DOM elements that we believe will be
     // the containers for advertisements.
     var getAdContainersForNodes = function(nodes) {
+      var elemsProcessed = gladly.getProcessedNodes();
       // Do some magic
       var adContainers = nodes.reduce(function(prev, curr) {
         return prev.concat(findIframes(curr)); // Find all iframes
       }, []).map(function(elem, i) {
         return elem.parentNode;      // Go up to parent of iframes
       }).filter(function(elem) {
-        return !isContainedByAny(nodes, elem) && noElephantInAncestors(elem);
+        return (
+          !isContainedByAny(elemsProcessed, elem) &&
+          noElephantInAncestors(elem)
+        );
       });
       return adContainers;
     }
@@ -561,6 +585,7 @@ var uBlockCollapser = (function() {
     // Add elephants to all ad containers.
     var elephantsEverywhere = function(nodes) {
       console.log('Considering adding elephants to these nodes:', nodes);
+      gladly.addProcessedNodes(nodes);
       var adContainers = getAdContainersForNodes(nodes);
       adContainers.forEach(function(elem, i, array) {
         addElephantToElem(elem);
