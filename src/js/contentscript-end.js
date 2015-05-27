@@ -525,6 +525,8 @@ var gladly = (function() {
       return true;
     }
 
+    // Takes elem, a DOM element.
+    // Returns an array of iframe elements found within elem.
     var findIframes = function(elem) {
       if (elem.nodeName.toLowerCase() == 'iframe') {
         return [elem];
@@ -561,22 +563,42 @@ var gladly = (function() {
       }
     }
 
+    // Takes a DOM element that filters have targeted
+    // as elements that hold an advertisement.
+    // Returns an array of DOM elements that we believe will be
+    // the containers for advertisements.
+    var getAdContainersForNode = function(node) {
+      var elemsProcessed = gladly.getProcessedNodes();
+      // Get any iframes within this node.
+      var iframes = findIframes(node);
+
+      // If we found an iframe, it's probably the ad unit.
+      if (iframes.length > 0 ) {
+        var adContainers = iframes.map(function(elem, i) {
+          return elem.parentNode;      // Go up to parent of iframes
+        }).filter(function(elem) {
+          return (
+            !isContainedByAny(elemsProcessed, elem) &&
+            noElephantInAncestors(elem)
+          );
+        });
+      }
+      // If there isn't an iframe, return an array
+      // containing the input element.
+      else {
+        return [node];
+      }
+      return adContainers;
+    }
+
     // Takes an array of DOM elements that filters have targeted
     // as elements that hold an advertisement.
     // Returns an array of DOM elements that we believe will be
     // the containers for advertisements.
     var getAdContainersForNodes = function(nodes) {
-      var elemsProcessed = gladly.getProcessedNodes();
-      // Do some magic
-      var adContainers = nodes.reduce(function(prev, curr) {
-        return prev.concat(findIframes(curr)); // Find all iframes
-      }, []).map(function(elem, i) {
-        return elem.parentNode;      // Go up to parent of iframes
-      }).filter(function(elem) {
-        return (
-          !isContainedByAny(elemsProcessed, elem) &&
-          noElephantInAncestors(elem)
-        );
+      var adContainers = [];
+      nodes.forEach(function(elem, index, array) {
+        adContainers = adContainers.concat(getAdContainersForNode(elem));
       });
       return adContainers;
     }
