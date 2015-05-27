@@ -516,50 +516,54 @@ var uBlockCollapser = (function() {
       return toReturn;
     }
 
-    // // create an observer instance
-    // var makeObserver = function() {
-    //   return new MutationObserver(function(mutations, observer) {
-    //       mutations.forEach(function(mutation) {
-    //           console.log('MUTATION: ' + mutation.type);
-    //           observer.disconnect();
-    //           elephantsEverywhere([mutation.target]);
-    //       });
-    //   });
-    // }
-    // }
+    // Takes a DOM element.
+    // Returns null.
+    // Adds an elephant to the corner of the elem.
+    var addElephantToElem = function(elem) {
+      // If the element already has an elephant, skip it.
+      if (!elem.dataset.elephant) {
+        // console.log('Adding elephant to: ', elem);
+        // elem.style.position = 'relative';
+        var elephantElem = document.createElement('div');
+        elephantElem.setAttribute('style', 'margin-top: -48px; opacity: 0.99; text-align:left;');
+        elephantElem.innerHTML = '<img style="width: 50px; z-index: 1000000" src="http://tabforacause-west.s3.amazonaws.com/static-1/img/sad-elephant.png">';
+        elem.dataset.elephant = "true";
+        for (var i = 0; i < elem.childNodes.length; i++) {
+          if (elem.childNodes[i].style && elem.childNodes[i].clientWidth) {
+            elephantElem.style['margin-left'] = elem.childNodes[i].style['margin-left'];
+            elephantElem.style['margin-right'] = elem.childNodes[i].style['margin-right'];
 
-    var elephantsEverywhere = function(nodes) {
+            // TODO: figure out how to copy width here!
+            elephantElem.style.width = elem.childNodes[i].clientWidth;
+          }
+        }
+        elem.appendChild(elephantElem);
+      }
+    }
+
+    // Takes an array of DOM elements that filters have targeted
+    // as elements that hold an advertisement.
+    // Returns an array of DOM elements that we believe will be
+    // the containers for advertisements.
+    var getAdContainersForNodes = function(nodes) {
       // Do some magic
-      nodes.reduce(function(prev, curr) {
+      var adContainers = nodes.reduce(function(prev, curr) {
         return prev.concat(findIframes(curr)); // Find all iframes
       }, []).map(function(elem, i) {
         return elem.parentNode;      // Go up to parent of iframes
       }).filter(function(elem) {
         return !isContainedByAny(nodes, elem) && noElephantInAncestors(elem);
-      }).forEach(function(elem, i, array) {
-          // pass in the target node, as well as the observer options
-          // makeObserver().observe(elem, {
-          //     childList: true,
-          //     subtree: true
-          // });
-          if (!elem.dataset.elephant) {
-            // console.log('Adding elephant to: ', elem);
-            // elem.style.position = 'relative';
-            var elephantElem = document.createElement('div');
-            elephantElem.setAttribute('style', 'margin-top: -48px; opacity: 0.99; text-align:left;');
-            elephantElem.innerHTML = '<img style="width: 50px; z-index: 1000000" src="http://tabforacause-west.s3.amazonaws.com/static-1/img/sad-elephant.png">';
-            elem.dataset.elephant = "true";
-            for (var i = 0; i < elem.childNodes.length; i++) {
-              if (elem.childNodes[i].style && elem.childNodes[i].clientWidth) {
-                elephantElem.style['margin-left'] = elem.childNodes[i].style['margin-left'];
-                elephantElem.style['margin-right'] = elem.childNodes[i].style['margin-right'];
+      });
+      return adContainers;
+    }
 
-                // TODO: figure out how to copy width here!
-                elephantElem.style.width = elem.childNodes[i].clientWidth;
-              }
-            }
-            elem.appendChild(elephantElem);
-          }
+    // Takes an array of DOM elements.
+    // Add elephants to all ad containers.
+    var elephantsEverywhere = function(nodes) {
+      console.log('Considering adding elephants to these nodes:', nodes);
+      var adContainers = getAdContainersForNodes(nodes);
+      adContainers.forEach(function(elem, i, array) {
+        addElephantToElem(elem);
       });
     }
 
@@ -882,7 +886,7 @@ var uBlockCollapser = (function() {
                 addedNodeLists.push(nodeList);
             }
         }
-        console.log('Mutation; added node lists', addedNodeLists);
+        // console.log('Mutation; added node lists', addedNodeLists);
         if ( addedNodeListsTimer === null ) {
             // I arbitrarily chose 100 ms for now:
             // I have to compromise between the overhead of processing too few
