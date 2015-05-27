@@ -544,21 +544,28 @@ var gladly = (function() {
     var addElephantToElem = function(elem) {
       // If the element already has an elephant, skip it.
       if (!elem.dataset.elephant) {
-        // console.log('Adding elephant to: ', elem);
-        // elem.style.position = 'relative';
+        console.log('Adding elephant to: ', elem);
+        var ICON_HEIGHT_PX = 48;
         var elephantElem = document.createElement('div');
-        elephantElem.setAttribute('style', 'margin-top: -48px; opacity: 0.99; text-align:left;');
+        elephantElem.setAttribute('style', 'opacity: 0.99; text-align:left;');
         elephantElem.innerHTML = '<img style="width: 50px; z-index: 1000000" src="http://tabforacause-west.s3.amazonaws.com/static-1/img/sad-elephant.png">';
+        // Mark that we added an elephant.
         elem.dataset.elephant = "true";
-        for (var i = 0; i < elem.childNodes.length; i++) {
-          if (elem.childNodes[i].style && elem.childNodes[i].clientWidth) {
-            elephantElem.style['margin-left'] = elem.childNodes[i].style['margin-left'];
-            elephantElem.style['margin-right'] = elem.childNodes[i].style['margin-right'];
+        // Copy some positioning from the parent element to our icon container.
+        var parentElemStyle = window.getComputedStyle(elem);
+        elephantElem.style['margin-left'] = parentElemStyle['margin-left'] + 'px';
+        elephantElem.style['margin-right'] = parentElemStyle['margin-right'] + 'px';
+        elephantElem.style['margin-bottom'] = parentElemStyle['margin-bottom'] + 'px';
+        // Set a negative top margin for our icon container.
+        var sibling = elem.childNodes[elem.childNodes.length - 1];
+        var siblingStyle = window.getComputedStyle(sibling);
+        var iconMarginTop = -ICON_HEIGHT_PX - parseInt(siblingStyle['margin-bottom'], 10) + 'px';
+        elephantElem.style['margin-top'] = iconMarginTop;
 
-            // TODO: figure out how to copy width here!
-            elephantElem.style.width = elem.childNodes[i].clientWidth;
-          }
-        }
+        // TODO: figure out how to copy width to the elephantElem.
+        // Could do so by watching the width of the ad node (e.g. iframe)
+        // and adjusting the elephantElem width on changes.
+
         elem.appendChild(elephantElem);
       }
     }
