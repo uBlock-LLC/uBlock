@@ -55,6 +55,10 @@ if ( vAPI.contentscriptStartInjected ) {
 vAPI.contentscriptStartInjected = true;
 vAPI.styles = vAPI.styles || [];
 
+// TODO: get this from the extension.
+// vAPI.isGladlyPartnerPage = true;
+vAPI.isGladlyPartnerPage = false;
+
 /******************************************************************************/
 
 var localMessager = vAPI.messaging.channel('contentscript-start.js');
@@ -91,23 +95,27 @@ var cosmeticFilters = function(details) {
             }
         }
     }
-    if ( hide.length !== 0 ) {
+    if ( hide.length !== 0 && !vAPI.isGladlyPartnerPage) {
         var text = hide.join(',\n');
         hideElements(text);
-        // var style = vAPI.specificHideStyle = document.createElement('style');
-        // // The linefeed before the style block is very important: do not remove!
-        // style.appendChild(document.createTextNode(text + '\n{display:none !important;}'));
-        // //console.debug('µBlock> "%s" cosmetic filters: injecting %d CSS rules:', details.domain, details.hide.length, hideStyleText);
-        // var parent = document.head || document.documentElement;
-        // if ( parent ) {
-        //     parent.appendChild(style);
-        //     vAPI.styles.push(style);
-        // }
+        var style = vAPI.specificHideStyle = document.createElement('style');
+        // The linefeed before the style block is very important: do not remove!
+        style.appendChild(document.createTextNode(text + '\n{display:none !important;}'));
+        //console.debug('µBlock> "%s" cosmetic filters: injecting %d CSS rules:', details.domain, details.hide.length, hideStyleText);
+        var parent = document.head || document.documentElement;
+        if ( parent ) {
+            parent.appendChild(style);
+            vAPI.styles.push(style);
+        }
     }
     vAPI.donthideCosmeticFilters = donthideCosmeticFilters;
-    // Gladly edited.
-    // vAPI.hideCosmeticFilters = hideCosmeticFilters;
-    vAPI.hideCosmeticFilters = {};
+
+    if (vAPI.isGladlyPartnerPage) {
+        vAPI.hideCosmeticFilters = {};
+    }
+    else {
+        vAPI.hideCosmeticFilters = hideCosmeticFilters;
+    }
 };
 
 var netFilters = function(details) {
@@ -164,7 +172,7 @@ var hideElements = function(selectors) {
     var elems = document.querySelectorAll(selectors);
     var i = elems.length;
     while ( i-- ) {
-        // elems[i].style.setProperty('display', 'none', 'important');
+        elems[i].style.setProperty('display', 'none', 'important');
     }
 };
 

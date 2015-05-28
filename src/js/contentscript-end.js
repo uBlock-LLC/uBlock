@@ -324,9 +324,8 @@ var gladly = (function() {
     return elemsProcessed;
   }
 
-  // TODO: get this from the extension.
-  var isGladlyPartnerPage = true;
-  // var isGladlyPartnerPage = false;
+  // Set in contentscript-start.js.
+  var isGladlyPartnerPage = vAPI.isGladlyPartnerPage;
 
   return {
     addProcessedNodes: addProcessedNodes,
