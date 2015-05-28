@@ -23,7 +23,7 @@ cp platform/firefox/frame*.js $DES/
 cp -R platform/firefox/img $DES/
 cp -R platform/firefox/css $DES/
 cp platform/firefox/chrome.manifest $DES/
-cp platform/firefox/install.rdf $DES/
+cp platform/firefox/*.rdf $DES/
 cp platform/firefox/*.xul $DES/
 cp LICENSE.txt $DES/
 
@@ -33,6 +33,10 @@ python tools/make-firefox-meta.py $DES/
 if [ "$1" = all ]; then
     echo "*** uBlock.firefox: Creating package..."
     pushd $DES/
+
+# Don't include update.rdf in .xpi
+    mv update.rdf ../firefox-update.rdf
+
     zip ../uBlock.firefox.xpi -qr *
     popd
 fi

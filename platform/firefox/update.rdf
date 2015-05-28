@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<r:RDF xmlns:r="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.mozilla.org/2004/em-rdf#">
+  <r:Description about="urn:mozilla:extension:{{2b10c1c8-a11f-4bad-fe9c-1c11e82cac42}}">
+    <updates>
+      <r:Seq>
+        <r:li>
+          <r:Description>
+            <version>{version}</version>
+
+            <!-- Firefox -->
+            <targetApplication>
+              <r:Description>
+                <id>{{ec8030f7-c20a-464f-9b0e-13a3a9e97384}}</id>
+                <minVersion>24.0</minVersion>
+                <maxVersion>40.0</maxVersion>
+
+                <updateLink>https://github.com/chrisaljoudi/uBlock/releases/download/{version}/uBlock.firefox.xpi</updateLink>
+              </r:Description>
+            </targetApplication>
+
+            <!-- Fennec -->
+            <targetApplication>
+              <r:Description>
+                <id>{{aa3c5121-dab2-40e2-81ca-7ea25febc110}}</id>
+                <minVersion>24.0</minVersion>
+                <maxVersion>40.0</maxVersion>
+
+                <updateLink>https://github.com/chrisaljoudi/uBlock/releases/download/{version}/uBlock.firefox.xpi</updateLink>
+              </r:Description>
+            </targetApplication>
+
+            <!-- SeaMonkey -->
+            <targetApplication>
+              <r:Description>
+                <id>{{92650c4d-4b8e-4d2a-b7eb-24ecf4f6b63a}}</id>
+                <minVersion>2.21</minVersion>
+                <maxVersion>2.37</maxVersion>
+
+                <updateLink>https://github.com/chrisaljoudi/uBlock/releases/download/{version}/uBlock.firefox.xpi</updateLink>
+              </r:Description>
+            </targetApplication>
+            
+          </r:Description>
+        </r:li>
+      </r:Seq>
+    </updates>
+  </r:Description>
+</r:RDF>

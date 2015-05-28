@@ -7,6 +7,7 @@
         <description>{description}</description>
         <homepageURL>{homepage}</homepageURL>
         <creator>{author}</creator>
+        <updateURL>https://github.com/chrisaljoudi/uBlock/raw/master/firefox-update.rdf</updateURL>
         <type>2</type>
         <bootstrap>true</bootstrap>
         <multiprocessCompatible>true</multiprocessCompatible>
