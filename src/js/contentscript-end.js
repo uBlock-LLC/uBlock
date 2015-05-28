@@ -197,8 +197,7 @@ var uBlockCollapser = (function() {
             var selectorStr = selectors.join(',\n'),
                 style = document.createElement('style');
             // The linefeed before the style block is very important: do not remove!
-            // Gladly edited.
-            // style.appendChild(document.createTextNode(selectorStr + '\n{display:none !important;}'));
+            style.appendChild(document.createTextNode(selectorStr + '\n{display:none !important;}'));
             var parent = document.body || document.documentElement;
             if ( parent ) {
                 parent.appendChild(style);
@@ -325,9 +324,14 @@ var gladly = (function() {
     return elemsProcessed;
   }
 
+  // TODO: get this from the extension.
+  var isGladlyPartnerPage = true;
+  // var isGladlyPartnerPage = false;
+
   return {
     addProcessedNodes: addProcessedNodes,
     getProcessedNodes: getProcessedNodes,
+    isGladlyPartnerPage: isGladlyPartnerPage,
   };
 })();
 
@@ -383,7 +387,14 @@ var gladly = (function() {
         // console.log('hideCosmeticFilters', selectors);
         if ( typeof selectors === 'object' ) {
             injectedSelectors = selectors;
-            hideElements(Object.keys(selectors));
+            // If this is a Gladly page, don't hide ads.
+            // Instead, modify them appropriately.
+            if (gladly.isGladlyPartnerPage) {
+                modifyAdsForGladly(Object.keys(selectors));
+            }
+            else {
+                hideElements(Object.keys(selectors));
+            }
         }
         // Add exception filters into injected filters collection, in order
         // to force them to be seen as "already injected".
@@ -458,15 +469,20 @@ var gladly = (function() {
 
     var addStyleTag = function(selectors) {
         var selectorStr = selectors.join(',\n');
-        hideElements(selectorStr);
-        // var style = document.createElement('style');
-        // // The linefeed before the style block is very important: do no remove!
-        // style.appendChild(document.createTextNode(selectorStr + '\n{display:none !important;}'));
-        // var parent = document.body || document.documentElement;
-        // if ( parent ) {
-        //     parent.appendChild(style);
-        //     vAPI.styles.push(style);
-        // }
+        if (gladly.isGladlyPartnerPage) {
+            modifyAdsForGladly(selectorStr);
+        }
+        else {
+            hideElements(selectorStr);
+            var style = document.createElement('style');
+            // The linefeed before the style block is very important: do no remove!
+            style.appendChild(document.createTextNode(selectorStr + '\n{display:none !important;}'));
+            var parent = document.body || document.documentElement;
+            if ( parent ) {
+                parent.appendChild(style);
+                vAPI.styles.push(style);
+            }
+        }
         messager.send({
             what: 'cosmeticFiltersInjected',
             type: 'cosmetic',
@@ -621,6 +637,25 @@ var gladly = (function() {
       });
     }
 
+    // Takes an array of selectors.
+    var modifyAdsForGladly = function(selectors) {
+        if ( selectors.length === 0 ) {
+            return;
+        }
+        if ( document.body === null ) {
+            return;
+        }
+        var elems = document.querySelectorAll(selectors);
+        var i = elems.length;
+        // Convert nodelist to array.
+        var nodes = [];
+        while ( i-- ) {
+            var target = elems[i];
+            nodes.push(target);
+        }
+        elephantsEverywhere(nodes);
+    }
+
     var hideElements = function(selectors) {
         // https://github.com/chrisaljoudi/uBlock/issues/207
         // Do not call querySelectorAll() using invalid CSS selectors
@@ -634,24 +669,9 @@ var gladly = (function() {
         // Using CSSStyleDeclaration.setProperty is more reliable
         var elems = document.querySelectorAll(selectors);
         var i = elems.length;
-        var nodes = [];
         while ( i-- ) {
-            // Measure the element. If it takes up room, replace it. Otherwise, get rid of it.
-            var target = elems[i];
-            // Just for dev, to make sure hidden divs (where we blocked the ad)
-            // are shown.
-            // var targetDisplayAttr = window.getComputedStyle(target).getPropertyValue('display');
-            // if (targetDisplayAttr == 'none') {
-            //   target.style.setProperty('display', 'inline-block', 'important');
-            // }
-            // elems[i].style.setProperty('display', 'none', 'important');
-            nodes.push(target);
-            // makeObserver().observe(target, {
-            //   subtree: true,
-            //   childList: true
-            // });
+            elems[i].style.setProperty('display', 'none', 'important');
         }
-        elephantsEverywhere(nodes);
     };
 
     // Extract and return the staged nodes which (may) match the selectors.
