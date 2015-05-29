@@ -408,13 +408,9 @@ var onMessage = function(request, sender, callback) {
 
     switch ( request.what ) {
         case 'retrieveDomainCosmeticSelectors':
-            // Gladly edited
-            response = µb.cosmeticFilteringEngine.retrieveDomainSelectors(request);
-            // console.log(response);
-            
-            // if ( pageStore && pageStore.getSpecificCosmeticFilteringSwitch() ) {
-            //     response = µb.cosmeticFilteringEngine.retrieveDomainSelectors(request);
-            // }
+            if ( pageStore && pageStore.getSpecificCosmeticFilteringSwitch() ) {
+                response = µb.cosmeticFilteringEngine.retrieveDomainSelectors(request);
+            }
             break;
 
         default:
@@ -458,13 +454,12 @@ var tagNameToRequestTypeMap = {
 
 var filterRequests = function(pageStore, details) {
     var requests = details.requests;
-    // Gladly edited to not filter any requests.
-    // if ( !pageStore || !pageStore.getNetFilteringSwitch() ) {
-    //     return requests;
-    // }
-    // if ( µb.userSettings.collapseBlocked === false ) {
-    //     return requests;
-    // }
+    if ( !pageStore || !pageStore.getNetFilteringSwitch() ) {
+        return requests;
+    }
+    if ( µb.userSettings.collapseBlocked === false ) {
+        return requests;
+    }
 
     //console.debug('messaging.js/contentscript-end.js: processing %d requests', requests.length);
 
@@ -480,11 +475,9 @@ var filterRequests = function(pageStore, details) {
         context.requestURL = vAPI.punycodeURL(request.url);
         context.requestHostname = µburi.hostnameFromURI(request.url);
         context.requestType = tagNameToRequestTypeMap[request.tagName];
-        // Gladly edited.
-        request.collapse = true;
-        // if ( isBlockResult(pageStore.filterRequest(context)) ) {
-        //     request.collapse = true;
-        // }
+        if ( isBlockResult(pageStore.filterRequest(context)) ) {
+            request.collapse = true;
+        }
     }
     return requests;
 };
@@ -508,25 +501,21 @@ var onMessage = function(request, sender, callback) {
 
     switch ( request.what ) {
         case 'retrieveGenericCosmeticSelectors':
+            // Shut down if we shouldn't filter requests and it
+            // is not a Gladly partner page.
+            var shouldShutdown = !pageStore || (!pageStore.getNetFilteringSwitch() && !µBlock.isGladlyPartnerPage());
             response = {
-                // Gladly edited
-                shutdown: false,
-                // shutdown: !pageStore || !pageStore.getNetFilteringSwitch(),
+                shutdown: shouldShutdown,
                 result: null
             };
             if ( !response.shutdown && pageStore.getGenericCosmeticFilteringSwitch() ) {
                 response.result = µb.cosmeticFilteringEngine.retrieveGenericSelectors(request);
             }
-            // console.log('retrieveGenericCosmeticSelectors response', response);
             break;
 
         // Evaluate many requests
         case 'filterRequests':
             response = {
-                // Gladly edited
-                // TODO: figure out why setting shutdown to false
-                // breaks adding elephants.
-                // shutdown: false,
                 shutdown: !pageStore || !pageStore.getNetFilteringSwitch(),
                 result: null
             };

@@ -29,8 +29,9 @@
 
 /******************************************************************************/
 
+// TODO: only calculate this once per tab and store the result.
 µBlock.isGladlyPartnerPage = function() {
-    // TODO: make dynamic
+    // TODO: make dynamic.
     return true;
 };
 
