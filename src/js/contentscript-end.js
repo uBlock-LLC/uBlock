@@ -559,24 +559,58 @@ var gladly = (function() {
     var addElephantToElem = function(elem) {
       // If the element already has an elephant, skip it.
       if (!elem.dataset.elephant) {
-        console.log('Adding elephant to: ', elem);
+        console.log('Adding elephant to: ', elem.nodeName);
         var ICON_HEIGHT_PX = 48;
         var elephantElem = document.createElement('div');
         elephantElem.setAttribute('style', 'opacity: 0.99; text-align:left;');
         elephantElem.innerHTML = '<img style="width: 50px; z-index: 1000000" src="http://tabforacause-west.s3.amazonaws.com/static-1/img/sad-elephant.png">';
         // Mark that we added an elephant.
-        elem.dataset.elephant = "true";
+        elem.dataset.elephant = 'true';
         // Copy some positioning from the parent element to our icon container.
         var parentElemStyle = window.getComputedStyle(elem);
         elephantElem.style['margin-left'] = parentElemStyle['margin-left'] + 'px';
         elephantElem.style['margin-right'] = parentElemStyle['margin-right'] + 'px';
         elephantElem.style['margin-bottom'] = parentElemStyle['margin-bottom'] + 'px';
         // Set a negative top margin for our icon container.
-        var sibling = elem.childNodes[elem.childNodes.length - 1];
-        // TODO: Fix. This appears to be buggy (e.g. on imgur).
-        var siblingStyle = window.getComputedStyle(sibling);
-        var iconMarginTop = -ICON_HEIGHT_PX - parseInt(siblingStyle['margin-bottom'], 10) + 'px';
-        elephantElem.style['margin-top'] = iconMarginTop;
+        var sibling;
+        for(var i = 0; i < elem.childNodes.length; i++ ) {
+          sibling = elem.childNodes[i];
+          if (!sibling) {
+            continue;
+          }
+          if (sibling.nodeType == Node.ELEMENT_NODE &&
+              sibling.nodeName.toLowerCase() != 'script') {
+            break;
+          }
+        }
+        if (sibling && sibling.nodeType == Node.ELEMENT_NODE) {
+          var siblingStyle = window.getComputedStyle(sibling);
+          if (siblingStyle['position'] == 'absolute') {
+            elephantElem.style['position'] = 'absolute';
+            elephantElem.style['bottom'] = 0;
+          } else {
+            var iconMarginTop = -ICON_HEIGHT_PX - parseInt(siblingStyle['margin-bottom'], 10) + 'px';
+            elephantElem.style['margin-top'] = iconMarginTop;
+
+            elephantElem.style['margin-left'] = 'auto';
+            elephantElem.style['margin-right'] = 'auto';
+
+            window.setTimeout(function(targetEl, sib) {
+              var width = sib.getAttribute('width');
+              if (!width) {
+                width = sib.style.width;
+              }
+              if (!width) {
+                width = sib.clientWidth;
+              }
+              if (width && width > 10) {
+                width = width + 'px'
+                console.log('FOUND SIBLING WIDTH ' + width);
+                targetEl.style.width = width;
+              }
+            }, 200, elephantElem, sibling);
+          }
+        }
 
         // TODO: figure out how to copy width to the elephantElem.
         // Could do so by watching the width of the ad node (e.g. iframe)
