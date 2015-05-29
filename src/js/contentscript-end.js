@@ -595,6 +595,7 @@ var gladly = (function() {
             elephantElem.style['margin-left'] = 'auto';
             elephantElem.style['margin-right'] = 'auto';
 
+            // TODO: listener instead of arbitrary timeout.
             window.setTimeout(function(targetEl, sib) {
               var width = sib.getAttribute('width');
               if (!width) {
