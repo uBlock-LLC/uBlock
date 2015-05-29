@@ -29,10 +29,25 @@
 
 /******************************************************************************/
 
-// TODO: only calculate this once per tab and store the result.
-µBlock.isGladlyPartnerPage = function() {
-    // TODO: make dynamic.
-    return true;
+µBlock.isGladlyPartnerDomain = function(domain) {
+    var isGladlyPartner = isInGladlyPartnerList(domain);
+    // console.log('Is a Gladly partner?', isGladlyPartner, domain);
+    return isGladlyPartner;
+};
+
+var loadGladlyPartnerList = function() {
+    // TODO: fetch this object from a file.
+    var gladlyPartnerList = {
+        'tabforacause.org': [],
+        'imgur.com': [],
+        'cnn.com': [],
+    };
+    return gladlyPartnerList;
+}
+
+var isInGladlyPartnerList = function(domain) {
+    var gladlyPartnerList = loadGladlyPartnerList();
+    return gladlyPartnerList.hasOwnProperty(domain);
 };
 
 /******************************************************************************/
@@ -73,13 +88,9 @@ var matchWhitelistDirective = function(url, hostname, directive) {
 /******************************************************************************/
 
 µBlock.getNetFilteringSwitch = function(url) {
-    // Don't filter requests if this is a Gladly partner page.
-    if (µBlock.isGladlyPartnerPage()) {
-        return false;
-    }
+    var targetHostname = this.URI.hostnameFromURI(url);
     var netWhitelist = this.netWhitelist;
     var buckets, i, pos;
-    var targetHostname = this.URI.hostnameFromURI(url);
     var key = targetHostname;
     for (;;) {
         if ( netWhitelist.hasOwnProperty(key) ) {

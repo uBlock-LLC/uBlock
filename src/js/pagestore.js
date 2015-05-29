@@ -304,6 +304,10 @@ PageStore.prototype.init = function(tabId) {
     this.perLoadAllowedRequestCount = 0;
     this.netFilteringCache = NetFilteringResultCache.factory();
 
+    var hostname = tabContext.rootHostname;
+    var domain = µb.URI.domainFromHostname(hostname) || hostname;
+    this.isGladlyPartnerPage = µBlock.isGladlyPartnerDomain(domain);
+
     // Support `elemhide` filter option. Called at this point so the required
     // context is all setup at this point.
     var context = this.createContextFromPage();
@@ -435,9 +439,15 @@ PageStore.prototype.getNetFilteringSwitch = function() {
         return this.netFiltering;
     }
 
-    // https://github.com/chrisaljoudi/uBlock/issues/1078
-    // Use both the raw and normalized URLs.
-    this.netFiltering = µb.getNetFilteringSwitch(tabContext.normalURL);
+    // Don't filter requests if this is a Gladly partner page.
+    if (this.isGladlyPartnerPage) {
+        this.netFiltering = false;
+    }
+    else {
+        // https://github.com/chrisaljoudi/uBlock/issues/1078
+        // Use both the raw and normalized URLs.
+        this.netFiltering = µb.getNetFilteringSwitch(tabContext.normalURL);
+    }
     if ( this.netFiltering && tabContext.rawURL !== tabContext.normalURL ) {
         this.netFiltering = µb.getNetFilteringSwitch(tabContext.rawURL);
     }
@@ -449,7 +459,7 @@ PageStore.prototype.getNetFilteringSwitch = function() {
 
 PageStore.prototype.getSpecificCosmeticFilteringSwitch = function() {
     // Always do cosmetic filtering if this is a Gladly partner page.
-    if (µBlock.isGladlyPartnerPage()) {
+    if (this.isGladlyPartnerPage) {
         return true;
     }
 
@@ -467,7 +477,7 @@ PageStore.prototype.getSpecificCosmeticFilteringSwitch = function() {
 
 PageStore.prototype.getGenericCosmeticFilteringSwitch = function() {
     // Always do cosmetic filtering if this is a Gladly partner page.
-    if (µBlock.isGladlyPartnerPage()) {
+    if (this.isGladlyPartnerPage) {
         return true;
     }
     

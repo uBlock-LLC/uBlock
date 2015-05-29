@@ -409,6 +409,11 @@ var onMessage = function(request, sender, callback) {
     switch ( request.what ) {
         case 'retrieveDomainCosmeticSelectors':
             if ( pageStore && pageStore.getSpecificCosmeticFilteringSwitch() ) {
+                // Pass on whether this is a Gladly partner page to the
+                // cosmetic filtering engine, which will pass it back
+                // to the content script. This helps us not duplicate the
+                // domain lookup.
+                request.isGladlyPartnerPage = pageStore.isGladlyPartnerPage;
                 response = µb.cosmeticFilteringEngine.retrieveDomainSelectors(request);
             }
             break;
@@ -503,7 +508,8 @@ var onMessage = function(request, sender, callback) {
         case 'retrieveGenericCosmeticSelectors':
             // Shut down if we shouldn't filter requests and it
             // is not a Gladly partner page.
-            var shouldShutdown = !pageStore || (!pageStore.getNetFilteringSwitch() && !µBlock.isGladlyPartnerPage());
+            var shouldShutdown = (!pageStore || 
+                (!pageStore.getNetFilteringSwitch() && !pageStore.isGladlyPartnerPage));
             response = {
                 shutdown: shouldShutdown,
                 result: null
