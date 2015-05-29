@@ -573,6 +573,7 @@ var gladly = (function() {
         elephantElem.style['margin-bottom'] = parentElemStyle['margin-bottom'] + 'px';
         // Set a negative top margin for our icon container.
         var sibling = elem.childNodes[elem.childNodes.length - 1];
+        // TODO: Fix. This appears to be buggy (e.g. on imgur).
         var siblingStyle = window.getComputedStyle(sibling);
         var iconMarginTop = -ICON_HEIGHT_PX - parseInt(siblingStyle['margin-bottom'], 10) + 'px';
         elephantElem.style['margin-top'] = iconMarginTop;
