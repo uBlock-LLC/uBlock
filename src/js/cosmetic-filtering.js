@@ -1183,7 +1183,8 @@ FilterContainer.prototype.retrieveDomainSelectors = function(request) {
         cosmeticHide: [],
         cosmeticDonthide: [],
         netHide: [],
-        netCollapse: µb.userSettings.collapseBlocked
+        netCollapse: µb.userSettings.collapseBlocked,
+        isGladlyPartnerPage: µb.isGladlyPartnerPage()
     };
 
     var hash, bucket;

@@ -55,10 +55,6 @@ if ( vAPI.contentscriptStartInjected ) {
 vAPI.contentscriptStartInjected = true;
 vAPI.styles = vAPI.styles || [];
 
-// TODO: get this from the extension.
-vAPI.isGladlyPartnerPage = true;
-// vAPI.isGladlyPartnerPage = false;
-
 /******************************************************************************/
 
 var localMessager = vAPI.messaging.channel('contentscript-start.js');
@@ -136,6 +132,7 @@ var netFilters = function(details) {
 var filteringHandler = function(details) {
     var styleTagCount = vAPI.styles.length;
 
+    vAPI.isGladlyPartnerPage = details.isGladlyPartnerPage;
     vAPI.skipCosmeticFiltering = !details || details.skipCosmeticFiltering;
     if ( details ) {
         if ( details.cosmeticHide.length !== 0 || details.cosmeticDonthide.length !== 0 ) {
