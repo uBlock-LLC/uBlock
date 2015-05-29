@@ -448,8 +448,10 @@ PageStore.prototype.getNetFilteringSwitch = function() {
 /******************************************************************************/
 
 PageStore.prototype.getSpecificCosmeticFilteringSwitch = function() {
-    // Gladly edited to always do cosmetic filtering
-    return true;
+    // Always do cosmetic filtering if this is a Gladly partner page.
+    if (µBlock.isGladlyPartnerPage()) {
+        return true;
+    }
 
     if ( this.getNetFilteringSwitch() === false ) {
         return false;
@@ -464,8 +466,10 @@ PageStore.prototype.getSpecificCosmeticFilteringSwitch = function() {
 /******************************************************************************/
 
 PageStore.prototype.getGenericCosmeticFilteringSwitch = function() {
-    // Gladly edited to always do cosmetic filtering
-    return true;
+    // Always do cosmetic filtering if this is a Gladly partner page.
+    if (µBlock.isGladlyPartnerPage()) {
+        return true;
+    }
     
     if ( this.skipCosmeticFiltering ) {
         return false;

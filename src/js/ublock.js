@@ -29,6 +29,13 @@
 
 /******************************************************************************/
 
+µBlock.isGladlyPartnerPage = function() {
+    // TODO: make dynamic
+    return true;
+};
+
+/******************************************************************************/
+
 // https://github.com/chrisaljoudi/uBlock/issues/405
 // Be more flexible with whitelist syntax
 
@@ -65,6 +72,10 @@ var matchWhitelistDirective = function(url, hostname, directive) {
 /******************************************************************************/
 
 µBlock.getNetFilteringSwitch = function(url) {
+    // Don't filter requests if this is a Gladly partner page.
+    if (µBlock.isGladlyPartnerPage()) {
+        return false;
+    }
     var netWhitelist = this.netWhitelist;
     var buckets, i, pos;
     var targetHostname = this.URI.hostnameFromURI(url);
@@ -86,9 +97,7 @@ var matchWhitelistDirective = function(url, hostname, directive) {
         }
         key = key.slice(pos + 1);
     }
-    // Gladly edited to always allow requests
-    return false;
-    // return true;
+    return true;
 };
 
 /******************************************************************************/
