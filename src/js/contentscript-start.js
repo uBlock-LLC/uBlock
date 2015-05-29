@@ -56,8 +56,8 @@ vAPI.contentscriptStartInjected = true;
 vAPI.styles = vAPI.styles || [];
 
 // TODO: get this from the extension.
-// vAPI.isGladlyPartnerPage = true;
-vAPI.isGladlyPartnerPage = false;
+vAPI.isGladlyPartnerPage = true;
+// vAPI.isGladlyPartnerPage = false;
 
 /******************************************************************************/
 
