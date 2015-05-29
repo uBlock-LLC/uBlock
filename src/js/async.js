@@ -183,12 +183,15 @@ return asyncJobManager;
             return;
         }
 
-        var netFiltering = pageStore.getNetFilteringSwitch();
         var badge = '';
-        if ( µb.userSettings.showIconBadge && netFiltering && pageStore.perLoadBlockedRequestCount ) {
-            badge = µb.utils.formatCount(pageStore.perLoadBlockedRequestCount);
-        }
-        vAPI.setIcon(tabId, netFiltering ? 'on' : 'off', badge);
+        var isGladlyPartnerPage = pageStore.isGladlyPartnerPage;
+        // TODO: add Gladly ad count to badge.
+        // var numGladlyAds = pageStore.numGladlyAds;
+        // var numGladlyAds = 13
+        // if ( µb.userSettings.showIconBadge && isGladlyPartnerPage && numGladlyAds) {
+        //     badge = µb.utils.formatCount(numGladlyAds);
+        // }
+        vAPI.setIcon(tabId, isGladlyPartnerPage ? 'on' : 'off', badge);
     };
 
     return function(tabId) {
