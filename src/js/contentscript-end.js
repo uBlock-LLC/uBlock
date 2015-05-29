@@ -977,14 +977,16 @@ var gladly = (function() {
 
     // https://github.com/gorhill/uMatrix/issues/144
     shutdownJobs.add(function() {
-        // Gladly edited: don't shut down the mutation observer.
-        // We use it to watch for new nodes since we can't listen
-        // for blocked requests when we're not filtering ad requests.
-
-        // treeObserver.disconnect();
-        // if ( addedNodeListsTimer !== null ) {
-        //     clearTimeout(addedNodeListsTimer);
-        // }
+        // If this is a Gladly partner page, don't shut down the
+        // mutation observer. We use it to watch for new nodes,
+        // becasue we can't listen for blocked requests when we're
+        // not filtering requests.
+        if (!gladly.isGladlyPartnerPage) {
+            treeObserver.disconnect();
+            if ( addedNodeListsTimer !== null ) {
+                clearTimeout(addedNodeListsTimer);
+            }
+        }
     });
 })();
 
