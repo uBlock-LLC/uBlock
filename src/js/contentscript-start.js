@@ -173,6 +173,18 @@ var hideElements = function(selectors) {
     }
 };
 
+var iconHandler = function(details) {
+    vAPI.goodblockIconUrl = details.iconUrl;
+}
+
+// Get the URL of the ad icon.
+localMessager.send(
+    {
+        what: 'retrieveIconUrl',
+    },
+    iconHandler
+);
+
 var url = window.location.href;
 localMessager.send(
     {

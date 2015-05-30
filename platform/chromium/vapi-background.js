@@ -444,7 +444,8 @@ var iconStateForTabId = {}; // {tabId: IconState}
 
 var ICON_PATHS = {
     "on": { '19': 'img/browsericons/icon19.png',     '38': 'img/browsericons/icon38.png' },
-    "off": { '19': 'img/browsericons/icon19-off.png', '38': 'img/browsericons/icon38-off.png' }
+    "off": { '19': 'img/browsericons/icon19-off.png', '38': 'img/browsericons/icon38-off.png' },
+    "goodblock": { 'adIcon': 'img/browsericons/icon24.png' }
 };
 
 // Must read: https://code.google.com/p/chromium/issues/detail?id=410868#c8
@@ -486,6 +487,14 @@ vAPI.setIcon = function(tabId, iconStatus, badge) {
         chrome.browserAction.setBadgeText({ tabId: tabId, text: badge });
     }
 };
+
+/******************************************************************************/
+
+vAPI.getAdIconPath = function() {
+    var relative_url = ICON_PATHS['goodblock']['adIcon'];
+    var url = chrome.extension.getURL(relative_url);
+    return url;
+}
 
 /******************************************************************************/
 

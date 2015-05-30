@@ -560,10 +560,19 @@ var gladly = (function() {
       // If the element already has an elephant, skip it.
       if (!elem.dataset.elephant) {
         console.log('Adding elephant to: ', elem.nodeName);
-        var ICON_HEIGHT_PX = 48;
+        var ICON_HEIGHT_PX = 24;
+        var ICON_WIDTH_PX = 24;
+        // The ad icon container.
         var elephantElem = document.createElement('div');
         elephantElem.setAttribute('style', 'opacity: 0.99; text-align:left;');
-        elephantElem.innerHTML = '<img style="width: 50px; z-index: 1000000" src="http://tabforacause-west.s3.amazonaws.com/static-1/img/sad-elephant.png">';
+        // The ad icon image.
+        var adIconElem = document.createElement('img');
+        var iconUrl = vAPI.goodblockIconUrl;
+        adIconElem.setAttribute('src', iconUrl);
+        adIconElem.style.width = ICON_WIDTH_PX + 'px';
+        adIconElem.setAttribute('style', 'z-index: 1000000; background-color: rgba(0,0,0,0.2); border-top-right-radius: 5px; padding-right: 3px;');
+        elephantElem.appendChild(adIconElem);
+
         // Mark that we added an elephant.
         elem.dataset.elephant = 'true';
         // Copy some positioning from the parent element to our icon container.

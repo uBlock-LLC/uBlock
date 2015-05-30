@@ -17,6 +17,10 @@
         "default_popup": "popup.html"
     },
 
+    "web_accessible_resources": [
+        "img/browsericons/icon24.png"
+    ],
+
     "author": "The uBlock Development Team",
     "background": {
         "page": "background.html"

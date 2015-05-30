@@ -549,6 +549,22 @@ var collapsibleRequestTypes = 'image sub_frame object';
 
 /******************************************************************************/
 
+PageStore.prototype.getAdIconPath = function(context) {
+    // Put in pagestore to limit calls to get the icon URL.
+    if (this.adIconPath) {
+        var url = this.adIconPath;
+    }
+    else {
+        var url = vAPI.getAdIconPath();
+        this.adIconPath = url;
+    }
+    return {
+        'iconUrl': url
+    }
+};
+
+/******************************************************************************/
+
 PageStore.prototype.filterRequestNoCache = function(context) {
     if ( this.getNetFilteringSwitch() === false ) {
         return '';
