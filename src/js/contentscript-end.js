@@ -564,22 +564,27 @@ var gladly = (function() {
         var ICON_WIDTH_PX = 24;
         // The ad icon container.
         var elephantElem = document.createElement('div');
-        elephantElem.setAttribute('style', 'opacity: 0.99; text-align:left;');
-        // The ad icon image.
-        var adIconElem = document.createElement('img');
-        var iconUrl = vAPI.goodblockIconUrl;
-        adIconElem.setAttribute('src', iconUrl);
-        adIconElem.style.width = ICON_WIDTH_PX + 'px';
-        adIconElem.setAttribute('style', 'z-index: 1000000; background-color: rgba(0,0,0,0.2); border-top-right-radius: 5px; padding-right: 3px;');
-        elephantElem.appendChild(adIconElem);
-
-        // Mark that we added an elephant.
-        elem.dataset.elephant = 'true';
+        elephantElem.style['opacity'] = '0.99';
+        elephantElem.style['text-align'] = 'left';
         // Copy some positioning from the parent element to our icon container.
         var parentElemStyle = window.getComputedStyle(elem);
         elephantElem.style['margin-left'] = parentElemStyle['margin-left'] + 'px';
         elephantElem.style['margin-right'] = parentElemStyle['margin-right'] + 'px';
         elephantElem.style['margin-bottom'] = parentElemStyle['margin-bottom'] + 'px';
+        // The ad icon image.
+        var adIconElem = document.createElement('img');
+        var iconUrl = vAPI.goodblockIconUrl;
+        adIconElem.setAttribute('src', iconUrl);
+        adIconElem.style['width'] = ICON_WIDTH_PX + 'px';
+        adIconElem.style['z-index'] = 1000000;
+        adIconElem.style['background-color'] = 'rgba(0,0,0,0.2)';
+        adIconElem.style['border-top-right-radius'] = '5px';
+        adIconElem.style['padding-right'] = '3px';
+        elephantElem.appendChild(adIconElem);
+
+        // Mark that we added an elephant.
+        elem.dataset.elephant = 'true';
+
         // Set a negative top margin for our icon container.
         var sibling;
         for(var i = 0; i < elem.childNodes.length; i++ ) {
