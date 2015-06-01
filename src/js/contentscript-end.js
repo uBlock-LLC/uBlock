@@ -565,18 +565,18 @@ var gladly = (function() {
     var createGoodblockModalTint = function() {
         var tintElem = document.createElement('div');
         tintElem.id = 'goodblock-informational-modal-tint';
-        tintElem.style['position'] = 'fixed';
-        tintElem.style['top'] = '0px';
-        tintElem.style['left'] = '-9999px'; // Start hidden.
-        tintElem.style['opacity'] = '0';
-        tintElem.style['height'] = '100%';
-        tintElem.style['width'] = '100%';
-        tintElem.style['z-index'] = '10000000';
-        tintElem.style['background'] = 'rgba(0,0,0, 0.7)';
+        tintElem.style.setProperty('position', 'fixed', 'important');
+        tintElem.style.setProperty('top', '0px', 'important');
+        tintElem.style.setProperty('left', '-9999px', 'important'); // Start hidden.
+        tintElem.style.setProperty('opacity', '0', 'important');
+        tintElem.style.setProperty('height', '100%', 'important');
+        tintElem.style.setProperty('width', '100%', 'important');
+        tintElem.style.setProperty('z-index', '16777270', 'important');
+        tintElem.style.setProperty('background', 'rgba(0,0,0, 0.7)', 'important');
         // Transitions.
-        tintElem.style['-webkit-transition'] = 'opacity 0.3s';
-        tintElem.style['-moz-transition'] = 'opacity 0.3s';
-        tintElem.style['transition'] = 'opacity 0.3s';
+        tintElem.style.setProperty('-webkit-transition', 'opacity 0.3s', 'important');
+        tintElem.style.setProperty('-moz-transition', 'opacity 0.3s', 'important');
+        tintElem.style.setProperty('transition', 'opacity 0.3s', 'important');
         document.body.appendChild(tintElem);
         addModalTintListeners(tintElem);
         // Make sure the initial states are applied.
@@ -599,34 +599,34 @@ var gladly = (function() {
 
     var hideGoodblockModalTint = function() {
         var modalTintElem = getGoodblockModalTint();
-        modalTintElem.style['opacity'] = '0';
+        modalTintElem.style.setProperty('opacity', '0', 'important');
         // Delay to hide the modal because of animation.
         setTimeout(function() {
-            modalTintElem.style['left'] = '-9999px';
+            modalTintElem.style.setProperty('left', '-9999px', 'important');
         }, 300);
     }
 
     var showGoodblockModalTint = function() {
         var modalTintElem = getGoodblockModalTint();
-        modalTintElem.style['left'] = '0px';
-        modalTintElem.style['opacity'] = '0.99';
+        modalTintElem.style.setProperty('left', '0px', 'important');
+        modalTintElem.style.setProperty('opacity', '0.99', 'important');
     }
 
     var createGoodblockModal = function() {
         var modalId = 'goodblock-informational-modal';
         var modalElem = document.createElement('div');
         modalElem.id = modalId;
-        modalElem.style.width = '450px';
-        modalElem.style.height = '290px';
-        modalElem.style.position = 'fixed'
-        modalElem.style.top = 'calc(45% - 145px)'; // Subtract half the height
-        modalElem.style.zIndex = '100000000';
-        modalElem.style.background = '#FFF';
-        modalElem.style['border-radius'] = '5px';
+        modalElem.style.setProperty('width', '450px', 'important');
+        modalElem.style.setProperty('height', '290px', 'important');
+        modalElem.style.setProperty('position', 'fixed', 'important');
+        modalElem.style.setProperty('top', 'calc(45% - 145px)', 'important'); // Subtract half the height
+        modalElem.style.setProperty('z-index', '16777271', 'important');
+        modalElem.style.setProperty('background', '#FFF', 'important');
+        modalElem.style.setProperty('border-radius', '5px', 'important');
         // Transitions.
-        modalElem.style['-webkit-transition'] = 'transform 0.3s, opacity 0.3s';
-        modalElem.style['-moz-transition'] = 'transform 0.3s, opacity 0.3s';
-        modalElem.style['transition'] = 'transform 0.3s, opacity 0.3s';
+        modalElem.style.setProperty('-webkit-transition', 'transform 0.3s, opacity 0.3s', 'important');
+        modalElem.style.setProperty('-moz-transition', 'transform 0.3s, opacity 0.3s', 'important');
+        modalElem.style.setProperty('transition', 'transform 0.3s, opacity 0.3s', 'important');
         document.body.appendChild(modalElem);
         // Start with the modal hidden.
         hideGoodblockModal(modalElem, true);
@@ -654,11 +654,11 @@ var gladly = (function() {
         modalElem.style.left = 'calc(50% - 225px)';
         modalElem.dataset.modalState = 'active';
         // Animate the appearance.
-        modalElem.style['-webkit-transform'] = 'scale(1)';
-        modalElem.style['-moz-transform'] = 'scale(1)';
-        modalElem.style['-ms-transform'] = 'scale(1)';
-        modalElem.style['transform'] = 'scale(1)';
-        modalElem.style['opacity'] = '0.99';
+        modalElem.style.setProperty('-webkit-transform', 'scale(1)', 'important');
+        modalElem.style.setProperty('-moz-transform', 'scale(1)', 'important');
+        modalElem.style.setProperty('-ms-transform', 'scale(1)', 'important');
+        modalElem.style.setProperty('transform', 'scale(1)', 'important');
+        modalElem.style.setProperty('opacity', '0.99', 'important');
 
         // Show the modal background.
         showGoodblockModalTint();
@@ -667,15 +667,15 @@ var gladly = (function() {
     var hideGoodblockModal = function(modalElem, justCreated) {
         modalElem.dataset.modalState = 'inactive';
         // Reset appearance.
-        modalElem.style['-webkit-transform'] = 'scale(0.7)';
-        modalElem.style['-moz-transform'] = 'scale(0.7)';
-        modalElem.style['-ms-transform'] = 'scale(0.7)';
-        modalElem.style['transform'] = 'scale(0.7)';
-        modalElem.style['opacity'] = '0';
+        modalElem.style.setProperty('-webkit-transform', 'scale(0.7)', 'important');
+        modalElem.style.setProperty('-moz-transform', 'scale(0.7)', 'important');
+        modalElem.style.setProperty('-ms-transform', 'scale(0.7)', 'important');
+        modalElem.style.setProperty('transform', 'scale(0.7)', 'important');
+        modalElem.style.setProperty('opacity', '0', 'important');
         if (!justCreated) {
             // Delay to hide the modal because of animation.
             setTimeout(function() {
-                modalElem.style.left = '-9999px'; // Move offscreen.
+                modalElem.style.setProperty('left', '-9999px', 'important'); // Move offscreen.
             }, 300);
             // Hide the modal tint element.
             hideGoodblockModalTint();
@@ -724,28 +724,28 @@ var gladly = (function() {
         var ICON_WIDTH_PX = 24;
         // The ad icon container.
         var elephantElem = document.createElement('div');
-        elephantElem.style['opacity'] = '0.99';
-        elephantElem.style['text-align'] = 'left';
+        elephantElem.style.setProperty('opacity', '0.99', 'important');
+        elephantElem.style.setProperty('text-align', 'left', 'important');
         // Copy some positioning from the parent element to our icon container.
         var parentElemStyle = window.getComputedStyle(elem);
-        elephantElem.style['margin-left'] = parentElemStyle['margin-left'] + 'px';
-        elephantElem.style['margin-right'] = parentElemStyle['margin-right'] + 'px';
-        elephantElem.style['margin-bottom'] = parentElemStyle['margin-bottom'] + 'px';
+        elephantElem.style.setProperty('margin-left', parentElemStyle['margin-left'] + 'px', 'important');
+        elephantElem.style.setProperty('margin-right', parentElemStyle['margin-right'] + 'px', 'important');
+        elephantElem.style.setProperty('margin-bottom', parentElemStyle['margin-bottom'] + 'px', 'important');
         // The ad icon image.
         var adIconElem = document.createElement('img');
         var iconUrl = vAPI.goodblockIconUrl;
         adIconElem.setAttribute('src', iconUrl);
-        adIconElem.style['width'] = ICON_WIDTH_PX + 'px';
-        adIconElem.style['z-index'] = 1000000;
-        adIconElem.style['background-color'] = 'rgba(0,0,0,0.2)';
-        adIconElem.style['border-top-right-radius'] = '5px';
-        adIconElem.style['padding-right'] = '3px';
+        adIconElem.style.setProperty('width', ICON_WIDTH_PX + 'px', 'important');
+        adIconElem.style.setProperty('z-index', '16777271', 'important');
+        adIconElem.style.setProperty('background-color', 'rgba(0,0,0,0.2)', 'important');
+        adIconElem.style.setProperty('border-top-right-radius', '5px', 'important');
+        adIconElem.style.setProperty('padding-right', '3px', 'important');
         // The ad icon image holder.
         var adIconElemHolder = document.createElement('span');
         adIconElemHolder.appendChild(adIconElem);
-        adIconElemHolder.style['cursor'] = 'pointer';
+        adIconElemHolder.style.setProperty('cursor', 'pointer', 'important');
         addAdIconListeners(adIconElemHolder);
-        
+
         elephantElem.appendChild(adIconElemHolder);
 
         // Mark that we added an elephant.
@@ -766,14 +766,14 @@ var gladly = (function() {
         if (sibling && sibling.nodeType == Node.ELEMENT_NODE) {
           var siblingStyle = window.getComputedStyle(sibling);
           if (siblingStyle['position'] == 'absolute') {
-            elephantElem.style['position'] = 'absolute';
-            elephantElem.style['bottom'] = 0;
+            elephantElem.style.setProperty('position', 'absolute', 'important');
+            elephantElem.style.setProperty('bottom', 0, 'important');
           } else {
             var iconMarginTop = -ICON_HEIGHT_PX - parseInt(siblingStyle['margin-bottom'], 10) + 'px';
             elephantElem.style['margin-top'] = iconMarginTop;
 
-            elephantElem.style['margin-left'] = 'auto';
-            elephantElem.style['margin-right'] = 'auto';
+            elephantElem.style.setProperty('margin-left', 'auto', 'important');
+            elephantElem.style.setProperty('margin-right', 'auto', 'important');
 
             // TODO: listener instead of arbitrary timeout.
             window.setTimeout(function(targetEl, sib) {
@@ -787,7 +787,7 @@ var gladly = (function() {
               if (width && width > 10) {
                 width = width + 'px'
                 console.log('FOUND SIBLING WIDTH ' + width);
-                targetEl.style.width = width;
+                targetEl.style.setProperty('width', width, 'important');
               }
             }, 200, elephantElem, sibling);
           }
