@@ -18,7 +18,7 @@
     },
 
     "web_accessible_resources": [
-        "img/browsericons/icon24.png"
+        "img/browsericons/*.png"
     ],
 
     "author": "The uBlock Development Team",

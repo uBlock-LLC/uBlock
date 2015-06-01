@@ -445,7 +445,7 @@ var iconStateForTabId = {}; // {tabId: IconState}
 var ICON_PATHS = {
     "on": { '19': 'img/browsericons/icon19.png',     '38': 'img/browsericons/icon38.png' },
     "off": { '19': 'img/browsericons/icon19-off.png', '38': 'img/browsericons/icon38-off.png' },
-    "goodblock": { 'adIcon': 'img/browsericons/icon24.png' }
+    "goodblock": { 'adIcon': 'img/browsericons/icon20.png' }
 };
 
 // Must read: https://code.google.com/p/chromium/issues/detail?id=410868#c8

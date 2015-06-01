@@ -720,8 +720,8 @@ var gladly = (function() {
       // If the element already has an elephant, skip it.
       if (!elem.dataset.elephant) {
         console.log('Adding elephant to: ', elem.nodeName);
-        var ICON_HEIGHT_PX = 24;
-        var ICON_WIDTH_PX = 24;
+        var ICON_HEIGHT_PX = 20;
+        var ICON_WIDTH_PX = 20;
         // The ad icon container.
         var elephantElem = document.createElement('div');
         elephantElem.style.setProperty('opacity', '0.99', 'important');
@@ -731,6 +731,7 @@ var gladly = (function() {
         elephantElem.style.setProperty('margin-left', parentElemStyle['margin-left'] + 'px', 'important');
         elephantElem.style.setProperty('margin-right', parentElemStyle['margin-right'] + 'px', 'important');
         elephantElem.style.setProperty('margin-bottom', parentElemStyle['margin-bottom'] + 'px', 'important');
+        elephantElem.style.setProperty('pointer-events', 'none', 'important');
         // The ad icon image.
         var adIconElem = document.createElement('img');
         var iconUrl = vAPI.goodblockIconUrl;
@@ -739,11 +740,13 @@ var gladly = (function() {
         adIconElem.style.setProperty('z-index', '16777271', 'important');
         adIconElem.style.setProperty('background-color', 'rgba(0,0,0,0.2)', 'important');
         adIconElem.style.setProperty('border-top-right-radius', '5px', 'important');
-        adIconElem.style.setProperty('padding-right', '3px', 'important');
+        adIconElem.style.setProperty('padding-right', '1px', 'important');
         // The ad icon image holder.
-        var adIconElemHolder = document.createElement('span');
+        var adIconElemHolder = document.createElement('div');
         adIconElemHolder.appendChild(adIconElem);
         adIconElemHolder.style.setProperty('cursor', 'pointer', 'important');
+        adIconElemHolder.style.setProperty('display', 'inline-block', 'important');
+        adIconElemHolder.style.setProperty('pointer-events', 'all', 'important');
         addAdIconListeners(adIconElemHolder);
 
         elephantElem.appendChild(adIconElemHolder);
