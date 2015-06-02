@@ -555,18 +555,22 @@ var gladly = (function() {
 
     // BEGIN TOOLTIP FUNCTIONS
 
-    var getTooltipBoxDimensions = function() {
+    var goodblockTooltip = {
+        tooltipId: 'goodblock-informational-tooltip',
+    };
+
+    goodblockTooltip.getDimensions = function() {
         return {
             'width': 180,
             'height': 80,
         }
     }
 
-    var createGoodblockTooltip = function() {
-        var tooltipId = 'goodblock-informational-tooltip';
+    goodblockTooltip.create = function() {
+        var tooltipId = this.tooltipId;
         var tooltipElem = document.createElement('div');
         tooltipElem.id = tooltipId;
-        var dimensions = getTooltipBoxDimensions();
+        var dimensions = goodblockTooltip.getDimensions();
         tooltipElem.style.setProperty('width', dimensions.width + 'px', 'important');
         tooltipElem.style.setProperty('height', dimensions.height + 'px', 'important');
         tooltipElem.style.setProperty('position', 'absolute', 'important');
@@ -578,26 +582,26 @@ var gladly = (function() {
         tooltipElem.style.setProperty('transition', 'transform 0.3s, opacity 0.3s', 'important');
         document.body.appendChild(tooltipElem);
         // Start with the tooltip hidden.
-        hideGoodblockTooltip(true);
+        goodblockTooltip.hide(true);
         // Make sure the initial states are applied.
         // This is because we will transition immediately.
         window.getComputedStyle(tooltipElem).opacity;
         return tooltipElem;
     }
 
-    var getGoodblockTooltip = function() {
-        var tooltipId = 'goodblock-informational-tooltip';
+    goodblockTooltip.get = function() {
+        var tooltipId = this.tooltipId;
         var tooltipElem = document.querySelector('#' + tooltipId);
         if (tooltipElem) {
             return tooltipElem;
         }
         else {
-            return createGoodblockTooltip();
+            return goodblockTooltip.create();
         }
     }
 
-    var hideGoodblockTooltip = function(justCreated) {
-        var tooltipElem = getGoodblockTooltip();
+    goodblockTooltip.hide = function(justCreated) {
+        var tooltipElem = goodblockTooltip.get();
         // Reset appearance.
         tooltipElem.style.setProperty('-webkit-transform', 'scale(0.7)', 'important');
         tooltipElem.style.setProperty('-moz-transform', 'scale(0.7)', 'important');
@@ -606,18 +610,22 @@ var gladly = (function() {
         tooltipElem.style.setProperty('opacity', '0', 'important');
         if (!justCreated) {
             // Delay to hide the modal because of animation.
-            setTimeout(function() {
+            goodblockTooltip.timeoutId = window.setTimeout(function() {
                 tooltipElem.style.setProperty('left', '-9999px', 'important'); // Move offscreen.
             }, 300);
         }
     }
 
     // TODO: style this.
-    var showGoodblockTooltip = function(targetElem) {
-        var tooltipElem = getGoodblockTooltip();
+    goodblockTooltip.show = function(targetElem) {
+        // Clear any previous hide timeout.
+        if(typeof goodblockTooltip.timeoutId == "number") {
+            window.clearTimeout(goodblockTooltip.timeoutId);
+        }
+        var tooltipElem = goodblockTooltip.get();
         // Move tooltip into position.
         var rect = targetElem.getBoundingClientRect(); // the coordinates of the target elem
-        var tooltipDimensions = getTooltipBoxDimensions();
+        var tooltipDimensions = goodblockTooltip.getDimensions();
         var topPos = rect.top - tooltipDimensions.height - 5;
         var leftPos = rect.left - tooltipDimensions.width/2;
         tooltipElem.style.setProperty('top', topPos + 'px', 'important');
@@ -777,22 +785,29 @@ var gladly = (function() {
     var adIconMouseoverHandler = function(event) {
         var elem = event.currentTarget;
         elem.style['background-color'] = 'rgba(0, 0, 0, 0.4)';
-        showGoodblockTooltip(elem);
+        goodblockTooltip.show(elem);
     }
 
     var adIconMouseoutHandler = function(event) {
         var elem = event.currentTarget;
         elem.style['background-color'] = 'rgba(0,0,0,0.2)';
-        hideGoodblockTooltip();
+        goodblockTooltip.hide();
     }
 
     var addAdIconListeners = function(elem) {
         elem.addEventListener('mouseover', adIconMouseoverHandler);
         elem.addEventListener('mouseout', adIconMouseoutHandler);
         elem.addEventListener('click', function() {
-            hideGoodblockTooltip();
+            goodblockTooltip.hide();
             toggleGoodblockModal();
         });
+    }
+
+    var getAdIconContainerDimensions = function() {
+        return {
+            'width': 20,
+            'height': 20,
+        }
     }
 
     // Takes a DOM element.
@@ -802,8 +817,9 @@ var gladly = (function() {
       // If the element already has an elephant, skip it.
       if (!elem.dataset.elephant) {
         console.log('Adding elephant to: ', elem.nodeName);
-        var ICON_HEIGHT_PX = 20;
-        var ICON_WIDTH_PX = 20;
+        var dimensions = getAdIconContainerDimensions();
+        var ICON_HEIGHT_PX = dimensions.width;
+        var ICON_WIDTH_PX = dimensions.height;
         // The ad icon container.
         var elephantElem = document.createElement('div');
         elephantElem.style.setProperty('opacity', '0.99', 'important');
