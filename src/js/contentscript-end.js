@@ -696,12 +696,12 @@ var gladly = (function() {
     // END MODAL FUNCTIONS
 
     var adIconMouseoverHandler = function(event) {
-        var elem = event.target;
+        var elem = event.currentTarget;
         elem.style['background-color'] = 'rgba(0, 0, 0, 0.4)';
     }
 
     var adIconMouseoutHandler = function(event) {
-        var elem = event.target;
+        var elem = event.currentTarget;
         elem.style['background-color'] = 'rgba(0,0,0,0.2)';
     }
 
@@ -738,15 +738,19 @@ var gladly = (function() {
         adIconElem.setAttribute('src', iconUrl);
         adIconElem.style.setProperty('width', ICON_WIDTH_PX + 'px', 'important');
         adIconElem.style.setProperty('z-index', '16777271', 'important');
-        adIconElem.style.setProperty('background-color', 'rgba(0,0,0,0.2)', 'important');
-        adIconElem.style.setProperty('border-top-right-radius', '5px', 'important');
         adIconElem.style.setProperty('padding-right', '1px', 'important');
+        elephantElem.style.setProperty('position', 'relative', 'important');
         // The ad icon image holder.
         var adIconElemHolder = document.createElement('div');
         adIconElemHolder.appendChild(adIconElem);
         adIconElemHolder.style.setProperty('cursor', 'pointer', 'important');
-        adIconElemHolder.style.setProperty('display', 'inline-block', 'important');
+        adIconElemHolder.style.setProperty('position', 'absolute', 'important');
         adIconElemHolder.style.setProperty('pointer-events', 'all', 'important');
+        adIconElemHolder.style.setProperty('height', ICON_HEIGHT_PX + 'px', 'important');
+        adIconElemHolder.style.setProperty('background-color', 'rgba(0,0,0,0.2)', 'important');
+        adIconElemHolder.style.setProperty('border-top-right-radius', '5px', 'important');
+        adIconElemHolder.style.setProperty('border-bottom-right-radius', '5px', 'important');
+        adIconElemHolder.style.setProperty('z-index', '16777271', 'important');
         addAdIconListeners(adIconElemHolder);
 
         elephantElem.appendChild(adIconElemHolder);
@@ -772,8 +776,8 @@ var gladly = (function() {
             elephantElem.style.setProperty('position', 'absolute', 'important');
             elephantElem.style.setProperty('bottom', 0, 'important');
           } else {
-            var iconMarginTop = -ICON_HEIGHT_PX - parseInt(siblingStyle['margin-bottom'], 10) + 'px';
-            elephantElem.style['margin-top'] = iconMarginTop;
+            var iconMoveUp = -ICON_HEIGHT_PX - parseInt(siblingStyle['margin-bottom'], 10) + 'px';
+            adIconElemHolder.style['top'] = iconMoveUp;
 
             elephantElem.style.setProperty('margin-left', 'auto', 'important');
             elephantElem.style.setProperty('margin-right', 'auto', 'important');
