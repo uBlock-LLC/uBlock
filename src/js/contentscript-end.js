@@ -561,9 +561,33 @@ var gladly = (function() {
 
     goodblockTooltip.getDimensions = function() {
         return {
-            'width': 180,
-            'height': 80,
+            'width': 140,
+            'height': 76,
         }
+    }
+
+    goodblockTooltip.getTooltipTriangleDimensions = function() {
+        return {
+            'width': 20,
+            'height': 12,
+        }
+    }
+
+    goodblockTooltip.handleMouseover = function() {
+        goodblockTooltip.clearHideTimers();
+    }
+
+    goodblockTooltip.handleMouseout = function() {
+        goodblockTooltip.hide();
+    }
+
+    goodblockTooltip.addTooltipListeners = function(elem) {
+        elem.addEventListener('mouseover', goodblockTooltip.handleMouseover);
+        elem.addEventListener('mouseout', goodblockTooltip.handleMouseout);
+    }
+
+    goodblockTooltip.addTooltipButtonListener = function(elem) {
+        elem.addEventListener('click', goodblockModal.show);
     }
 
     goodblockTooltip.create = function() {
@@ -571,18 +595,55 @@ var gladly = (function() {
         var tooltipElem = document.createElement('div');
         tooltipElem.id = tooltipId;
         var dimensions = goodblockTooltip.getDimensions();
+        var tooltipTriangleDims = goodblockTooltip.getTooltipTriangleDimensions();
+        
+        // Tooltip body.
         tooltipElem.style.setProperty('width', dimensions.width + 'px', 'important');
         tooltipElem.style.setProperty('height', dimensions.height + 'px', 'important');
         tooltipElem.style.setProperty('position', 'absolute', 'important');
         tooltipElem.style.setProperty('z-index', '16777271', 'important');
-        tooltipElem.style.setProperty('background', '#CCC', 'important');
+        tooltipElem.style.setProperty('background', '#FFF', 'important');
+        tooltipElem.style.setProperty('border-radius', '2px', 'important');
+        tooltipElem.style.setProperty('border', '1px solid #EFEFEF', 'important');
+        tooltipElem.style.setProperty('padding', '4px', 'important');
+        tooltipElem.style.setProperty('box-sizing', 'border-box', 'important');
+        tooltipElem.style.setProperty('text-align', 'center', 'important');
+        tooltipElem.style.setProperty('font-family', "'Helvetica Neue', Roboto, 'Segoe UI', Calibri, sans-serif", 'important');
+        tooltipElem.style.setProperty('font-size', '13px', 'important');
+        goodblockTooltip.addTooltipListeners(tooltipElem);
+        // Tooltip content.
+        tooltipElem.innerHTML = 'This ad is raising money for charity.';
+        var tooltipButton = document.createElement('div');
+        tooltipButton.innerHTML = 'Learn more'
+        tooltipButton.style.setProperty('text-align', 'center', 'important');
+        tooltipButton.style.setProperty('padding', '4px', 'important');
+        tooltipButton.style.setProperty('background', '#1393C5', 'important');
+        tooltipButton.style.setProperty('cursor', 'pointer', 'important')
+        tooltipButton.style.setProperty('margin', '4px auto 0px auto', 'important');
+        tooltipButton.style.setProperty('width', '70px', 'important');
+        tooltipButton.style.setProperty('color', '#FFF', 'important');
+        tooltipButton.style.setProperty('border-radius', '2px', 'important');
+        goodblockTooltip.addTooltipButtonListener(tooltipButton);
+        tooltipElem.appendChild(tooltipButton);
+        // var tooltipContent = document.createElement('div');
+        // Tooltip triangle.
+        var tooltipTriangle = document.createElement('div');
+        tooltipTriangle.style.setProperty('position', 'absolute', 'important');
+        tooltipTriangle.style.setProperty('bottom', -(tooltipTriangleDims.height - 1) + 'px', 'important');
+        tooltipTriangle.style.setProperty('left', 'calc(50% - ' + tooltipTriangleDims.height + 'px)', 'important');
+        tooltipTriangle.style.setProperty('width', '0', 'important');
+        tooltipTriangle.style.setProperty('height', '0', 'important');
+        tooltipTriangle.style.setProperty('border-left', tooltipTriangleDims.width/2 + 'px solid transparent', 'important');
+        tooltipTriangle.style.setProperty('border-right', tooltipTriangleDims.width/2 + 'px solid transparent', 'important');
+        tooltipTriangle.style.setProperty('border-top', tooltipTriangleDims.height + 'px solid #FFF', 'important');
+        tooltipElem.appendChild(tooltipTriangle);
         // Transitions.
         tooltipElem.style.setProperty('-webkit-transition', 'opacity 0.3s', 'important');
         tooltipElem.style.setProperty('-moz-transition', 'opacity 0.3s', 'important');
         tooltipElem.style.setProperty('transition', 'transform 0.3s, opacity 0.3s', 'important');
         document.body.appendChild(tooltipElem);
         // Start with the tooltip hidden.
-        goodblockTooltip.hide(true);
+        goodblockTooltip.addHideProperties();
         // Make sure the initial states are applied.
         // This is because we will transition immediately.
         window.getComputedStyle(tooltipElem).opacity;
@@ -600,34 +661,51 @@ var gladly = (function() {
         }
     }
 
-    goodblockTooltip.hide = function(justCreated) {
+    goodblockTooltip.addHideProperties = function() {
         var tooltipElem = goodblockTooltip.get();
-        // Reset appearance.
         tooltipElem.style.setProperty('-webkit-transform', 'scale(0.7)', 'important');
         tooltipElem.style.setProperty('-moz-transform', 'scale(0.7)', 'important');
         tooltipElem.style.setProperty('-ms-transform', 'scale(0.7)', 'important');
         tooltipElem.style.setProperty('transform', 'scale(0.7)', 'important');
         tooltipElem.style.setProperty('opacity', '0', 'important');
-        if (!justCreated) {
-            // Delay to hide the modal because of animation.
-            goodblockTooltip.timeoutId = window.setTimeout(function() {
-                tooltipElem.style.setProperty('left', '-9999px', 'important'); // Move offscreen.
-            }, 300);
+    }
+
+    goodblockTooltip.hideNoTimeout = function() {
+        var tooltipElem = goodblockTooltip.get();
+        goodblockTooltip.addHideProperties();
+        // Delay to hide because of animation.
+        goodblockTooltip.tooltipHideTimeoutId = window.setTimeout(function() {
+            tooltipElem.style.setProperty('left', '-9999px', 'important'); // Move offscreen.
+        }, 300);
+    }
+
+    goodblockTooltip.hide = function() {
+        goodblockTooltip.tooltipFadeTimeoutId = window.setTimeout(function() {
+            goodblockTooltip.hideNoTimeout();
+        }, 500);
+    }
+
+    // Clear any previous hide timeouts on the tooltip.
+    goodblockTooltip.clearHideTimers = function() {
+        if(typeof goodblockTooltip.tooltipFadeTimeoutId == "number") {
+            window.clearTimeout(goodblockTooltip.tooltipFadeTimeoutId);
+        }
+        if(typeof goodblockTooltip.tooltipHideTimeoutId == "number") {
+            window.clearTimeout(goodblockTooltip.tooltipHideTimeoutId);
         }
     }
 
     // TODO: style this.
     goodblockTooltip.show = function(targetElem) {
-        // Clear any previous hide timeout.
-        if(typeof goodblockTooltip.timeoutId == "number") {
-            window.clearTimeout(goodblockTooltip.timeoutId);
-        }
+        goodblockTooltip.clearHideTimers();
         var tooltipElem = goodblockTooltip.get();
         // Move tooltip into position.
         var rect = targetElem.getBoundingClientRect(); // the coordinates of the target elem
         var tooltipDimensions = goodblockTooltip.getDimensions();
-        var topPos = rect.top - tooltipDimensions.height - 5;
-        var leftPos = rect.left - tooltipDimensions.width/2;
+        var tooltipTriangleDims = goodblockTooltip.getTooltipTriangleDimensions();
+        var adIconDimensions = getAdIconContainerDimensions();
+        var topPos = rect.top - tooltipDimensions.height - tooltipTriangleDims.height;
+        var leftPos = rect.left - tooltipDimensions.width/2 + adIconDimensions.width/2;
         tooltipElem.style.setProperty('top', topPos + 'px', 'important');
         tooltipElem.style.setProperty('left', leftPos + 'px', 'important');
         // Animate the appearance.
@@ -649,8 +727,7 @@ var gladly = (function() {
 
     goodblockModal.addTintListeners = function(modalTintElem) {
         modalTintElem.addEventListener('click', function() {
-            var goodblockModalElem = goodblockModal.get();
-            goodblockModal.hide(goodblockModalElem, false);
+            goodblockModal.hide();
         });
     }
 
@@ -721,7 +798,7 @@ var gladly = (function() {
         modalElem.style.setProperty('transition', 'transform 0.3s, opacity 0.3s', 'important');
         document.body.appendChild(modalElem);
         // Start with the modal hidden.
-        goodblockModal.hide(modalElem, true);
+        goodblockModal.addHideProperties(modalElem);
         // Make sure the initial states are applied.
         // This is because we will transition immediately.
         window.getComputedStyle(modalElem).opacity;
@@ -740,7 +817,8 @@ var gladly = (function() {
         }
     }
 
-    goodblockModal.show = function(modalElem) {
+    goodblockModal.show = function() {
+        var modalElem = goodblockModal.get();
         // Move back to on screen.
         // Subtract half the width of the modal.
         modalElem.style.left = 'calc(50% - 225px)';
@@ -754,34 +832,38 @@ var gladly = (function() {
 
         // Show the modal background.
         goodblockModal.showTint();
+        // Make sure the tooltip is hidden.
+        goodblockTooltip.hideNoTimeout();
     }
 
-    goodblockModal.hide = function(modalElem, justCreated) {
+    goodblockModal.addHideProperties = function(modalElem) {
         modalElem.dataset.modalState = 'inactive';
-        // Reset appearance.
         modalElem.style.setProperty('-webkit-transform', 'scale(0.7)', 'important');
         modalElem.style.setProperty('-moz-transform', 'scale(0.7)', 'important');
         modalElem.style.setProperty('-ms-transform', 'scale(0.7)', 'important');
         modalElem.style.setProperty('transform', 'scale(0.7)', 'important');
         modalElem.style.setProperty('opacity', '0', 'important');
-        if (!justCreated) {
-            // Delay to hide the modal because of animation.
-            setTimeout(function() {
-                modalElem.style.setProperty('left', '-9999px', 'important'); // Move offscreen.
-            }, 300);
-            // Hide the modal tint element.
-            goodblockModal.hideTint();
-        }
+    }
+
+    goodblockModal.hide = function() {
+        var modalElem = goodblockModal.get();
+        goodblockModal.addHideProperties(modalElem);
+        // Delay to hide the modal because of animation.
+        setTimeout(function() {
+            modalElem.style.setProperty('left', '-9999px', 'important'); // Move offscreen.
+        }, 300);
+        // Hide the modal tint element.
+        goodblockModal.hideTint();
     }
 
     goodblockModal.toggle = function() {
         var modalElem = goodblockModal.get();
         console.log('modal state', modalElem.dataset.modalState);
         if (modalElem.dataset.modalState === 'active') {
-            goodblockModal.hide(modalElem, false);
+            goodblockModal.hide();
         }
         else {
-            goodblockModal.show(modalElem);
+            goodblockModal.show();
         }
     }
 
