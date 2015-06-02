@@ -642,14 +642,19 @@ var gladly = (function() {
 
     // BEGIN MODAL FUNCTIONS
 
-    var addModalTintListeners = function(modalTintElem) {
+    var goodblockModal = {
+        'modalId': '',
+        'modalTintId': 'goodblock-informational-modal-tint',
+    }
+
+    goodblockModal.addTintListeners = function(modalTintElem) {
         modalTintElem.addEventListener('click', function() {
-            var goodblockModalElem = getGoodblockModal();
-            hideGoodblockModal(goodblockModalElem, false);
+            var goodblockModalElem = goodblockModal.get();
+            goodblockModal.hide(goodblockModalElem, false);
         });
     }
 
-    var createGoodblockModalTint = function() {
+    goodblockModal.createTint = function() {
         var tintElem = document.createElement('div');
         tintElem.id = 'goodblock-informational-modal-tint';
         tintElem.style.setProperty('position', 'fixed', 'important');
@@ -665,14 +670,14 @@ var gladly = (function() {
         tintElem.style.setProperty('-moz-transition', 'opacity 0.3s', 'important');
         tintElem.style.setProperty('transition', 'opacity 0.3s', 'important');
         document.body.appendChild(tintElem);
-        addModalTintListeners(tintElem);
+        goodblockModal.addTintListeners(tintElem);
         // Make sure the initial states are applied.
         // This is because we will transition immediately.
         window.getComputedStyle(tintElem).opacity;
         return tintElem;
     }
 
-    var getGoodblockModalTint = function() {
+    goodblockModal.getTintElem = function() {
         // See if the modal tint exists.
         var modalId = 'goodblock-informational-modal-tint';
         var modalTintElem = document.querySelector('#' + modalId);
@@ -680,12 +685,12 @@ var gladly = (function() {
             return modalTintElem;
         }
         else {
-            return createGoodblockModalTint();
+            return goodblockModal.createTint();
         }
     }
 
-    var hideGoodblockModalTint = function() {
-        var modalTintElem = getGoodblockModalTint();
+    goodblockModal.hideTint = function() {
+        var modalTintElem = goodblockModal.getTintElem();
         modalTintElem.style.setProperty('opacity', '0', 'important');
         // Delay to hide the modal because of animation.
         setTimeout(function() {
@@ -693,13 +698,13 @@ var gladly = (function() {
         }, 300);
     }
 
-    var showGoodblockModalTint = function() {
-        var modalTintElem = getGoodblockModalTint();
+    goodblockModal.showTint = function() {
+        var modalTintElem = goodblockModal.getTintElem();
         modalTintElem.style.setProperty('left', '0px', 'important');
         modalTintElem.style.setProperty('opacity', '0.99', 'important');
     }
 
-    var createGoodblockModal = function() {
+    goodblockModal.create = function() {
         var modalId = 'goodblock-informational-modal';
         var modalElem = document.createElement('div');
         modalElem.id = modalId;
@@ -716,14 +721,14 @@ var gladly = (function() {
         modalElem.style.setProperty('transition', 'transform 0.3s, opacity 0.3s', 'important');
         document.body.appendChild(modalElem);
         // Start with the modal hidden.
-        hideGoodblockModal(modalElem, true);
+        goodblockModal.hide(modalElem, true);
         // Make sure the initial states are applied.
         // This is because we will transition immediately.
         window.getComputedStyle(modalElem).opacity;
         return modalElem;
     }
 
-    var getGoodblockModal = function() {
+    goodblockModal.get = function() {
         // See if the modal exists.
         var modalId = 'goodblock-informational-modal';
         var modalElem = document.querySelector('#' + modalId);
@@ -731,11 +736,11 @@ var gladly = (function() {
             return modalElem;
         }
         else {
-            return createGoodblockModal();
+            return goodblockModal.create();
         }
     }
 
-    var showGoodblockModal = function(modalElem) {
+    goodblockModal.show = function(modalElem) {
         // Move back to on screen.
         // Subtract half the width of the modal.
         modalElem.style.left = 'calc(50% - 225px)';
@@ -748,10 +753,10 @@ var gladly = (function() {
         modalElem.style.setProperty('opacity', '0.99', 'important');
 
         // Show the modal background.
-        showGoodblockModalTint();
+        goodblockModal.showTint();
     }
 
-    var hideGoodblockModal = function(modalElem, justCreated) {
+    goodblockModal.hide = function(modalElem, justCreated) {
         modalElem.dataset.modalState = 'inactive';
         // Reset appearance.
         modalElem.style.setProperty('-webkit-transform', 'scale(0.7)', 'important');
@@ -765,18 +770,18 @@ var gladly = (function() {
                 modalElem.style.setProperty('left', '-9999px', 'important'); // Move offscreen.
             }, 300);
             // Hide the modal tint element.
-            hideGoodblockModalTint();
+            goodblockModal.hideTint();
         }
     }
 
-    var toggleGoodblockModal = function() {
-        var modalElem = getGoodblockModal();
+    goodblockModal.toggle = function() {
+        var modalElem = goodblockModal.get();
         console.log('modal state', modalElem.dataset.modalState);
         if (modalElem.dataset.modalState === 'active') {
-            hideGoodblockModal(modalElem, false);
+            goodblockModal.hide(modalElem, false);
         }
         else {
-            showGoodblockModal(modalElem);
+            goodblockModal.show(modalElem);
         }
     }
 
@@ -799,7 +804,7 @@ var gladly = (function() {
         elem.addEventListener('mouseout', adIconMouseoutHandler);
         elem.addEventListener('click', function() {
             goodblockTooltip.hide();
-            toggleGoodblockModal();
+            goodblockModal.toggle();
         });
     }
 
