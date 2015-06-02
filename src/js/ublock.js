@@ -41,6 +41,7 @@ var loadGladlyPartnerList = function() {
         'tabforacause.org': [],
         'imgur.com': [],
         'cnn.com': [],
+        '127.0.0.1': [], // Solely for testing.
     };
     return gladlyPartnerList;
 }
