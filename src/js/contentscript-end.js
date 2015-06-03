@@ -609,6 +609,7 @@ var gladly = (function() {
         tooltipElem.style.setProperty('box-sizing', 'border-box', 'important');
         tooltipElem.style.setProperty('text-align', 'center', 'important');
         tooltipElem.style.setProperty('font-family', "'Helvetica Neue', Roboto, 'Segoe UI', Calibri, sans-serif", 'important');
+        tooltipElem.style.setProperty('box-shadow', 'rgba(0, 0, 0, 0.0980392) 2px 4px 2px 2px', 'important');
         tooltipElem.style.setProperty('font-size', '13px', 'important');
         goodblockTooltip.addTooltipListeners(tooltipElem);
         // Tooltip content.
