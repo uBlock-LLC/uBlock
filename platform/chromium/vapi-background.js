@@ -445,7 +445,7 @@ var iconStateForTabId = {}; // {tabId: IconState}
 var ICON_PATHS = {
     "on": { '19': 'img/browsericons/icon19.png',     '38': 'img/browsericons/icon38.png' },
     "off": { '19': 'img/browsericons/icon19-off.png', '38': 'img/browsericons/icon38-off.png' },
-    "goodblock": { 'adIcon': 'img/browsericons/icon20.png' }
+    "goodblock": { 'adIcon': 'img/browsericons/icon20.png', 'modalLogo': 'img/browsericons/icon60.png', 'modalHeartIcon': 'img/browsericons/heart54x63.png', 'modalWaterIcon': 'img/browsericons/water52x64.png', 'modalCloseIcon': 'img/browsericons/close13x13.png'}
 };
 
 // Must read: https://code.google.com/p/chromium/issues/detail?id=410868#c8
@@ -494,6 +494,21 @@ vAPI.getAdIconPath = function() {
     var relative_url = ICON_PATHS['goodblock']['adIcon'];
     var url = chrome.extension.getURL(relative_url);
     return url;
+}
+
+/******************************************************************************/
+
+vAPI.getGoodblockOverlayIconPaths = function() {
+    var logoUrl = ICON_PATHS['goodblock']['modalLogo'];
+    var heartUrl = ICON_PATHS['goodblock']['modalHeartIcon'];
+    var waterUrl = ICON_PATHS['goodblock']['modalWaterIcon'];
+    var closeUrl = ICON_PATHS['goodblock']['modalCloseIcon'];
+    return {
+        'logo': chrome.extension.getURL(logoUrl),
+        'heart': chrome.extension.getURL(heartUrl),
+        'water': chrome.extension.getURL(waterUrl),
+        'close': chrome.extension.getURL(closeUrl),
+    };
 }
 
 /******************************************************************************/

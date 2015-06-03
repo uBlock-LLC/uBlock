@@ -533,6 +533,21 @@ var onMessage = function(request, sender, callback) {
             }
             break;
 
+        case 'retrieveGoodblockOverlayData':
+            var modalImgs = vAPI.getGoodblockOverlayIconPaths();
+            response = {
+                'imgPaths': modalImgs,
+                // TODO: use localization.
+                'text': {
+                    'title': 'Goodblock',
+                    'text': 'Goodblock raises money for charity. Every ad you see helps get fresh, clean drinking water to those who need it.',
+                    // TODO: use real values.
+                    'vcAmount': '18.7K',
+                    'impact': '3 WEEKS',
+                }
+            }
+            break;
+
         default:
             return vAPI.messaging.UNHANDLED;
     }

@@ -695,7 +695,6 @@ var gladly = (function() {
         }
     }
 
-    // TODO: style this.
     goodblockTooltip.show = function(targetElem) {
         goodblockTooltip.clearHideTimers();
         var tooltipElem = goodblockTooltip.get();
@@ -721,8 +720,24 @@ var gladly = (function() {
     // BEGIN MODAL FUNCTIONS
 
     var goodblockModal = {
-        'modalId': '',
-        'modalTintId': 'goodblock-informational-modal-tint',
+        ids: {
+            modal: 'goodblock-informational-modal',
+            modalTint: 'goodblock-informational-modal-tint',
+            modalImgHolder: 'goodblock-informational-modal-img-holder',
+            modalImg: 'goodblock-informational-modal-img',
+            modalTitle: 'goodblock-informational-modal-title',
+            modalText: 'goodblock-informational-modal-text',
+            vcAmountContainer: 'goodblock-informational-modal-vc-amount-container',
+            impactContainer: 'goodblock-informational-modal-impact-conatainer',
+            vcAmountText: 'goodblock-informational-modal-vc-amount-text',
+            impactText: 'goodblock-informational-modal-impact-text',
+            vcAmountImg: 'goodblock-informational-modal-vc-img',
+            impactImg: 'goodblock-informational-modal-impact-img',
+            'closeIcon': 'goodblock-informational-modal-close-icon',
+        },
+        style: {
+            logoHeightPx: 60,
+        }
     }
 
     goodblockModal.addTintListeners = function(modalTintElem) {
@@ -733,7 +748,7 @@ var gladly = (function() {
 
     goodblockModal.createTint = function() {
         var tintElem = document.createElement('div');
-        tintElem.id = 'goodblock-informational-modal-tint';
+        tintElem.id = goodblockModal['ids']['modalTint'];
         tintElem.style.setProperty('position', 'fixed', 'important');
         tintElem.style.setProperty('top', '0px', 'important');
         tintElem.style.setProperty('left', '-9999px', 'important'); // Start hidden.
@@ -756,7 +771,7 @@ var gladly = (function() {
 
     goodblockModal.getTintElem = function() {
         // See if the modal tint exists.
-        var modalId = 'goodblock-informational-modal-tint';
+        var modalId = goodblockModal['ids']['modalTint'];
         var modalTintElem = document.querySelector('#' + modalId);
         if (modalTintElem) {
             return modalTintElem;
@@ -781,8 +796,79 @@ var gladly = (function() {
         modalTintElem.style.setProperty('opacity', '0.99', 'important');
     }
 
-    goodblockModal.create = function() {
-        var modalId = 'goodblock-informational-modal';
+    goodblockModal.populate = function(response) {
+        var modalElem = goodblockModal.get();
+        var modalImgHolderId = goodblockModal['ids']['modalImgHolder'];
+        var modalTitleId = goodblockModal['ids']['modalTitle'];
+        var modalTextId = goodblockModal['ids']['modalText'];
+        var logoImgId = goodblockModal['ids']['modalImg'];
+        var vcContainerId = goodblockModal['ids']['vcAmountContainer'];
+        var impactContainerId = goodblockModal['ids']['impactContainer'];
+        var vcImgId = goodblockModal['ids']['vcAmountImg'];
+        var impactImgId = goodblockModal['ids']['impactImg'];
+        var vcAmountElemId = goodblockModal['ids']['vcAmountText'];
+        var impactElemId = goodblockModal['ids']['impactText'];
+        var closeIconId = goodblockModal['ids']['closeIcon'];
+        // Add images if they don't already exist.
+        var logoImg = document.getElementById(logoImgId);
+        if (!logoImg) {
+            var logoHolderElem = document.getElementById(modalImgHolderId);
+            var img = document.createElement('img');
+            img.id = logoImgId;
+            img.src = response.imgPaths.logo;
+            img.style.setProperty('height', goodblockModal.style.logoHeightPx + 'px', 'important');
+            logoHolderElem.appendChild(img);
+        }
+        var vcImg = document.getElementById(vcImgId);
+        if (!vcImg) {
+            var vcContainerElem = document.getElementById(vcContainerId);
+            var img = document.createElement('img');
+            img.id = vcImgId;
+            img.src = response.imgPaths.heart;
+            img.style.setProperty('height', '34px', 'important');
+            var imgHolder = document.createElement('div');
+            imgHolder.style.setProperty('height', '43px', 'important');
+            imgHolder.appendChild(img);
+            vcContainerElem.insertBefore(imgHolder, vcContainerElem.firstChild);
+        }
+        var impactImg = document.getElementById(impactImgId);
+        if (!impactImg) {
+            var impactContainerElem = document.getElementById(impactContainerId);
+            var img = document.createElement('img');
+            img.id = impactImgId;
+            img.src = response.imgPaths.water;
+            img.style.setProperty('height', '40px', 'important');
+            var imgHolder = document.createElement('div');
+            imgHolder.style.setProperty('height', '43px', 'important');
+            imgHolder.appendChild(img);
+            impactContainerElem.insertBefore(imgHolder, impactContainerElem.firstChild);
+        }
+        var closeIcon = document.getElementById(closeIconId);
+        if (!closeIcon) {
+            // Icon color: #C5C5C5
+            var img = document.createElement('img');
+            img.id = closeIconId;
+            img.src = response.imgPaths.close;
+            img.style.setProperty('position', 'absolute', 'important');
+            img.style.setProperty('top', '5px', 'important');
+            img.style.setProperty('right', '5px', 'important');
+            img.style.setProperty('height', '13px', 'important');
+            img.style.setProperty('width', '13px', 'important');
+            img.style.setProperty('cursor', 'pointer', 'important');
+            img.addEventListener('click', function() {
+                goodblockModal.hide();
+            });
+            modalElem.appendChild(img);
+        }
+        // Populate text.
+        document.getElementById(modalTitleId).innerHTML = response.text.title;
+        document.getElementById(modalTextId).innerHTML = response.text.text;
+        document.getElementById(vcAmountElemId).innerHTML = response.text.vcAmount;
+        document.getElementById(impactElemId).innerHTML = response.text.impact;
+    }
+
+    goodblockModal.create = function() {        
+        var modalId = goodblockModal['ids']['modal'];
         var modalElem = document.createElement('div');
         modalElem.id = modalId;
         modalElem.style.setProperty('width', '450px', 'important');
@@ -792,6 +878,56 @@ var gladly = (function() {
         modalElem.style.setProperty('z-index', '16777271', 'important');
         modalElem.style.setProperty('background', '#FFF', 'important');
         modalElem.style.setProperty('border-radius', '5px', 'important');
+        modalElem.style.setProperty('font-family', "'Helvetica Neue', Roboto, 'Segoe UI', Calibri, sans-serif", 'important');
+        modalElem.style.setProperty('text-align', 'center', 'important');
+        // Modal content.
+        // Logo image
+        var logoHolderElem = document.createElement('div');
+        logoHolderElem.id = goodblockModal['ids']['modalImgHolder'];
+        logoHolderElem.style.setProperty('height', goodblockModal.style.logoHeightPx + 'px', 'important');
+        logoHolderElem.style.setProperty('margin-top', '20px', 'important');
+        // Title
+        var titleElem = document.createElement('div');
+        titleElem.style.setProperty('color', '#4f4f4f', 'important');
+        titleElem.style.setProperty('font-size', '30px', 'important');
+        titleElem.style.setProperty('margin', '0px auto 20px auto', 'important');
+        titleElem.id = goodblockModal['ids']['modalTitle'];
+        // Text
+        var textElem = document.createElement('div');
+        textElem.style.setProperty('width', '270px', 'important');
+        textElem.style.setProperty('color', '#787878', 'important');
+        textElem.style.setProperty('font-size', '13px', 'important');
+        textElem.style.setProperty('margin', '10px auto', 'important');
+        textElem.id = goodblockModal['ids']['modalText'];
+        // Impact container
+        var statsContainer = document.createElement('div');
+        statsContainer.style.setProperty('width', '300px', 'important');
+        statsContainer.style.setProperty('margin', '20px auto 10px auto', 'important');
+        statsContainer.style.setProperty('font-weight', '500', 'important');
+        // VC amount
+        var vcAmountContainer = document.createElement('div');
+        vcAmountContainer.style.setProperty('display', 'inline-block', 'important');
+        vcAmountContainer.style.setProperty('width', '80px', 'important');
+        vcAmountContainer.id = goodblockModal['ids']['vcAmountContainer'];
+        var vcAmountTextElem = document.createElement('div');
+        vcAmountTextElem.id = goodblockModal['ids']['vcAmountText'];
+        vcAmountContainer.appendChild(vcAmountTextElem);
+        statsContainer.appendChild(vcAmountContainer);
+        // Impact
+        var impactContainer = document.createElement('div');
+        impactContainer.style.setProperty('display', 'inline-block', 'important');
+        impactContainer.style.setProperty('width', '100px', 'important');
+        impactContainer.id = goodblockModal['ids']['impactContainer'];
+        var impactTextElem = document.createElement('div');
+        impactTextElem.id = goodblockModal['ids']['impactText'];
+        impactContainer.appendChild(impactTextElem);
+        statsContainer.appendChild(impactContainer);
+        // Append to overlay parent.
+        modalElem.appendChild(logoHolderElem);
+        modalElem.appendChild(titleElem);
+        modalElem.appendChild(textElem);
+        modalElem.appendChild(statsContainer);
+
         // Transitions.
         modalElem.style.setProperty('-webkit-transition', 'transform 0.3s, opacity 0.3s', 'important');
         modalElem.style.setProperty('-moz-transition', 'transform 0.3s, opacity 0.3s', 'important');
@@ -807,7 +943,7 @@ var gladly = (function() {
 
     goodblockModal.get = function() {
         // See if the modal exists.
-        var modalId = 'goodblock-informational-modal';
+        var modalId = goodblockModal['ids']['modal'];
         var modalElem = document.querySelector('#' + modalId);
         if (modalElem) {
             return modalElem;
@@ -818,6 +954,10 @@ var gladly = (function() {
     }
 
     goodblockModal.show = function() {
+        // Fetch data for the overlay.
+        messager.send({
+            what: 'retrieveGoodblockOverlayData'
+        }, goodblockModal.populate);
         var modalElem = goodblockModal.get();
         // Move back to on screen.
         // Subtract half the width of the modal.
@@ -858,7 +998,6 @@ var gladly = (function() {
 
     goodblockModal.toggle = function() {
         var modalElem = goodblockModal.get();
-        console.log('modal state', modalElem.dataset.modalState);
         if (modalElem.dataset.modalState === 'active') {
             goodblockModal.hide();
         }
