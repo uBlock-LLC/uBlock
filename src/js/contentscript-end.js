@@ -738,6 +738,24 @@ var gladly = (function() {
         },
         style: {
             logoHeightPx: 60,
+            logoWidthPx: 60,
+            modal: {
+                fontSize: '14px',
+                fontWeight: '300',
+                lineHeight: '100%',
+                fontFamily: "'Helvetica Neue', Roboto, 'Segoe UI', Calibri, sans-serif",
+                textFontSize: '13px',
+                statsContainer: {
+                    width: '300px',
+                    height: '58px',
+                },
+                stats: {
+                    width: '100px',
+                    fontSize: '14px',
+                    fontWeight: '500',
+                    lineHeight: '100%',
+                },
+            }
         }
     }
 
@@ -818,6 +836,8 @@ var gladly = (function() {
             img.id = logoImgId;
             img.src = response.imgPaths.logo;
             img.style.setProperty('height', goodblockModal.style.logoHeightPx + 'px', 'important');
+            img.style.setProperty('width', goodblockModal.style.logoWidthPx + 'px', 'important');
+            img.style.setProperty('margin', 'auto', 'important');
             logoHolderElem.appendChild(img);
         }
         var vcImg = document.getElementById(vcImgId);
@@ -826,7 +846,9 @@ var gladly = (function() {
             var img = document.createElement('img');
             img.id = vcImgId;
             img.src = response.imgPaths.heart;
-            img.style.setProperty('height', '34px', 'important');
+            img.style.setProperty('width', '40px', 'important');
+            img.style.setProperty('height', '35px', 'important');
+            img.style.setProperty('margin', 'auto', 'important');
             var imgHolder = document.createElement('div');
             imgHolder.style.setProperty('height', '43px', 'important');
             imgHolder.appendChild(img);
@@ -838,7 +860,9 @@ var gladly = (function() {
             var img = document.createElement('img');
             img.id = impactImgId;
             img.src = response.imgPaths.water;
+            img.style.setProperty('width', '33px', 'important');
             img.style.setProperty('height', '40px', 'important');
+            img.style.setProperty('margin', 'auto', 'important');
             var imgHolder = document.createElement('div');
             imgHolder.style.setProperty('height', '43px', 'important');
             imgHolder.appendChild(img);
@@ -868,7 +892,7 @@ var gladly = (function() {
         document.getElementById(impactElemId).innerHTML = response.text.impact;
     }
 
-    goodblockModal.create = function() {        
+    goodblockModal.create = function() {
         var modalId = goodblockModal['ids']['modal'];
         var modalElem = document.createElement('div');
         modalElem.id = modalId;
@@ -879,7 +903,7 @@ var gladly = (function() {
         modalElem.style.setProperty('z-index', '16777271', 'important');
         modalElem.style.setProperty('background', '#FFF', 'important');
         modalElem.style.setProperty('border-radius', '5px', 'important');
-        modalElem.style.setProperty('font-family', "'Helvetica Neue', Roboto, 'Segoe UI', Calibri, sans-serif", 'important');
+        modalElem.style.setProperty('font-family', goodblockModal.style.modal.fontFamily, 'important');
         modalElem.style.setProperty('text-align', 'center', 'important');
         // Modal content.
         // Logo image
@@ -893,34 +917,46 @@ var gladly = (function() {
         titleElem.style.setProperty('font-size', '30px', 'important');
         titleElem.style.setProperty('margin', '0px auto 20px auto', 'important');
         titleElem.id = goodblockModal['ids']['modalTitle'];
+        titleElem.style.setProperty('font-weight', goodblockModal.style.modal.fontWeight, 'important');
+        titleElem.style.setProperty('line-height', goodblockModal.style.modal.lineHeight, 'important');
         // Text
         var textElem = document.createElement('div');
         textElem.style.setProperty('width', '270px', 'important');
         textElem.style.setProperty('color', '#787878', 'important');
-        textElem.style.setProperty('font-size', '13px', 'important');
+        textElem.style.setProperty('font-size', goodblockModal.style.modal.textFontSize, 'important');
         textElem.style.setProperty('margin', '10px auto', 'important');
+        textElem.style.setProperty('font-family', goodblockModal.style.modal.fontFamily, 'important');
+        textElem.style.setProperty('font-weight', goodblockModal.style.modal.fontWeight, 'important');
+        textElem.style.setProperty('line-height', goodblockModal.style.modal.lineHeight, 'important');
         textElem.id = goodblockModal['ids']['modalText'];
         // Impact container
         var statsContainer = document.createElement('div');
-        statsContainer.style.setProperty('width', '300px', 'important');
+        statsContainer.style.setProperty('width', goodblockModal.style.modal.statsContainer.width, 'important');
+        statsContainer.style.setProperty('height', goodblockModal.style.modal.statsContainer.height, 'important');
         statsContainer.style.setProperty('margin', '20px auto 10px auto', 'important');
-        statsContainer.style.setProperty('font-weight', '500', 'important');
+        statsContainer.style.setProperty('font-weight', goodblockModal.style.modal.stats.fontWeight, 'important');
         // VC amount
         var vcAmountContainer = document.createElement('div');
         vcAmountContainer.style.setProperty('display', 'inline-block', 'important');
-        vcAmountContainer.style.setProperty('width', '80px', 'important');
+        vcAmountContainer.style.setProperty('width', goodblockModal.style.modal.stats.width, 'important');
         vcAmountContainer.id = goodblockModal['ids']['vcAmountContainer'];
         var vcAmountTextElem = document.createElement('div');
         vcAmountTextElem.id = goodblockModal['ids']['vcAmountText'];
+        vcAmountTextElem.style.setProperty('font-family', goodblockModal.style.modal.fontFamily, 'important');
+        vcAmountTextElem.style.setProperty('font-size', goodblockModal.style.modal.stats.fontSize, 'important');
+        vcAmountTextElem.style.setProperty('line-height', goodblockModal.style.modal.stats.lineHeight, 'important');
         vcAmountContainer.appendChild(vcAmountTextElem);
         statsContainer.appendChild(vcAmountContainer);
         // Impact
         var impactContainer = document.createElement('div');
         impactContainer.style.setProperty('display', 'inline-block', 'important');
-        impactContainer.style.setProperty('width', '100px', 'important');
+        impactContainer.style.setProperty('width', goodblockModal.style.modal.stats.width, 'important');
         impactContainer.id = goodblockModal['ids']['impactContainer'];
         var impactTextElem = document.createElement('div');
         impactTextElem.id = goodblockModal['ids']['impactText'];
+        impactTextElem.style.setProperty('font-family', goodblockModal.style.modal.fontFamily, 'important');
+        impactTextElem.style.setProperty('font-size', goodblockModal.style.modal.stats.fontSize, 'important');
+        impactTextElem.style.setProperty('line-height', goodblockModal.style.modal.stats.lineHeight, 'important');
         impactContainer.appendChild(impactTextElem);
         statsContainer.appendChild(impactContainer);
         // Append to overlay parent.
