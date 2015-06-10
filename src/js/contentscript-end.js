@@ -310,29 +310,31 @@ var uBlockCollapser = (function() {
 /******************************************************************************/
 /******************************************************************************/
 
+
 // Gladly
 
-var gladly = (function() {
-  // Elements Gladly has processed.
-  var elemsProcessed = [];
+var gladly;
+var setUpGladly = function() {
+    // Elements Gladly has processed.
+    var elemsProcessed = [];
 
-  var addProcessedNodes = function(nodes) {
+    var addProcessedNodes = function(nodes) {
     elemsProcessed = elemsProcessed.concat(nodes);
-  }
+    }
 
-  var getProcessedNodes = function() {
+    var getProcessedNodes = function() {
     return elemsProcessed;
-  }
+    }
 
-  // Set in contentscript-start.js.
-  var isGladlyPartnerPage = vAPI.isGladlyPartnerPage;
+    // Set in contentscript-start.js.
+    var isGladlyPartnerPage = vAPI.isGladlyPartnerPage;
 
-  return {
-    addProcessedNodes: addProcessedNodes,
-    getProcessedNodes: getProcessedNodes,
-    isGladlyPartnerPage: isGladlyPartnerPage,
-  };
-})();
+    gladly = {
+        addProcessedNodes: addProcessedNodes,
+        getProcessedNodes: getProcessedNodes,
+        isGladlyPartnerPage: isGladlyPartnerPage,
+    };
+};
 
 // Cosmetic filters
 
@@ -378,6 +380,10 @@ var gladly = (function() {
     // likeliness to outrun contentscript-start.js, which may still be waiting
     // on a response from its own query.
     var firstRetrieveHandler = function(response) {
+        // Wait to set up Gladly information until we're sure
+        // contentscript-start.js is finished.
+        setUpGladly();
+
         // https://github.com/chrisaljoudi/uBlock/issues/158
         // Ensure injected styles are enforced
         // rhill 2014-11-16: not sure this is needed anymore. Test case in
