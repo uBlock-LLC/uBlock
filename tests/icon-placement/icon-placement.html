@@ -18,6 +18,12 @@
 			<div class='label'>Just a div ad.</div>
 			<div class='google_ads banner advertisement item'>This is an ad.</div>
 		</div>
+		<div class='test test-o'>
+			<div class='label'>A div ad with a child filling the space.</div>
+			<div class='google_ads banner advertisement item'>
+				<div class='ad-child'>This is an ad.</div>
+			</div>
+		</div>
 		<div class='test test-b'>
 			<div class='label'>Absolutely positioned div in relative parent.</div>
 			<div class='relative-position container'>
@@ -63,6 +69,9 @@
 		<div class='section-break'>End delayed-loading ads</div>
 	</div>
 	<div class='google_ads small advertisement fixed item test-h'>Fixed sidebar ad without parent</div>
+	<div class='google_ads small advertisement fixed item test-p'>
+		<div class='ad-child'>Fixed ad with child</div>
+	</div>
 	<div class='test test-i fixed'>
 		<div class='label'>Fixed ad with parent</div>
 		<div class='relative-position container'>
@@ -72,6 +81,11 @@
 	<div class='test test-k absolute-position'>
 		<div class='label'>Absolute ad with parent</div>
 		<div class='google_ads small advertisement item'>This is an ad.</div>
+	</div>
+	<div class='test test-q absolute-position'>
+		<div class='google_ads small advertisement item'>
+			<div class='ad-child'>Absolute ad with child</div>
+		</div>
 	</div>
 
 	<script src='../jquery/jquery-1.11.2.min.js'></script>
