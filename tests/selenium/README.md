@@ -1,6 +1,9 @@
 # Testing Infrastructure
 
 ## Requirements
+
+You must have the [Chrome webdriver](https://sites.google.com/a/chromium.org/chromedriver/) installed and available in your `PATH`.
+
 There's a requirements.txt file in `tests/selenium/requirements.txt`
 
 ## Running Tests

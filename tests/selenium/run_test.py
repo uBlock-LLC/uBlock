@@ -17,6 +17,15 @@ class AdTagTestCase(unittest.TestCase):
     def tearDown(self):
         self.driver.close()
 
+    def assert_tad_placement(self, ad, tad):
+        self.assertDictEqual({'width': 21, 'height': 20}, tad.size)
+        offsets = {
+            'x': tad.location['x'] - ad.location['x'],
+            'y': tad.location['y'] - ad.location['y'],
+        }
+        self.assertDictEqual({'x': 0, 'y': 18}, offsets)
+
+
     def test_ad_placement(self):
         self.driver.get('chrome://extensions')
         time.sleep(1)
@@ -31,12 +40,9 @@ class AdTagTestCase(unittest.TestCase):
             EC.presence_of_element_located((By.CLASS_NAME, 'page-title'))
         )
 
-        # Do the following for each ad placement
+        # Do the following for each ad placement.
+        # Note the data-test identifier. It's useful to have specific identifiers for
+        # test code which are not shared with selectors used by JS or CSS, but not required
         banner1 = self.driver.find_element_by_css_selector('[data-test="banner1"]')
         banner1_tad = banner1.find_element_by_xpath('.//div/div/img')
-        size = banner1_tad.size
-        loc = banner1_tad.location
-        assert size['height'] == 20
-        assert size['width'] == 21
-        assert loc['y'] == 84
-        assert loc['x'] == 265
+        self.assert_tad_placement(banner1, banner1_tad)
