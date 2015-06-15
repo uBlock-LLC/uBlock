@@ -1295,10 +1295,14 @@ var setUpGladly = function() {
         while ( i-- ) {
             selector = generics[i];
             // console.log('processLowGenerics selector', selector);
-            // Don't process the element if we already have.
-            if ( injectedSelectors.hasOwnProperty(selector) ) {
-                // console.log('processLowGenerics already found', selector);
-                continue;
+            // For normal ad hiding, don't process the element if we already have.
+            // Gladly partner page elements need to be processed each time
+            // because we're adding elements to the ad.
+            console.log('isGladlyPartnerPage', gladly.isGladlyPartnerPage);
+            if (!gladly.isGladlyPartnerPage) {
+                if ( injectedSelectors.hasOwnProperty(selector) ) {
+                    continue;
+                }
             }
             injectedSelectors[selector] = true;
             out.push(selector);
@@ -1469,7 +1473,13 @@ var setUpGladly = function() {
                 v = vv[j];
                 if ( typeof v !== 'string' ) { continue; }
                 v = '.' + v;
-                if ( qq.hasOwnProperty(v) ) { continue; }
+                // If we're doing normal ad-hiding, and we've already
+                // processed this class, skip it.
+                if (gladly && !gladly.isGladlyPartnerPage) {
+                    if ( qq.hasOwnProperty(v) ) {
+                        continue;
+                    }
+                }
                 ll.push(v);
                 qq[v] = true;
             }
