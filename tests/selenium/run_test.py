@@ -1,3 +1,12 @@
+import time
+import unittest
+
+# Try importing local settings.
+try:
+    import local_settings
+except ImportError:
+    pass
+
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -5,14 +14,18 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.action_chains import ActionChains
-import time
-import unittest
+
 
 class AdTagTestCase(unittest.TestCase):
     def setUp(self):
         chrome_options = Options()
         dist_path = './dist/build/uBlock.chromium'
         chrome_options.add_argument('load-extension=%s' % dist_path)
+        if local_settings:
+            # If the user specified a custom binary path, use it.
+            google_chrome_binary_path = getattr(local_settings, 'GOOGLE_CHROME_BINARY_PATH', None)
+            if google_chrome_binary_path:
+                chrome_options._binary_location = google_chrome_binary_path
         self.driver = webdriver.Chrome(chrome_options=chrome_options)
 
     def tearDown(self):

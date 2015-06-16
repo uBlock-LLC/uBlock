@@ -2,3 +2,4 @@
 *.pem
 /dist/build/
 *.pyc
+local_settings.py
