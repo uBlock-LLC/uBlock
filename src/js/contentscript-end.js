@@ -536,9 +536,9 @@ var setUpGladly = function() {
         return false;
     }
 
-    var noElephantInAncestors = function(elem) {
+    var noGoodblockIconInAncestors = function(elem) {
       while(elem.parentNode) {
-          if (elem.parentNode.dataset && elem.parentNode.dataset.elephant) {
+          if (elem.parentNode.dataset && elem.parentNode.dataset.goodblockIcon) {
               return false;
           }
           elem = elem.parentNode;
@@ -1081,24 +1081,24 @@ var setUpGladly = function() {
 
     // Takes a DOM element.
     // Returns null.
-    // Adds an elephant to the corner of the elem.
-    var addElephantToElem = function(elem) {
-      // If the element already has an elephant, skip it.
-      if (!elem.dataset.elephant) {
-        console.log('Adding elephant to: ', elem.nodeName);
+    // Adds an goodblockIcon to the corner of the elem.
+    var addGoodblockIconToElem = function(elem) {
+      // If the element already has an goodblockIcon, skip it.
+      if (!elem.dataset.goodblockIcon) {
+        console.log('Adding goodblockIcon to: ', elem.nodeName);
         var dimensions = getAdIconContainerDimensions();
         var ICON_HEIGHT_PX = dimensions.width;
         var ICON_WIDTH_PX = dimensions.height;
         // The ad icon container.
-        var elephantElem = document.createElement('div');
-        elephantElem.style.setProperty('opacity', '0.99', 'important');
-        elephantElem.style.setProperty('text-align', 'left', 'important');
+        var goodblockIconElem = document.createElement('div');
+        goodblockIconElem.style.setProperty('opacity', '0.99', 'important');
+        goodblockIconElem.style.setProperty('text-align', 'left', 'important');
         // Copy some positioning from the parent element to our icon container.
         var parentElemStyle = window.getComputedStyle(elem);
-        elephantElem.style.setProperty('margin-left', parentElemStyle['margin-left'] + 'px', 'important');
-        elephantElem.style.setProperty('margin-right', parentElemStyle['margin-right'] + 'px', 'important');
-        elephantElem.style.setProperty('margin-bottom', parentElemStyle['margin-bottom'] + 'px', 'important');
-        elephantElem.style.setProperty('pointer-events', 'none', 'important');
+        goodblockIconElem.style.setProperty('margin-left', parentElemStyle['margin-left'] + 'px', 'important');
+        goodblockIconElem.style.setProperty('margin-right', parentElemStyle['margin-right'] + 'px', 'important');
+        goodblockIconElem.style.setProperty('margin-bottom', parentElemStyle['margin-bottom'] + 'px', 'important');
+        goodblockIconElem.style.setProperty('pointer-events', 'none', 'important');
         // The ad icon image.
         var adIconElem = document.createElement('img');
         var iconUrl = vAPI.goodblockIconUrl;
@@ -1106,7 +1106,7 @@ var setUpGladly = function() {
         adIconElem.style.setProperty('width', ICON_WIDTH_PX + 'px', 'important');
         adIconElem.style.setProperty('z-index', '16777271', 'important');
         adIconElem.style.setProperty('padding-right', '1px', 'important');
-        elephantElem.style.setProperty('position', 'relative', 'important');
+        goodblockIconElem.style.setProperty('position', 'relative', 'important');
         // The ad icon image holder.
         var adIconElemHolder = document.createElement('div');
         adIconElemHolder.appendChild(adIconElem);
@@ -1120,10 +1120,10 @@ var setUpGladly = function() {
         adIconElemHolder.style.setProperty('z-index', '16777271', 'important');
         addAdIconListeners(adIconElemHolder);
 
-        elephantElem.appendChild(adIconElemHolder);
+        goodblockIconElem.appendChild(adIconElemHolder);
 
-        // Mark that we added an elephant.
-        elem.dataset.elephant = 'true';
+        // Mark that we added an goodblockIcon.
+        elem.dataset.goodblockIcon = 'true';
 
         // Set a negative top margin for our icon container.
         var sibling;
@@ -1140,14 +1140,14 @@ var setUpGladly = function() {
         if (sibling && sibling.nodeType == Node.ELEMENT_NODE) {
           var siblingStyle = window.getComputedStyle(sibling);
           if (siblingStyle['position'] == 'absolute') {
-            elephantElem.style.setProperty('position', 'absolute', 'important');
-            elephantElem.style.setProperty('bottom', 0, 'important');
+            goodblockIconElem.style.setProperty('position', 'absolute', 'important');
+            goodblockIconElem.style.setProperty('bottom', 0, 'important');
           } else {
             var iconMoveUp = -ICON_HEIGHT_PX - parseInt(siblingStyle['margin-bottom'], 10) + 'px';
             adIconElemHolder.style['top'] = iconMoveUp;
 
-            elephantElem.style.setProperty('margin-left', 'auto', 'important');
-            elephantElem.style.setProperty('margin-right', 'auto', 'important');
+            goodblockIconElem.style.setProperty('margin-left', 'auto', 'important');
+            goodblockIconElem.style.setProperty('margin-right', 'auto', 'important');
 
             // TODO: listener instead of arbitrary timeout.
             window.setTimeout(function(targetEl, sib) {
@@ -1163,15 +1163,15 @@ var setUpGladly = function() {
                 console.log('FOUND SIBLING WIDTH ' + width);
                 targetEl.style.setProperty('width', width, 'important');
               }
-            }, 200, elephantElem, sibling);
+            }, 200, goodblockIconElem, sibling);
           }
         }
 
-        // TODO: figure out how to copy width to the elephantElem.
+        // TODO: figure out how to copy width to the goodblockIconElem.
         // Could do so by watching the width of the ad node (e.g. iframe)
-        // and adjusting the elephantElem width on changes.
+        // and adjusting the goodblockIconElem width on changes.
 
-        elem.appendChild(elephantElem);
+        elem.appendChild(goodblockIconElem);
       }
     }
 
@@ -1191,7 +1191,7 @@ var setUpGladly = function() {
         }).filter(function(elem) {
           return (
             !isContainedByAny(elemsProcessed, elem) &&
-            noElephantInAncestors(elem)
+            noGoodblockIconInAncestors(elem)
           );
         });
       }
@@ -1216,13 +1216,13 @@ var setUpGladly = function() {
     }
 
     // Takes an array of DOM elements.
-    // Add elephants to all ad containers.
-    var elephantsEverywhere = function(nodes) {
-      console.log('Considering adding elephants to these nodes:', nodes);
+    // Add goodblockIcons to all ad containers.
+    var goodblockIconsEverywhere = function(nodes) {
+      console.log('Considering adding goodblockIcons to these nodes:', nodes);
       gladly.addProcessedNodes(nodes);
       var adContainers = getAdContainersForNodes(nodes);
       adContainers.forEach(function(elem, i, array) {
-        addElephantToElem(elem);
+        addGoodblockIconToElem(elem);
       });
     }
 
@@ -1242,7 +1242,7 @@ var setUpGladly = function() {
             var target = elems[i];
             nodes.push(target);
         }
-        elephantsEverywhere(nodes);
+        goodblockIconsEverywhere(nodes);
     }
 
     var hideElements = function(selectors) {
