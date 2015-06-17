@@ -1074,8 +1074,9 @@ var setUpGladly = function() {
 
     var getAdIconContainerDimensions = function() {
         return {
-            'width': 20,
-            'height': 20,
+            'width': 16,
+            'height': 16,
+            'padding': 2,
         }
     }
 
@@ -1120,7 +1121,7 @@ var setUpGladly = function() {
         var adElemStyle = window.getComputedStyle(adElem);
         goodblockElem.style.setProperty('opacity', '0.99', 'important');
         goodblockElem.style.setProperty('display', 'block', 'important');
-        goodblockElem.style.setProperty('background-color', 'rgba(256,0,0,0.2)', 'important');
+        goodblockElem.style.setProperty('background-color', 'rgba(0,256,0,0.2)', 'important');
         goodblockElem.style.setProperty('text-align', 'left', 'important');
         switch (adElemStyle.position) {
             case 'fixed':
@@ -1166,6 +1167,7 @@ var setUpGladly = function() {
         var dimensions = getAdIconContainerDimensions();
         var ICON_HEIGHT_PX = dimensions.width;
         var ICON_WIDTH_PX = dimensions.height;
+        var ICON_PADDING = dimensions.padding;
         // The ad icon container.
         var goodblockIconElem = document.createElement('div');
         // The ad icon image.
@@ -1173,23 +1175,22 @@ var setUpGladly = function() {
         var iconUrl = vAPI.goodblockIconUrl;
         adIconElem.setAttribute('src', iconUrl);
         adIconElem.style.setProperty('width', ICON_WIDTH_PX + 'px', 'important');
+        adIconElem.style.setProperty('background-color', 'rgba(0,0,0,0.2)', 'important');
+        adIconElem.style.setProperty('border-radius', '50%', 'important');
         adIconElem.style.setProperty('z-index', '16777271', 'important');
-        adIconElem.style.setProperty('padding-right', '1px', 'important');
+        adIconElem.style.setProperty('padding', ICON_PADDING + 'px', 'important');
         goodblockIconElem.style.setProperty('position', 'relative', 'important');
+        addAdIconListeners(adIconElem);
         // The ad icon image holder.
         var adIconElemHolder = document.createElement('div');
         adIconElemHolder.appendChild(adIconElem);
         adIconElemHolder.style.setProperty('cursor', 'pointer', 'important');
         adIconElemHolder.style.setProperty('position', 'absolute', 'important');
         adIconElemHolder.style.setProperty('bottom', '0px', 'important');
-        adIconElemHolder.style.setProperty('left', '0px', 'important');
+        adIconElemHolder.style.setProperty('right', '0px', 'important');
         adIconElemHolder.style.setProperty('pointer-events', 'all', 'important');
-        adIconElemHolder.style.setProperty('height', ICON_HEIGHT_PX + 'px', 'important');
-        adIconElemHolder.style.setProperty('background-color', 'rgba(0,0,0,0.2)', 'important');
-        adIconElemHolder.style.setProperty('border-top-right-radius', '5px', 'important');
-        adIconElemHolder.style.setProperty('border-bottom-right-radius', '5px', 'important');
+        adIconElemHolder.style.setProperty('height', (ICON_HEIGHT_PX + ICON_PADDING*2) + 'px', 'important');
         adIconElemHolder.style.setProperty('z-index', '16777271', 'important');
-        addAdIconListeners(adIconElemHolder);
 
         goodblockIconElem.appendChild(adIconElemHolder);
         // Mark that we added an goodblockIcon.
