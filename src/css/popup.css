@@ -1,5 +1,5 @@
 body {
-    background-color: #fafafa;
+    background-color: #10597E;
     color: #333;
     border: 0;
     font: 13px Helvetica Neue, Helvetica, sans-serif;
@@ -10,10 +10,10 @@ body {
     display: inline-block;
     }
 h2 {
-    background-color: #eee;
+    background-color: #10597E;
     border: 0;
     border-top: 1px solid #ccc;
-    color: #666;
+    color: white;
     font-size: 14px;
     font-weight: normal;
     margin:  10px 0 5px 0;
@@ -37,13 +37,18 @@ a {
     padding: 4px;
     padding-top: 5px;
     color: #eee;
-    background-color: #444;
+    background-color: #10597E;
     text-align: center;
     cursor: pointer;
+    }
+#header {
+    text-align: left;
     }
 #appname {
     margin-left: 3px;
     font-weight: bold;
+    color: white;
+    font-size: 20px;
     }
 #version {
     font-size: 75%;
@@ -80,7 +85,7 @@ body[dir="rtl"] #panes > div {
     overflow-y: auto;
     overflow-x: hidden;
     width: 320px;
-    border-right: 1px solid #444;
+    /*border-right: 1px solid #444;*/
     }
 body[dir="ltr"] #panes > #dfPane {
     direction: rtl; /* scroll bar to the left */
@@ -95,7 +100,7 @@ body[dir="rtl"] #panes > #dfPane {
     }
 #panes > #switchPane {
     box-sizing: border-box;
-    min-width: 150px;
+    min-width: 450px;
     }
 p {
     text-align: center;
@@ -234,7 +239,7 @@ body.dirty #refresh:hover {
     width: 15%;
     }
 #firewallContainer > div {
-    background-color: #e6e6e6;
+    background-color: #10597E;
     border: 0;
     border-bottom: 1px solid white;
     direction: ltr;
@@ -242,7 +247,7 @@ body.dirty #refresh:hover {
     padding: 0;
     }
 #firewallContainer > div:hover {
-    background-color: #f0f0f0;
+    background-color: #10597E;
     }
 #firewallContainer.minimized > div.isSubDomain {
     display: none;

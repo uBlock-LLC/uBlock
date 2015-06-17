@@ -226,6 +226,7 @@ var getStats = function(tabId, tabTitle) {
         firewallPaneMinimized: µb.userSettings.firewallPaneMinimized,
         globalAllowedRequestCount: µb.localSettings.allowedRequestCount,
         globalBlockedRequestCount: µb.localSettings.blockedRequestCount,
+        tadProcessedAdCount: µb.localSettings.tadProcessedAdCount,
         netFilteringSwitch: false,
         rawURL: tabContext.rawURL,
         pageURL: tabContext.normalURL,
@@ -531,6 +532,13 @@ var onMessage = function(request, sender, callback) {
             if(!response.shutdown) {
                 response.result = filterRequests(pageStore, request);
             }
+            break;
+
+        // count how many ads have been processed by Tad
+        case 'countNumAds':
+            var numAds = request.numAds;
+            µb.localSettings.tadProcessedAdCount += numAds;
+            console.log('counting ads ', µb.localSettings.tadProcessedAdCount)
             break;
 
         default:

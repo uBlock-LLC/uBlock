@@ -91,7 +91,7 @@ var cosmeticFilters = function(details) {
             }
         }
     }
-    if ( hide.length !== 0 && !vAPI.isGladlyPartnerPage) {
+    if ( hide.length !== 0 && !vAPI.isGladlyPartnerPage ) {
         var text = hide.join(',\n');
         hideElements(text);
         var style = vAPI.specificHideStyle = document.createElement('style');

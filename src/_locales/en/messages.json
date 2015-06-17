@@ -1,6 +1,6 @@
 {
   "extName":{
-    "message":"uBlock",
+    "message":"Goodblock",
     "description":"extension name."
   },
   "extShortDesc":{
@@ -8,8 +8,8 @@
     "description":"this will be in the chrome web store: must be 132 characters or less"
   },
   "dashboardName":{
-    "message":"uBlock — Dashboard",
-    "description":"English: uBlock — Dashboard"
+    "message":"Goodblock — Dashboard",
+    "description":"English: Goodblock — Dashboard"
   },
   "settingsPageName":{
     "message":"Settings",
@@ -58,6 +58,18 @@
   "popupBlockedSinceInstallPrompt":{
     "message":"since install",
     "description":"English: since install"
+  },
+  "vcEarnedStats":{
+    "message": "{{count}}",
+    "description": "Number of hearts the user has earned"
+  },
+  "impactStats":{
+    "message": "{{amount}} {{units}}",
+    "description": "Example 3 WEEKS"
+  },
+  "impactStats":{
+    "message": "Awesome! You've raised {{amount}} {{units}} worth of fresh clean water for water.org",
+    "description": "English: Awesome! You've raised {{amount}} {{units}} worth of fresh clean water for water.org"
   },
   "popupOr":{
     "message":"or",

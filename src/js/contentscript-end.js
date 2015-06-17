@@ -31,6 +31,7 @@
 
 /******************************************************************************/
 
+var numAds = 0;
 // https://github.com/chrisaljoudi/uBlock/issues/464
 if ( document instanceof HTMLDocument === false ) {
     //console.debug('contentscript-end.js > not a HTLMDocument');
@@ -344,7 +345,6 @@ var gladly = (function() {
 
     //var timer = window.performance || Date;
     //var tStart = timer.now();
-
     var queriedSelectors = {};
     var injectedSelectors = {};
     var lowGenericSelectors = [];
@@ -389,7 +389,7 @@ var gladly = (function() {
             // If this is a Gladly page, don't hide ads.
             // Instead, modify them appropriately.
             if (gladly.isGladlyPartnerPage) {
-                modifyAdsForGladly(Object.keys(selectors));
+                modifyAdsForGladly(Object.keys(selectors), numAds);
             }
             else {
                 hideElements(Object.keys(selectors));
@@ -469,7 +469,7 @@ var gladly = (function() {
     var addStyleTag = function(selectors) {
         var selectorStr = selectors.join(',\n');
         if (gladly.isGladlyPartnerPage) {
-            modifyAdsForGladly(selectorStr);
+            numAds = modifyAdsForGladly(selectorStr, numAds);
         }
         else {
             hideElements(selectorStr);
@@ -818,10 +818,10 @@ var gladly = (function() {
     // Takes a DOM element.
     // Returns null.
     // Adds an elephant to the corner of the elem.
-    var addElephantToElem = function(elem) {
+    var addElephantToElem = function(elem, numAds) {
       // If the element already has an elephant, skip it.
       if (!elem.dataset.elephant) {
-        console.log('Adding elephant to: ', elem.nodeName);
+        numAds += 1;
         var dimensions = getAdIconContainerDimensions();
         var ICON_HEIGHT_PX = dimensions.width;
         var ICON_WIDTH_PX = dimensions.height;
@@ -909,6 +909,7 @@ var gladly = (function() {
 
         elem.appendChild(elephantElem);
       }
+      return numAds;
     }
 
     // Takes a DOM element that filters have targeted
@@ -953,17 +954,17 @@ var gladly = (function() {
 
     // Takes an array of DOM elements.
     // Add elephants to all ad containers.
-    var elephantsEverywhere = function(nodes) {
-      console.log('Considering adding elephants to these nodes:', nodes);
+    var elephantsEverywhere = function(nodes, numAds) {
       gladly.addProcessedNodes(nodes);
       var adContainers = getAdContainersForNodes(nodes);
       adContainers.forEach(function(elem, i, array) {
-        addElephantToElem(elem);
+        numAds = addElephantToElem(elem, numAds);
       });
+      return numAds;
     }
 
     // Takes an array of selectors.
-    var modifyAdsForGladly = function(selectors) {
+    var modifyAdsForGladly = function(selectors, numAds) {
         if ( selectors.length === 0 ) {
             return;
         }
@@ -978,7 +979,14 @@ var gladly = (function() {
             var target = elems[i];
             nodes.push(target);
         }
-        elephantsEverywhere(nodes);
+        numAds = elephantsEverywhere(nodes, numAds);
+        if (numAds != 0) {
+            messager.send({
+               what: 'countNumAds',
+               numAds: numAds
+           });
+        }
+        return numAds;
     }
 
     var hideElements = function(selectors) {
@@ -1305,7 +1313,7 @@ var gladly = (function() {
     shutdownJobs.add(function() {
         // If this is a Gladly partner page, don't shut down the
         // mutation observer. We use it to watch for new nodes,
-        // becasue we can't listen for blocked requests when we're
+        // because we can't listen for blocked requests when we're
         // not filtering requests.
         if (!gladly.isGladlyPartnerPage) {
             treeObserver.disconnect();

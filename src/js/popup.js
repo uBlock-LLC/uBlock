@@ -45,19 +45,6 @@ document.getElementById('dfPane').style.setProperty(
     document.getElementById('switchPane').offsetHeight + 'px'
 );
 
-// The save/flush must be manually positioned:
-// - It's vertical position depends on the height on the title bar.
-var gotoPrefsBottom = document.getElementById('gotoPrefs').getBoundingClientRect().bottom;
-document.getElementById('saveflushButtonGroup').style.setProperty(
-    'top',
-    (gotoPrefsBottom + 4) + 'px'
-);
-// The scope icons as well.
-document.getElementById('scopeIcons').style.setProperty(
-    'top',
-    (gotoPrefsBottom) + 'px'
-);
-
 // https://github.com/chrisaljoudi/uBlock/issues/996
 // Experimental: mitigate glitchy popup UI: immediately set the firewall pane
 // visibility to its last known state. By default the pane is hidden.
@@ -108,6 +95,7 @@ var cachePopupData = function(data) {
         return popupData;
     }
     popupData = data;
+    console.log('popupData ', data)
     scopeToSrcHostnameMap['.'] = popupData.pageHostname || '';
     var hostnameDict = popupData.hostnameDict;
     if ( typeof hostnameDict !== 'object' ) {
@@ -249,6 +237,7 @@ var updateFirewallCell = function(scope, des, type, rule) {
     var hnDetails = popupData.hostnameDict[des];
     var aCount = hnDetails.allowCount;
     var bCount = hnDetails.blockCount;
+    console.log('allowed ads ', allowCount)
     if ( aCount !== 0 || bCount !== 0 ) {
         // https://github.com/chrisaljoudi/uBlock/issues/471
         aCount = Math.min(Math.ceil(Math.log(aCount + 1) / Math.LN10), 3);
@@ -401,6 +390,7 @@ var positionDfPaneFloaters = function() {
 // Assume everything has to be done incrementally.
 
 var renderPopup = function() {
+
     if ( popupData.tabTitle ) {
         document.title = popupData.appName + ' - ' + popupData.tabTitle;
     }
@@ -422,23 +412,22 @@ var renderPopup = function() {
     uDom('#gotoPick').toggleClass('enabled', popupData.canElementPicker === true);
 
     var text;
-    var blocked = popupData.pageBlockedRequestCount;
-    var total = popupData.pageAllowedRequestCount + blocked;
-    if ( total === 0 ) {
+    var totalVc = popupData.tadProcessedAdCount;
+    console.log('allowed request count ', popupData.pageAllowedRequestCount)
+    if ( totalVc === 0 ) {
         text = formatNumber(0);
     } else {
-        text = statsStr.replace('{{count}}', formatNumber(blocked))
-                       .replace('{{percent}}', formatNumber(Math.floor(blocked * 100 / total)));
+        text = statsStr.replace('{{count}}', formatNumber(totalVc))
+                       .replace('{{percent}}', formatNumber(totalVc));
     }
     uDom('#page-blocked').text(text);
+    totalVc = popupData.tadProcessedAdCount;
 
-    blocked = popupData.globalBlockedRequestCount;
-    total = popupData.globalAllowedRequestCount + blocked;
-    if ( total === 0 ) {
+    if ( totalVc === 0 ) {
         text = formatNumber(0);
     } else {
-        text = statsStr.replace('{{count}}', formatNumber(blocked))
-                       .replace('{{percent}}', formatNumber(Math.floor(blocked * 100 / total)));
+        text = statsStr.replace('{{count}}', formatNumber(totalVc))
+                       .replace('{{percent}}', formatNumber(totalVc));
     }
     uDom('#total-blocked').text(text);
 
@@ -470,6 +459,7 @@ var renderPopup = function() {
 /******************************************************************************/
 
 var toggleNetFilteringSwitch = function(ev) {
+
     if ( !popupData || !popupData.pageURL ) {
         return;
     }
@@ -746,6 +736,7 @@ var getPopupData = function(tabId) {
 // Make menu only when popup html is fully loaded
 
 uDom.onLoad(function () {
+
     var tabId = null; //If there's no tab ID specified in the query string, it will default to current tab.
 
     // Extract the tab id of the page this popup is for

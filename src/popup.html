@@ -2,23 +2,21 @@
 <html>
 
 <head>
-<meta name="viewport" content="width=470"> <!-- When showing as a tab in fennec, scale to full size (150px + 320px)-->
+<!-- <meta name="viewport" content="width=470"> --> <!-- When showing as a tab in fennec, scale to full size (150px + 320px)-->
 <meta charset="utf-8">
 <link rel="stylesheet" href="css/common.css" type="text/css">
 <link rel="stylesheet" href="css/popup.css" type="text/css">
-<title>uBlock</title>
+<title>Goodblock</title>
 </head>
 
 <body>
-<a href="dashboard.html" target="_blank" id="gotoPrefs" data-i18n-tip="popupTipDashboard"><svg class="icon icon-preferences"><use xlink:href="img/icons.svg#icon-preferences"></use></svg> <span id="appname">&nbsp;</span> <span id="version">&nbsp;</span></a>
+<div id="header">
+    <span id="appname">&nbsp;</span>
+</div>
 <div id="panes">
     <div id="switchPane">
-        <p id="switch" data-i18n-tip="popupPowerSwitchInfo"><svg class="icon icon-power"><use xlink:href="img/icons.svg#icon-power"></use></svg></p>
-        <h2 id="dfToggler" data-i18n="popupBlockedRequestPrompt">&nbsp;</h2>
         <p class="statName">
             <span data-i18n="popupBlockedOnThisPagePrompt">&nbsp;</span>&ensp;
-            <span id="gotoPick" class="tool" data-i18n-tip="popupTipPicker" data-tip-anchor="top"><svg class="icon icon-eyedropper"><use xlink:href="img/icons.svg#icon-eyedropper"></use></svg></span>&ensp;
-            <a href="#" target="_blank" id="gotoLog" class="tool" data-i18n-tip="popupTipLog" data-tip-anchor="top"><svg class="icon icon-view"><use xlink:href="img/icons.svg#icon-view"></use></svg></a>
             </p>
         <p class="statValue" id="page-blocked">?</p>
         <p class="statName" data-i18n="popupBlockedSinceInstallPrompt">&nbsp;</p>
