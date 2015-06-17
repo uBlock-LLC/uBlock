@@ -1079,26 +1079,95 @@ var setUpGladly = function() {
         }
     }
 
+    var isElemHorizontallyAligned = function(elem) {
+        var parentWidth = window.getComputedStyle(elem.parentNode).width;
+        var elemStyle = window.getComputedStyle(elem);
+        var isHorizontallyAligned = (parseFloat(parentWidth) === (parseFloat(elemStyle.width) + parseFloat(elemStyle.marginLeft) + parseFloat(elemStyle.marginRight)));
+        // console.log('isHorizontallyAligned', isHorizontallyAligned, elem);
+        // console.log(parseFloat(parentWidth), parseFloat(elemStyle.width), parseFloat(elemStyle.marginLeft), parseFloat(elemStyle.marginRight))
+        return isHorizontallyAligned;
+    }
+
+    // var isElemHorizontallyAlignedOffset = function(elem) {
+    //     var elemLeftOffset = elem.offsetLeft;
+    //     var elemRightOffset = elemLeftOffset + parseFloat(window.getComputedStyle(elem).width);
+    //     var parentElem = elem.parentNode;
+    //     var parentElemLeftOffset = parentElem.offsetLeft;
+    //     var parentElemRightOffset = parentElemLeftOffset + parseFloat(window.getComputedStyle(parentElem).width);
+    //     var isElemHorizAligned = ((parentElemLeftOffset - elemLeftOffset) === (parentElemRightOffset - elemRightOffset));
+    //     console.log('isElemHorizAligned', isElemHorizAligned, elem);
+    //     console.log(parentElemLeftOffset, elemLeftOffset, parentElemRightOffset, elemRightOffset);
+    //     return isElemHorizAligned;
+    // }
+
+    var copyStyleBetweenElems = function(copyFromElem, copyToElem) {
+        var copyFromElemStyle = window.getComputedStyle(copyFromElem, '');
+        copyToElem.style.cssText = copyFromElemStyle.cssText;
+        // The .cssText method will copy calculated values in 
+        // place of 'auto', so we want to replace any 'auto' values.
+        if (isElemHorizontallyAligned(copyFromElem)) {
+            copyToElem.style.setProperty('margin-left', 'auto', 'important');
+            copyToElem.style.setProperty('margin-right', 'auto', 'important');
+        }
+    }
+
+    function insertAfter(newNode, referenceNode) {
+        referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+    }
+
+    var insertGoodblockElemOnAdElem = function(adElem, goodblockElem) {
+        copyStyleBetweenElems(adElem, goodblockElem);
+        var adElemStyle = window.getComputedStyle(adElem);
+        goodblockElem.style.setProperty('opacity', '0.99', 'important');
+        goodblockElem.style.setProperty('display', 'block', 'important');
+        goodblockElem.style.setProperty('background-color', 'rgba(256,0,0,0.2)', 'important');
+        goodblockElem.style.setProperty('text-align', 'left', 'important');
+        switch (adElemStyle.position) {
+            case 'fixed':
+                goodblockElem.style.setProperty('position', 'fixed', 'important');
+                break;
+            case 'absolute':
+                goodblockElem.style.setProperty('position', 'relative', 'important');
+                break;
+            default:
+                 goodblockElem.style.setProperty('position', 'relative', 'important');
+              if (adElemStyle.display === 'inline' || adElemStyle.display === 'inline-block') {
+                    // Hack to handle possible white space around
+                    // inline elements.
+                    var inlineElemGapPx = 4;
+                }
+                else {
+                    var inlineElemGapPx = 0;
+                };
+                var marginTopGoodblock = 'calc(-' + adElemStyle.height + ' - ' + adElemStyle.marginBottom + ' - ' + adElemStyle.paddingTop + ' - ' + adElemStyle.paddingBottom + ' - ' + inlineElemGapPx + 'px' + ')';
+                goodblockElem.style.setProperty('margin-top', marginTopGoodblock, 'important');
+                break;
+        }
+        // // TODO: To handle margin-auto inline elements.
+        // if (
+        //     (adElemStyle.display === 'inline' || adElemStyle.display === 'inline-block') && 
+        //     (isElemHorizontallyAlignedOffset(adElem))
+        // ) {
+        //     var marginLeftGoodblock = 'calc(50% - (' + adElemStyle.width + ' / 2) + (' + adElemStyle.marginLeft + ' / 2))';
+        //     console.log(marginLeftGoodblock);
+        //     goodblockElem.style.setProperty('margin-left', marginLeftGoodblock, 'important');
+        //     goodblockElem.style.setProperty('margin-right', 'auto', 'important');
+        // }
+        insertAfter(goodblockElem, adElem);
+    }
+
     // Takes a DOM element.
     // Returns null.
     // Adds an goodblockIcon to the corner of the elem.
     var addGoodblockIconToElem = function(elem) {
       // If the element already has an goodblockIcon, skip it.
       if (!elem.dataset.goodblockIcon) {
-        console.log('Adding goodblockIcon to: ', elem.nodeName);
+        console.log('Adding goodblockIcon to: ', elem);
         var dimensions = getAdIconContainerDimensions();
         var ICON_HEIGHT_PX = dimensions.width;
         var ICON_WIDTH_PX = dimensions.height;
         // The ad icon container.
         var goodblockIconElem = document.createElement('div');
-        goodblockIconElem.style.setProperty('opacity', '0.99', 'important');
-        goodblockIconElem.style.setProperty('text-align', 'left', 'important');
-        // Copy some positioning from the parent element to our icon container.
-        var parentElemStyle = window.getComputedStyle(elem);
-        goodblockIconElem.style.setProperty('margin-left', parentElemStyle['margin-left'] + 'px', 'important');
-        goodblockIconElem.style.setProperty('margin-right', parentElemStyle['margin-right'] + 'px', 'important');
-        goodblockIconElem.style.setProperty('margin-bottom', parentElemStyle['margin-bottom'] + 'px', 'important');
-        goodblockIconElem.style.setProperty('pointer-events', 'none', 'important');
         // The ad icon image.
         var adIconElem = document.createElement('img');
         var iconUrl = vAPI.goodblockIconUrl;
@@ -1112,6 +1181,8 @@ var setUpGladly = function() {
         adIconElemHolder.appendChild(adIconElem);
         adIconElemHolder.style.setProperty('cursor', 'pointer', 'important');
         adIconElemHolder.style.setProperty('position', 'absolute', 'important');
+        adIconElemHolder.style.setProperty('bottom', '0px', 'important');
+        adIconElemHolder.style.setProperty('left', '0px', 'important');
         adIconElemHolder.style.setProperty('pointer-events', 'all', 'important');
         adIconElemHolder.style.setProperty('height', ICON_HEIGHT_PX + 'px', 'important');
         adIconElemHolder.style.setProperty('background-color', 'rgba(0,0,0,0.2)', 'important');
@@ -1121,107 +1192,61 @@ var setUpGladly = function() {
         addAdIconListeners(adIconElemHolder);
 
         goodblockIconElem.appendChild(adIconElemHolder);
-
         // Mark that we added an goodblockIcon.
         elem.dataset.goodblockIcon = 'true';
 
-        // Set a negative top margin for our icon container.
-        var sibling;
-        for(var i = 0; i < elem.childNodes.length; i++ ) {
-          sibling = elem.childNodes[i];
-          if (!sibling) {
-            continue;
-          }
-          if (sibling.nodeType == Node.ELEMENT_NODE &&
-              sibling.nodeName.toLowerCase() != 'script') {
-            break;
-          }
-        }
-        if (sibling && sibling.nodeType == Node.ELEMENT_NODE) {
-          var siblingStyle = window.getComputedStyle(sibling);
-          if (siblingStyle['position'] == 'absolute') {
-            goodblockIconElem.style.setProperty('position', 'absolute', 'important');
-            goodblockIconElem.style.setProperty('bottom', 0, 'important');
-          } else {
-            var iconMoveUp = -ICON_HEIGHT_PX - parseInt(siblingStyle['margin-bottom'], 10) + 'px';
-            adIconElemHolder.style['top'] = iconMoveUp;
+        insertGoodblockElemOnAdElem(elem, goodblockIconElem);
 
-            goodblockIconElem.style.setProperty('margin-left', 'auto', 'important');
-            goodblockIconElem.style.setProperty('margin-right', 'auto', 'important');
+        // var sibling;
+        // for(var i = 0; i < elem.childNodes.length; i++ ) {
+        //   sibling = elem.childNodes[i];
+        //   if (!sibling) {
+        //     continue;
+        //   }
+        //   if (sibling.nodeType == Node.ELEMENT_NODE &&
+        //       sibling.nodeName.toLowerCase() != 'script') {
+        //     break;
+        //   }
+        // }
+        // if (sibling && sibling.nodeType == Node.ELEMENT_NODE) {
+        //   var siblingStyle = window.getComputedStyle(sibling);
+        //   if (siblingStyle['position'] == 'absolute') {
+        //     goodblockIconElem.style.setProperty('position', 'absolute', 'important');
+        //     goodblockIconElem.style.setProperty('bottom', 0, 'important');
+        //   } else {
+        //     var iconMoveUp = -ICON_HEIGHT_PX - parseInt(siblingStyle['margin-bottom'], 10) + 'px';
+        //     adIconElemHolder.style['top'] = iconMoveUp;
 
-            // TODO: listener instead of arbitrary timeout.
-            window.setTimeout(function(targetEl, sib) {
-              var width = sib.getAttribute('width');
-              if (!width) {
-                width = sib.style.width;
-              }
-              if (!width) {
-                width = sib.clientWidth;
-              }
-              if (width && width > 10) {
-                width = width + 'px'
-                console.log('FOUND SIBLING WIDTH ' + width);
-                targetEl.style.setProperty('width', width, 'important');
-              }
-            }, 200, goodblockIconElem, sibling);
-          }
-        }
+        //     goodblockIconElem.style.setProperty('margin-left', 'auto', 'important');
+        //     goodblockIconElem.style.setProperty('margin-right', 'auto', 'important');
 
-        // TODO: figure out how to copy width to the goodblockIconElem.
-        // Could do so by watching the width of the ad node (e.g. iframe)
-        // and adjusting the goodblockIconElem width on changes.
+        //     // TODO: listener instead of arbitrary timeout.
+        //     window.setTimeout(function(targetEl, sib) {
+        //       var width = sib.getAttribute('width');
+        //       if (!width) {
+        //         width = sib.style.width;
+        //       }
+        //       if (!width) {
+        //         width = sib.clientWidth;
+        //       }
+        //       if (width && width > 10) {
+        //         width = width + 'px'
+        //         console.log('FOUND SIBLING WIDTH ' + width);
+        //         targetEl.style.setProperty('width', width, 'important');
+        //       }
+        //     }, 200, goodblockIconElem, sibling);
+        //   }
+        // }
 
-        elem.appendChild(goodblockIconElem);
       }
-    }
-
-    // Takes a DOM element that filters have targeted
-    // as elements that hold an advertisement.
-    // Returns an array of DOM elements that we believe will be
-    // the containers for advertisements.
-    var getAdContainersForNode = function(node) {
-      var elemsProcessed = gladly.getProcessedNodes();
-      // Get any iframes within this node.
-      var iframes = findIframes(node);
-
-      // If we found an iframe, it's probably the ad unit.
-      if (iframes.length > 0 ) {
-        var adContainers = iframes.map(function(elem, i) {
-          return elem.parentNode;      // Go up to parent of iframes
-        }).filter(function(elem) {
-          return (
-            !isContainedByAny(elemsProcessed, elem) &&
-            noGoodblockIconInAncestors(elem)
-          );
-        });
-      }
-      // If there isn't an iframe, return an array
-      // containing the input element.
-      else {
-        return [node];
-      }
-      return adContainers;
-    }
-
-    // Takes an array of DOM elements that filters have targeted
-    // as elements that hold an advertisement.
-    // Returns an array of DOM elements that we believe will be
-    // the containers for advertisements.
-    var getAdContainersForNodes = function(nodes) {
-      var adContainers = [];
-      nodes.forEach(function(elem, index, array) {
-        adContainers = adContainers.concat(getAdContainersForNode(elem));
-      });
-      return adContainers;
     }
 
     // Takes an array of DOM elements.
     // Add goodblockIcons to all ad containers.
     var goodblockIconsEverywhere = function(nodes) {
-      console.log('Considering adding goodblockIcons to these nodes:', nodes);
+      // console.log('Considering adding goodblockIcons to these nodes:', nodes);
       gladly.addProcessedNodes(nodes);
-      var adContainers = getAdContainersForNodes(nodes);
-      adContainers.forEach(function(elem, i, array) {
+      nodes.forEach(function(elem, i, array) {
         addGoodblockIconToElem(elem);
       });
     }
@@ -1298,7 +1323,6 @@ var setUpGladly = function() {
             // For normal ad hiding, don't process the element if we already have.
             // Gladly partner page elements need to be processed each time
             // because we're adding elements to the ad.
-            console.log('isGladlyPartnerPage', gladly.isGladlyPartnerPage);
             if (!gladly.isGladlyPartnerPage) {
                 if ( injectedSelectors.hasOwnProperty(selector) ) {
                     continue;
