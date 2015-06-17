@@ -97,3 +97,8 @@ html, body {
 	left: 10px;
 	top: 340px;
 }
+.test-r {
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 10px;
+}
