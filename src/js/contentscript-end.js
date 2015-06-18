@@ -319,11 +319,11 @@ var setUpGladly = function() {
     var elemsProcessed = [];
 
     var addProcessedNodes = function(nodes) {
-    elemsProcessed = elemsProcessed.concat(nodes);
+        elemsProcessed = elemsProcessed.concat(nodes);
     }
 
     var getProcessedNodes = function() {
-    return elemsProcessed;
+        return elemsProcessed;
     }
 
     // Set in contentscript-start.js.
@@ -496,68 +496,6 @@ var setUpGladly = function() {
         });
         //console.debug('µBlock> generic cosmetic filters: injecting %d CSS rules:', selectors.length, text);
     };
-
-    // var getElementTreeXPath = function(element) {
-    //     var paths = [];
-    //     // Use nodeName (instead of localName) so namespace prefix is included (if any).
-    //     for (; element && element.nodeType == 1; element = element.parentNode)
-    //     {
-    //         var index = 0;
-    //         for (var sibling = element.previousSibling; sibling; sibling = sibling.previousSibling) {
-    //             // Ignore document type declaration.
-    //             if (sibling.nodeType == Node.DOCUMENT_TYPE_NODE)
-    //                 continue;
-    //             if (sibling.nodeName == element.nodeName)
-    //                 ++index;
-    //         }
-    //         var tagName = element.nodeName.toLowerCase();
-    //         var pathIndex = (index ? "[" + (index+1) + "]" : "");
-    //         paths.splice(0, 0, tagName + pathIndex);
-    //     }
-    //     return paths.length ? "/" + paths.join("/") : null;
-    // };
-
-    var isParentOf = function(parent, child) {
-        while(child.parentNode) {
-            if (child.parentNode == parent) {
-                return true;
-            }
-            child = child.parentNode;
-        }
-        return false;
-    }
-
-    var isContainedByAny = function(parents, child) {
-        for (var i = 0; i < parents.length; i++) {
-            if (isParentOf(parents[i], child)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    var noGoodblockIconInAncestors = function(elem) {
-      while(elem.parentNode) {
-          if (elem.parentNode.dataset && elem.parentNode.dataset.goodblockIcon) {
-              return false;
-          }
-          elem = elem.parentNode;
-      }
-      return true;
-    }
-
-    // Takes elem, a DOM element.
-    // Returns an array of iframe elements found within elem.
-    var findIframes = function(elem) {
-      if (elem.nodeName.toLowerCase() == 'iframe') {
-        return [elem];
-      }
-      var toReturn = [];
-      for (var i = 0; i < elem.childNodes.length; i++) {
-        toReturn = toReturn.concat(findIframes(elem.childNodes[i]));
-      }
-      return toReturn;
-    }
 
     // BEGIN TOOLTIP FUNCTIONS
 
@@ -1080,6 +1018,9 @@ var setUpGladly = function() {
         }
     }
 
+    // BEGIN FUNCTIONS FOR ADDING GOODBLOCK ICON TO AD.
+
+
     var isElemHorizontallyAligned = function(elem) {
         var parentWidth = window.getComputedStyle(elem.parentNode).width;
         var elemStyle = window.getComputedStyle(elem);
@@ -1089,17 +1030,76 @@ var setUpGladly = function() {
         return isHorizontallyAligned;
     }
 
+    // TODO: functions to support smart searching for visible ad unit.
+
     // var isElemHorizontallyAlignedOffset = function(elem) {
     //     var elemLeftOffset = elem.offsetLeft;
     //     var elemRightOffset = elemLeftOffset + parseFloat(window.getComputedStyle(elem).width);
     //     var parentElem = elem.parentNode;
     //     var parentElemLeftOffset = parentElem.offsetLeft;
     //     var parentElemRightOffset = parentElemLeftOffset + parseFloat(window.getComputedStyle(parentElem).width);
-    //     var isElemHorizAligned = ((parentElemLeftOffset - elemLeftOffset) === (parentElemRightOffset - elemRightOffset));
+    //     var isElemHorizAligned = ((parentElemLeftOffset + parentElemRightOffset) === (elemLeftOffset + elemRightOffset));
     //     console.log('isElemHorizAligned', isElemHorizAligned, elem);
     //     console.log(parentElemLeftOffset, elemLeftOffset, parentElemRightOffset, elemRightOffset);
     //     return isElemHorizAligned;
     // }
+
+    // var isParentOf = function(parent, child) {
+    //     while(child.parentNode) {
+    //         if (child.parentNode == parent) {
+    //             return true;
+    //         }
+    //         child = child.parentNode;
+    //     }
+    //     return false;
+    // };
+
+    // var isContainedByAny = function(parents, child) {
+    //     for (var i = 0; i < parents.length; i++) {
+    //         if (isParentOf(parents[i], child)) {
+    //             return true;
+    //         }
+    //     }
+    //     return false;
+    // };
+
+    // var noGoodblockIconInAncestors = function(elem) {
+    //   while(elem.parentNode) {
+    //       if (elem.parentNode.dataset && elem.parentNode.dataset.goodblockIcon) {
+    //           return false;
+    //       }
+    //       elem = elem.parentNode;
+    //   }
+    //   return true;
+    // };
+
+    // // Takes elem, a DOM element.
+    // // Returns an array of iframe elements found within elem.
+    // var findIframes = function(elem) {
+    //   if (elem.nodeName.toLowerCase() == 'iframe') {
+    //     return [elem];
+    //   }
+    //   var toReturn = [];
+    //   for (var i = 0; i < elem.childNodes.length; i++) {
+    //     toReturn = toReturn.concat(findIframes(elem.childNodes[i]));
+    //   }
+    //   return toReturn;
+    // };
+
+    // var isSmallElem = function(elem) {
+    //     var SMALL_PX_WIDTH_THRESHOLD = 30;
+    //     var SMALL_PX_HEIGHT_THRESHOLD = 30;
+    //     var AREA_PX_THRESHOLD = 7000;
+    //     var elemStyle = window.getComputedStyle(elem);
+    //     var elemWidthPx = parseFloat(elemStyle.width);
+    //     var elemHeightPx = parseFloat(elemStyle.height);
+    //     var elemAreaPx = elemWidthPx * elemHeightPx;
+    //     return (
+    //         elemWidthPx < SMALL_PX_WIDTH_THRESHOLD ||
+    //         elemHeightPx < SMALL_PX_HEIGHT_THRESHOLD ||
+    //         elemAreaPx < AREA_PX_THRESHOLD
+    //     );
+    // };
 
     var copyStyleBetweenElems = function(copyFromElem, copyToElem) {
         var copyFromElemStyle = window.getComputedStyle(copyFromElem, '');
@@ -1135,7 +1135,8 @@ var setUpGladly = function() {
               if (adElemStyle.display === 'inline' || adElemStyle.display === 'inline-block') {
                     // Hack to handle possible white space around
                     // inline elements.
-                    var inlineElemGapPx = 4;
+                    // var inlineElemGapPx = 4;
+                    var inlineElemGapPx = 0;
                 }
                 else {
                     var inlineElemGapPx = 0;
@@ -1150,7 +1151,6 @@ var setUpGladly = function() {
         //     (isElemHorizontallyAlignedOffset(adElem))
         // ) {
         //     var marginLeftGoodblock = 'calc(50% - (' + adElemStyle.width + ' / 2) + (' + adElemStyle.marginLeft + ' / 2))';
-        //     console.log(marginLeftGoodblock);
         //     goodblockElem.style.setProperty('margin-left', marginLeftGoodblock, 'important');
         //     goodblockElem.style.setProperty('margin-right', 'auto', 'important');
         // }
@@ -1197,60 +1197,66 @@ var setUpGladly = function() {
         elem.dataset.goodblockIcon = 'true';
 
         insertGoodblockElemOnAdElem(elem, goodblockIconElem);
-
-        // var sibling;
-        // for(var i = 0; i < elem.childNodes.length; i++ ) {
-        //   sibling = elem.childNodes[i];
-        //   if (!sibling) {
-        //     continue;
-        //   }
-        //   if (sibling.nodeType == Node.ELEMENT_NODE &&
-        //       sibling.nodeName.toLowerCase() != 'script') {
-        //     break;
-        //   }
-        // }
-        // if (sibling && sibling.nodeType == Node.ELEMENT_NODE) {
-        //   var siblingStyle = window.getComputedStyle(sibling);
-        //   if (siblingStyle['position'] == 'absolute') {
-        //     goodblockIconElem.style.setProperty('position', 'absolute', 'important');
-        //     goodblockIconElem.style.setProperty('bottom', 0, 'important');
-        //   } else {
-        //     var iconMoveUp = -ICON_HEIGHT_PX - parseInt(siblingStyle['margin-bottom'], 10) + 'px';
-        //     adIconElemHolder.style['top'] = iconMoveUp;
-
-        //     goodblockIconElem.style.setProperty('margin-left', 'auto', 'important');
-        //     goodblockIconElem.style.setProperty('margin-right', 'auto', 'important');
-
-        //     // TODO: listener instead of arbitrary timeout.
-        //     window.setTimeout(function(targetEl, sib) {
-        //       var width = sib.getAttribute('width');
-        //       if (!width) {
-        //         width = sib.style.width;
-        //       }
-        //       if (!width) {
-        //         width = sib.clientWidth;
-        //       }
-        //       if (width && width > 10) {
-        //         width = width + 'px'
-        //         console.log('FOUND SIBLING WIDTH ' + width);
-        //         targetEl.style.setProperty('width', width, 'important');
-        //       }
-        //     }, 200, goodblockIconElem, sibling);
-        //   }
-        // }
-
       }
     }
+
+    // Takes a DOM element that filters have targeted
+    // as elements that hold an advertisement.
+    // Returns an array of DOM elements that we believe will be
+    // the containers for advertisements.
+    var getAdContainersForNode = function(node) {
+        return node;
+
+        // TODO: smart searching for visible ad unit.
+        // if (isSmallElem(node)) {
+        //     return node.parentNode;
+        // }
+        // return node;
+
+        // var elemsProcessed = gladly.getProcessedNodes();
+        // // Get any iframes within this node.
+        // var iframes = findIframes(node);
+
+        // // If we found an iframe, it's probably the ad unit.
+        // if (iframes.length > 0 ) {
+        //     var adContainers = iframes.map(function(elem, i) {
+        //         return elem.parentNode;      // Go up to parent of iframes
+        //     }).filter(function(elem) {
+        //         return (
+        //             !isContainedByAny(elemsProcessed, elem) &&
+        //             noGoodblockIconInAncestors(elem)
+        //         );
+        //     });
+        // }
+        // // If there isn't an iframe, return an array
+        // // containing the input element.
+        // else {
+        //     return [node];
+        // }
+    };
+
+    // Takes an array of DOM elements that filters have targeted
+    // as elements that hold an advertisement.
+    // Returns an array of DOM elements that we believe will be
+    // the containers for advertisements.
+    var getAdContainersForNodes = function(nodes) {
+      var adContainers = [];
+      nodes.forEach(function(elem, index, array) {
+        adContainers = adContainers.concat(getAdContainersForNode(elem));
+      });
+      return adContainers;
+    };
 
     // Takes an array of DOM elements.
     // Add goodblockIcons to all ad containers.
     var goodblockIconsEverywhere = function(nodes) {
       // console.log('Considering adding goodblockIcons to these nodes:', nodes);
       gladly.addProcessedNodes(nodes);
-      nodes.forEach(function(elem, i, array) {
+      var adContainers = getAdContainersForNodes(nodes);
+      adContainers.forEach(function(elem, i, array) {
         addGoodblockIconToElem(elem);
       });
-    }
+    };
 
     // Takes an array of selectors.
     var modifyAdsForGladly = function(selectors) {
@@ -1269,7 +1275,9 @@ var setUpGladly = function() {
             nodes.push(target);
         }
         goodblockIconsEverywhere(nodes);
-    }
+    };
+
+    // END FUNCTIONS FOR ADDING GOODBLOCK ICON TO AD.
 
     var hideElements = function(selectors) {
         // https://github.com/chrisaljoudi/uBlock/issues/207
