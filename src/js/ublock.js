@@ -29,8 +29,11 @@
 
 /******************************************************************************/
 
+// Whether we want to make all webpages into partner sites.
+var allDomainsAreGladlyPartners = true;
+
 µBlock.isGladlyPartnerDomain = function(domain) {
-    var isGladlyPartner = isInGladlyPartnerList(domain);
+    var isGladlyPartner = isInGladlyPartnerList(domain) || allDomainsAreGladlyPartners;
     // console.log('Is a Gladly partner?', isGladlyPartner, domain);
     return isGladlyPartner;
 };

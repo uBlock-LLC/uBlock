@@ -539,6 +539,20 @@ var onMessage = function(request, sender, callback) {
         case 'countNumAds':
             var numAds = request.numAds;
             µb.localSettings.tadProcessedAdCount += numAds;
+        
+        case 'retrieveGoodblockOverlayData':
+            var modalImgs = vAPI.getGoodblockOverlayIconPaths();
+            response = {
+                'imgPaths': modalImgs,
+                // TODO: use localization.
+                'text': {
+                    'title': 'Goodblock',
+                    'text': 'Goodblock raises money for charity. Every ad you see helps get fresh, clean drinking water to those who need it.',
+                    'vcAmount': µb.localSettings.tadProcessedAdCount,
+                    // TODO: use real values.
+                    'impact': '3 WEEKS',
+                }
+            }
             break;
 
         default:
