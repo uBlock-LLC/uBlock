@@ -164,7 +164,7 @@ p {
 #settings .icon {
     cursor: pointer;
     float: right;
-    padding-right: 7px;
+    margin-right: 10px;
     padding-top: 7px;
     color: #42BDF8;
 }
