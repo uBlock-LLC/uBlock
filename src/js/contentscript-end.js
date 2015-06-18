@@ -1165,13 +1165,8 @@ var setUpGladly = function() {
 
     // Takes a DOM element.
     // Returns null.
-    // Adds an elephant to the corner of the elem.
-    var addElephantToElem = function(elem, numAds) {
-      // If the element already has an elephant, skip it.
-      if (!elem.dataset.elephant) {
-        numAds += 1;
     // Adds an goodblockIcon to the corner of the elem.
-    var addGoodblockIconToElem = function(elem) {
+    var addGoodblockIconToElem = function(elem, numAds) {
       // If the element already has an goodblockIcon, skip it.
       if (!elem.dataset.goodblockIcon) {
         console.log('Adding goodblockIcon to: ', elem);
@@ -1267,7 +1262,7 @@ var setUpGladly = function() {
       gladly.addProcessedNodes(nodes);
       var adContainers = getAdContainersForNodes(nodes);
       adContainers.forEach(function(elem, i, array) {
-        numAds = addGoodblockIconToElem(elem);
+        numAds = addGoodblockIconToElem(elem, numAds);
       });
       return numAds;
     };
