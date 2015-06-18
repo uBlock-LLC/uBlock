@@ -68,12 +68,12 @@
     "description": "Example 3 WEEKS"
   },
   "impactText":{
-    "message": "Awesome! You've raised {{amount}} {{units}} worth of fresh clean water for ",
-    "description": "English: Awesome! You've raised {{amount}} {{units}} worth of fresh clean water for "
+    "message": "Awesome! You've raised {{amount}} {{units}} worth of fresh clean water for {{name}}",
+    "description": "English: Awesome! You've raised {{amount}} {{units}} worth of fresh clean water for {{name}}"
   },
   "noImpact":{
-    "message": "Give clean water via {{link}} just by browsing the web! Keep browsing to see your impact.",
-    "description": "English: Give clean water via {{link}} just by browsing the web! Keep browsing to see your impact."
+    "message": "Give clean water via {{name}} just by browsing the web! Keep browsing to see your impact.",
+    "description": "English: Give clean water via {{name}} just by browsing the web! Keep browsing to see your impact."
   },
   "days":{
     "message": "days",

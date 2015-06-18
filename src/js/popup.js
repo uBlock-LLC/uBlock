@@ -462,12 +462,13 @@ var renderPopup = function() {
                    .replace('{{units}}', impactUnits.toUpperCase());
     uDom('#total-impact').text(text);
     
+    var water_dot_org = '<a target="_blank" href="http://www.water.org/">water.org</a>';
     if ( impactAmount === 0 ) {
-        text = noImpactStr.replace('{{link}}', '<a target="_blank" href="http://www.water.org/">water.org</a>');
+        text = noImpactStr.replace('{{name}}', water_dot_org);
     } else {
         text = impactTextStr.replace('{{amount}}', formatNumber(impactAmount))
-                       .replace('{{units}}', impactUnits);
-        text += '<a target="_blank" href="http://www.water.org/">water.org</a>'
+                       .replace('{{units}}', impactUnits)
+                       .replace('{{name}}', water_dot_org);
     }
     uDom('#impact-text').html(text)
 
