@@ -68,12 +68,12 @@
     "description": "Example 3 WEEKS"
   },
   "impactText":{
-    "message": "Awesome! You've raised {{amount}} {{units}} worth of fresh clean water for water.org",
-    "description": "English: Awesome! You've raised {{amount}} {{units}} worth of fresh clean water for water.org"
+    "message": "Awesome! You've raised {{amount}} {{units}} worth of fresh clean water for ",
+    "description": "English: Awesome! You've raised {{amount}} {{units}} worth of fresh clean water for "
   },
   "noImpact":{
-    "message": "Goodblock helps you give clean water to people just by having it installed! Keep browsing the web to see its impact!",
-    "description": "Goodblock helps you give clean water to people just by having it installed! Keep browsing the web to see its impact!"
+    "message": "Give clean water to people just by browsing the web! Keep browsing to see your impact.",
+    "description": "Give clean water to people just by browsing the web! Keep browsing to see your impact."
   },
   "days":{
     "message": "days",

@@ -93,7 +93,7 @@ var calculateImpact = function(vcCount) {
     // TODO: Implement me
     
     var impact = {
-        'value': 0,
+        'value': 10,
         'units': 'days'
     };
     return impact
@@ -449,8 +449,9 @@ var renderPopup = function() {
     } else {
         text = impactTextStr.replace('{{amount}}', formatNumber(impactAmount))
                        .replace('{{units}}', impactUnits);
+        text += '<a target="_blank" href="http://www.water.org/">water.org</a>'
     }
-    uDom('#impact-text').text(text)
+    uDom('#impact-text').html(text)
 
     // This will collate all domains, touched or not
     renderPrivacyExposure();

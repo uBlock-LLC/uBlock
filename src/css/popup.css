@@ -1,5 +1,5 @@
 body {
-    background-color: #10597E;
+    background-color: rgb(21, 109, 143);
     color: white;
     border: 0;
     font: 13px Helvetica Neue, Helvetica, sans-serif;
@@ -9,7 +9,7 @@ body {
     display: inline-block;
     }
 h2 {
-    background-color: #10597E;
+    background-color: rgb(21, 109, 143);
     border: 0;
     border-top: 1px solid #ccc;
     color: white;
@@ -36,19 +36,20 @@ a {
     padding: 4px;
     padding-top: 5px;
     color: #eee;
-    background-color: #10597E;
+    background-color: rgb(21, 109, 143);
     text-align: center;
     cursor: pointer;
     }
 #header {
     text-align: left;
-    min-height: 150px;
+    padding: 7px 7px 0px 7px;
     }
 #appname {
-    margin-left: 3px;
+    margin-left: 5px;
     font-weight: bold;
     color: white;
-    font-size: 20px;
+    font-size: 22px;
+    vertical-align: super;
     }
 #version {
     font-size: 75%;
@@ -97,17 +98,30 @@ body[dir="rtl"] #panes > #dfPane {
     }
 #panes > #statsPane {
     box-sizing: border-box;
-    width: 450px;
+    width: 400px;
+    min-height: 100px;
+    padding-top: 20px;
+    background: #2095C4; /* Old browsers */
+    background: -moz-linear-gradient(top,  #2095C4 0%, #1576aa 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#2095C4), color-stop(100%,#1576aa)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  #2095C4 0%,#1576aa 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  #2095C4 0%,#1576aa 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  #2095C4 0%,#1576aa 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  #2095C4 0%,#1576aa 100%); /* W3C */
     }
-#panes {
-    padding: 7px;
+#panes > #wave-pane {
+    height: 68px;
     }
 p {
     text-align: center;
     }
 #impact-text {
     text-align: left;
+    padding-right: 10px;
     }
+#impact-text a {
+    color: orange;
+}
 #switch {
     margin: 8px 0;
     font-size:0;
@@ -161,10 +175,18 @@ body.off #switch .icon {
     }
 
 #settings {
-    min-height: 20px;
+    min-height: 30px;
     float: right;
+    width: 100%;
+    background-color: #1C87BE;
     }
-
+#settings .icon {
+    cursor: pointer;
+    float: right;
+    padding-right: 7px;
+    padding-top: 7px;
+    color: #42BDF8;
+}
 body.advancedUser h2 {
     cursor: pointer;
     }
@@ -253,7 +275,7 @@ body.dirty #refresh:hover {
     width: 15%;
     }
 #firewallContainer > div {
-    background-color: #10597E;
+    background-color: rgb(21, 109, 143);
     border: 0;
     border-bottom: 1px solid white;
     direction: ltr;
@@ -261,7 +283,7 @@ body.dirty #refresh:hover {
     padding: 0;
     }
 #firewallContainer > div:hover {
-    background-color: #10597E;
+    background-color: rgb(21, 109, 143);
     }
 #firewallContainer.minimized > div.isSubDomain {
     display: none;
