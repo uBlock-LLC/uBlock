@@ -463,7 +463,7 @@ var renderPopup = function() {
     uDom('#total-impact').text(text);
     
     if ( impactAmount === 0 ) {
-        text = noImpactStr.replace('{{amount}}', formatNumber(0));
+        text = noImpactStr.replace('{{link}}', '<a target="_blank" href="http://www.water.org/">water.org</a>');
     } else {
         text = impactTextStr.replace('{{amount}}', formatNumber(impactAmount))
                        .replace('{{units}}', impactUnits);
