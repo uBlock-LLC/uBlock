@@ -174,7 +174,16 @@ var hashFromPopupData = function(reset) {
 /******************************************************************************/
 
 var formatNumber = function(count) {
-    return typeof count === 'number' ? count.toLocaleString() : '';
+    if (typeof count === 'number') {
+        if (count >= 1000 && count < 1000000) {
+            return (Math.round(count * 100 / 1000) / 100).toFixed(1) + 'K';
+        } else if (count >= 1000000) {
+            return (Math.round(count * 100 / 1000000) / 100).toFixed(1) + 'M';
+        } else {
+            return count.toLocaleString()
+        }
+    }
+    return '';
 };
 
 /******************************************************************************/
