@@ -10,20 +10,31 @@
 </head>
 
 <body>
-<div id="header">
-    <span id="appname">&nbsp;</span>
-</div>
 <div id="panes">
-    <div id="switchPane">
-        <p class="statName">
-            <span data-i18n="popupBlockedOnThisPagePrompt">&nbsp;</span>&ensp;
-            </p>
-        <p class="statValue" id="page-blocked">?</p>
-        <p class="statName" data-i18n="popupBlockedSinceInstallPrompt">&nbsp;</p>
-        <p class="statValue" id="total-blocked">?</p>
-        <h2 data-i18n="popupHitDomainCountPrompt">&nbsp;</h2>
-        <p class="statValue" id="popupHitDomainCount">&nbsp;</p>
+    <div id="header">
+        <span id="appname">&nbsp;</span>
+    </div>
+    <div id="statsPane">
+        <div class="statWrapper" style="width: 15%">
+            <svg class="icon icon-heart statSymbol"><use xlink:href="img/icons.svg#icon-heart"></use></svg>
+            <div class="statValue" id="vc-earned">?</div>
+        </div>
+        <div class="statWrapper" style="width: 15%">
+            <svg class="icon icon-water statSymbol"><use xlink:href="img/icons.svg#icon-water"></use></svg>
+            <div class="statValue" id="total-impact">?</div>
+        </div>
+        <div class="statWrapper" style="width: 70%">
+            <p class="statValue" id="impact-text">?</p>
+        </div>
+        
+        <!-- <h2 data-i18n="vcEarnedStats">&nbsp;</h2>
+        <p class="statValue" id="vcEarnedStats">&nbsp;</p> -->
+        
         <div id="refresh"><svg class="icon icon-reload"><use xlink:href="img/icons.svg#icon-reload"></use></svg></div>
+    </div>
+    <div id="settings">
+        <svg class="icon icon-heart"><use xlink:href="img/icons.svg#icon-heart"></use></svg>
+        <svg class="icon icon-preferences"><use xlink:href="img/icons.svg#icon-preferences"></use></svg>
     </div><!--no spaces--><div id="dfPane">
         <div id="firewallContainer">
             <div><span data-i18n="popupAnyRulePrompt"></span><span data-src="." data-des="*" data-type="*"> </span><span data-src="/" data-des="*" data-type="*"> </span></div>

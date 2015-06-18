@@ -42,7 +42,7 @@ var dfPaneVisibleStored = vAPI.localStorage.getItem('popupFirewallPane') === 'tr
 // height is more than what is available.
 document.getElementById('dfPane').style.setProperty(
     'height',
-    document.getElementById('switchPane').offsetHeight + 'px'
+    document.getElementById('statsPane').offsetHeight + 'px'
 );
 
 // https://github.com/chrisaljoudi/uBlock/issues/996
@@ -74,7 +74,10 @@ var allHostnameRows = [];
 var touchedDomainCount = 0;
 var rowsToRecycle = uDom();
 var cachedPopupHash = '';
-var statsStr = vAPI.i18n('popupBlockedStats');
+var vcEarnedStr = vAPI.i18n('vcEarnedStats');
+var impactStatsStr = vAPI.i18n('impactStats');
+var impactTextStr = vAPI.i18n('impactText');
+var noImpactStr = vAPI.i18n('noImpact');
 var domainsHitStr = vAPI.i18n('popupHitDomainCount');
 var reNetworkRelatedURL = /^(?:ftps?|https?|wss?):\/\//;
 
@@ -83,6 +86,18 @@ var reNetworkRelatedURL = /^(?:ftps?|https?|wss?):\/\//;
 // https://github.com/chrisaljoudi/httpswitchboard/issues/345
 
 var messager = vAPI.messaging.channel('popup.js');
+
+/******************************************************************************/
+
+var calculateImpact = function(vcCount) {
+    // TODO: Implement me
+    
+    var impact = {
+        'value': 0,
+        'units': 'days'
+    };
+    return impact
+}
 
 /******************************************************************************/
 
@@ -412,24 +427,30 @@ var renderPopup = function() {
     uDom('#gotoPick').toggleClass('enabled', popupData.canElementPicker === true);
 
     var text;
-    var totalVc = popupData.tadProcessedAdCount;
-    console.log('allowed request count ', popupData.pageAllowedRequestCount)
-    if ( totalVc === 0 ) {
-        text = formatNumber(0);
-    } else {
-        text = statsStr.replace('{{count}}', formatNumber(totalVc))
-                       .replace('{{percent}}', formatNumber(totalVc));
-    }
-    uDom('#page-blocked').text(text);
-    totalVc = popupData.tadProcessedAdCount;
 
+    var totalVc = popupData.tadProcessedAdCount;
     if ( totalVc === 0 ) {
         text = formatNumber(0);
     } else {
-        text = statsStr.replace('{{count}}', formatNumber(totalVc))
-                       .replace('{{percent}}', formatNumber(totalVc));
+        text = vcEarnedStr.replace('{{count}}', formatNumber(totalVc));
     }
-    uDom('#total-blocked').text(text);
+    uDom('#vc-earned').text(text);
+
+    var impact = calculateImpact(totalVc);
+    var impactAmount = impact.value;
+    var impactUnits = vAPI.i18n(impact.units);
+
+    text = impactStatsStr.replace('{{amount}}', formatNumber(impactAmount))
+                   .replace('{{units}}', impactUnits);
+    uDom('#total-impact').text(text);
+    
+    if ( impactAmount === 0 ) {
+        text = noImpactStr.replace('{{amount}}', formatNumber(0));
+    } else {
+        text = impactTextStr.replace('{{amount}}', formatNumber(impactAmount))
+                       .replace('{{units}}', impactUnits);
+    }
+    uDom('#impact-text').text(text)
 
     // This will collate all domains, touched or not
     renderPrivacyExposure();

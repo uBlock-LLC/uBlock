@@ -1,12 +1,11 @@
 body {
     background-color: #10597E;
-    color: #333;
+    color: white;
     border: 0;
     font: 13px Helvetica Neue, Helvetica, sans-serif;
     margin: 0;
     padding: 0;
     overflow: hidden;
-    white-space: nowrap;
     display: inline-block;
     }
 h2 {
@@ -43,6 +42,7 @@ a {
     }
 #header {
     text-align: left;
+    min-height: 150px;
     }
 #appname {
     margin-left: 3px;
@@ -59,10 +59,7 @@ html {
     font-size: 0;
     }
 html, body, #panes {
-    text-align: right;
-    }
-#panes {
-    white-space: nowrap;
+    text-align: left;
     }
 body[dir="ltr"] #panes {
     direction: rtl;
@@ -98,13 +95,18 @@ body[dir="rtl"] #panes > #dfPane {
 #panes:not(.dfEnabled) > #dfPane {
     display: none;
     }
-#panes > #switchPane {
+#panes > #statsPane {
     box-sizing: border-box;
-    min-width: 450px;
+    width: 450px;
+    }
+#panes {
+    padding: 7px;
     }
 p {
     text-align: center;
-    white-space: nowrap;
+    }
+#impact-text {
+    text-align: left;
     }
 #switch {
     margin: 8px 0;
@@ -125,19 +127,26 @@ body.off #switch .icon {
     color: #888;
     font-size: 11px;
     }
-#page-blocked {
-    font-size: 20px;
-    }
 .statName {
     color: #666;
     margin: 0;
     margin-top: 10px;
     text-align: center;
     }
+.statSymbol {
+    font-size: 40px;
+    width: 100%;
+}
 .statValue {
     font-size: 14px;
     margin: 4px 0;
+    padding: 5px;
     text-align: center;
+    color: white;
+    }
+.statWrapper {
+    float: left;
+    display: block;
     }
 .tool {
     color: #aaa;
@@ -149,6 +158,11 @@ body.off #switch .icon {
     }
 .tool:hover {
     color: #444;
+    }
+
+#settings {
+    min-height: 20px;
+    float: right;
     }
 
 body.advancedUser h2 {
