@@ -85,6 +85,7 @@ return {
         blockedRequestCount: 0,
         allowedRequestCount: 0,
         tadProcessedAdCount: 0,
+        impactConversion: 6,
     },
     localSettingsModifyTime: 0,
     localSettingsSaveTime: 0,

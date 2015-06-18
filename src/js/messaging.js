@@ -227,6 +227,7 @@ var getStats = function(tabId, tabTitle) {
         globalAllowedRequestCount: µb.localSettings.allowedRequestCount,
         globalBlockedRequestCount: µb.localSettings.blockedRequestCount,
         tadProcessedAdCount: µb.localSettings.tadProcessedAdCount,
+        conversion: µb.localSettings.impactConversion,
         netFilteringSwitch: false,
         rawURL: tabContext.rawURL,
         pageURL: tabContext.normalURL,
@@ -538,7 +539,6 @@ var onMessage = function(request, sender, callback) {
         case 'countNumAds':
             var numAds = request.numAds;
             µb.localSettings.tadProcessedAdCount += numAds;
-            console.log('counting ads ', µb.localSettings.tadProcessedAdCount)
             break;
 
         default:

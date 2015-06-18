@@ -110,7 +110,7 @@ body[dir="rtl"] #panes > #dfPane {
     background: linear-gradient(to bottom,  #2095C4 0%,#1576aa 100%); /* W3C */
     }
 #panes > #wave-pane {
-    height: 68px;
+    height: 66px;
     }
 p {
     text-align: center;
@@ -122,25 +122,6 @@ p {
 #impact-text a {
     color: orange;
 }
-#switch {
-    margin: 8px 0;
-    font-size:0;
-    }
-#switch .icon {
-    color: dodgerblue;
-    cursor: pointer;
-    font-size: 96px;
-    }
-#switch .icon:hover {
-    opacity: 0.8;
-    }
-body.off #switch .icon {
-    color: #ccc;
-    }
-#switch-hint {
-    color: #888;
-    font-size: 11px;
-    }
 .statName {
     color: #666;
     margin: 0;

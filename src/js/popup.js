@@ -89,12 +89,23 @@ var messager = vAPI.messaging.channel('popup.js');
 
 /******************************************************************************/
 
-var calculateImpact = function(vcCount) {
-    // TODO: Implement me
-    
+var calculateImpact = function(vcCount, conversion) {
+    var days = Math.round(vcCount / conversion);
+    var value;
+    var units;
+    if (days >= 7 && days < 30) {
+        value = Math.round(days / 7);
+        units = value == 1 ? 'week' : 'weeks';
+    } else if (days >= 30 && days < 365) {
+        value = Math.round(days / 30);
+        units = value == 1 ? 'month' : 'months';
+    } else {
+        value = days;
+        units = value == 1 ? 'day' : 'days';
+    }
     var impact = {
-        'value': 10,
-        'units': 'days'
+        'value': value,
+        'units': units,
     };
     return impact
 }
@@ -110,7 +121,6 @@ var cachePopupData = function(data) {
         return popupData;
     }
     popupData = data;
-    console.log('popupData ', data)
     scopeToSrcHostnameMap['.'] = popupData.pageHostname || '';
     var hostnameDict = popupData.hostnameDict;
     if ( typeof hostnameDict !== 'object' ) {
@@ -252,7 +262,6 @@ var updateFirewallCell = function(scope, des, type, rule) {
     var hnDetails = popupData.hostnameDict[des];
     var aCount = hnDetails.allowCount;
     var bCount = hnDetails.blockCount;
-    console.log('allowed ads ', allowCount)
     if ( aCount !== 0 || bCount !== 0 ) {
         // https://github.com/chrisaljoudi/uBlock/issues/471
         aCount = Math.min(Math.ceil(Math.log(aCount + 1) / Math.LN10), 3);
@@ -436,7 +445,7 @@ var renderPopup = function() {
     }
     uDom('#vc-earned').text(text);
 
-    var impact = calculateImpact(totalVc);
+    var impact = calculateImpact(totalVc, popupData.conversion);
     var impactAmount = impact.value;
     var impactUnits = vAPI.i18n(impact.units);
 
