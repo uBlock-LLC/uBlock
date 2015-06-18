@@ -459,7 +459,7 @@ var renderPopup = function() {
     var impactUnits = vAPI.i18n(impact.units);
 
     text = impactStatsStr.replace('{{amount}}', formatNumber(impactAmount))
-                   .replace('{{units}}', impactUnits);
+                   .replace('{{units}}', impactUnits.toUpperCase());
     uDom('#total-impact').text(text);
     
     if ( impactAmount === 0 ) {

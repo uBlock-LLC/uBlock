@@ -117,7 +117,8 @@ p {
     }
 #impact-text {
     text-align: left;
-    padding-right: 10px;
+    padding: 0px 10px;
+    font-size: 14px;
     }
 #impact-text a {
     color: orange;
@@ -138,6 +139,7 @@ p {
     padding: 5px;
     text-align: center;
     color: white;
+    font-weight: bold;
     }
 .statWrapper {
     float: left;
