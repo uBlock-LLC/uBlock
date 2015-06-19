@@ -951,6 +951,8 @@ var setUpGladly = function() {
         modalElem.style.setProperty('transform', 'scale(1)', 'important');
         modalElem.style.setProperty('opacity', '0.99', 'important');
 
+        console.log('modal elem', modalElem)
+
         // Show the modal background.
         goodblockModal.showTint();
         // Make sure the tooltip is hidden.
@@ -1032,6 +1034,11 @@ var setUpGladly = function() {
     }
 
     // TODO: functions to support smart searching for visible ad unit.
+
+    var cleanNodes = function(nodes) {
+        console.log('all the nodes!!', nodes);
+        return nodes;
+    }
 
     // var isElemHorizontallyAlignedOffset = function(elem) {
     //     var elemLeftOffset = elem.offsetLeft;
@@ -1258,7 +1265,7 @@ var setUpGladly = function() {
     // Takes an array of DOM elements.
     // Add goodblockIcons to all ad containers.
     var goodblockIconsEverywhere = function(nodes, numAds) {
-      // console.log('Considering adding goodblockIcons to these nodes:', nodes);
+      nodes = cleanNodes(nodes);
       gladly.addProcessedNodes(nodes);
       var adContainers = getAdContainersForNodes(nodes);
       adContainers.forEach(function(elem, i, array) {
