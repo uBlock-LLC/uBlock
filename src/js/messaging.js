@@ -542,6 +542,30 @@ var onMessage = function(request, sender, callback) {
         
         case 'retrieveGoodblockOverlayData':
             var modalImgs = vAPI.getGoodblockOverlayIconPaths();
+            var calculateImpact = function(vcCount, conversion) {
+                var days = Math.round(vcCount / conversion);
+                var value;
+                var units;
+                if (days >= 7 && days < 30) {
+                    value = Math.round(days / 7);
+                    units = value == 1 ? 'week' : 'weeks';
+                } else if (days >= 30 && days < 365) {
+                    value = Math.round(days / 30);
+                    units = value == 1 ? 'month' : 'months';
+                } else {
+                    value = days;
+                    units = value == 1 ? 'day' : 'days';
+                }
+                var impact = {
+                    'value': value,
+                    'units': units,
+                };
+                return impact
+            }
+            var impact = calculateImpact(µb.localSettings.tadProcessedAdCount, µb.localSettings.impactConversion);
+            var impactAmount = impact.value;
+            var impactUnits = vAPI.i18n(impact.units);
+            impact = impactAmount.toString() + ' ' + impactUnits.toString();
             response = {
                 'imgPaths': modalImgs,
                 // TODO: use localization.
@@ -549,8 +573,7 @@ var onMessage = function(request, sender, callback) {
                     'title': 'Goodblock',
                     'text': 'Goodblock raises money for charity. Every ad you see helps get fresh, clean drinking water to those who need it.',
                     'vcAmount': µb.localSettings.tadProcessedAdCount,
-                    // TODO: use real values.
-                    'impact': '3 WEEKS',
+                    'impact': impact,
                 }
             }
             break;

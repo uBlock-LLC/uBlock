@@ -829,6 +829,7 @@ var setUpGladly = function() {
             });
             modalElem.appendChild(img);
         }
+        console.log('response text ', response.text)
         // Populate text.
         document.getElementById(modalTitleId).innerHTML = response.text.title;
         document.getElementById(modalTextId).innerHTML = response.text.text;
