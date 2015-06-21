@@ -1081,18 +1081,18 @@ var setUpGladly = function() {
     //   return true;
     // };
 
-    // // Takes elem, a DOM element.
-    // // Returns an array of iframe elements found within elem.
-    // var findIframes = function(elem) {
-    //   if (elem.nodeName.toLowerCase() == 'iframe') {
-    //     return [elem];
-    //   }
-    //   var toReturn = [];
-    //   for (var i = 0; i < elem.childNodes.length; i++) {
-    //     toReturn = toReturn.concat(findIframes(elem.childNodes[i]));
-    //   }
-    //   return toReturn;
-    // };
+    // Takes elem, a DOM element.
+    // Returns an array of iframe elements found within elem.
+    var findIframes = function(elem) {
+      if (elem.nodeName.toLowerCase() == 'iframe') {
+        return [elem];
+      }
+      var toReturn = [];
+      for (var i = 0; i < elem.childNodes.length; i++) {
+        toReturn = toReturn.concat(findIframes(elem.childNodes[i]));
+      }
+      return toReturn;
+    };
 
     // var isSmallElem = function(elem) {
     //     var SMALL_PX_WIDTH_THRESHOLD = 30;
