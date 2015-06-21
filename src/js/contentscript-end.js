@@ -1094,6 +1094,8 @@ var setUpGladly = function() {
       return toReturn;
     };
 
+    // email change commit
+
     // var isSmallElem = function(elem) {
     //     var SMALL_PX_WIDTH_THRESHOLD = 30;
     //     var SMALL_PX_HEIGHT_THRESHOLD = 30;
