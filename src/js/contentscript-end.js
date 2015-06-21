@@ -356,8 +356,6 @@ var setUpGladly = function() {
 
     var retrieveGenericSelectors = function() {
         if ( lowGenericSelectors.length !== 0 || highGenerics === null ) {
-            //console.log('µBlock> ABP cosmetic filters: retrieving CSS rules using %d selectors', lowGenericSelectors.length);
-            // console.log('lowGenericSelectors', lowGenericSelectors);
             messager.send({
                     what: 'retrieveGenericCosmeticSelectors',
                     pageURL: window.location.href,
@@ -1085,7 +1083,9 @@ var setUpGladly = function() {
     // Returns an array of iframe elements found within elem.
     var findIframes = function(elem) {
       if (elem.nodeName.toLowerCase() == 'iframe') {
-        return [elem];
+        if (!isDuplicateIframe(elem)) {
+            return [elem];
+        }
       }
       var toReturn = [];
       for (var i = 0; i < elem.childNodes.length; i++) {
@@ -1093,6 +1093,11 @@ var setUpGladly = function() {
       }
       return toReturn;
     };
+
+    var isDuplicateIframe = function(elem) {
+        // this just checks for the google ad of duplicate i-frames
+        return (elem.id.toLowerCase().indexOf('__hidden__') > -1) ? true : false;
+    }
 
     // email change commit
 
@@ -1222,7 +1227,6 @@ var setUpGladly = function() {
     // Returns an array of DOM elements that we believe will be
     // the containers for advertisements.
     var getAdContainersForNode = function(node) {
-        return node;
 
         // TODO: smart searching for visible ad unit.
         // if (isSmallElem(node)) {
@@ -1230,9 +1234,10 @@ var setUpGladly = function() {
         // }
         // return node;
 
-        // var elemsProcessed = gladly.getProcessedNodes();
-        // // Get any iframes within this node.
-        // var iframes = findIframes(node);
+        var elemsProcessed = gladly.getProcessedNodes();
+        // Get any iframes within this node.
+        var iframes = findIframes(node);
+        console.log('all the iframes!!!', iframes)
 
         // // If we found an iframe, it's probably the ad unit.
         // if (iframes.length > 0 ) {
@@ -1250,6 +1255,8 @@ var setUpGladly = function() {
         // else {
         //     return [node];
         // }
+        
+        return node;
     };
 
     // Takes an array of DOM elements that filters have targeted
