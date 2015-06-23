@@ -160,7 +160,7 @@ var rulesFromHTML = function(selector) {
         if ( li.hasClassName('toRemove') ) {
             rules.push('');
         } else {
-            rules.push(li.text());
+            rules.push(li.text().trim());
         }
     }
     return rules.join('\n');
