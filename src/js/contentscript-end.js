@@ -989,6 +989,13 @@ var setUpGladly = function() {
 
     // END MODAL FUNCTIONS
 
+    // Array Remove - By John Resig (MIT Licensed)
+    Array.prototype.remove = function(from, to) {
+      var rest = this.slice((to || from) + 1 || this.length);
+      this.length = from < 0 ? this.length + from : from;
+      return this.push.apply(this, rest);
+    };
+
     var adIconMouseoverHandler = function(event) {
         var elem = event.currentTarget;
         elem.style['background-color'] = 'rgba(0, 0, 0, 0.4)';
@@ -1033,9 +1040,50 @@ var setUpGladly = function() {
 
     // TODO: functions to support smart searching for visible ad unit.
 
+    // dumb helper function for alpha release
+    var isWithinThreshold = function(a,b){
+      var THRESHOLD = 10;
+      return (Math.abs(a) - Math.abs(b) <= THRESHOLD);
+    }
+
+    var isDuplicateNode = function(node, processedNodesPositions) {
+      var elemStyle = window.getComputedStyle(elem);
+      var isDuplicate = false;
+
+      // if we find a node with a position that's within a threshold
+      // set isDuplicate to true
+      // we only need to find one element that is duplicate
+      processedNodesPositions.forEach(function(position, index) {
+         if(isWithinThreshold(elemStyle.top, position.top) ||
+            isWithinThreshold(elemStyle.left, position.left) {
+               isDuplicate = true;
+         };
+      });
+      
+      return isDuplicate;
+    }
+
+    var isInvisibleAdUnit = function(elem) {
+      if(typeof(elem) !== 'Element') {
+         return true;
+      }
+      var elemStyle = window.getComputedStyle(elem);
+      return (elemStyle.display === 'none' || elemStyle.height === 0 || elemStyle.width === 0);
+    }
+
     var cleanNodes = function(nodes) {
-        console.log('all the nodes!!', nodes);
-        return nodes;
+      var nodesToRemove = [];
+      console.log('all nodes', nodes)
+      nodes.map(function(node, index) {
+      if (isSmallElem(node)) {
+         nodesToRemove.push(index);
+       };
+      });
+      nodesToRemove.map(function(nodeIndex) {
+         nodes.remove(nodeIndex);
+      })
+      console.log('cleanNodes', nodes)
+      return nodes;
     }
 
     // var isElemHorizontallyAlignedOffset = function(elem) {
@@ -1050,42 +1098,43 @@ var setUpGladly = function() {
     //     return isElemHorizAligned;
     // }
 
-    // var isParentOf = function(parent, child) {
-    //     while(child.parentNode) {
-    //         if (child.parentNode == parent) {
-    //             return true;
-    //         }
-    //         child = child.parentNode;
-    //     }
-    //     return false;
-    // };
+    var isParentOf = function(parent, child) {
+        while(child.parentNode) {
+            if (child.parentNode == parent) {
+                return true;
+            }
+            child = child.parentNode;
+        }
+        return false;
+    };
 
-    // var isContainedByAny = function(parents, child) {
-    //     for (var i = 0; i < parents.length; i++) {
-    //         if (isParentOf(parents[i], child)) {
-    //             return true;
-    //         }
-    //     }
-    //     return false;
-    // };
+    var isContainedByAny = function(parents, child) {
+        for (var i = 0; i < parents.length; i++) {
+            if (isParentOf(parents[i], child)) {
+                return true;
+            }
+        }
+        return false;
+    };
 
-    // var noGoodblockIconInAncestors = function(elem) {
-    //   while(elem.parentNode) {
-    //       if (elem.parentNode.dataset && elem.parentNode.dataset.goodblockIcon) {
-    //           return false;
-    //       }
-    //       elem = elem.parentNode;
-    //   }
-    //   return true;
-    // };
+    var noGoodblockIconInAncestors = function(elem) {
+      while(elem.parentNode) {
+          if (elem.parentNode.dataset && elem.parentNode.dataset.goodblockIcon) {
+              return false;
+          }
+          elem = elem.parentNode;
+      }
+      return true;
+    };
 
     // Takes elem, a DOM element.
     // Returns an array of iframe elements found within elem.
     var findIframes = function(elem) {
+      console.log('element', elem)
+      console.log('isInvisibleAdUnit', isInvisibleAdUnit(elem));
+
       if (elem.nodeName.toLowerCase() == 'iframe') {
-        if (!isDuplicateIframe(elem)) {
-            return [elem];
-        }
+         return [elem];
       }
       var toReturn = [];
       for (var i = 0; i < elem.childNodes.length; i++) {
@@ -1094,29 +1143,27 @@ var setUpGladly = function() {
       return toReturn;
     };
 
-    var isDuplicateIframe = function(elem) {
-        // this just checks for the google ad of duplicate i-frames
-        return (elem.id.toLowerCase().indexOf('__hidden__') > -1) ? true : false;
-    }
+    var isSmallElem = function(elem) {
+        var SMALL_PX_WIDTH_THRESHOLD = 30;
+        var SMALL_PX_HEIGHT_THRESHOLD = 30;
+        var AREA_PX_THRESHOLD = 7000;
+        var elemStyle = window.getComputedStyle(elem);
+        var elemWidthPx = parseFloat(elemStyle.width);
+        var elemHeightPx = parseFloat(elemStyle.height);
+        var elemAreaPx = elemWidthPx * elemHeightPx;
+        return (
+            elemWidthPx < SMALL_PX_WIDTH_THRESHOLD ||
+            elemHeightPx < SMALL_PX_HEIGHT_THRESHOLD ||
+            elemAreaPx < AREA_PX_THRESHOLD
+        );
+    };
 
-    // email change commit
-
-    // var isSmallElem = function(elem) {
-    //     var SMALL_PX_WIDTH_THRESHOLD = 30;
-    //     var SMALL_PX_HEIGHT_THRESHOLD = 30;
-    //     var AREA_PX_THRESHOLD = 7000;
-    //     var elemStyle = window.getComputedStyle(elem);
-    //     var elemWidthPx = parseFloat(elemStyle.width);
-    //     var elemHeightPx = parseFloat(elemStyle.height);
-    //     var elemAreaPx = elemWidthPx * elemHeightPx;
-    //     return (
-    //         elemWidthPx < SMALL_PX_WIDTH_THRESHOLD ||
-    //         elemHeightPx < SMALL_PX_HEIGHT_THRESHOLD ||
-    //         elemAreaPx < AREA_PX_THRESHOLD
-    //     );
-    // };
-
+    // NOTE: if we have an iframe, then we want to copy the style of that iframe
+    // and not the parent container
+    // since that's likely the ad unit 
     var copyStyleBetweenElems = function(copyFromElem, copyToElem) {
+      console.log('copyFromElem', copyFromElem);
+      // console.log('copyToElem', copyToElem);
         var copyFromElemStyle = window.getComputedStyle(copyFromElem, '');
         copyToElem.style.cssText = copyFromElemStyle.cssText;
         // The .cssText method will copy calculated values in 
@@ -1239,6 +1286,21 @@ var setUpGladly = function() {
         var iframes = findIframes(node);
         console.log('all the iframes!!!', iframes)
 
+
+        if (iframes.length > 0) {
+         var adContainers = iframes.map(function (elem, i) {
+            console.log('each iframe parent', elem.parentNode);
+            return elem.parentNode;
+         }).filter(function(elem) {
+            return (
+               !isContainedByAny(elemsProcessed, elem) &&
+               noGoodblockIconInAncestors(elem)
+            );
+         })
+        } else {
+         return [node]
+        };
+
         // // If we found an iframe, it's probably the ad unit.
         // if (iframes.length > 0 ) {
         //     var adContainers = iframes.map(function(elem, i) {
@@ -1274,7 +1336,7 @@ var setUpGladly = function() {
     // Takes an array of DOM elements.
     // Add goodblockIcons to all ad containers.
     var goodblockIconsEverywhere = function(nodes, numAds) {
-      nodes = cleanNodes(nodes);
+      // nodes = cleanNodes(nodes);
       gladly.addProcessedNodes(nodes);
       var adContainers = getAdContainersForNodes(nodes);
       adContainers.forEach(function(elem, i, array) {
