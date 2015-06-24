@@ -29,28 +29,31 @@
 
 /******************************************************************************/
 
-var popupData;
-var dfPaneBuilt = false;
-var reIP = /^\d+(?:\.\d+){1,3}$/;
-var reSrcHostnameFromRule = /^d[abn]:([^ ]+) ([^ ]+) ([^ ]+)/;
-var scopeToSrcHostnameMap = {
-    '/': '*',
-    '.': ''
-};
-var threePlus = '+++';
-var threeMinus = '−−−';
-var sixSpace = '\u2007\u2007\u2007\u2007\u2007\u2007';
-var dfHotspots = null;
-var rowsToRecycle = uDom();
-var cachedPopupHash = '';
-var reNetworkRelatedURL = /^(?:ftps?|https?|wss?):\/\//;
+var mainWelcomeText = vAPI.i18n('welcomeMain');
+var introText = vAPI.i18n('intro');
+var point1Text = vAPI.i18n('welcome1');
+var point2Text = vAPI.i18n('welcome2');
+var point3Text = vAPI.i18n('welcome3');
+var point4Text = vAPI.i18n('welcome4');
 
 /******************************************************************************/
-
 
 var messager = vAPI.messaging.channel('welcome.js');
 
 /******************************************************************************/
 
+var populatePage = function() {
+    uDom('#welcome-message').text(mainWelcomeText);
+    uDom('#intro').text(introText);
+    uDom('#point1').text(point1Text);
+    uDom('#point2').text(point2Text);
+    uDom('#point3').text(point3Text);
+    uDom('#poin4t').text(point4Text);
+};
+
+// populate the text once the page is fully rendered
+uDom.onLoad(function () {
+    populatePage();
+});
 
 })();

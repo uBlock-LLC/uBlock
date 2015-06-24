@@ -91,6 +91,30 @@
     "message": "years",
     "description": "English: years"
   },
+  "welcomeMain": {
+    "message": "Welcome to Goodblock!",
+    "description": "English: Welcome to Goodblock!"
+  },
+  "intro": {
+    "message": "We're happy to have you! Together, you and Tad can help shape the future of online advertising.",
+    "description": "English: We're happy to have you! Together, you and Tad can help shape the future of online advertising."
+  },
+  "welcome1":{
+    "message": "Tad lights up when you visit one of our partner pages",
+    "description": "English: Tad lights up when you visit one of our partner pages"
+  },
+  "welcome2":{
+    "message": "If you see Tad on an ad, you know it's doing good!",
+    "description": "English: If you see Tad on an ad, you know it's doing good!"
+  },
+  "welcome3": {
+    "message": "Every ad you see raises money for charity!",
+    "description": "English: Every ad you see raises money for charity!"
+  },
+  "welcome4":{
+    "message": "Keep track of your impact by clicking on Tad",
+    "description": "English: Keep track of your impact by clicking on Tad"
+  },
   "popupOr":{
     "message":"or",
     "description":"English: or"
