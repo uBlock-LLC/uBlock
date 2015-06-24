@@ -1054,8 +1054,7 @@ var setUpGladly = function() {
       // set isDuplicate to true
       // we only need to find one element that is duplicate
       processedNodesPositions.forEach(function(position, index) {
-         if(isWithinThreshold(elemStyle.top, position.top) ||
-            isWithinThreshold(elemStyle.left, position.left) {
+         if(isWithinThreshold(elemStyle.top, position.top) || isWithinThreshold(elemStyle.left, position.left)) {
                isDuplicate = true;
          };
       });
