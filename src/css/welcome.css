@@ -1,0 +1,35 @@
+body {
+    background-color: rgb(21, 109, 143);
+    color: white;
+    border: 0;
+    font: 13px Helvetica Neue, Helvetica, sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    display: inline-block;
+    }
+h2 {
+    background-color: rgb(21, 109, 143);
+    border: 0;
+    border-top: 1px solid #ccc;
+    color: white;
+    font-size: 14px;
+    font-weight: normal;
+    margin:  10px 0 5px 0;
+    padding: 5px 2px 4px 2px;
+    text-align: center;
+    }
+a {
+    color: inherit;
+    text-decoration: none;
+    }
+:focus {
+    outline: 0;
+    }
+#tad-preview,
+#welcome-text {
+    float: left;
+    display: block;
+    width: 50%;
+    padding: 10px;
+}
