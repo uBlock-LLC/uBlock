@@ -1,6 +1,6 @@
 body {
-    background-color: rgb(21, 109, 143);
-    color: white;
+    background-color: white;
+    color: rgb(21, 109, 143);
     border: 0;
     font: 13px Helvetica Neue, Helvetica, sans-serif;
     margin: 0;
@@ -8,9 +8,8 @@ body {
     overflow: hidden;
     }
 h1 {
-    background-color: rgb(21, 109, 143);
     border: 0;
-    color: white;
+    color: rgb(21, 109, 143);
     margin:  10px;
     padding: 7px 2px 4px 2px;
     text-align:left;
@@ -29,14 +28,14 @@ a {
 #welcome-text {
     float: left;
     display: block;
-    width: 60%;
     padding: 10px;
+    width: 70%;
     font-size: 18px;
 }
 #tad-preview {
     float: left;
     display: block;
-    width: 35%;
+    width: 25%;
     padding: 10px;
 }
 #tad-preview > img {
