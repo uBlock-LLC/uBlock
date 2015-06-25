@@ -1278,9 +1278,10 @@ var setUpGladly = function() {
 
     // Takes a DOM element that filters have targeted
     // as elements that hold an advertisement.
-    // Returns an array of DOM elements that we believe will be
-    // the containers for advertisements.
-    var getAdContainersForNode = function(node) {
+    // Returns a DOM element that we believe will be
+    // the containers for advertisements, or
+    // false if we don't believe it is a displayed ad.
+    var getAdContainerForNode = function(node) {
 
         // TODO: smart searching for visible ad unit.
         // if (isSmallElem(node)) {
@@ -1333,11 +1334,14 @@ var setUpGladly = function() {
     // Returns an array of DOM elements that we believe will be
     // the containers for advertisements.
     var getAdContainersForNodes = function(nodes) {
-      var adContainers = [];
-      nodes.forEach(function(elem, index, array) {
-        adContainers = adContainers.concat(getAdContainersForNode(elem));
-      });
-      return adContainers;
+        var adContainers = [];
+        nodes.forEach(function(elem, index, array) {
+            var adContainer = getAdContainerForNode(elem);
+            if (adContainer) {
+                adContainers = adContainers.concat(adContainer);
+            }
+        });
+        return adContainers;
     };
 
     // Takes an array of DOM elements.
