@@ -387,7 +387,6 @@ var setUpGladly = function() {
         // rhill 2014-11-16: not sure this is needed anymore. Test case in
         //  above issue was fine without the line below..
         var selectors = vAPI.hideCosmeticFilters;
-        // console.log('hideCosmeticFilters', selectors);
         if ( typeof selectors === 'object' ) {
             injectedSelectors = selectors;
             // If this is a Gladly page, don't hide ads.
@@ -949,8 +948,6 @@ var setUpGladly = function() {
         modalElem.style.setProperty('transform', 'scale(1)', 'important');
         modalElem.style.setProperty('opacity', '0.99', 'important');
 
-        console.log('modal elem', modalElem)
-
         // Show the modal background.
         goodblockModal.showTint();
         // Make sure the tooltip is hidden.
@@ -1072,7 +1069,6 @@ var setUpGladly = function() {
 
     var cleanNodes = function(nodes) {
       var nodesToRemove = [];
-      console.log('all nodes', nodes)
       nodes.map(function(node, index) {
       if (isSmallElem(node)) {
          nodesToRemove.push(index);
@@ -1081,7 +1077,6 @@ var setUpGladly = function() {
       nodesToRemove.map(function(nodeIndex) {
          nodes.remove(nodeIndex);
       })
-      console.log('cleanNodes', nodes)
       return nodes;
     }
 
@@ -1137,9 +1132,6 @@ var setUpGladly = function() {
     // Takes elem, a DOM element.
     // Returns an array of iframe elements found within elem.
     var findIframes = function(elem) {
-      console.log('element', elem)
-      console.log('isInvisibleAdUnit', isInvisibleAdUnit(elem));
-
       if (elem.nodeName.toLowerCase() == 'iframe') {
          return [elem];
       }
@@ -1169,8 +1161,6 @@ var setUpGladly = function() {
     // and not the parent container
     // since that's likely the ad unit 
     var copyStyleBetweenElems = function(copyFromElem, copyToElem) {
-      console.log('copyFromElem', copyFromElem);
-      // console.log('copyToElem', copyToElem);
         var copyFromElemStyle = window.getComputedStyle(copyFromElem, '');
         copyToElem.style.cssText = copyFromElemStyle.cssText;
         // The .cssText method will copy calculated values in 
@@ -1237,7 +1227,7 @@ var setUpGladly = function() {
     var addGoodblockIconToElem = function(elem, numAds) {
       // If the element already has an goodblockIcon, skip it.
       if (!elem.dataset.goodblockIcon) {
-        console.log('Adding goodblockIcon to: ', elem);
+        // console.log('Adding goodblockIcon to: ', elem);
         numAds += 1;
         var dimensions = getAdIconContainerDimensions();
         var ICON_HEIGHT_PX = dimensions.width;
@@ -1290,14 +1280,11 @@ var setUpGladly = function() {
         // return node;
 
         var elemsProcessed = gladly.getProcessedNodes();
+
         // Get any iframes within this node.
         var iframes = findIframes(node);
-        console.log('all the iframes!!!', iframes)
-
-
         if (iframes.length > 0) {
          var adContainers = iframes.map(function (elem, i) {
-            console.log('each iframe parent', elem.parentNode);
             return elem.parentNode;
          }).filter(function(elem) {
             return (
