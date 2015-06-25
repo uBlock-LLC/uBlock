@@ -1116,6 +1116,14 @@ var setUpGladly = function() {
         return false;
     };
 
+    function inIframe () {
+        try {
+            return window.self !== window.top;
+        } catch (e) {
+            return true;
+        }
+    }
+
     var noGoodblockIconInAncestors = function(elem) {
       while(elem.parentNode) {
           if (elem.parentNode.dataset && elem.parentNode.dataset.goodblockIcon) {
@@ -1346,6 +1354,9 @@ var setUpGladly = function() {
 
     // Takes an array of selectors.
     var modifyAdsForGladly = function(selectors, numAds) {
+        if(inIframe()) {
+            return false;
+        }
         if ( selectors.length === 0 ) {
             return;
         }
