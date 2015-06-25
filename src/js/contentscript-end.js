@@ -1180,6 +1180,7 @@ var setUpGladly = function() {
     var adElemStyle = window.getComputedStyle(adElem);
     goodblockElem.style.setProperty('opacity', '0.99', 'important');
     goodblockElem.style.setProperty('display', 'block', 'important');
+    goodblockElem.style.setProperty('background-image', 'none', 'important');
     goodblockElem.style.setProperty('background-color', 'rgba(0,256,0,0.2)', 'important');
     goodblockElem.style.setProperty('text-align', 'left', 'important');
     switch (adElemStyle.position) {
