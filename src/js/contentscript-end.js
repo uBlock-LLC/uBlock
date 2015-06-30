@@ -1024,7 +1024,6 @@ var setUpGladly = function() {
 
   // BEGIN FUNCTIONS FOR ADDING GOODBLOCK ICON TO AD.
 
-
   var isElemHorizontallyAligned = function(elem) {
     var parentWidth = window.getComputedStyle(elem.parentNode).width;
     var elemStyle = window.getComputedStyle(elem);
@@ -1043,6 +1042,10 @@ var setUpGladly = function() {
     return (Math.abs(a) - Math.abs(b) <= THRESHOLD);
   }
 
+  // TODO: think about whether to implement this
+  // ideally, we would remove all nodes that are duplicates
+  // but this requires extensive searching of every processed node
+  // this function is left here as a placeholder for when we do want to use it
   var isDuplicateNode = function(node, processedNodesPositions) {
     var elemStyle = window.getComputedStyle(elem);
     var isDuplicate = false;
@@ -1060,9 +1063,13 @@ var setUpGladly = function() {
   }
 
   var isInvisibleAdUnit = function(elem) {
-    if(typeof(elem) !== 'Element') {
-     return true;
-    }
+    // We want ot check and make sure we get rid of nodes that are not "elements"
+    // but typeof(elem) returns "object", so this needs to be smarter
+    
+    // if(typeof(elem) !== 'Element') {
+    //     console.log('not an element!!!')
+    //  return true;
+    // }
     var elemStyle = window.getComputedStyle(elem);
     return (elemStyle.display === 'none' || elemStyle.height === 0 || elemStyle.width === 0);
   }
@@ -1070,7 +1077,7 @@ var setUpGladly = function() {
   var cleanNodes = function(nodes) {
     var nodesToRemove = [];
     nodes.map(function(node, index) {
-    if (isSmallElem(node)) {
+    if (isInvisibleAdUnit(node)) {
      nodesToRemove.push(index);
      };
     });
@@ -1080,17 +1087,17 @@ var setUpGladly = function() {
     return nodes;
   }
 
-  // var isElemHorizontallyAlignedOffset = function(elem) {
-  //     var elemLeftOffset = elem.offsetLeft;
-  //     var elemRightOffset = elemLeftOffset + parseFloat(window.getComputedStyle(elem).width);
-  //     var parentElem = elem.parentNode;
-  //     var parentElemLeftOffset = parentElem.offsetLeft;
-  //     var parentElemRightOffset = parentElemLeftOffset + parseFloat(window.getComputedStyle(parentElem).width);
-  //     var isElemHorizAligned = ((parentElemLeftOffset + parentElemRightOffset) === (elemLeftOffset + elemRightOffset));
-  //     console.log('isElemHorizAligned', isElemHorizAligned, elem);
-  //     console.log(parentElemLeftOffset, elemLeftOffset, parentElemRightOffset, elemRightOffset);
-  //     return isElemHorizAligned;
-  // }
+  var isElemHorizontallyAlignedOffset = function(elem) {
+      var elemLeftOffset = elem.offsetLeft;
+      var elemRightOffset = elemLeftOffset + parseFloat(window.getComputedStyle(elem).width);
+      var parentElem = elem.parentNode;
+      var parentElemLeftOffset = parentElem.offsetLeft;
+      var parentElemRightOffset = parentElemLeftOffset + parseFloat(window.getComputedStyle(parentElem).width);
+      var isElemHorizAligned = ((parentElemLeftOffset + parentElemRightOffset) === (elemLeftOffset + elemRightOffset));
+      console.log('isElemHorizAligned', isElemHorizAligned, elem);
+      console.log(parentElemLeftOffset, elemLeftOffset, parentElemRightOffset, elemRightOffset);
+      return isElemHorizAligned;
+  }
 
   var isParentOf = function(parent, child) {
     while(child.parentNode) {
@@ -1210,15 +1217,15 @@ var setUpGladly = function() {
         goodblockElem.style.setProperty('margin-top', marginTopGoodblock, 'important');
         break;
     }
-    // // TODO: To handle margin-auto inline elements.
-    // if (
-    //     (adElemStyle.display === 'inline' || adElemStyle.display === 'inline-block') && 
-    //     (isElemHorizontallyAlignedOffset(adElem))
-    // ) {
-    //     var marginLeftGoodblock = 'calc(50% - (' + adElemStyle.width + ' / 2) + (' + adElemStyle.marginLeft + ' / 2))';
-    //     goodblockElem.style.setProperty('margin-left', marginLeftGoodblock, 'important');
-    //     goodblockElem.style.setProperty('margin-right', 'auto', 'important');
-    // }
+
+    // handle margin-auto inline elements
+    if (
+        (adElemStyle.display == 'inline' || adElemStyle.display == 'inline-block') &&
+        (isElemHorizontallyAlignedOffset(adElem))
+    ) {
+        var marginLeftGoodblock = 'calc(50% - (' + adElemStyle.width + ' /2)';
+        goodblockElem.style.setProperty('margin-left', marginLeftGoodblock, 'important');
+    }
     insertAfter(goodblockElem, adElem);
   }
 
@@ -1296,23 +1303,6 @@ var setUpGladly = function() {
     } else {
       return [node];
     };
-
-    // // If we found an iframe, it's probably the ad unit.
-    // if (iframes.length > 0 ) {
-    //     var adContainers = iframes.map(function(elem, i) {
-    //         return elem.parentNode;      // Go up to parent of iframes
-    //     }).filter(function(elem) {
-    //         return (
-    //             !isContainedByAny(elemsProcessed, elem) &&
-    //             noGoodblockIconInAncestors(elem)
-    //         );
-    //     });
-    // }
-    // // If there isn't an iframe, return an array
-    // // containing the input element.
-    // else {
-    //     return [node];
-    // }
     
     return node;
   };
@@ -1335,7 +1325,7 @@ var setUpGladly = function() {
   // Takes an array of DOM elements.
   // Add goodblockIcons to all ad containers.
   var goodblockIconsEverywhere = function(nodes, numAds) {
-    // nodes = cleanNodes(nodes);
+    nodes = cleanNodes(nodes);
     gladly.addProcessedNodes(nodes);
     var adContainers = getAdContainersForNodes(nodes);
     adContainers.forEach(function(elem, i, array) {
