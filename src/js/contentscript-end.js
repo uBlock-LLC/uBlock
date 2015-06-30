@@ -1219,10 +1219,8 @@ var setUpGladly = function() {
     }
 
     // handle margin-auto inline elements
-    if (
-        (adElemStyle.display == 'inline' || adElemStyle.display == 'inline-block') &&
-        (isElemHorizontallyAlignedOffset(adElem))
-    ) {
+    console.log('adElemStyle', adElemStyle)
+    if (adElemStyle.display == 'inline' || adElemStyle.display == 'inline-block'){
         var marginLeftGoodblock = 'calc(50% - (' + adElemStyle.width + ' /2)';
         goodblockElem.style.setProperty('margin-left', marginLeftGoodblock, 'important');
     }
