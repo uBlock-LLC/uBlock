@@ -712,7 +712,7 @@ FilterContainer.prototype.rePlainSelector = /^([#.][\w-]+)/;
 FilterContainer.prototype.reHighLow = /^[a-z]*\[(?:alt|title)="[^"]+"\]$/;
 FilterContainer.prototype.reHighMedium = /^\[href\^="https?:\/\/([^"]{8})[^"]*"\]$/;
 
-/*"*****************************************************************************/
+/******************************************************************************/
 
 FilterContainer.prototype.compileHostnameSelector = function(hostname, parsed, out) {
     // https://github.com/chrisaljoudi/uBlock/issues/145
@@ -1103,13 +1103,12 @@ FilterContainer.prototype.pruneSelectorCacheAsync = function() {
 /******************************************************************************/
 
 FilterContainer.prototype.retrieveGenericSelectors = function(request) {
-    // Gladly edited.
-    // if ( this.acceptedCount === 0 ) {
-    //     return;
-    // }
-    // if ( !request.selectors ) {
-    //     return;
-    // }
+    if ( this.acceptedCount === 0 ) {
+        return;
+    }
+    if ( !request.selectors ) {
+        return;
+    }
 
     //quickProfiler.start('FilterContainer.retrieve()');
 
@@ -1183,8 +1182,7 @@ FilterContainer.prototype.retrieveDomainSelectors = function(request) {
         cosmeticHide: [],
         cosmeticDonthide: [],
         netHide: [],
-        netCollapse: µb.userSettings.collapseBlocked,
-        isGladlyPartnerPage: request.isGladlyPartnerPage
+        netCollapse: µb.userSettings.collapseBlocked
     };
 
     var hash, bucket;

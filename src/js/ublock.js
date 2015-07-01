@@ -29,33 +29,6 @@
 
 /******************************************************************************/
 
-// Whether we want to make all webpages into partner sites.
-var allDomainsAreGladlyPartners = true;
-
-µBlock.isGladlyPartnerDomain = function(domain) {
-    var isGladlyPartner = isInGladlyPartnerList(domain) || allDomainsAreGladlyPartners;
-    // console.log('Is a Gladly partner?', isGladlyPartner, domain);
-    return isGladlyPartner;
-};
-
-var loadGladlyPartnerList = function() {
-    // TODO: fetch this object from a file.
-    var gladlyPartnerList = {
-        'tabforacause.org': [],
-        'imgur.com': [],
-        'cnn.com': [],
-        '127.0.0.1': [], // Solely for testing.
-    };
-    return gladlyPartnerList;
-}
-
-var isInGladlyPartnerList = function(domain) {
-    var gladlyPartnerList = loadGladlyPartnerList();
-    return gladlyPartnerList.hasOwnProperty(domain);
-};
-
-/******************************************************************************/
-
 // https://github.com/chrisaljoudi/uBlock/issues/405
 // Be more flexible with whitelist syntax
 
@@ -92,9 +65,9 @@ var matchWhitelistDirective = function(url, hostname, directive) {
 /******************************************************************************/
 
 µBlock.getNetFilteringSwitch = function(url) {
-    var targetHostname = this.URI.hostnameFromURI(url);
     var netWhitelist = this.netWhitelist;
     var buckets, i, pos;
+    var targetHostname = this.URI.hostnameFromURI(url);
     var key = targetHostname;
     for (;;) {
         if ( netWhitelist.hasOwnProperty(key) ) {

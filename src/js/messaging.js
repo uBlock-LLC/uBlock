@@ -411,11 +411,6 @@ var onMessage = function(request, sender, callback) {
     switch ( request.what ) {
         case 'retrieveDomainCosmeticSelectors':
             if ( pageStore && pageStore.getSpecificCosmeticFilteringSwitch() ) {
-                // Pass on whether this is a Gladly partner page to the
-                // cosmetic filtering engine, which will pass it back
-                // to the content script. This helps us not duplicate the
-                // domain lookup.
-                request.isGladlyPartnerPage = pageStore.isGladlyPartnerPage;
                 response = µb.cosmeticFilteringEngine.retrieveDomainSelectors(request);
             }
             break;
@@ -511,12 +506,8 @@ var onMessage = function(request, sender, callback) {
 
     switch ( request.what ) {
         case 'retrieveGenericCosmeticSelectors':
-            // Shut down if we shouldn't filter requests and it
-            // is not a Gladly partner page.
-            var shouldShutdown = (!pageStore || 
-                (!pageStore.getNetFilteringSwitch() && !pageStore.isGladlyPartnerPage));
             response = {
-                shutdown: shouldShutdown,
+                shutdown: !pageStore || !pageStore.getNetFilteringSwitch(),
                 result: null
             };
             if ( !response.shutdown && pageStore.getGenericCosmeticFilteringSwitch() ) {
@@ -532,49 +523,6 @@ var onMessage = function(request, sender, callback) {
             };
             if(!response.shutdown) {
                 response.result = filterRequests(pageStore, request);
-            }
-            break;
-
-        // count how many ads have been processed by Tad
-        case 'countNumAds':
-            var numAds = request.numAds;
-            µb.localSettings.tadProcessedAdCount += numAds;
-        
-        case 'retrieveGoodblockOverlayData':
-            var modalImgs = vAPI.getGoodblockOverlayIconPaths();
-            var calculateImpact = function(vcCount, conversion) {
-                var days = Math.round(vcCount / conversion);
-                var value;
-                var units;
-                if (days >= 7 && days < 30) {
-                    value = Math.round(days / 7);
-                    units = value == 1 ? 'week' : 'weeks';
-                } else if (days >= 30 && days < 365) {
-                    value = Math.round(days / 30);
-                    units = value == 1 ? 'month' : 'months';
-                } else {
-                    value = days;
-                    units = value == 1 ? 'day' : 'days';
-                }
-                var impact = {
-                    'value': value,
-                    'units': units,
-                };
-                return impact
-            }
-            var impact = calculateImpact(µb.localSettings.tadProcessedAdCount, µb.localSettings.impactConversion);
-            var impactAmount = impact.value;
-            var impactUnits = vAPI.i18n(impact.units);
-            impact = impactAmount.toString() + ' ' + impactUnits.toString();
-            response = {
-                'imgPaths': modalImgs,
-                // TODO: use localization.
-                'text': {
-                    'title': 'Goodblock',
-                    'text': 'Goodblock raises money for charity. Every ad you see helps get fresh, clean drinking water to those who need it.',
-                    'vcAmount': µb.localSettings.tadProcessedAdCount,
-                    'impact': impact,
-                }
             }
             break;
 
