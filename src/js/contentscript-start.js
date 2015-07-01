@@ -70,7 +70,6 @@ var cosmeticFilters = function(details) {
   var hideCosmeticFilters = {};
   var donthide = details.cosmeticDonthide;
   var hide = details.cosmeticHide;
-  // console.log('Cached generic hide filters', hide);
   var i;
   if ( donthide.length !== 0 ) {
     i = donthide.length;
@@ -91,7 +90,7 @@ var cosmeticFilters = function(details) {
       }
     }
   }
-  if ( hide.length !== 0 && !vAPI.isGladlyPartnerPage ) {
+  if ( hide.length !== 0 ) {
     var text = hide.join(',\n');
     hideElements(text);
     var style = vAPI.specificHideStyle = document.createElement('style');
@@ -106,12 +105,7 @@ var cosmeticFilters = function(details) {
   }
   vAPI.donthideCosmeticFilters = donthideCosmeticFilters;
 
-  if (vAPI.isGladlyPartnerPage) {
-    vAPI.hideCosmeticFilters = {};
-  }
-  else {
-    vAPI.hideCosmeticFilters = hideCosmeticFilters;
-  }
+  vAPI.hideCosmeticFilters = hideCosmeticFilters;
 };
 
 var netFilters = function(details) {
@@ -132,7 +126,6 @@ var netFilters = function(details) {
 var filteringHandler = function(details) {
   var styleTagCount = vAPI.styles.length;
 
-  vAPI.isGladlyPartnerPage = details.isGladlyPartnerPage;
   vAPI.skipCosmeticFiltering = !details || details.skipCosmeticFiltering;
   if ( details ) {
     if ( details.cosmeticHide.length !== 0 || details.cosmeticDonthide.length !== 0 ) {

@@ -69,7 +69,6 @@ var shutdownJobs = (function() {
       jobs.push(job);
     },
     exec: function() {
-      console.debug('Shutting down filtering...');
       var job;
       while ( job = jobs.pop() ) {
         job();
@@ -162,7 +161,6 @@ var uBlockCollapser = (function() {
     var i = requests.length;
     var request, entry, target, value;
     while ( i-- ) {
-      // console.log('Processing a filtering request.');
       request = requests[i];
       if ( pendingRequests.hasOwnProperty(request.id) === false ) {
         continue;
@@ -312,31 +310,6 @@ var uBlockCollapser = (function() {
 /******************************************************************************/
 
 
-// Gladly
-
-var gladly;
-var setUpGladly = function() {
-  // Elements Gladly has processed.
-  var elemsProcessed = [];
-
-  var addProcessedNodes = function(nodes) {
-    elemsProcessed = elemsProcessed.concat(nodes);
-  }
-
-  var getProcessedNodes = function() {
-    return elemsProcessed;
-  }
-
-  // Set in contentscript-start.js.
-  var isGladlyPartnerPage = vAPI.isGladlyPartnerPage;
-
-  gladly = {
-    addProcessedNodes: addProcessedNodes,
-    getProcessedNodes: getProcessedNodes,
-    isGladlyPartnerPage: isGladlyPartnerPage,
-  };
-};
-
 // Cosmetic filters
 
 (function() {
@@ -378,9 +351,6 @@ var setUpGladly = function() {
   // likeliness to outrun contentscript-start.js, which may still be waiting
   // on a response from its own query.
   var firstRetrieveHandler = function(response) {
-    // Wait to set up Gladly information until we're sure
-    // contentscript-start.js is finished.
-    setUpGladly();
 
     // https://github.com/chrisaljoudi/uBlock/issues/158
     // Ensure injected styles are enforced
@@ -389,14 +359,7 @@ var setUpGladly = function() {
     var selectors = vAPI.hideCosmeticFilters;
     if ( typeof selectors === 'object' ) {
       injectedSelectors = selectors;
-      // If this is a Gladly page, don't hide ads.
-      // Instead, modify them appropriately.
-      if (gladly.isGladlyPartnerPage) {
-        modifyAdsForGladly(Object.keys(selectors), numAds);
-      }
-      else {
-        hideElements(Object.keys(selectors));
-      }
+      hideElements(Object.keys(selectors));
     }
     // Add exception filters into injected filters collection, in order
     // to force them to be seen as "already injected".
@@ -431,8 +394,6 @@ var setUpGladly = function() {
       shutdownJobs.exec();
       return;
     }
-    // console.log('nextRetrieveHandler');
-    // console.log(response);
 
     //var tStart = timer.now();
     //console.debug('µBlock> contextNodes = %o', contextNodes);
@@ -453,9 +414,7 @@ var setUpGladly = function() {
         processHighHighGenericsAsync();
       }
     }
-    // console.log('hideSelectors', hideSelectors);
     if ( hideSelectors.length !== 0 ) {
-      // console.log('Hiding selectors!');
       addStyleTag(hideSelectors);
     }
     contextNodes.length = 0;
@@ -471,19 +430,14 @@ var setUpGladly = function() {
 
   var addStyleTag = function(selectors) {
     var selectorStr = selectors.join(',\n');
-    if (gladly.isGladlyPartnerPage) {
-      numAds = modifyAdsForGladly(selectorStr, numAds);
-    }
-    else {
-      hideElements(selectorStr);
-      var style = document.createElement('style');
-      // The linefeed before the style block is very important: do no remove!
-      style.appendChild(document.createTextNode(selectorStr + '\n{display:none !important;}'));
-      var parent = document.body || document.documentElement;
-      if ( parent ) {
-        parent.appendChild(style);
-        vAPI.styles.push(style);
-      }
+    hideElements(selectorStr);
+    var style = document.createElement('style');
+    // The linefeed before the style block is very important: do no remove!
+    style.appendChild(document.createTextNode(selectorStr + '\n{display:none !important;}'));
+    var parent = document.body || document.documentElement;
+    if ( parent ) {
+      parent.appendChild(style);
+      vAPI.styles.push(style);
     }
     messager.send({
       what: 'cosmeticFiltersInjected',
@@ -494,873 +448,12 @@ var setUpGladly = function() {
     //console.debug('µBlock> generic cosmetic filters: injecting %d CSS rules:', selectors.length, text);
   };
 
-  // BEGIN TOOLTIP FUNCTIONS
-
-  var goodblockTooltip = {
-    tooltipId: 'goodblock-informational-tooltip',
-  };
-
-  goodblockTooltip.getDimensions = function() {
-    return {
-      'width': 140,
-      'height': 76,
-    }
-  }
-
-  goodblockTooltip.getTooltipTriangleDimensions = function() {
-    return {
-      'width': 20,
-      'height': 12,
-    }
-  }
-
-  goodblockTooltip.handleMouseover = function() {
-    goodblockTooltip.clearHideTimers();
-  }
-
-  goodblockTooltip.handleMouseout = function() {
-    goodblockTooltip.hide();
-  }
-
-  goodblockTooltip.addTooltipListeners = function(elem) {
-    elem.addEventListener('mouseover', goodblockTooltip.handleMouseover);
-    elem.addEventListener('mouseout', goodblockTooltip.handleMouseout);
-  }
-
-  goodblockTooltip.addTooltipButtonListener = function(elem) {
-    elem.addEventListener('click', goodblockModal.show);
-  }
-
-  goodblockTooltip.create = function() {
-    var tooltipId = this.tooltipId;
-    var tooltipElem = document.createElement('div');
-    tooltipElem.id = tooltipId;
-    var dimensions = goodblockTooltip.getDimensions();
-    var tooltipTriangleDims = goodblockTooltip.getTooltipTriangleDimensions();
-    
-    // Tooltip body.
-    tooltipElem.style.setProperty('width', dimensions.width + 'px', 'important');
-    tooltipElem.style.setProperty('height', dimensions.height + 'px', 'important');
-    tooltipElem.style.setProperty('position', 'absolute', 'important');
-    tooltipElem.style.setProperty('z-index', '16777271', 'important');
-    tooltipElem.style.setProperty('background', '#FFF', 'important');
-    tooltipElem.style.setProperty('border-radius', '2px', 'important');
-    tooltipElem.style.setProperty('border', '1px solid #EFEFEF', 'important');
-    tooltipElem.style.setProperty('padding', '4px', 'important');
-    tooltipElem.style.setProperty('box-sizing', 'border-box', 'important');
-    tooltipElem.style.setProperty('text-align', 'center', 'important');
-    tooltipElem.style.setProperty('font-family', "'Helvetica Neue', Roboto, 'Segoe UI', Calibri, sans-serif", 'important');
-    tooltipElem.style.setProperty('box-shadow', 'rgba(0, 0, 0, 0.0980392) 2px 4px 2px 2px', 'important');
-    tooltipElem.style.setProperty('font-size', '13px', 'important');
-    goodblockTooltip.addTooltipListeners(tooltipElem);
-    // Tooltip content.
-    tooltipElem.innerHTML = 'This ad is raising money for charity.';
-    var tooltipButton = document.createElement('div');
-    tooltipButton.innerHTML = 'Learn more'
-    tooltipButton.style.setProperty('text-align', 'center', 'important');
-    tooltipButton.style.setProperty('padding', '4px', 'important');
-    tooltipButton.style.setProperty('background', '#1393C5', 'important');
-    tooltipButton.style.setProperty('cursor', 'pointer', 'important')
-    tooltipButton.style.setProperty('margin', '4px auto 0px auto', 'important');
-    tooltipButton.style.setProperty('width', '70px', 'important');
-    tooltipButton.style.setProperty('color', '#FFF', 'important');
-    tooltipButton.style.setProperty('border-radius', '2px', 'important');
-    goodblockTooltip.addTooltipButtonListener(tooltipButton);
-    tooltipElem.appendChild(tooltipButton);
-    // var tooltipContent = document.createElement('div');
-    // Tooltip triangle.
-    var tooltipTriangle = document.createElement('div');
-    tooltipTriangle.style.setProperty('position', 'absolute', 'important');
-    tooltipTriangle.style.setProperty('bottom', -(tooltipTriangleDims.height - 1) + 'px', 'important');
-    tooltipTriangle.style.setProperty('left', 'calc(50% - ' + tooltipTriangleDims.height + 'px)', 'important');
-    tooltipTriangle.style.setProperty('width', '0', 'important');
-    tooltipTriangle.style.setProperty('height', '0', 'important');
-    tooltipTriangle.style.setProperty('border-left', tooltipTriangleDims.width/2 + 'px solid transparent', 'important');
-    tooltipTriangle.style.setProperty('border-right', tooltipTriangleDims.width/2 + 'px solid transparent', 'important');
-    tooltipTriangle.style.setProperty('border-top', tooltipTriangleDims.height + 'px solid #FFF', 'important');
-    tooltipElem.appendChild(tooltipTriangle);
-    // Transitions.
-    tooltipElem.style.setProperty('-webkit-transition', 'opacity 0.3s', 'important');
-    tooltipElem.style.setProperty('-moz-transition', 'opacity 0.3s', 'important');
-    tooltipElem.style.setProperty('transition', 'transform 0.3s, opacity 0.3s', 'important');
-    document.body.appendChild(tooltipElem);
-    // Start with the tooltip hidden.
-    goodblockTooltip.addHideProperties();
-    // Make sure the initial states are applied.
-    // This is because we will transition immediately.
-    window.getComputedStyle(tooltipElem).opacity;
-    return tooltipElem;
-  }
-
-  goodblockTooltip.get = function() {
-    var tooltipId = this.tooltipId;
-    var tooltipElem = document.querySelector('#' + tooltipId);
-    if (tooltipElem) {
-      return tooltipElem;
-    }
-    else {
-      return goodblockTooltip.create();
-    }
-  }
-
-  goodblockTooltip.addHideProperties = function() {
-    var tooltipElem = goodblockTooltip.get();
-    tooltipElem.style.setProperty('-webkit-transform', 'scale(0.7)', 'important');
-    tooltipElem.style.setProperty('-moz-transform', 'scale(0.7)', 'important');
-    tooltipElem.style.setProperty('-ms-transform', 'scale(0.7)', 'important');
-    tooltipElem.style.setProperty('transform', 'scale(0.7)', 'important');
-    tooltipElem.style.setProperty('opacity', '0', 'important');
-  }
-
-  goodblockTooltip.hideNoTimeout = function() {
-    var tooltipElem = goodblockTooltip.get();
-    goodblockTooltip.addHideProperties();
-    // Delay to hide because of animation.
-    goodblockTooltip.tooltipHideTimeoutId = window.setTimeout(function() {
-      tooltipElem.style.setProperty('left', '-9999px', 'important'); // Move offscreen.
-    }, 300);
-  }
-
-  goodblockTooltip.hide = function() {
-    goodblockTooltip.tooltipFadeTimeoutId = window.setTimeout(function() {
-      goodblockTooltip.hideNoTimeout();
-    }, 500);
-  }
-
-  // Clear any previous hide timeouts on the tooltip.
-  goodblockTooltip.clearHideTimers = function() {
-    if(typeof goodblockTooltip.tooltipFadeTimeoutId == "number") {
-      window.clearTimeout(goodblockTooltip.tooltipFadeTimeoutId);
-    }
-    if(typeof goodblockTooltip.tooltipHideTimeoutId == "number") {
-      window.clearTimeout(goodblockTooltip.tooltipHideTimeoutId);
-    }
-  }
-
-  goodblockTooltip.show = function(targetElem) {
-    goodblockTooltip.clearHideTimers();
-    var tooltipElem = goodblockTooltip.get();
-    // Move tooltip into position.
-    var rect = targetElem.getBoundingClientRect(); // the coordinates of the target elem
-    var tooltipDimensions = goodblockTooltip.getDimensions();
-    var tooltipTriangleDims = goodblockTooltip.getTooltipTriangleDimensions();
-    var adIconDimensions = getAdIconContainerDimensions();
-    var topPos = rect.top - tooltipDimensions.height - tooltipTriangleDims.height;
-    var leftPos = rect.left - tooltipDimensions.width/2 + adIconDimensions.width/2;
-    tooltipElem.style.setProperty('top', topPos + 'px', 'important');
-    tooltipElem.style.setProperty('left', leftPos + 'px', 'important');
-    // Animate the appearance.
-    tooltipElem.style.setProperty('-webkit-transform', 'scale(1)', 'important');
-    tooltipElem.style.setProperty('-moz-transform', 'scale(1)', 'important');
-    tooltipElem.style.setProperty('-ms-transform', 'scale(1)', 'important');
-    tooltipElem.style.setProperty('transform', 'scale(1)', 'important');
-    tooltipElem.style.setProperty('opacity', '0.99', 'important');
-  }
-
-  // END TOOLTIP FUNCTIONS
-
-  // BEGIN MODAL FUNCTIONS
-
-  var goodblockModal = {
-    ids: {
-      modal: 'goodblock-informational-modal',
-      modalTint: 'goodblock-informational-modal-tint',
-      modalImgHolder: 'goodblock-informational-modal-img-holder',
-      modalImg: 'goodblock-informational-modal-img',
-      modalTitle: 'goodblock-informational-modal-title',
-      modalText: 'goodblock-informational-modal-text',
-      vcAmountContainer: 'goodblock-informational-modal-vc-amount-container',
-      impactContainer: 'goodblock-informational-modal-impact-conatainer',
-      vcAmountText: 'goodblock-informational-modal-vc-amount-text',
-      impactText: 'goodblock-informational-modal-impact-text',
-      vcAmountImg: 'goodblock-informational-modal-vc-img',
-      impactImg: 'goodblock-informational-modal-impact-img',
-      'closeIcon': 'goodblock-informational-modal-close-icon',
-    },
-    style: {
-      logoHeightPx: 60,
-      logoWidthPx: 60,
-      modal: {
-        fontSize: '14px',
-        fontWeight: '300',
-        lineHeight: '100%',
-        fontFamily: "'Helvetica Neue', Roboto, 'Segoe UI', Calibri, sans-serif",
-        textFontSize: '13px',
-        statsContainer: {
-          width: '300px',
-          height: '58px',
-        },
-        stats: {
-          width: '100px',
-          fontSize: '14px',
-          fontWeight: '500',
-          lineHeight: '100%',
-        },
-      }
-    }
-  }
-
-  goodblockModal.addTintListeners = function(modalTintElem) {
-    modalTintElem.addEventListener('click', function() {
-      goodblockModal.hide();
-    });
-  }
-
-  goodblockModal.createTint = function() {
-    var tintElem = document.createElement('div');
-    tintElem.id = goodblockModal['ids']['modalTint'];
-    tintElem.style.setProperty('position', 'fixed', 'important');
-    tintElem.style.setProperty('top', '0px', 'important');
-    tintElem.style.setProperty('left', '-9999px', 'important'); // Start hidden.
-    tintElem.style.setProperty('opacity', '0', 'important');
-    tintElem.style.setProperty('height', '100%', 'important');
-    tintElem.style.setProperty('width', '100%', 'important');
-    tintElem.style.setProperty('z-index', '16777270', 'important');
-    tintElem.style.setProperty('background', 'rgba(0,0,0, 0.7)', 'important');
-    // Transitions.
-    tintElem.style.setProperty('-webkit-transition', 'opacity 0.3s', 'important');
-    tintElem.style.setProperty('-moz-transition', 'opacity 0.3s', 'important');
-    tintElem.style.setProperty('transition', 'opacity 0.3s', 'important');
-    document.body.appendChild(tintElem);
-    goodblockModal.addTintListeners(tintElem);
-    // Make sure the initial states are applied.
-    // This is because we will transition immediately.
-    window.getComputedStyle(tintElem).opacity;
-    return tintElem;
-  }
-
-  goodblockModal.getTintElem = function() {
-    // See if the modal tint exists.
-    var modalId = goodblockModal['ids']['modalTint'];
-    var modalTintElem = document.querySelector('#' + modalId);
-    if (modalTintElem) {
-      return modalTintElem;
-    }
-    else {
-      return goodblockModal.createTint();
-    }
-  }
-
-  goodblockModal.hideTint = function() {
-    var modalTintElem = goodblockModal.getTintElem();
-    modalTintElem.style.setProperty('opacity', '0', 'important');
-    // Delay to hide the modal because of animation.
-    setTimeout(function() {
-      modalTintElem.style.setProperty('left', '-9999px', 'important');
-    }, 300);
-  }
-
-  goodblockModal.showTint = function() {
-    var modalTintElem = goodblockModal.getTintElem();
-    modalTintElem.style.setProperty('left', '0px', 'important');
-    modalTintElem.style.setProperty('opacity', '0.99', 'important');
-  }
-
-  goodblockModal.populate = function(response) {
-    var modalElem = goodblockModal.get();
-    var modalImgHolderId = goodblockModal['ids']['modalImgHolder'];
-    var modalTitleId = goodblockModal['ids']['modalTitle'];
-    var modalTextId = goodblockModal['ids']['modalText'];
-    var logoImgId = goodblockModal['ids']['modalImg'];
-    var vcContainerId = goodblockModal['ids']['vcAmountContainer'];
-    var impactContainerId = goodblockModal['ids']['impactContainer'];
-    var vcImgId = goodblockModal['ids']['vcAmountImg'];
-    var impactImgId = goodblockModal['ids']['impactImg'];
-    var vcAmountElemId = goodblockModal['ids']['vcAmountText'];
-    var impactElemId = goodblockModal['ids']['impactText'];
-    var closeIconId = goodblockModal['ids']['closeIcon'];
-    // Add images if they don't already exist.
-    var logoImg = document.getElementById(logoImgId);
-    if (!logoImg) {
-      var logoHolderElem = document.getElementById(modalImgHolderId);
-      var img = document.createElement('img');
-      img.id = logoImgId;
-      img.src = response.imgPaths.logo;
-      img.style.setProperty('height', goodblockModal.style.logoHeightPx + 'px', 'important');
-      img.style.setProperty('width', goodblockModal.style.logoWidthPx + 'px', 'important');
-      img.style.setProperty('margin', 'auto', 'important');
-      logoHolderElem.appendChild(img);
-    }
-    var vcImg = document.getElementById(vcImgId);
-    if (!vcImg) {
-      var vcContainerElem = document.getElementById(vcContainerId);
-      var img = document.createElement('img');
-      img.id = vcImgId;
-      img.src = response.imgPaths.heart;
-      img.style.setProperty('width', '40px', 'important');
-      img.style.setProperty('height', '35px', 'important');
-      img.style.setProperty('margin', 'auto', 'important');
-      var imgHolder = document.createElement('div');
-      imgHolder.style.setProperty('height', '43px', 'important');
-      imgHolder.appendChild(img);
-      vcContainerElem.insertBefore(imgHolder, vcContainerElem.firstChild);
-    }
-    var impactImg = document.getElementById(impactImgId);
-    if (!impactImg) {
-      var impactContainerElem = document.getElementById(impactContainerId);
-      var img = document.createElement('img');
-      img.id = impactImgId;
-      img.src = response.imgPaths.water;
-      img.style.setProperty('width', '33px', 'important');
-      img.style.setProperty('height', '40px', 'important');
-      img.style.setProperty('margin', 'auto', 'important');
-      var imgHolder = document.createElement('div');
-      imgHolder.style.setProperty('height', '43px', 'important');
-      imgHolder.appendChild(img);
-      impactContainerElem.insertBefore(imgHolder, impactContainerElem.firstChild);
-    }
-    var closeIcon = document.getElementById(closeIconId);
-    if (!closeIcon) {
-      // Icon color: #C5C5C5
-      var img = document.createElement('img');
-      img.id = closeIconId;
-      img.src = response.imgPaths.close;
-      img.style.setProperty('position', 'absolute', 'important');
-      img.style.setProperty('top', '5px', 'important');
-      img.style.setProperty('right', '5px', 'important');
-      img.style.setProperty('height', '13px', 'important');
-      img.style.setProperty('width', '13px', 'important');
-      img.style.setProperty('cursor', 'pointer', 'important');
-      img.addEventListener('click', function() {
-        goodblockModal.hide();
-      });
-      modalElem.appendChild(img);
-    }
-    // Populate text.
-    document.getElementById(modalTitleId).innerHTML = response.text.title;
-    document.getElementById(modalTextId).innerHTML = response.text.text;
-    document.getElementById(vcAmountElemId).innerHTML = response.text.vcAmount;
-    document.getElementById(impactElemId).innerHTML = response.text.impact;
-  }
-
-  goodblockModal.create = function() {
-    var modalId = goodblockModal['ids']['modal'];
-    var modalElem = document.createElement('div');
-    modalElem.id = modalId;
-    modalElem.style.setProperty('width', '450px', 'important');
-    modalElem.style.setProperty('height', '290px', 'important');
-    modalElem.style.setProperty('position', 'fixed', 'important');
-    modalElem.style.setProperty('top', 'calc(45% - 145px)', 'important'); // Subtract half the height
-    modalElem.style.setProperty('z-index', '16777271', 'important');
-    modalElem.style.setProperty('background', '#FFF', 'important');
-    modalElem.style.setProperty('border-radius', '5px', 'important');
-    modalElem.style.setProperty('font-family', goodblockModal.style.modal.fontFamily, 'important');
-    modalElem.style.setProperty('text-align', 'center', 'important');
-    // Modal content.
-    // Logo image
-    var logoHolderElem = document.createElement('div');
-    logoHolderElem.id = goodblockModal['ids']['modalImgHolder'];
-    logoHolderElem.style.setProperty('height', goodblockModal.style.logoHeightPx + 'px', 'important');
-    logoHolderElem.style.setProperty('margin-top', '20px', 'important');
-    // Title
-    var titleElem = document.createElement('div');
-    titleElem.style.setProperty('color', '#4f4f4f', 'important');
-    titleElem.style.setProperty('font-size', '30px', 'important');
-    titleElem.style.setProperty('margin', '0px auto 20px auto', 'important');
-    titleElem.id = goodblockModal['ids']['modalTitle'];
-    titleElem.style.setProperty('font-weight', goodblockModal.style.modal.fontWeight, 'important');
-    titleElem.style.setProperty('line-height', goodblockModal.style.modal.lineHeight, 'important');
-    // Text
-    var textElem = document.createElement('div');
-    textElem.style.setProperty('width', '270px', 'important');
-    textElem.style.setProperty('color', '#787878', 'important');
-    textElem.style.setProperty('font-size', goodblockModal.style.modal.textFontSize, 'important');
-    textElem.style.setProperty('margin', '10px auto', 'important');
-    textElem.style.setProperty('font-family', goodblockModal.style.modal.fontFamily, 'important');
-    textElem.style.setProperty('font-weight', goodblockModal.style.modal.fontWeight, 'important');
-    textElem.style.setProperty('line-height', goodblockModal.style.modal.lineHeight, 'important');
-    textElem.id = goodblockModal['ids']['modalText'];
-    // Impact container
-    var statsContainer = document.createElement('div');
-    statsContainer.style.setProperty('width', goodblockModal.style.modal.statsContainer.width, 'important');
-    statsContainer.style.setProperty('height', goodblockModal.style.modal.statsContainer.height, 'important');
-    statsContainer.style.setProperty('margin', '20px auto 10px auto', 'important');
-    statsContainer.style.setProperty('font-weight', goodblockModal.style.modal.stats.fontWeight, 'important');
-    // VC amount
-    var vcAmountContainer = document.createElement('div');
-    vcAmountContainer.style.setProperty('display', 'inline-block', 'important');
-    vcAmountContainer.style.setProperty('width', goodblockModal.style.modal.stats.width, 'important');
-    vcAmountContainer.id = goodblockModal['ids']['vcAmountContainer'];
-    var vcAmountTextElem = document.createElement('div');
-    vcAmountTextElem.id = goodblockModal['ids']['vcAmountText'];
-    vcAmountTextElem.style.setProperty('font-family', goodblockModal.style.modal.fontFamily, 'important');
-    vcAmountTextElem.style.setProperty('font-size', goodblockModal.style.modal.stats.fontSize, 'important');
-    vcAmountTextElem.style.setProperty('line-height', goodblockModal.style.modal.stats.lineHeight, 'important');
-    vcAmountContainer.appendChild(vcAmountTextElem);
-    statsContainer.appendChild(vcAmountContainer);
-    // Impact
-    var impactContainer = document.createElement('div');
-    impactContainer.style.setProperty('display', 'inline-block', 'important');
-    impactContainer.style.setProperty('width', goodblockModal.style.modal.stats.width, 'important');
-    impactContainer.id = goodblockModal['ids']['impactContainer'];
-    var impactTextElem = document.createElement('div');
-    impactTextElem.id = goodblockModal['ids']['impactText'];
-    impactTextElem.style.setProperty('font-family', goodblockModal.style.modal.fontFamily, 'important');
-    impactTextElem.style.setProperty('font-size', goodblockModal.style.modal.stats.fontSize, 'important');
-    impactTextElem.style.setProperty('line-height', goodblockModal.style.modal.stats.lineHeight, 'important');
-    impactContainer.appendChild(impactTextElem);
-    statsContainer.appendChild(impactContainer);
-    // Append to overlay parent.
-    modalElem.appendChild(logoHolderElem);
-    modalElem.appendChild(titleElem);
-    modalElem.appendChild(textElem);
-    modalElem.appendChild(statsContainer);
-
-    // Transitions.
-    modalElem.style.setProperty('-webkit-transition', 'transform 0.3s, opacity 0.3s', 'important');
-    modalElem.style.setProperty('-moz-transition', 'transform 0.3s, opacity 0.3s', 'important');
-    modalElem.style.setProperty('transition', 'transform 0.3s, opacity 0.3s', 'important');
-    document.body.appendChild(modalElem);
-    // Start with the modal hidden.
-    goodblockModal.addHideProperties(modalElem);
-    // Make sure the initial states are applied.
-    // This is because we will transition immediately.
-    window.getComputedStyle(modalElem).opacity;
-    return modalElem;
-  }
-
-  goodblockModal.get = function() {
-    // See if the modal exists.
-    var modalId = goodblockModal['ids']['modal'];
-    var modalElem = document.querySelector('#' + modalId);
-    if (modalElem) {
-      return modalElem;
-    }
-    else {
-      return goodblockModal.create();
-    }
-  }
-
-  goodblockModal.show = function() {
-    // Fetch data for the overlay.
-    messager.send({
-      what: 'retrieveGoodblockOverlayData'
-    }, goodblockModal.populate);
-    var modalElem = goodblockModal.get();
-    // Move back to on screen.
-    // Subtract half the width of the modal.
-    modalElem.style.left = 'calc(50% - 225px)';
-    modalElem.dataset.modalState = 'active';
-    // Animate the appearance.
-    modalElem.style.setProperty('-webkit-transform', 'scale(1)', 'important');
-    modalElem.style.setProperty('-moz-transform', 'scale(1)', 'important');
-    modalElem.style.setProperty('-ms-transform', 'scale(1)', 'important');
-    modalElem.style.setProperty('transform', 'scale(1)', 'important');
-    modalElem.style.setProperty('opacity', '0.99', 'important');
-
-    // Show the modal background.
-    goodblockModal.showTint();
-    // Make sure the tooltip is hidden.
-    goodblockTooltip.hideNoTimeout();
-  }
-
-  goodblockModal.addHideProperties = function(modalElem) {
-    modalElem.dataset.modalState = 'inactive';
-    modalElem.style.setProperty('-webkit-transform', 'scale(0.7)', 'important');
-    modalElem.style.setProperty('-moz-transform', 'scale(0.7)', 'important');
-    modalElem.style.setProperty('-ms-transform', 'scale(0.7)', 'important');
-    modalElem.style.setProperty('transform', 'scale(0.7)', 'important');
-    modalElem.style.setProperty('opacity', '0', 'important');
-  }
-
-  goodblockModal.hide = function() {
-    var modalElem = goodblockModal.get();
-    goodblockModal.addHideProperties(modalElem);
-    // Delay to hide the modal because of animation.
-    setTimeout(function() {
-      modalElem.style.setProperty('left', '-9999px', 'important'); // Move offscreen.
-    }, 300);
-    // Hide the modal tint element.
-    goodblockModal.hideTint();
-  }
-
-  goodblockModal.toggle = function() {
-    var modalElem = goodblockModal.get();
-    if (modalElem.dataset.modalState === 'active') {
-      goodblockModal.hide();
-    }
-    else {
-      goodblockModal.show();
-    }
-  }
-
-  // END MODAL FUNCTIONS
-
   // Array Remove - By John Resig (MIT Licensed)
   Array.prototype.remove = function(from, to) {
     var rest = this.slice((to || from) + 1 || this.length);
     this.length = from < 0 ? this.length + from : from;
     return this.push.apply(this, rest);
   };
-
-  var adIconMouseoverHandler = function(event) {
-    var elem = event.currentTarget;
-    elem.style['background-color'] = 'rgba(0, 0, 0, 0.4)';
-    goodblockTooltip.show(elem);
-  }
-
-  var adIconMouseoutHandler = function(event) {
-    var elem = event.currentTarget;
-    elem.style['background-color'] = 'rgba(0,0,0,0.2)';
-    goodblockTooltip.hide();
-  }
-
-  var addAdIconListeners = function(elem) {
-    elem.addEventListener('mouseover', adIconMouseoverHandler);
-    elem.addEventListener('mouseout', adIconMouseoutHandler);
-    elem.addEventListener('click', function() {
-      goodblockTooltip.hide();
-      goodblockModal.toggle();
-    });
-  }
-
-  var getAdIconContainerDimensions = function() {
-    return {
-      'width': 16,
-      'height': 16,
-      'padding': 2,
-    }
-  }
-
-  // BEGIN FUNCTIONS FOR ADDING GOODBLOCK ICON TO AD.
-
-  var isElemHorizontallyAligned = function(elem) {
-    var parentWidth = window.getComputedStyle(elem.parentNode).width;
-    var elemStyle = window.getComputedStyle(elem);
-    var isHorizontallyAligned = (
-      parseFloat(parentWidth) === 
-      (parseFloat(elemStyle.width) + parseFloat(elemStyle.marginLeft) + parseFloat(elemStyle.marginRight))
-    );
-    return isHorizontallyAligned;
-  }
-
-  // TODO: functions to support smart searching for visible ad unit.
-
-  // dumb helper function for alpha release
-  var isWithinThreshold = function(a,b){
-    var THRESHOLD = 10;
-    return (Math.abs(a) - Math.abs(b) <= THRESHOLD);
-  }
-
-  // TODO: think about whether to implement this
-  // ideally, we would remove all nodes that are duplicates
-  // but this requires extensive searching of every processed node
-  // this function is left here as a placeholder for when we do want to use it
-  var isDuplicateNode = function(node, processedNodesPositions) {
-    var elemStyle = window.getComputedStyle(elem);
-    var isDuplicate = false;
-
-    // if we find a node with a position that's within a threshold
-    // set isDuplicate to true
-    // we only need to find one element that is duplicate
-    processedNodesPositions.forEach(function(position, index) {
-     if(isWithinThreshold(elemStyle.top, position.top) || isWithinThreshold(elemStyle.left, position.left)) {
-         isDuplicate = true;
-     };
-    });
-    
-    return isDuplicate;
-  }
-
-  var isInvisibleAdUnit = function(elem) {
-    // We want ot check and make sure we get rid of nodes that are not "elements"
-    // but typeof(elem) returns "object", so this needs to be smarter
-    
-    // if(typeof(elem) !== 'Element') {
-    //     console.log('not an element!!!')
-    //  return true;
-    // }
-    var elemStyle = window.getComputedStyle(elem);
-    return (elemStyle.display === 'none' || elemStyle.height === 0 || elemStyle.width === 0);
-  }
-
-  var cleanNodes = function(nodes) {
-    var nodesToRemove = [];
-    nodes.map(function(node, index) {
-    if (isInvisibleAdUnit(node)) {
-     nodesToRemove.push(index);
-     };
-    });
-    nodesToRemove.map(function(nodeIndex) {
-     nodes.remove(nodeIndex);
-    })
-    return nodes;
-  }
-
-  var isElemHorizontallyAlignedOffset = function(elem) {
-      var elemLeftOffset = elem.offsetLeft;
-      var elemRightOffset = elemLeftOffset + parseFloat(window.getComputedStyle(elem).width);
-      var parentElem = elem.parentNode;
-      var parentElemLeftOffset = parentElem.offsetLeft;
-      var parentElemRightOffset = parentElemLeftOffset + parseFloat(window.getComputedStyle(parentElem).width);
-      var isElemHorizAligned = ((parentElemLeftOffset + parentElemRightOffset) === (elemLeftOffset + elemRightOffset));
-      console.log('isElemHorizAligned', isElemHorizAligned, elem);
-      console.log(parentElemLeftOffset, elemLeftOffset, parentElemRightOffset, elemRightOffset);
-      return isElemHorizAligned;
-  }
-
-  var isParentOf = function(parent, child) {
-    while(child.parentNode) {
-      if (child.parentNode == parent) {
-        return true;
-      }
-      child = child.parentNode;
-    }
-    return false;
-  };
-
-  var isContainedByAny = function(parents, child) {
-    for (var i = 0; i < parents.length; i++) {
-      if (isParentOf(parents[i], child)) {
-        return true;
-      }
-    }
-    return false;
-  };
-
-  function inIframe () {
-    try {
-      return window.self !== window.top;
-    } catch (e) {
-      return true;
-    }
-  }
-
-  var noGoodblockIconInAncestors = function(elem) {
-    while(elem.parentNode) {
-      if (elem.parentNode.dataset && elem.parentNode.dataset.goodblockIcon) {
-        return false;
-      }
-      elem = elem.parentNode;
-    }
-    return true;
-  };
-
-  // Takes elem, a DOM element.
-  // Returns an array of iframe elements found within elem.
-  var findIframes = function(elem) {
-    if (elem.nodeName.toLowerCase() == 'iframe') {
-     return [elem];
-    }
-    var toReturn = [];
-    for (var i = 0; i < elem.childNodes.length; i++) {
-    toReturn = toReturn.concat(findIframes(elem.childNodes[i]));
-    }
-    return toReturn;
-  };
-
-  var isSmallElem = function(elem) {
-    var SMALL_PX_WIDTH_THRESHOLD = 30;
-    var SMALL_PX_HEIGHT_THRESHOLD = 30;
-    var AREA_PX_THRESHOLD = 7000;
-    var elemStyle = window.getComputedStyle(elem);
-    var elemWidthPx = parseFloat(elemStyle.width);
-    var elemHeightPx = parseFloat(elemStyle.height);
-    var elemAreaPx = elemWidthPx * elemHeightPx;
-    return (
-      elemWidthPx < SMALL_PX_WIDTH_THRESHOLD ||
-      elemHeightPx < SMALL_PX_HEIGHT_THRESHOLD ||
-      elemAreaPx < AREA_PX_THRESHOLD
-    );
-  };
-
-  // NOTE: if we have an iframe, then we want to copy the style of that iframe
-  // and not the parent container
-  // since that's likely the ad unit 
-  var copyStyleBetweenElems = function(copyFromElem, copyToElem) {
-    var copyFromElemStyle = window.getComputedStyle(copyFromElem, '');
-    copyToElem.style.cssText = copyFromElemStyle.cssText;
-    // The .cssText method will copy calculated values in 
-    // place of 'auto', so we want to replace any 'auto' values.
-    if (isElemHorizontallyAligned(copyFromElem)) {
-      copyToElem.style.setProperty('margin-left', 'auto', 'important');
-      copyToElem.style.setProperty('margin-right', 'auto', 'important');
-    }
-  }
-
-  function insertAfter(newNode, referenceNode) {
-    referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
-  }
-
-  var insertGoodblockElemOnAdElem = function(adElem, goodblockElem) {
-    copyStyleBetweenElems(adElem, goodblockElem);
-    var adElemStyle = window.getComputedStyle(adElem);
-    goodblockElem.style.setProperty('opacity', '0.99', 'important');
-    goodblockElem.style.setProperty('display', 'block', 'important');
-    goodblockElem.style.setProperty('background-image', 'none', 'important');
-    goodblockElem.style.setProperty('background-color', 'rgba(0,256,0,0.2)', 'important');
-    goodblockElem.style.setProperty('text-align', 'left', 'important');
-    switch (adElemStyle.position) {
-      case 'fixed':
-        goodblockElem.style.setProperty('position', 'fixed', 'important');
-        break;
-      case 'absolute':
-        goodblockElem.style.setProperty('position', 'relative', 'important');
-        break;
-      default:
-         goodblockElem.style.setProperty('position', 'relative', 'important');
-        if (adElemStyle.display === 'inline' || adElemStyle.display === 'inline-block') {
-          // Hack to handle possible white space around
-          // inline elements.
-          // var inlineElemGapPx = 4;
-          var inlineElemGapPx = 0;
-        }
-        else {
-          var inlineElemGapPx = 0;
-        };
-        var marginTopGoodblock = 'calc(-' 
-          + adElemStyle.height + ' - ' 
-          + adElemStyle.marginBottom + ' - ' 
-          + adElemStyle.paddingTop + ' - ' 
-          + adElemStyle.paddingBottom + ' - ' 
-          + inlineElemGapPx + 'px' + ')';
-        goodblockElem.style.setProperty('margin-top', marginTopGoodblock, 'important');
-        break;
-    }
-
-    // handle margin-auto inline elements
-    console.log('adElemStyle', adElemStyle)
-    if (adElemStyle.display == 'inline' || adElemStyle.display == 'inline-block'){
-        var marginLeftGoodblock = 'calc(50% - (' + adElemStyle.width + ' /2)';
-        goodblockElem.style.setProperty('margin-left', marginLeftGoodblock, 'important');
-    }
-    insertAfter(goodblockElem, adElem);
-  }
-
-  // Takes a DOM element.
-  // Returns null.
-  // Adds an goodblockIcon to the corner of the elem.
-  var addGoodblockIconToElem = function(elem, numAds) {
-    // If the element already has an goodblockIcon, skip it.
-    if (!elem.dataset.goodblockIcon) {
-    // console.log('Adding goodblockIcon to: ', elem);
-    numAds += 1;
-    var dimensions = getAdIconContainerDimensions();
-    var ICON_HEIGHT_PX = dimensions.width;
-    var ICON_WIDTH_PX = dimensions.height;
-    var ICON_PADDING = dimensions.padding;
-    // The ad icon container.
-    var goodblockIconElem = document.createElement('div');
-    // The ad icon image.
-    var adIconElem = document.createElement('img');
-    var iconUrl = vAPI.goodblockIconUrl;
-    adIconElem.setAttribute('src', iconUrl);
-    adIconElem.style.setProperty('width', ICON_WIDTH_PX + 'px', 'important');
-    adIconElem.style.setProperty('background-color', 'rgba(0,0,0,0.2)', 'important');
-    adIconElem.style.setProperty('border-radius', '50%', 'important');
-    adIconElem.style.setProperty('z-index', '16777271', 'important');
-    adIconElem.style.setProperty('padding', ICON_PADDING + 'px', 'important');
-    goodblockIconElem.style.setProperty('position', 'relative', 'important');
-    addAdIconListeners(adIconElem);
-    // The ad icon image holder.
-    var adIconElemHolder = document.createElement('div');
-    adIconElemHolder.appendChild(adIconElem);
-    adIconElemHolder.style.setProperty('cursor', 'pointer', 'important');
-    adIconElemHolder.style.setProperty('position', 'absolute', 'important');
-    adIconElemHolder.style.setProperty('bottom', '0px', 'important');
-    adIconElemHolder.style.setProperty('right', '0px', 'important');
-    adIconElemHolder.style.setProperty('pointer-events', 'all', 'important');
-    adIconElemHolder.style.setProperty('height', (ICON_HEIGHT_PX + ICON_PADDING*2) + 'px', 'important');
-    adIconElemHolder.style.setProperty('z-index', '16777271', 'important');
-
-    goodblockIconElem.appendChild(adIconElemHolder);
-    // Mark that we added an goodblockIcon.
-    elem.dataset.goodblockIcon = 'true';
-
-    insertGoodblockElemOnAdElem(elem, goodblockIconElem);
-    }
-    return numAds;
-  }
-
-  // Takes a DOM element that filters have targeted
-  // as elements that hold an advertisement.
-  // Returns a DOM element that we believe will be
-  // the containers for advertisements, or
-  // false if we don't believe it is a displayed ad.
-  var getAdContainerForNode = function(node) {
-
-    // TODO: smart searching for visible ad unit.
-    // if (isSmallElem(node)) {
-    //     return node.parentNode;
-    // }
-    // return node;
-
-    var elemsProcessed = gladly.getProcessedNodes();
-
-    // Get any iframes within this node.
-    var iframes = findIframes(node);
-    if (iframes.length > 0) {
-     var adContainers = iframes.map(function (elem, i) {
-      return elem.parentNode;
-     }).filter(function(elem) {
-      return (
-         !isContainedByAny(elemsProcessed, elem) &&
-         noGoodblockIconInAncestors(elem)
-      );
-     })
-    } else {
-      return [node];
-    };
-    
-    return node;
-  };
-
-  // Takes an array of DOM elements that filters have targeted
-  // as elements that hold an advertisement.
-  // Returns an array of DOM elements that we believe will be
-  // the containers for advertisements.
-  var getAdContainersForNodes = function(nodes) {
-    var adContainers = [];
-    nodes.forEach(function(elem, index, array) {
-      var adContainer = getAdContainerForNode(elem);
-      if (adContainer) {
-        adContainers = adContainers.concat(adContainer);
-      }
-    });
-    return adContainers;
-  };
-
-  // Takes an array of DOM elements.
-  // Add goodblockIcons to all ad containers.
-  var goodblockIconsEverywhere = function(nodes, numAds) {
-    nodes = cleanNodes(nodes);
-    gladly.addProcessedNodes(nodes);
-    var adContainers = getAdContainersForNodes(nodes);
-    adContainers.forEach(function(elem, i, array) {
-    numAds = addGoodblockIconToElem(elem, numAds);
-    });
-    return numAds;
-  };
-
-  // Takes an array of selectors.
-  var modifyAdsForGladly = function(selectors, numAds) {
-    if(inIframe()) {
-      return false;
-    }
-    if ( selectors.length === 0 ) {
-      return;
-    }
-    if ( document.body === null ) {
-      return;
-    }
-    var elems = document.querySelectorAll(selectors);
-    var i = elems.length;
-    // Convert nodelist to array.
-    var nodes = [];
-    while ( i-- ) {
-      var target = elems[i];
-      nodes.push(target);
-    }
-    numAds = goodblockIconsEverywhere(nodes, numAds);
-    if (numAds != 0) {
-      messager.send({
-         what: 'countNumAds',
-         numAds: numAds
-       });
-    }
-    return numAds;
-  };
-  // END FUNCTIONS FOR ADDING GOODBLOCK ICON TO AD.
 
   var hideElements = function(selectors) {
     // https://github.com/chrisaljoudi/uBlock/issues/207
@@ -1411,14 +504,8 @@ var setUpGladly = function() {
     var selector;
     while ( i-- ) {
       selector = generics[i];
-      // console.log('processLowGenerics selector', selector);
-      // For normal ad hiding, don't process the element if we already have.
-      // Gladly partner page elements need to be processed each time
-      // because we're adding elements to the ad.
-      if (!gladly.isGladlyPartnerPage) {
-        if ( injectedSelectors.hasOwnProperty(selector) ) {
-          continue;
-        }
+      if ( injectedSelectors.hasOwnProperty(selector) ) {
+        continue;
       }
       injectedSelectors[selector] = true;
       out.push(selector);
@@ -1589,12 +676,9 @@ var setUpGladly = function() {
         v = vv[j];
         if ( typeof v !== 'string' ) { continue; }
         v = '.' + v;
-        // If we're doing normal ad-hiding, and we've already
-        // processed this class, skip it.
-        if (gladly && !gladly.isGladlyPartnerPage) {
-          if ( qq.hasOwnProperty(v) ) {
-            continue;
-          }
+        // If we've already processed this class, skip it.
+        if ( qq.hasOwnProperty(v) ) {
+          continue;
         }
         ll.push(v);
         qq[v] = true;
@@ -1654,7 +738,6 @@ var setUpGladly = function() {
     }
     addedNodeListsTimer = null;
     if ( contextNodes.length !== 0 ) {
-      // console.log('Filtering page after tree mutation change.');
       idsFromNodeList(selectNodes('[id]'));
       classesFromNodeList(selectNodes('[class]'));
       retrieveGenericSelectors();
@@ -1665,8 +748,6 @@ var setUpGladly = function() {
   // https://github.com/chrisaljoudi/uBlock/issues/205
   // Do not handle added node directly from within mutation observer.
   var treeMutationObservedHandlerAsync = function(mutations) {
-    // console.log('Tree mutation change.');
-    // console.log('Mutation added nodes:', mutations);
     var iMutation = mutations.length;
     var nodeList;
     while ( iMutation-- ) {
@@ -1675,7 +756,6 @@ var setUpGladly = function() {
         addedNodeLists.push(nodeList);
       }
     }
-    // console.log('Mutation; added node lists', addedNodeLists);
     if ( addedNodeListsTimer === null ) {
       // I arbitrarily chose 100 ms for now:
       // I have to compromise between the overhead of processing too few
@@ -1693,15 +773,9 @@ var setUpGladly = function() {
 
   // https://github.com/gorhill/uMatrix/issues/144
   shutdownJobs.add(function() {
-    // If this is a Gladly partner page, don't shut down the
-    // mutation observer. We use it to watch for new nodes,
-    // because we can't listen for blocked requests when we're
-    // not filtering requests.
-    if (!gladly.isGladlyPartnerPage) {
-      treeObserver.disconnect();
-      if ( addedNodeListsTimer !== null ) {
-        clearTimeout(addedNodeListsTimer);
-      }
+    treeObserver.disconnect();
+    if ( addedNodeListsTimer !== null ) {
+      clearTimeout(addedNodeListsTimer);
     }
   });
 })();
