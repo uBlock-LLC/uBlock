@@ -185,9 +185,9 @@ return asyncJobManager;
 
         var netFiltering = pageStore.getNetFilteringSwitch();
         var badge = '';
-        if ( µb.userSettings.showIconBadge && netFiltering && pageStore.perLoadBlockedRequestCount ) {
-            badge = µb.utils.formatCount(pageStore.perLoadBlockedRequestCount);
-        }
+        // if ( µb.userSettings.showIconBadge && netFiltering && pageStore.perLoadBlockedRequestCount ) {
+        //     badge = µb.utils.formatCount(pageStore.perLoadBlockedRequestCount);
+        // }
         vAPI.setIcon(tabId, netFiltering ? 'on' : 'off', badge);
     };
 
