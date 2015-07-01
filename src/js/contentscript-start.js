@@ -62,6 +62,26 @@ var localMessager = vAPI.messaging.channel('contentscript-start.js');
 /******************************************************************************/
 /******************************************************************************/
 
+// BEGIN GOODBLOCK CODE.
+
+var goodblockDataHandler = function(details) {
+  vAPI.goodblockData = details;
+};
+
+localMessager.send(
+  {
+    what: 'retrieveGoodblockData',
+    pageURL: url,
+    locationURL: url
+  },
+  goodblockDataHandler
+);
+
+// END GOODBLOCK CODE.
+
+/******************************************************************************/
+/******************************************************************************/
+
 // Domain-based ABP cosmetic filters.
 // These can be inserted before the DOM is loaded.
 
@@ -165,18 +185,6 @@ var hideElements = function(selectors) {
     elems[i].style.setProperty('display', 'none', 'important');
   }
 };
-
-var iconHandler = function(details) {
-  vAPI.goodblockIconUrl = details.iconUrl;
-}
-
-// Get the URL of the ad icon.
-localMessager.send(
-  {
-    what: 'retrieveIconUrl',
-  },
-  iconHandler
-);
 
 var url = window.location.href;
 localMessager.send(

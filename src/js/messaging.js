@@ -414,8 +414,8 @@ var onMessage = function(request, sender, callback) {
                 response = µb.cosmeticFilteringEngine.retrieveDomainSelectors(request);
             }
             break;
-        case 'retrieveIconUrl':
-            response = pageStore.getAdIconPath();
+        case 'retrieveGoodblockData':
+            response = pageStore.getGoodblockData();
             break;
 
         default:

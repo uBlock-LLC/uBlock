@@ -18,7 +18,8 @@
     },
 
     "web_accessible_resources": [
-        "img/browsericons/*.png"
+        "img/browsericons/*.png",
+        "js/contentscript-goodblock.js"
     ],
 
     "author": "The Goodblock Development Team",

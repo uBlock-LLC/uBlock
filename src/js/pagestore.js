@@ -529,22 +529,6 @@ var collapsibleRequestTypes = 'image sub_frame object';
 
 /******************************************************************************/
 
-PageStore.prototype.getAdIconPath = function(context) {
-    // Put in pagestore to limit calls to get the icon URL.
-    if (this.adIconPath) {
-        var url = this.adIconPath;
-    }
-    else {
-        var url = vAPI.getAdIconPath();
-        this.adIconPath = url;
-    }
-    return {
-        'iconUrl': url
-    }
-};
-
-/******************************************************************************/
-
 PageStore.prototype.filterRequestNoCache = function(context) {
     if ( this.getNetFilteringSwitch() === false ) {
         return '';
@@ -605,6 +589,25 @@ PageStore.prototype.logRequest = function(context, result) {
 };
 
 // https://www.youtube.com/watch?v=drW8p_dTLD4
+
+/******************************************************************************/
+
+// BEGIN GOODBLOCK CODE.
+
+PageStore.prototype.getGoodblockData = function(context) {
+    // Try to get from pagestore to limit computation.
+    if (this.goodblockData) {
+        return this.goodblockData;
+    }
+    var scriptUrl = vAPI.getGoodblockScriptUrl();
+    var goodblockData = {
+        'scriptUrl': scriptUrl,
+    };
+    this.goodblockData = goodblockData; // Save data to pagestore.
+    return goodblockData;
+};
+
+// END GOODBLOCK CODE.
 
 /******************************************************************************/
 
