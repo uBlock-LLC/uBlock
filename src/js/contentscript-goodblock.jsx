@@ -5,6 +5,22 @@ console.log('Goodblock content script.');
 
 // Our React app code.
 
+var GoodblockIcon = React.createClass({
+	render: function() {
+		var goodblockData = this.props.goodblockData;
+		var goodblockIconUrl = goodblockData['imgUrls']['goodblockIcon60'];
+		var imgSrc = goodblockIconUrl;
+		var imgStyle = {
+
+		};
+		return (
+			<img
+				src={imgSrc}
+				style={imgStyle} />
+		);
+	}
+});
+
 var GoodblockRootElem = React.createClass({
 	getInitialState: function() {
 		return {
@@ -15,12 +31,11 @@ var GoodblockRootElem = React.createClass({
 		this.setState({'isClicked': !this.state.isClicked});
 	},
 	render: function() {
+		var goodblockData = this.props.goodblockData;
 		var id = 'goodblockBaseElem';
-		var content = 'Goodblock!';
 		var textColor = '#000';
 		var backgroundColor = '#E2E2E2';
 		if (this.state.isClicked) {
-			content = 'Goodblock clicked!';
 			textColor = '#FFF';
 			backgroundColor = '#000';
 		}
@@ -42,7 +57,7 @@ var GoodblockRootElem = React.createClass({
 				style={style}
 				onMouseDown={this.onClick}
 				dataGoodblockElem='true'>
-					{content}
+					<GoodblockIcon goodblockData={goodblockData} />
 			</div>
 		);
 	}
@@ -69,19 +84,15 @@ localMessager.send(
 /******************************************************************************/
 /******************************************************************************/
 
-// TODO: Listen for Goodblock data changes from the extension
-// and pass them into our React code for stateful updating.
-
 // Create the Goodblock app elements.
 var setUpGoodblock = function(goodblockData) {
-	console.log('goodblockData', goodblockData);
 	var reactBaseElem = document.createElement('div');
 	var reactBaseElemId = 'goodblock-react-base';
 	reactBaseElem.id = reactBaseElemId;
 	reactBaseElem.dataset.goodblockInitialized = 'true';
 	document.body.appendChild(reactBaseElem);
 	// TODO: pass Goodblock data as a property.
-	React.render(<GoodblockRootElem />, document.getElementById(reactBaseElemId));
+	React.render(<GoodblockRootElem goodblockData={goodblockData} />, document.getElementById(reactBaseElemId));
 }
 
 /******************************************************************************/

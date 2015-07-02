@@ -446,7 +446,13 @@ var ICON_PATHS = {
     "on": { '19': 'img/browsericons/icon19.png',     '38': 'img/browsericons/icon38.png' },
     "off": { '19': 'img/browsericons/icon19-off.png', '38': 'img/browsericons/icon38-off.png' },
     // Goodblock
-    "goodblock": { 'adIcon': 'img/browsericons/icon20.png', 'modalLogo': 'img/browsericons/icon60.png', 'modalHeartIcon': 'img/browsericons/heart40x35.png', 'modalWaterIcon': 'img/browsericons/water33x40.png', 'modalCloseIcon': 'img/browsericons/close13x13.png'}
+    "goodblock": {
+        'goodblockIcon20': 'img/browsericons/icon20.png',
+        'goodblockIcon60': 'img/browsericons/icon60.png',
+        'heartIcon': 'img/browsericons/heart40x35.png',
+        'waterIcon': 'img/browsericons/water33x40.png',
+        'closeIcon': 'img/browsericons/close13x13.png'
+    }
 };
 
 var SCRIPT_PATHS = {
@@ -500,25 +506,12 @@ vAPI.setIcon = function(tabId, iconStatus, badge) {
 /******************************************************************************/
 
 // Goodblock.
-vAPI.getAdIconPath = function() {
-    var relative_url = ICON_PATHS['goodblock']['adIcon'];
-    var url = chrome.extension.getURL(relative_url);
-    return url;
-}
-
-/******************************************************************************/
-
-// Goodblock.
-vAPI.getGoodblockOverlayIconPaths = function() {
-    var logoUrl = ICON_PATHS['goodblock']['modalLogo'];
-    var heartUrl = ICON_PATHS['goodblock']['modalHeartIcon'];
-    var waterUrl = ICON_PATHS['goodblock']['modalWaterIcon'];
-    var closeUrl = ICON_PATHS['goodblock']['modalCloseIcon'];
+vAPI.getGoodblockImgUrls = function() {
     return {
-        'logo': chrome.extension.getURL(logoUrl),
-        'heart': chrome.extension.getURL(heartUrl),
-        'water': chrome.extension.getURL(waterUrl),
-        'close': chrome.extension.getURL(closeUrl),
+        'goodblockIcon60': chrome.extension.getURL(ICON_PATHS['goodblock']['goodblockIcon60']),
+        'heartIcon': chrome.extension.getURL(ICON_PATHS['goodblock']['heartIcon']),
+        'waterIcon': chrome.extension.getURL(ICON_PATHS['goodblock']['waterIcon']),
+        'closeIcon': chrome.extension.getURL(ICON_PATHS['goodblock']['closeIcon']),
     };
 }
 

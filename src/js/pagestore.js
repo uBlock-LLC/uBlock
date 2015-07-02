@@ -599,9 +599,7 @@ PageStore.prototype.getGoodblockData = function(context) {
     if (this.goodblockData) {
         return this.goodblockData;
     }
-    // TODO
-    // var imgUrls = vAPI.getGoodblockImgUrls();
-    var imgUrls = {};
+    var imgUrls = vAPI.getGoodblockImgUrls();
     var goodblockData = {
         'imgUrls': imgUrls,
     };
