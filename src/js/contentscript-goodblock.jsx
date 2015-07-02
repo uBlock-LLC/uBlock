@@ -1,5 +1,10 @@
 console.log('Goodblock content script.');
 
+/******************************************************************************/
+/******************************************************************************/
+
+// Our React app code.
+
 var GoodblockRootElem = React.createClass({
 	getInitialState: function() {
 		return {
@@ -43,9 +48,23 @@ var GoodblockRootElem = React.createClass({
 	}
 });
 
+
+/******************************************************************************/
+/******************************************************************************/
+
+// TODO: Move Goodblock data fetching here instead of in
+// contentscript-start.js. No need for it to live elsewhere.
 console.log('goodblockData', vAPI.goodblockData);
+
+// TODO: Listen for Goodblock data changes from the extension
+// and pass them into our React code for stateful updating.
+
 var reactBaseElem = document.createElement('div');
 var reactBaseElemId = 'react-base';
 reactBaseElem.id = reactBaseElemId;
 document.body.appendChild(reactBaseElem);
+// TODO: pass Goodblock data as a property.
 React.render(<GoodblockRootElem />, document.getElementById(reactBaseElemId));
+
+/******************************************************************************/
+/******************************************************************************/
