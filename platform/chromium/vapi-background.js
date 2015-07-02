@@ -451,7 +451,10 @@ var ICON_PATHS = {
 
 var SCRIPT_PATHS = {
     // Goodblock
-    "goodblock": { 'contentscript': 'js/contentscript-goodblock.js' }
+    "goodblock": {
+        'contentscript': 'js/contentscript-goodblock.js',
+        'reactjs': 'lib/react-with-addons.js',
+    }
 };
 
 // Must read: https://code.google.com/p/chromium/issues/detail?id=410868#c8
@@ -522,10 +525,12 @@ vAPI.getGoodblockOverlayIconPaths = function() {
 /******************************************************************************/
 
 // Goodblock.
-vAPI.getGoodblockScriptUrl = function() {
-    var relative_url = SCRIPT_PATHS['goodblock']['contentscript'];
-    var url = chrome.extension.getURL(relative_url);
-    return url;
+vAPI.getGoodblockScriptUrls = function() {
+    var scripts = SCRIPT_PATHS['goodblock'];
+    return {
+        'contentScript': chrome.extension.getURL(scripts['contentscript']),
+        'reactjs': chrome.extension.getURL(scripts['reactjs']),
+    }
 }
 
 /******************************************************************************/

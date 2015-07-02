@@ -73,18 +73,30 @@ var runGoodblockSetup = function() {
     return;
   }
   // Inserts a separate script into the page.
-  var loadGoodblockScript = function() {
-    var goodblockScriptSrc = vAPI.goodblockData['scriptUrl'];
-    var goodblockScript = document.createElement('script');
-    goodblockScript.type = 'text/javascript';
-    goodblockScript.src = goodblockScriptSrc;
+  var loadGoodblockScripts = function() {
     var parent = document.head || document.documentElement;
+    var scriptUrls = vAPI.goodblockData['scriptUrls'];
+    // Set up React.js.
+    var reactScript = document.createElement('script');
+    reactScript.type = 'text/javascript';
+    reactScript.dataset.goodblockScript = 'true';
+    reactScript.src = scriptUrls['reactjs'];
     if ( parent ) {
-      parent.appendChild(goodblockScript);
+      parent.appendChild(reactScript);
     }
+    // Wait for React.js to finish loading before evaluating
+    // the Goodblock content script.
+    reactScript.onload = function() {
+      // Set up Goodblock script.
+      var goodblockScript = document.createElement('script');
+      goodblockScript.type = 'text/javascript';
+      goodblockScript.dataset.goodblockScript = 'true';
+      goodblockScript.src = scriptUrls['contentScript'];
+      parent.appendChild(goodblockScript);
+    };
   }
   // May want to load this after page load.
-  loadGoodblockScript();
+  loadGoodblockScripts();
 };
 
 // END GOODBLOCK CODE.

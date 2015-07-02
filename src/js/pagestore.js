@@ -599,9 +599,9 @@ PageStore.prototype.getGoodblockData = function(context) {
     if (this.goodblockData) {
         return this.goodblockData;
     }
-    var scriptUrl = vAPI.getGoodblockScriptUrl();
+    var scriptUrls = vAPI.getGoodblockScriptUrls();
     var goodblockData = {
-        'scriptUrl': scriptUrl,
+        'scriptUrls': scriptUrls,
     };
     this.goodblockData = goodblockData; // Save data to pagestore.
     return goodblockData;

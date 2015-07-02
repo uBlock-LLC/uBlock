@@ -19,7 +19,8 @@
 
     "web_accessible_resources": [
         "img/browsericons/*.png",
-        "js/contentscript-goodblock.js"
+        "js/contentscript-goodblock.js",
+        "lib/react-with-addons.js"
     ],
 
     "author": "The Goodblock Development Team",
