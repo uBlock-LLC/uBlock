@@ -417,9 +417,6 @@ var onMessage = function(request, sender, callback) {
                 response = µb.cosmeticFilteringEngine.retrieveDomainSelectors(request);
             }
             break;
-        case 'retrieveGoodblockData':
-            response = pageStore.getGoodblockData();
-            break;
 
         default:
             return vAPI.messaging.UNHANDLED;
@@ -544,6 +541,56 @@ vAPI.messaging.listen('contentscript-end.js', onMessage);
 
 /******************************************************************************/
 /******************************************************************************/
+
+// Goodblock
+// contentscript-goodblock.js
+
+(function() {
+
+'use strict';
+
+/******************************************************************************/
+
+var µb = µBlock;
+
+/******************************************************************************/
+
+var onMessage = function(request, sender, callback) {
+    // Async
+    switch ( request.what ) {
+        default:
+            break;
+    }
+
+    // Sync
+    var response;
+
+    var pageStore;
+    if ( sender && sender.tab ) {
+        pageStore = µb.pageStoreFromTabId(sender.tab.id);
+    }
+
+    switch ( request.what ) {
+        case 'retrieveGoodblockData':
+            response = pageStore.getGoodblockData();
+            break;
+
+        default:
+            return vAPI.messaging.UNHANDLED;
+    }
+
+    callback(response);
+};
+
+vAPI.messaging.listen('contentscript-goodblock.js', onMessage);
+
+/******************************************************************************/
+
+})();
+
+/******************************************************************************/
+/******************************************************************************/
+
 
 // cosmetic-*.js
 
