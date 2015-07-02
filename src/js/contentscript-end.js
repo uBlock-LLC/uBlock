@@ -72,28 +72,17 @@ var runGoodblockSetup = function() {
   if ( window !== window.top ) {
     return;
   }
+  var goodblockScriptInjectedHandler = function(details) {
+    // console.log('Finished injecting Goodblock scripts.');
+  };
   // Inserts a separate script into the page.
   var loadGoodblockScripts = function() {
-    var parent = document.head || document.documentElement;
-    var scriptUrls = vAPI.goodblockData['scriptUrls'];
-    // Set up React.js.
-    var reactScript = document.createElement('script');
-    reactScript.type = 'text/javascript';
-    reactScript.dataset.goodblockScript = 'true';
-    reactScript.src = scriptUrls['reactjs'];
-    if ( parent ) {
-      parent.appendChild(reactScript);
-    }
-    // Wait for React.js to finish loading before evaluating
-    // the Goodblock content script.
-    reactScript.onload = function() {
-      // Set up Goodblock script.
-      var goodblockScript = document.createElement('script');
-      goodblockScript.type = 'text/javascript';
-      goodblockScript.dataset.goodblockScript = 'true';
-      goodblockScript.src = scriptUrls['contentScript'];
-      parent.appendChild(goodblockScript);
-    };
+    messager.send(
+      {
+        what: 'injectGoodblockContentScripts',
+      },
+      goodblockScriptInjectedHandler
+    );
   }
   // May want to load this after page load.
   loadGoodblockScripts();

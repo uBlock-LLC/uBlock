@@ -108,6 +108,9 @@ var onMessage = function(request, sender, callback) {
         case 'userSettings':
             response = µb.changeUserSettings(request.name, request.value);
             break;
+        case 'injectGoodblockContentScripts':
+            response = vAPI.injectGoodblockContentScripts();
+            break;
 
         default:
             return vAPI.messaging.UNHANDLED;

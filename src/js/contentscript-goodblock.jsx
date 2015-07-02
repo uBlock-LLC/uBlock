@@ -43,6 +43,7 @@ var GoodblockRootElem = React.createClass({
 	}
 });
 
+console.log('goodblockData', vAPI.goodblockData);
 var reactBaseElem = document.createElement('div');
 var reactBaseElemId = 'react-base';
 reactBaseElem.id = reactBaseElemId;

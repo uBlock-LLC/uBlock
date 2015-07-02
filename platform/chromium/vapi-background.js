@@ -525,12 +525,17 @@ vAPI.getGoodblockOverlayIconPaths = function() {
 /******************************************************************************/
 
 // Goodblock.
-vAPI.getGoodblockScriptUrls = function() {
+vAPI.injectGoodblockContentScripts = function() {
     var scripts = SCRIPT_PATHS['goodblock'];
-    return {
-        'contentScript': chrome.extension.getURL(scripts['contentscript']),
-        'reactjs': chrome.extension.getURL(scripts['reactjs']),
-    }
+    // Execute React.js code followed by Goodblock scripts.
+    chrome.tabs.executeScript({
+        file: scripts['reactjs'],
+    }, function() {
+        chrome.tabs.executeScript({
+            file: scripts['contentscript'],
+        });
+    });
+    return true;
 }
 
 /******************************************************************************/
