@@ -1,24 +1,41 @@
 console.log('Goodblock content script.');
 
 var GoodblockRootElem = React.createClass({
+	getInitialState: function() {
+		return {
+			isClicked: false,
+		}
+	},
+	onClick: function() {
+		this.setState({'isClicked': !this.state.isClicked});
+	},
 	render: function() {
 		var id = 'goodblockBaseElem';
 		var content = 'Goodblock!';
+		var textColor = '#000';
+		var backgroundColor = '#E2E2E2';
+		if (this.state.isClicked) {
+			content = 'Goodblock clicked!';
+			textColor = '#FFF';
+			backgroundColor = '#000';
+		}
 		var style = {
-			position: 'fixed !important',
-			bottom: '10px !important',
-			left: '10px !important',
-			width: '100px !important',
-			height: '100px !important',
-			display: 'block !important',
-			zIndex: '10000000 !important',
-			backgroundColor: '#E2E2E2 !important',
-			padding: '10px !important',
+			position: 'fixed',
+			bottom: '10px',
+			left: '10px',
+			width: '100px',
+			height: '100px',
+			display: 'block',
+			zIndex: '10000000',
+			color: textColor,
+			backgroundColor: backgroundColor,
+			padding: '10px',
 		};
 		return (
 			<div
 				id={id}
 				style={style}
+				onMouseDown={this.onClick}
 				dataGoodblockElem='true'>
 					{content}
 			</div>
