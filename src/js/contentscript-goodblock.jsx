@@ -67,19 +67,7 @@ var GoodblockRootElem = React.createClass({
 /******************************************************************************/
 
 // Set up messaging to the extension.
-
 var localMessager = vAPI.messaging.channel('contentscript-goodblock.js');
-
-var goodblockDataHandler = function(data) {
-	setUpGoodblock(data);
-};
-
-localMessager.send(
-  {
-    what: 'retrieveGoodblockData'
-  },
-  goodblockDataHandler
-);
 
 /******************************************************************************/
 /******************************************************************************/
@@ -91,9 +79,26 @@ var setUpGoodblock = function(goodblockData) {
 	reactBaseElem.id = reactBaseElemId;
 	reactBaseElem.dataset.goodblockInitialized = 'true';
 	document.body.appendChild(reactBaseElem);
-	// TODO: pass Goodblock data as a property.
 	React.render(<GoodblockRootElem goodblockData={goodblockData} />, document.getElementById(reactBaseElemId));
 }
+
+/******************************************************************************/
+/******************************************************************************/
+
+// Listener for messages from extension.
+
+localMessager.listener = function(request) {
+	// console.log('Message sent to contentscript-goodblock.js', request);
+	switch (request.what) {
+		// Listen for Goodblock data.
+		case 'goodblockData':
+			// console.log('Goodblock data', request.data);
+			// TODO: handle data updating, not just setup.
+			setUpGoodblock(request.data);
+		default:
+			// console.log('Unhandled message sent to contentscript-goodblock.js:', request);
+	}
+};
 
 /******************************************************************************/
 /******************************************************************************/

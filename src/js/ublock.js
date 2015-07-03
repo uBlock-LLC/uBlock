@@ -352,4 +352,32 @@ var matchWhitelistDirective = function(url, hostname, directive) {
 
 /******************************************************************************/
 
+// Goodblock.
+µBlock.goodblock = {};
+
+/******************************************************************************/
+
+µBlock.goodblock.getGoodblockData = function() {
+    var imgUrls = vAPI.getGoodblockImgUrls();
+    var goodblockData = {
+        'imgUrls': imgUrls,
+    };
+    this.goodblockData = goodblockData; // Save data to pagestore.
+    return goodblockData;
+};
+
+/******************************************************************************/
+
+// TODO: don't broadcast this to all tabs every time there is
+// a tab update. Instead, target the message to one tab.
+µBlock.goodblock.broadcastGoodblockData = function() {
+    var goodblockData = µBlock.goodblock.getGoodblockData();
+    vAPI.messaging.broadcast({
+        what: 'goodblockData',
+        data: goodblockData,
+    });
+};
+
+/******************************************************************************/
+
 })();

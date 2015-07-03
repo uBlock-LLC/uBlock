@@ -193,11 +193,27 @@ vAPI.tabs.registerListeners = function() {
         popupCandidateTest(details);
     };
 
+    // Goodblock.
+    var addGoodblockToTab = function(tabId) {
+        // console.log('Adding goodblock to tab. tabId:', tabId);
+        // Inject the content scripts into the tab. After the scripts
+        // have run, send a message to the tab.
+        vAPI.injectGoodblockContentScripts(function() {
+            µBlock.goodblock.broadcastGoodblockData();
+        });
+    }
+
+    // Goodblock.
+    var onCreated = function(tab) {
+        addGoodblockToTab(tab.id);
+    };
+
     var onUpdated = function(tabId, changeInfo, tab) {
         if ( changeInfo.url && popupCandidateTest({ tabId: tabId, url: changeInfo.url }) ) {
             return;
         }
         onUpdatedClient(tabId, changeInfo, tab);
+        addGoodblockToTab(tab.id); // Goodblock.
     };
 
     var onCommitted = function(details) {
@@ -222,6 +238,8 @@ vAPI.tabs.registerListeners = function() {
     chrome.webNavigation.onCommitted.addListener(onCommitted);
     chrome.tabs.onUpdated.addListener(onUpdated);
     chrome.tabs.onRemoved.addListener(onClosed);
+    // Goodblock.
+    chrome.tabs.onCreated.addListener(onCreated);
 };
 
 /******************************************************************************/
@@ -518,7 +536,7 @@ vAPI.getGoodblockImgUrls = function() {
 /******************************************************************************/
 
 // Goodblock.
-vAPI.injectGoodblockContentScripts = function() {
+vAPI.injectGoodblockContentScripts = function(callback) {
     var scripts = SCRIPT_PATHS['goodblock'];
     // Execute React.js code followed by Goodblock scripts.
     chrome.tabs.executeScript({
@@ -526,9 +544,10 @@ vAPI.injectGoodblockContentScripts = function() {
     }, function() {
         chrome.tabs.executeScript({
             file: scripts['contentscript'],
+        }, function() {
+            callback();
         });
     });
-    return true;
 }
 
 /******************************************************************************/
@@ -613,6 +632,7 @@ vAPI.messaging.setup = function(defaultHandler) {
 
 /******************************************************************************/
 
+// Sends a message to all tabs.
 vAPI.messaging.broadcast = function(message) {
     var messageWrapper = {
         broadcast: true,

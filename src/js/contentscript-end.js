@@ -61,38 +61,6 @@ vAPI.styles = vAPI.styles || [];
 /******************************************************************************/
 /******************************************************************************/
 
-// BEGIN GOODBLOCK CODE.
-
-// Include Goodblock script in the page.
-// This is separate from the main content script because we may
-// not want to call the Goodblock script on every page load,
-// or we may want to delay it until the rest of the page has loaded.
-var runGoodblockSetup = function() {
-  // Only run the script on the top document.
-  if ( window !== window.top ) {
-    return;
-  }
-  var goodblockScriptInjectedHandler = function(details) {
-    // console.log('Finished injecting Goodblock scripts.');
-  };
-  // Inserts a separate script into the page.
-  var loadGoodblockScripts = function() {
-    messager.send(
-      {
-        what: 'injectGoodblockContentScripts',
-      },
-      goodblockScriptInjectedHandler
-    );
-  }
-  // May want to load this after page load.
-  loadGoodblockScripts();
-};
-
-// END GOODBLOCK CODE.
-
-/******************************************************************************/
-/******************************************************************************/
-
 var shutdownJobs = (function() {
   var jobs = [];
 
@@ -383,9 +351,6 @@ var uBlockCollapser = (function() {
   // likeliness to outrun contentscript-start.js, which may still be waiting
   // on a response from its own query.
   var firstRetrieveHandler = function(response) {
-    // Set up Goodblock. We call this here so that it doesn't
-    // outrun contentscript-start.js.
-    runGoodblockSetup();
 
     // https://github.com/chrisaljoudi/uBlock/issues/158
     // Ensure injected styles are enforced

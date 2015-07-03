@@ -592,25 +592,6 @@ PageStore.prototype.logRequest = function(context, result) {
 
 /******************************************************************************/
 
-// BEGIN GOODBLOCK CODE.
-
-PageStore.prototype.getGoodblockData = function(context) {
-    // Try to get from pagestore to limit computation.
-    if (this.goodblockData) {
-        return this.goodblockData;
-    }
-    var imgUrls = vAPI.getGoodblockImgUrls();
-    var goodblockData = {
-        'imgUrls': imgUrls,
-    };
-    this.goodblockData = goodblockData; // Save data to pagestore.
-    return goodblockData;
-};
-
-// END GOODBLOCK CODE.
-
-/******************************************************************************/
-
 return {
     factory: PageStore.factory
 };

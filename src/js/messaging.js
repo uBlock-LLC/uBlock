@@ -108,9 +108,6 @@ var onMessage = function(request, sender, callback) {
         case 'userSettings':
             response = µb.changeUserSettings(request.name, request.value);
             break;
-        case 'injectGoodblockContentScripts':
-            response = vAPI.injectGoodblockContentScripts();
-            break;
 
         default:
             return vAPI.messaging.UNHANDLED;
@@ -571,9 +568,12 @@ var onMessage = function(request, sender, callback) {
     }
 
     switch ( request.what ) {
-        case 'retrieveGoodblockData':
-            response = pageStore.getGoodblockData();
-            break;
+
+        // Currently unused, but could use to fetch updated
+        // data based on some action in the tab.
+        // case 'retrieveGoodblockData':
+        //     response = pageStore.getGoodblockData();
+        //     break;
 
         default:
             return vAPI.messaging.UNHANDLED;

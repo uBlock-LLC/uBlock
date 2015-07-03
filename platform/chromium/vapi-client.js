@@ -62,6 +62,8 @@ else if(!chrome.runtime.onMessage) {
 
 /******************************************************************************/
 
+// When sending messages from the extension to content scripts,
+// this calls any targeted listeners in the content scripts.
 var messagingConnector = function(response) {
     if ( !response ) {
         return;
