@@ -32,7 +32,7 @@ var GoodblockRootElem = React.createClass({
 	},
 	render: function() {
 		var goodblockData = this.props.goodblockData;
-		var id = 'goodblockBaseElem';
+		var id = 'goodblock-base-elem';
 		var textColor = '#000';
 		var backgroundColor = '#E2E2E2';
 		if (this.state.isClicked) {
@@ -85,7 +85,7 @@ var createBaseElem = function() {
 
 // Update the Goodblock app elements, creating them if they don't exist.
 var renderGoodblock = function(goodblockData) {
-	var baseElem = document.querySelector(reactBaseElemId);
+	var baseElem = document.querySelector('#' + reactBaseElemId);
 	// If our app base element doesn't exist, let's create it.
 	if (!baseElem) {
 		baseElem = createBaseElem();
