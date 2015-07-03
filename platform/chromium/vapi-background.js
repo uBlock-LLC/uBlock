@@ -198,7 +198,7 @@ vAPI.tabs.registerListeners = function() {
         // console.log('Adding goodblock to tab. tabId:', tabId);
         // Inject the content scripts into the tab. After the scripts
         // have run, send a message to the tab.
-        vAPI.injectGoodblockContentScripts(function() {
+        vAPI.injectGoodblockContentScripts(tabId, function() {
             µBlock.goodblock.sendGoodblockDataToTab(tabId);
         });
     }
@@ -536,18 +536,25 @@ vAPI.getGoodblockImgUrls = function() {
 /******************************************************************************/
 
 // Goodblock.
-vAPI.injectGoodblockContentScripts = function(callback) {
+// Inject Goodblock content scripts into the tab with ID tabId.
+// After the scripts are injected, call the function callback.
+vAPI.injectGoodblockContentScripts = function(tabId, callback) {
     var scripts = SCRIPT_PATHS['goodblock'];
     // Execute React.js code followed by Goodblock scripts.
-    chrome.tabs.executeScript({
-        file: scripts['reactjs'],
-    }, function() {
-        chrome.tabs.executeScript({
-            file: scripts['contentscript'],
+    chrome.tabs.executeScript(
+        tabId,
+        {
+            file: scripts['reactjs'],
         }, function() {
-            callback();
-        });
-    });
+            chrome.tabs.executeScript(
+                tabId,
+                {
+                    file: scripts['contentscript'],
+                }, function() {
+                    callback();
+                });
+        }
+    );
 }
 
 /******************************************************************************/
@@ -666,7 +673,7 @@ vAPI.messaging.messageTab = function(message, tabId) {
         msg: message,
         channelName: 'contentscript-goodblock.js'
     };
-    
+
     // Get the portName from the tabId.
     var port = vAPI.messaging.getPortFromTabId(tabId);
     var portName = port['name'];
