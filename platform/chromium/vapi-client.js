@@ -72,6 +72,7 @@ var messagingConnector = function(response) {
     var channels = vAPI.messaging.channels;
     var channel, listener;
 
+    // Handle a message sent to all tabs.
     if ( response.broadcast === true && !response.channelName ) {
         for ( channel in channels ) {
             if ( channels.hasOwnProperty(channel) === false ) {
@@ -91,6 +92,7 @@ var messagingConnector = function(response) {
         delete response.requestId;
     }
 
+    // Get the listener by channel name.
     if ( !listener ) {
         channel = channels[response.channelName];
         listener = channel && channel.listener;

@@ -96,7 +96,7 @@ localMessager.listener = function(request) {
 			// TODO: handle data updating, not just setup.
 			setUpGoodblock(request.data);
 		default:
-			// console.log('Unhandled message sent to contentscript-goodblock.js:', request);
+			console.log('Unhandled message sent to contentscript-goodblock.js:', request);
 	}
 };
 

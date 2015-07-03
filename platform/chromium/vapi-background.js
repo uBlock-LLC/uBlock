@@ -199,7 +199,7 @@ vAPI.tabs.registerListeners = function() {
         // Inject the content scripts into the tab. After the scripts
         // have run, send a message to the tab.
         vAPI.injectGoodblockContentScripts(function() {
-            µBlock.goodblock.broadcastGoodblockData();
+            µBlock.goodblock.sendGoodblockDataToTab(tabId);
         });
     }
 
@@ -645,6 +645,33 @@ vAPI.messaging.broadcast = function(message) {
         }
         this.ports[portName].postMessage(messageWrapper);
     }
+};
+
+/******************************************************************************/
+
+vAPI.messaging.getPortFromTabId = function(tabId) {
+    for ( var portName in this.ports ) {
+        var portTabId = this.ports[portName]['sender']['tab']['id'];
+        if (portTabId === tabId) {
+            return this.ports[portName];
+        }
+    }
+    return null;
+}
+
+// Goodblock.
+// Sends a message to a specific tab.
+vAPI.messaging.messageTab = function(message, tabId) {
+    var messageWrapper = {
+        msg: message,
+        channelName: 'contentscript-goodblock.js'
+    };
+    
+    // Get the portName from the tabId.
+    var port = vAPI.messaging.getPortFromTabId(tabId);
+    var portName = port['name'];
+    // Message the port.
+    this.ports[portName].postMessage(messageWrapper);
 };
 
 /******************************************************************************/

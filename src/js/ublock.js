@@ -368,14 +368,24 @@ var matchWhitelistDirective = function(url, hostname, directive) {
 
 /******************************************************************************/
 
-// TODO: don't broadcast this to all tabs every time there is
-// a tab update. Instead, target the message to one tab.
+// Send Goodblock data to all tabs.
 µBlock.goodblock.broadcastGoodblockData = function() {
     var goodblockData = µBlock.goodblock.getGoodblockData();
     vAPI.messaging.broadcast({
         what: 'goodblockData',
         data: goodblockData,
     });
+};
+
+/******************************************************************************/
+
+// Send Goodblock data to a specific tab.
+µBlock.goodblock.sendGoodblockDataToTab = function(tabId) {
+    var goodblockData = µBlock.goodblock.getGoodblockData();
+    vAPI.messaging.messageTab({
+        what: 'goodblockData',
+        data: goodblockData,
+    }, tabId);
 };
 
 /******************************************************************************/
