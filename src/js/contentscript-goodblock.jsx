@@ -72,14 +72,25 @@ var localMessager = vAPI.messaging.channel('contentscript-goodblock.js');
 /******************************************************************************/
 /******************************************************************************/
 
-// Create the Goodblock app elements.
-var setUpGoodblock = function(goodblockData) {
+var reactBaseElemId = 'goodblock-react-base';
+
+// Create the Goodblock app base element and return it.
+var createBaseElem = function() {
 	var reactBaseElem = document.createElement('div');
-	var reactBaseElemId = 'goodblock-react-base';
 	reactBaseElem.id = reactBaseElemId;
 	reactBaseElem.dataset.goodblockInitialized = 'true';
 	document.body.appendChild(reactBaseElem);
-	React.render(<GoodblockRootElem goodblockData={goodblockData} />, document.getElementById(reactBaseElemId));
+	return reactBaseElem;
+}
+
+// Update the Goodblock app elements, creating them if they don't exist.
+var renderGoodblock = function(goodblockData) {
+	var baseElem = document.querySelector(reactBaseElemId);
+	// If our app base element doesn't exist, let's create it.
+	if (!baseElem) {
+		baseElem = createBaseElem();
+	}
+	React.render(<GoodblockRootElem goodblockData={goodblockData} />, baseElem);
 }
 
 /******************************************************************************/
@@ -93,8 +104,7 @@ localMessager.listener = function(request) {
 		// Listen for Goodblock data.
 		case 'goodblockData':
 			// console.log('Goodblock data', request.data);
-			// TODO: handle data updating, not just setup.
-			setUpGoodblock(request.data);
+			renderGoodblock(request.data);
 			break;
 		default:
 			console.log('Unhandled message sent to contentscript-goodblock.js:', request);
