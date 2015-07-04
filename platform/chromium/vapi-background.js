@@ -208,6 +208,12 @@ vAPI.tabs.registerListeners = function() {
         addGoodblockToTab(tab.id);
     };
 
+    // Goodblock
+    var onActivated = function(activeInfo) {
+        var tabId = activeInfo.tabId;
+        µBlock.goodblock.updateActiveTab(tabId);
+    }
+
     var onUpdated = function(tabId, changeInfo, tab) {
         if ( changeInfo.url && popupCandidateTest({ tabId: tabId, url: changeInfo.url }) ) {
             return;
@@ -240,6 +246,8 @@ vAPI.tabs.registerListeners = function() {
     chrome.tabs.onRemoved.addListener(onClosed);
     // Goodblock.
     chrome.tabs.onCreated.addListener(onCreated);
+    // Goodblock.
+    chrome.tabs.onActivated.addListener(onActivated);
 };
 
 /******************************************************************************/

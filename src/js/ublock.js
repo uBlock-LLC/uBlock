@@ -357,6 +357,40 @@ var matchWhitelistDirective = function(url, hostname, directive) {
 
 /******************************************************************************/
 
+// An object of data representing the state of the Goodblock
+// functionality within tabs.
+µBlock.goodblock.state = {
+    activeTabId: null,
+}
+
+/******************************************************************************/
+
+// Control Goodblock visibility
+
+µBlock.goodblock.updateGoodblockVisibilityByTabId = function(tabId, isVisible) {
+    if (!tabId) {
+        return;
+    }
+    vAPI.messaging.messageTab({
+        what: 'goodblockVisibility',
+        data: {
+            isVisible: isVisible,
+        },
+    }, tabId);
+}
+
+µBlock.goodblock.updateActiveTab = function(activeTabId) {
+    // Hide Goodblock on the old tab.
+    µBlock.goodblock.updateGoodblockVisibilityByTabId(µBlock.goodblock.state.activeTabId, false);
+    µBlock.goodblock.state['activeTabId'] = activeTabId;
+    // Show Goodblock on the new tab.
+    µBlock.goodblock.updateGoodblockVisibilityByTabId(µBlock.goodblock.state.activeTabId, true);
+}
+
+/******************************************************************************/
+
+// Return an object of data needed to render elements in the
+// Goodblock content script.
 µBlock.goodblock.getGoodblockData = function() {
     var imgUrls = vAPI.getGoodblockImgUrls();
     var goodblockData = {
