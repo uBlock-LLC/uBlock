@@ -83,6 +83,10 @@ var GoodblockRootElem = React.createClass({
 		if (!this.shouldRender()) {
 			return <div></div>;
 		}
+		// TODO: Make Goodblock visibility work better on Chrome.
+		// React and CSS3 transitions don't work well on background tabs
+		// in the browser, so this element doesn't actually transition
+		// to being invisible.
 		var isVisible = goodblockData.isVisible;
 		var id = 'goodblock-base-elem';
 		var textColor = '#000';

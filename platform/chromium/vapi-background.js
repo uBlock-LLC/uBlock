@@ -544,6 +544,7 @@ vAPI.getGoodblockImgUrls = function() {
 // Goodblock.
 // Inject Goodblock content scripts into the tab with ID tabId.
 // After the scripts are injected, call the function callback.
+// TODO: check the tab URL to see if we are allowed to inject into it.
 vAPI.injectGoodblockContentScripts = function(tabId, callback) {
     var scripts = SCRIPT_PATHS['goodblock'];
 
