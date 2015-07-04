@@ -478,6 +478,7 @@ var SCRIPT_PATHS = {
     "goodblock": {
         'contentscript': 'js/contentscript-goodblock.js',
         'reactjs': 'lib/react-with-addons.js',
+        'eventEmitter': 'lib/EventEmitter.min.js',
     }
 };
 
@@ -540,21 +541,40 @@ vAPI.getGoodblockImgUrls = function() {
 // After the scripts are injected, call the function callback.
 vAPI.injectGoodblockContentScripts = function(tabId, callback) {
     var scripts = SCRIPT_PATHS['goodblock'];
-    // Execute React.js code followed by Goodblock scripts.
-    chrome.tabs.executeScript(
-        tabId,
-        {
-            file: scripts['reactjs'],
-        }, function() {
-            chrome.tabs.executeScript(
-                tabId,
-                {
-                    file: scripts['contentscript'],
-                }, function() {
-                    callback();
-                });
-        }
-    );
+
+    // Execute Goodblock code and call the callback.
+    function injectGoodblockScript() {
+        chrome.tabs.executeScript(
+            tabId,
+            {
+                file: scripts['contentscript'],
+            },
+            function() {
+                callback();
+            }
+        );
+    };
+
+    // Execute EventEmitter code and call the next script.
+    function injectEventEmitterScript() {
+        chrome.tabs.executeScript(
+            tabId,
+            {
+                file: scripts['eventEmitter'],
+            }, injectGoodblockScript
+        );
+    };
+
+    // Execute React.js code and call the next script.
+    function injectReactJsScript() {
+        chrome.tabs.executeScript(
+            tabId,
+            {
+                file: scripts['reactjs'],
+            }, injectEventEmitterScript
+        );
+    }
+    injectReactJsScript();
 }
 
 /******************************************************************************/
