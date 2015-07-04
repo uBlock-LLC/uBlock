@@ -569,11 +569,8 @@ var onMessage = function(request, sender, callback) {
 
     switch ( request.what ) {
 
-        // Currently unused, but could use to fetch updated
-        // data based on some action in the tab.
-        case 'retrieveGoodblockData':
-            var tabId = sender.tab.id;
-            response = µb.goodblock.getGoodblockData(tabId);
+        case 'retrieveGoodblockImgUrls':
+            response = vAPI.getGoodblockImgUrls();
             break;
 
         default:

@@ -357,10 +357,24 @@ var matchWhitelistDirective = function(url, hostname, directive) {
 
 /******************************************************************************/
 
-// An object of data representing the state of the Goodblock
-// functionality within tabs.
-µBlock.goodblock.state = {
+// To store info about tab activity that's relevant to showing
+// the Goodlbock icon.
+µBlock.goodblock.tabData = {
     activeTabId: null,
+}
+
+/******************************************************************************/
+
+µBlock.goodblock.updateGoodblockVisibilityByTabId = function(tabId, isVisible) {
+    if (!tabId) {
+        return;
+    }
+    vAPI.messaging.messageTab({
+        what: 'goodblockVisibility',
+        data: {
+            isVisible: isVisible,
+        },
+    }, tabId);
 }
 
 /******************************************************************************/
@@ -368,42 +382,15 @@ var matchWhitelistDirective = function(url, hostname, directive) {
 // Control Goodblock visibility
 
 µBlock.goodblock.updateActiveTab = function(activeTabId) {
-    var oldActiveTabId = µBlock.goodblock.state['activeTabId'];
+    var oldActiveTabId = µBlock.goodblock.tabData['activeTabId'];
 
     // Set the new active tab.
-    µBlock.goodblock.state['activeTabId'] = activeTabId;
+    µBlock.goodblock.tabData['activeTabId'] = activeTabId;
 
     // Send updated data to the old and new active tabs.
-    µBlock.goodblock.sendGoodblockDataToTab(oldActiveTabId);
-    µBlock.goodblock.sendGoodblockDataToTab(activeTabId);
+    µBlock.goodblock.updateGoodblockVisibilityByTabId(oldActiveTabId, false);
+    µBlock.goodblock.updateGoodblockVisibilityByTabId(activeTabId, true);
 }
-
-/******************************************************************************/
-
-// Return an object of data needed to render elements in the
-// Goodblock content script for a tab with ID tabID
-µBlock.goodblock.getGoodblockData = function(tabId) {
-    var imgUrls = vAPI.getGoodblockImgUrls();
-    var goodblockData = {
-        'imgUrls': imgUrls,
-        'isVisible': (tabId === µBlock.goodblock.state.activeTabId),
-    };
-    return goodblockData;
-};
-
-/******************************************************************************/
-
-// Send Goodblock data to a specific tab.
-µBlock.goodblock.sendGoodblockDataToTab = function(tabId) {
-    if (!tabId) {
-        return;
-    }
-    var goodblockData = µBlock.goodblock.getGoodblockData(tabId);
-    vAPI.messaging.messageTab({
-        what: 'goodblockData',
-        data: goodblockData,
-    }, tabId);
-};
 
 /******************************************************************************/
 

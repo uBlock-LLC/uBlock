@@ -6,18 +6,19 @@ console.log('Goodblock content script.');
 // Data stores.
 
 var ee = new EventEmitter();
-// Default Goodblock data.
+// Initial Goodblockstate.
 var _goodblockData = {
-	isVisible: false
+	imgUrls: {}, // We fetch these from the extension on load.
+	uiState: {
+		isClicked: false,
+		isVisible: true,
+	}
 };
 
+// Source-of-truth state for Goodblock on this page.
 var goodblockDataStore = {
     get: function() {
         return _goodblockData;
-    },
-    set: function(newData) {
-    	_goodblockData = newData;
-    	this.emitChange();
     },
     emitChange: function() {
     	console.log('Changed goodblockData:', _goodblockData);
@@ -29,8 +30,23 @@ var goodblockDataStore = {
     removeChangeListener: function(callback) {
         ee.removeListener('goodblockDataChange', callback);
     },
-
 };
+
+// Actions used to update the Goodblock state.
+var goodblockDataActions = {
+	iconClick: function(isClicked) {
+		_goodblockData.uiState.isClicked = isClicked;
+		goodblockDataStore.emitChange();
+	},
+	setImgUrls: function(imgUrls) {
+		_goodblockData.imgUrls = imgUrls;
+		goodblockDataStore.emitChange();
+	},
+	changeVisibility: function(isVisible) {
+		_goodblockData.uiState.isVisible = isVisible;
+		goodblockDataStore.emitChange();
+	},
+}
 
 /******************************************************************************/
 /******************************************************************************/
@@ -53,11 +69,59 @@ var GoodblockIcon = React.createClass({
 	}
 });
 
+var GoodblockIconHolder = React.createClass({
+	onClick: function() {
+		var goodblockData = this.props.goodblockData;
+		goodblockDataActions.iconClick(!goodblockData.uiState.isIconClicked);
+	},
+	render: function() {
+		var goodblockData = this.props.goodblockData;
+		// TODO: Make Goodblock visibility work better on Chrome.
+		// React and CSS3 transitions don't work well on background tabs
+		// in the browser, so this element doesn't actually transition
+		// to being invisible.
+		var isVisible = goodblockData.uiState.isVisible;
+		var textColor = '#000';
+		var backgroundColor = 'rgba(0, 0, 0, 0.06)';
+		if (goodblockData.uiState.isClicked) {
+			textColor = '#FFF';
+			backgroundColor = '#000';
+		}
+		var opacity;
+		if (isVisible) {
+			var left = '10px';
+			var transition = 'left 0.5s ease 0.3s';
+		}
+		else {
+			var left = '-1000px';
+			var transition = 'none';
+		}
+		var style = {
+			position: 'fixed',
+			bottom: '10px',
+			left: left,
+			width: '100px',
+			height: '100px',
+			display: 'block',
+			zIndex: '10000000',
+			borderRadius: '50%',
+			color: textColor,
+			backgroundColor: backgroundColor,
+			padding: '10px',
+			transition: transition,
+		};
+		return (
+			<div style={style} onMouseDown={this.onClick} >
+				<GoodblockIcon goodblockData={goodblockData} />
+			</div>
+		);
+	}
+});
+
 var GoodblockRootElem = React.createClass({
 	getInitialState: function() {
 		return {
 			goodblockData: goodblockDataStore.get(),
-			isClicked: false,
 		}
 	},
 	_onGoodblockDataChange: function() {
@@ -70,12 +134,18 @@ var GoodblockRootElem = React.createClass({
 	componentWillUnmount: function() {
 		goodblockDataStore.removeChangeListener(this._onGoodblockDataChange);
 	},
-	onClick: function() {
-		this.setState({'isClicked': !this.state.isClicked});
-	},
 	shouldRender: function() {
+		function isNonemptyObject(obj) {
+            return (Object.keys(obj).length);
+        }
 		var goodblockData = this.state.goodblockData;
-		return (goodblockData && goodblockData['imgUrls']);
+		return (
+			goodblockData &&
+			goodblockData.imgUrls &&
+			isNonemptyObject(goodblockData.imgUrls) &&
+			goodblockData.uiState &&
+			isNonemptyObject(goodblockData.uiState)
+		);
 	},
 	render: function() {
 		var goodblockData = this.state.goodblockData;
@@ -83,49 +153,12 @@ var GoodblockRootElem = React.createClass({
 		if (!this.shouldRender()) {
 			return <div></div>;
 		}
-		// TODO: Make Goodblock visibility work better on Chrome.
-		// React and CSS3 transitions don't work well on background tabs
-		// in the browser, so this element doesn't actually transition
-		// to being invisible.
-		var isVisible = goodblockData.isVisible;
 		var id = 'goodblock-base-elem';
-		var textColor = '#000';
-		var backgroundColor = '#E2E2E2';
-		if (this.state.isClicked) {
-			textColor = '#FFF';
-			backgroundColor = '#000';
-		}
-		var transition = 'opacity 1.5s ease 1s';
-		var opacity;
-		if (isVisible) {
-			// var left = '10px';
-			opacity = 1;
-		}
-		else {
-			// var left = '-1000px';
-			opacity = 0;
-		}
-		var style = {
-			position: 'fixed',
-			bottom: '10px',
-			// left: left,
-			opacity: opacity,
-			width: '100px',
-			height: '100px',
-			display: 'block',
-			zIndex: '10000000',
-			color: textColor,
-			backgroundColor: backgroundColor,
-			padding: '10px',
-			transition: transition,
-		};
 		return (
 			<div
 				id={id}
-				style={style}
-				onMouseDown={this.onClick}
 				dataGoodblockElem='true'>
-					<GoodblockIcon goodblockData={goodblockData} />
+					<GoodblockIconHolder goodblockData={goodblockData} />
 			</div>
 		);
 	}
@@ -168,14 +201,14 @@ initGoodblock();
 /******************************************************************************/
 /******************************************************************************/
 
-// Listen for messages from extension.
+// Listen for messages from the extension.
 
 localMessager.listener = function(request) {
 	// console.log('Message sent to contentscript-goodblock.js', request);
 	switch (request.what) {
 		// Listen for Goodblock data.
-		case 'goodblockData':	
-			goodblockDataStore.set(request.data);
+		case 'goodblockVisibility':
+			goodblockDataActions.changeVisibility(request.data.isVisible);
 			break;
 		default:
 			console.log('Unhandled message sent to contentscript-goodblock.js:', request);
@@ -186,17 +219,17 @@ localMessager.listener = function(request) {
 /******************************************************************************/
 /******************************************************************************/
 
-// Fetch Goodblock data at first load.
+// On load, fetch any Goodblock data we need from the extension.
 
-var goodblockDataHandler = function(data) {
-	goodblockDataStore.set(data);
+var goodblockImgUrlHandler = function(imgUrlData) {
+	goodblockDataActions.setImgUrls(imgUrlData);
 };
 
 localMessager.send(
   {
-    what: 'retrieveGoodblockData'
+    what: 'retrieveGoodblockImgUrls'
   },
-  goodblockDataHandler
+  goodblockImgUrlHandler
 );
 
 /******************************************************************************/
