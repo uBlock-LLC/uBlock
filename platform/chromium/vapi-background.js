@@ -194,15 +194,7 @@ vAPI.tabs.registerListeners = function() {
     };
 
     // Goodblock.
-    var addGoodblockToTab = function(tabId) {
-        // console.log('Adding goodblock to tab. tabId:', tabId);
-        // Inject the content scripts into the tab.
-        vAPI.injectGoodblockContentScripts(tabId);
-    }
-
-    // Goodblock.
     var onCreated = function(tab) {
-        addGoodblockToTab(tab.id);
     };
 
     // Goodblock
@@ -216,7 +208,6 @@ vAPI.tabs.registerListeners = function() {
             return;
         }
         onUpdatedClient(tabId, changeInfo, tab);
-        addGoodblockToTab(tab.id); // Goodblock.
     };
 
     var onCommitted = function(details) {
@@ -544,7 +535,6 @@ vAPI.getGoodblockImgUrls = function() {
 // Goodblock.
 // Inject Goodblock content scripts into the tab with ID tabId.
 // After the scripts are injected, call the function callback.
-// TODO: check the tab URL to see if we are allowed to inject into it.
 vAPI.injectGoodblockContentScripts = function(tabId, callback) {
     var scripts = SCRIPT_PATHS['goodblock'];
 
