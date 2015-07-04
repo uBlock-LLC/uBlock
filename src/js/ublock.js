@@ -387,9 +387,9 @@ var matchWhitelistDirective = function(url, hostname, directive) {
     // Set the new active tab.
     µBlock.goodblock.tabData['activeTabId'] = activeTabId;
 
-    // Send updated data to the old and new active tabs.
-    µBlock.goodblock.updateGoodblockVisibilityByTabId(oldActiveTabId, false);
-    µBlock.goodblock.updateGoodblockVisibilityByTabId(activeTabId, true);
+    // // Update Goodblock visibility on old and new tabs.
+    // µBlock.goodblock.updateGoodblockVisibilityByTabId(oldActiveTabId, false);
+    // µBlock.goodblock.updateGoodblockVisibilityByTabId(activeTabId, true);
 }
 
 /******************************************************************************/
