@@ -362,7 +362,6 @@ var matchWhitelistDirective = function(url, hostname, directive) {
     var goodblockData = {
         'imgUrls': imgUrls,
     };
-    this.goodblockData = goodblockData; // Save data to pagestore.
     return goodblockData;
 };
 
