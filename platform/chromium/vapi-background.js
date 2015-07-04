@@ -196,11 +196,8 @@ vAPI.tabs.registerListeners = function() {
     // Goodblock.
     var addGoodblockToTab = function(tabId) {
         // console.log('Adding goodblock to tab. tabId:', tabId);
-        // Inject the content scripts into the tab. After the scripts
-        // have run, send a message to the tab.
-        vAPI.injectGoodblockContentScripts(tabId, function() {
-            µBlock.goodblock.sendGoodblockDataToTab(tabId);
-        });
+        // Inject the content scripts into the tab.
+        vAPI.injectGoodblockContentScripts(tabId);
     }
 
     // Goodblock.
@@ -558,7 +555,9 @@ vAPI.injectGoodblockContentScripts = function(tabId, callback) {
                 file: scripts['contentscript'],
             },
             function() {
-                callback();
+                if (typeof callback === 'function') {
+                    callback();
+                }
             }
         );
     };
@@ -896,7 +895,10 @@ vAPI.onLoadAllCompleted = function() {
             file: 'js/contentscript-end.js',
             allFrames: true,
             runAt: 'document_idle'
-        }, scriptDone);
+        }, function() {
+            // Goodblock.
+            vAPI.injectGoodblockContentScripts(tabId, scriptDone);
+        });
     };
     var scriptStart = function(tabId) {
         vAPI.tabs.injectScript(tabId, {

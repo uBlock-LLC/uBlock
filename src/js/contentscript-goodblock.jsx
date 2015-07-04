@@ -11,15 +11,16 @@ var _goodblockData = {
 	isVisible: false
 };
 
-var updateGoodblockVisibility = function(isVisible) {
-	_goodblockData.isVisible = isVisible;
-}
-
 var goodblockDataStore = {
     get: function() {
         return _goodblockData;
     },
+    set: function(newData) {
+    	_goodblockData = newData;
+    	this.emitChange();
+    },
     emitChange: function() {
+    	console.log('Changed goodblockData:', _goodblockData);
         ee.emitEvent('goodblockDataChange');
     },
     addChangeListener: function(callback) {
@@ -163,28 +164,37 @@ initGoodblock();
 /******************************************************************************/
 /******************************************************************************/
 
-// Listener for messages from extension.
+// Listen for messages from extension.
 
 localMessager.listener = function(request) {
 	// console.log('Message sent to contentscript-goodblock.js', request);
 	switch (request.what) {
 		// Listen for Goodblock data.
-		case 'goodblockData':
-			// console.log('Goodblock data', request.data);
-			goodblockData = request.data;
-			_goodblockData = goodblockData;
-			break;
-		case 'goodblockVisibility':
-			isVisible = request.data.isVisible;
-			updateGoodblockVisibility(isVisible)
+		case 'goodblockData':	
+			goodblockDataStore.set(request.data);
 			break;
 		default:
 			console.log('Unhandled message sent to contentscript-goodblock.js:', request);
 			return;
 	}
-	// If data changed, send an update event.
-	goodblockDataStore.emitChange();
 };
 
 /******************************************************************************/
 /******************************************************************************/
+
+// Fetch Goodblock data at first load.
+
+var goodblockDataHandler = function(data) {
+	goodblockDataStore.set(data);
+};
+
+localMessager.send(
+  {
+    what: 'retrieveGoodblockData'
+  },
+  goodblockDataHandler
+);
+
+/******************************************************************************/
+/******************************************************************************/
+

@@ -571,9 +571,10 @@ var onMessage = function(request, sender, callback) {
 
         // Currently unused, but could use to fetch updated
         // data based on some action in the tab.
-        // case 'retrieveGoodblockData':
-        //     response = pageStore.getGoodblockData();
-        //     break;
+        case 'retrieveGoodblockData':
+            var tabId = sender.tab.id;
+            response = µb.goodblock.getGoodblockData(tabId);
+            break;
 
         default:
             return vAPI.messaging.UNHANDLED;
