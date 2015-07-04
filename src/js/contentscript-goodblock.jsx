@@ -58,6 +58,8 @@ var goodblockDataActions = {
 
 // Our React app code.
 
+var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
+
 var GoodblockIcon = React.createClass({
 	render: function() {
 		var goodblockData = this.props.goodblockData;
@@ -106,20 +108,10 @@ var GoodblockIconHolder = React.createClass({
 			textColor = '#FFF';
 			backgroundColor = '#000';
 		}
-		if (isVisible) {
-			var left = '10px';
-			var transition = 'left 0.5s ease 0.3s';
-		}
-		else {
-			var left = '-1000px';
-			var transition = 'none';
-		}
-
 		var style = {
 			color: textColor,
 			backgroundColor: backgroundColor,
-			transition: transition,
-			left: left,
+			left: 10,
 			bottom: 30,
 			width: 26,
 			height: 26,
@@ -130,13 +122,28 @@ var GoodblockIconHolder = React.createClass({
 			borderRadius: '50%',
 			boxSizing: 'content-box',
 		};
+		var goodblockIcon;
+		if (isVisible) {
+			goodblockIcon = (
+				<div
+					key='goodblock-icon-holder'
+					style={style}
+					onMouseDown={this.onClick}
+					onMouseEnter={this.onMouseEnter}
+					onMouseLeave={this.onMouseLeave} >
+					<GoodblockIcon goodblockData={goodblockData} />
+				</div>
+			);
+		}
+		var SHOULD_ANIMATE_ICON = true;
 		return (
-			<div style={style}
-				onMouseDown={this.onClick}
-				onMouseEnter={this.onMouseEnter}
-				onMouseLeave={this.onMouseLeave} >
-				<GoodblockIcon goodblockData={goodblockData} />
-			</div>
+			<ReactCSSTransitionGroup
+				transitionName='goodblock-icon'
+				transitionAppear={SHOULD_ANIMATE_ICON}
+				transitionEnter={SHOULD_ANIMATE_ICON}
+				transitionLeave={SHOULD_ANIMATE_ICON} >
+				{goodblockIcon}
+			</ReactCSSTransitionGroup>
 		);
 	}
 });
