@@ -11,6 +11,7 @@ var _goodblockData = {
 	imgUrls: {}, // We fetch these from the extension on load.
 	uiState: {
 		isClicked: false,
+		isHovering: false,
 		isVisible: true,
 	}
 };
@@ -38,6 +39,10 @@ var goodblockDataActions = {
 		_goodblockData.uiState.isClicked = isClicked;
 		goodblockDataStore.emitChange();
 	},
+	iconHover: function(isHovering) {
+		_goodblockData.uiState.isHovering = isHovering;
+		goodblockDataStore.emitChange();
+	},
 	setImgUrls: function(imgUrls) {
 		_goodblockData.imgUrls = imgUrls;
 		goodblockDataStore.emitChange();
@@ -59,7 +64,9 @@ var GoodblockIcon = React.createClass({
 		var goodblockIconUrl = goodblockData['imgUrls']['goodblockIcon60'];
 		var imgSrc = goodblockIconUrl;
 		var imgStyle = {
-
+			width: 26,
+			height: 26,
+		    maxWidth: 'none',
 		};
 		return (
 			<img
@@ -72,7 +79,16 @@ var GoodblockIcon = React.createClass({
 var GoodblockIconHolder = React.createClass({
 	onClick: function() {
 		var goodblockData = this.props.goodblockData;
-		goodblockDataActions.iconClick(!goodblockData.uiState.isIconClicked);
+		goodblockDataActions.iconClick(!goodblockData.uiState.isClicked);
+	},
+	changeHoverState: function(isHovering) {
+		goodblockDataActions.iconHover(isHovering);
+	},
+	onMouseEnter: function() {		
+		this.changeHoverState(true);
+	},
+	onMouseLeave: function() {
+		this.changeHoverState(false);
 	},
 	render: function() {
 		var goodblockData = this.props.goodblockData;
@@ -83,11 +99,13 @@ var GoodblockIconHolder = React.createClass({
 		var isVisible = goodblockData.uiState.isVisible;
 		var textColor = '#000';
 		var backgroundColor = 'rgba(0, 0, 0, 0.06)';
+		if (goodblockData.uiState.isHovering) {
+			backgroundColor = 'rgba(0, 0, 0, 0.12)';
+		}
 		if (goodblockData.uiState.isClicked) {
 			textColor = '#FFF';
 			backgroundColor = '#000';
 		}
-		var opacity;
 		if (isVisible) {
 			var left = '10px';
 			var transition = 'left 0.5s ease 0.3s';
@@ -96,22 +114,27 @@ var GoodblockIconHolder = React.createClass({
 			var left = '-1000px';
 			var transition = 'none';
 		}
+
 		var style = {
-			position: 'fixed',
-			bottom: '10px',
-			left: left,
-			width: '100px',
-			height: '100px',
-			display: 'block',
-			zIndex: '10000000',
-			borderRadius: '50%',
 			color: textColor,
 			backgroundColor: backgroundColor,
-			padding: '10px',
 			transition: transition,
+			left: left,
+			bottom: 30,
+			width: 26,
+			height: 26,
+			padding: 6,
+			display: 'block',
+			zIndex: '10000000',
+			position: 'fixed',
+			borderRadius: '50%',
+			boxSizing: 'content-box',
 		};
 		return (
-			<div style={style} onMouseDown={this.onClick} >
+			<div style={style}
+				onMouseDown={this.onClick}
+				onMouseEnter={this.onMouseEnter}
+				onMouseLeave={this.onMouseLeave} >
 				<GoodblockIcon goodblockData={goodblockData} />
 			</div>
 		);
