@@ -704,6 +704,12 @@ vAPI.messaging.messageTab = function(message, tabId) {
 
     // Get the portName from the tabId.
     var port = vAPI.messaging.getPortFromTabId(tabId);
+
+    // If there isn't a port for the tab, don't send the message.
+    if (!port) {
+        return;
+    }
+
     var portName = port['name'];
     // Message the port.
     this.ports[portName].postMessage(messageWrapper);
