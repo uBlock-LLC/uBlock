@@ -42,19 +42,7 @@
         },
         {
             "matches": ["http://*/*", "https://*/*", "file:///*"],
-            "js": ["lib/react-with-addons.js"],
-            "run_at": "document_idle",
-            "all_frames": false
-        },
-        {
-            "matches": ["http://*/*", "https://*/*", "file:///*"],
-            "js": ["lib/EventEmitter.min.js"],
-            "run_at": "document_idle",
-            "all_frames": false
-        },
-        {
-            "matches": ["http://*/*", "https://*/*", "file:///*"],
-            "js": ["js/contentscript-goodblock.js"],
+            "js": ["lib/react-with-addons.js", "lib/EventEmitter.min.js", "js/contentscript-goodblock.js"],
             "run_at": "document_idle",
             "all_frames": false
         },
