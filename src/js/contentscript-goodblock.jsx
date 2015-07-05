@@ -122,6 +122,7 @@ var SpeechBubble = React.createClass({
 
 var SnoozeButton = React.createClass({
 	onClick: function(event) {
+		event.stopPropagation();
 		var goodblockData = this.props.goodblockData;
 		goodblockDataActions.snoozeClick(!goodblockData.uiState.snooze.isClicked);
 	},
