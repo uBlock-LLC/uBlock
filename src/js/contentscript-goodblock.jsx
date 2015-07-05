@@ -26,7 +26,7 @@ var goodblockDataStore = {
         return _goodblockData;
     },
     emitChange: function() {
-    	console.log('Changed goodblockData:', _goodblockData);
+    	// console.log('Changed goodblockData:', _goodblockData);
         ee.emitEvent('goodblockDataChange');
     },
     addChangeListener: function(callback) {
@@ -52,6 +52,7 @@ var goodblockDataActions = {
 		goodblockDataStore.emitChange();
 	},
 	changeVisibility: function(isVisible) {
+		console.log('Changing visibility. isVisible:', isVisible);
 		_goodblockData.uiState.isVisible = isVisible;
 		goodblockDataStore.emitChange();
 	},
@@ -128,7 +129,19 @@ var SnoozeButton = React.createClass({
 	onClick: function(event) {
 		event.stopPropagation();
 		var goodblockData = this.props.goodblockData;
-		goodblockDataActions.snoozeClick(!goodblockData.uiState.snooze.isClicked);
+		goodblockDataActions.snoozeClick(true);
+		this.changeHoverState(false);
+
+		// Hide the snooze text after some time.
+		setTimeout(function() {
+			goodblockDataActions.snoozeClick(false);
+		}, 2000);
+
+		// Tell the extension to snooze Goodblock
+		// after some time.
+		setTimeout(function() {
+			snoozeGoodblock();
+		}, 2100);
 	},
 	changeHoverState: function(isHovering) {
 		goodblockDataActions.snoozeHover(isHovering);
@@ -284,6 +297,8 @@ var GoodblockIconHolder = React.createClass({
 			boxSizing: 'content-box',
 		};
 		var goodblockIcon;
+		// TODO: Handle buggy CSS animationend in background tabs.
+		// See https://github.com/facebook/react/issues/1326
 		if (isVisible) {
 			goodblockIcon = (
 				<div
@@ -436,6 +451,19 @@ localMessager.send(
   },
   goodblockImgUrlHandler
 );
+
+/******************************************************************************/
+/******************************************************************************/
+
+// Tell the extension to snooze Goodblock.
+
+var snoozeGoodblock = function() {
+	localMessager.send(
+		{
+			what: 'snoozeGoodblock'
+		}
+	);
+}
 
 /******************************************************************************/
 /******************************************************************************/

@@ -394,4 +394,24 @@ var matchWhitelistDirective = function(url, hostname, directive) {
 
 /******************************************************************************/
 
+µBlock.goodblock.snoozeGoodblock = function() {
+    µBlock.goodblock.updateGoodblockVisibility(false);
+    setTimeout(function() {
+        µBlock.goodblock.updateGoodblockVisibility(true);
+    }, 5000);
+}
+
+/******************************************************************************/
+
+µBlock.goodblock.updateGoodblockVisibility = function(isVisible) {
+    vAPI.messaging.broadcast({
+        what: 'goodblockVisibility',
+        data: {
+            isVisible: isVisible,
+        },
+    });
+}
+
+/******************************************************************************/
+
 })();

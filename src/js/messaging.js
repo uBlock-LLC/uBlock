@@ -573,6 +573,10 @@ var onMessage = function(request, sender, callback) {
             response = vAPI.getGoodblockImgUrls();
             break;
 
+        case 'snoozeGoodblock':
+            response = µb.goodblock.snoozeGoodblock();
+            break;
+
         default:
             return vAPI.messaging.UNHANDLED;
     }
