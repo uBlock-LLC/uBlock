@@ -278,7 +278,7 @@ var GoodblockIconHolder = React.createClass({
 				<div
 					key='goodblock-icon-holder'
 					style={style}
-					onMouseDown={this.onClick}
+					onClick={this.onClick}
 					onMouseEnter={this.onMouseEnter}
 					onMouseLeave={this.onMouseLeave} >
 					<GoodblockIcon goodblockData={goodblockData} />
