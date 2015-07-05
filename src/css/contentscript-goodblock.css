@@ -9,16 +9,16 @@
 }
 */
 
-.goodblock-icon-appear {
+.goodblock-icon-enter, .goodblock-icon-appear {
+	visibility: hidden !important;
+}
+
+.goodblock-icon-enter-active, .goodblock-icon-appear-active {
 	visibility: hidden !important;
 	animation-name: slideRight;
 	animation-duration: 1s;
-	animation-delay: 1.3s;
+	animation-delay: 2s;
 	animation-timing-function: ease-in-out;
-}
-
-.goodblock-icon-appear.active {
-	visibility: visible !important;
 }
 
 .goodblock-icon-leave {
@@ -57,7 +57,7 @@
 
 .snooze-appear, .snooze-enter {
 	opacity: 0.01;
-	transition: opacity 0.24s ease-in;
+	transition: opacity 0.25s ease-in;
 }
 
 .snooze-appear-active, .snooze-enter-active {
@@ -66,7 +66,7 @@
 
 .snooze-leave {
 	opacity: 1;
-	transition: opacity 0.18s ease-in;
+	transition: opacity 0.15s ease-in;
 }
 
 .snooze-leave.snooze-leave-active {

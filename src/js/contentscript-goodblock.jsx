@@ -5,6 +5,11 @@ console.log('Goodblock content script.');
 
 var React = require('react/addons');
 
+// This module is a replacement for React's CSSTransitionGroup,
+// which is buggy when run background tabs.
+// See https://github.com/facebook/react/issues/1326
+var TimeoutTransitionGroup = require('./components/TimeoutTransitionGroup.jsx');
+
 /******************************************************************************/
 /******************************************************************************/
 
@@ -75,8 +80,6 @@ var goodblockDataActions = {
 /******************************************************************************/
 
 // Our React app code.
-
-var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
 var universalStyle = {
 	'fontFamily': "'Helvetica Neue', Roboto, 'Segoe UI', Calibri, sans-serif",
@@ -257,10 +260,6 @@ var GoodblockIconHolder = React.createClass({
 	},
 	render: function() {
 		var goodblockData = this.props.goodblockData;
-		// TODO: Make Goodblock visibility work better on Chrome.
-		// React and CSS3 transitions don't work well on background tabs
-		// in the browser, so this element doesn't actually transition
-		// to being invisible.
 		var isVisible = goodblockData.uiState.isVisible;
 		var textColor = '#000';
 		var backgroundColor = 'rgba(0, 0, 0, 0.06)';
@@ -302,8 +301,6 @@ var GoodblockIconHolder = React.createClass({
 			boxSizing: 'content-box',
 		};
 		var goodblockIcon;
-		// TODO: Handle buggy CSS animationend in background tabs.
-		// See https://github.com/facebook/react/issues/1326
 		if (isVisible) {
 			goodblockIcon = (
 				<div
@@ -313,25 +310,32 @@ var GoodblockIconHolder = React.createClass({
 					onMouseEnter={this.onMouseEnter}
 					onMouseLeave={this.onMouseLeave} >
 					<GoodblockIcon goodblockData={goodblockData} />
-						<ReactCSSTransitionGroup
+						<TimeoutTransitionGroup
+							appearTimeout={200}
+							enterTimeout={200}
+							leaveTimeout={150}
 							transitionName='snooze'
 							transitionAppear={true}
+							transitionEnter={true}
 							transitionLeave={true}>
 								{snoozeButton}
 								{speechBubble}
-						</ReactCSSTransitionGroup>
+						</TimeoutTransitionGroup>
 				</div>
 			);
 		}
 		var SHOULD_ANIMATE_ICON = true;
 		return (
-			<ReactCSSTransitionGroup
+			<TimeoutTransitionGroup
+				appearTimeout={3000}
+				enterTimeout={3000}
+				leaveTimeout={500}
 				transitionName='goodblock-icon'
 				transitionAppear={SHOULD_ANIMATE_ICON}
 				transitionEnter={SHOULD_ANIMATE_ICON}
 				transitionLeave={SHOULD_ANIMATE_ICON} >
-				{goodblockIcon}
-			</ReactCSSTransitionGroup>
+					{goodblockIcon}
+			</TimeoutTransitionGroup>
 		);
 	}
 });
