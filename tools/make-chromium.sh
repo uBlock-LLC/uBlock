@@ -15,8 +15,8 @@ cp -R src/css $DES/
 cp -R src/img $DES/
 mkdir $DES/js
 cp src/js/*.js $DES/js/
-echo "*** uBlock.chromium: Transforming JSX files:"
-jsx --extension jsx src/js $DES/js/ # Transform JSX files.
+echo "*** uBlock.chromium: Transforming browserify/JSX files."
+browserify -t reactify src/js/contentscript-goodblock.jsx > $DES/js/contentscript-goodblock.js
 cp -R src/lib $DES/
 cp -R src/_locales $DES/
 cp -R $DES/_locales/nb $DES/_locales/no

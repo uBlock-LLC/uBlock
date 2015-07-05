@@ -473,7 +473,6 @@ var SCRIPT_PATHS = {
     // Goodblock
     "goodblock": {
         'contentscript': 'js/contentscript-goodblock.js',
-        'reactjs': 'lib/react-with-addons.js',
         'eventEmitter': 'lib/EventEmitter.min.js',
     }
 };
@@ -562,17 +561,8 @@ vAPI.injectGoodblockContentScripts = function(tabId, callback) {
             }, injectGoodblockScript
         );
     };
-
-    // Execute React.js code and call the next script.
-    function injectReactJsScript() {
-        chrome.tabs.executeScript(
-            tabId,
-            {
-                file: scripts['reactjs'],
-            }, injectEventEmitterScript
-        );
-    }
-    injectReactJsScript();
+    
+    injectEventEmitterScript();
 }
 
 /******************************************************************************/

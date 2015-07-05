@@ -43,7 +43,7 @@
         {
             "matches": ["http://*/*", "https://*/*", "file:///*"],
             "css": ["css/contentscript-goodblock.css"],
-            "js": ["lib/react-with-addons.js", "lib/EventEmitter.min.js", "js/contentscript-goodblock.js"],
+            "js": ["lib/EventEmitter.min.js", "js/contentscript-goodblock.js"],
             "run_at": "document_idle",
             "all_frames": false
         },

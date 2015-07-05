@@ -1,0 +1,3 @@
+class Foo {
+  get bar() {}
+}
