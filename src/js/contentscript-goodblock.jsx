@@ -95,6 +95,9 @@ var GoodblockIcon = React.createClass({
 });
 
 var SpeechBubble = React.createClass({
+	onClick: function(event) {
+		event.stopPropagation();
+	},
 	render: function() {
 		var goodblockData = this.props.goodblockData;
 		var text = this.props.text;
@@ -111,9 +114,10 @@ var SpeechBubble = React.createClass({
 			right: (-speechBubbleWidth) * 0.87,
 			textAlign: 'center',
 			boxSizing: 'content-box',
+			cursor: 'default',
 		};
 		return (
-			<div style={style} className='speech-bubble'>
+			<div style={style} className='speech-bubble' onClick={this.onClick}>
 				{text}
 			</div>
 		);
@@ -138,7 +142,7 @@ var SnoozeButton = React.createClass({
 	render: function() {
 		var goodblockData = this.props.goodblockData;
 		var bubbleBackground = 'rgba(255, 255, 255, 0.62)';
-		var bubbleBoxShadow = 'rgba(0,0,0,0.2) 3px 3px 10px';
+		var bubbleBoxShadow = 'rgba(0,0,0,0.2) 3px 3px 8px';
 		var bubbleTransition = 'background 0.3s, color 0.3s';
 		var textColor = '#949494';
 		if (goodblockData.uiState.snooze.isHovering) {
@@ -146,16 +150,22 @@ var SnoozeButton = React.createClass({
 			var bubbleBackground = 'rgba(255, 255, 255, 1)';
 		}
 		var parentWidth = 70;
-		var parentHeight = 70;
+		var parentHeight = 65;
 		var parentStyle = {
 			position: 'absolute',
 			width: parentWidth,
 			height: parentHeight,
 			top: (-parentHeight) * 0.6,
-			right: (-parentWidth) * 0.8,
+			right: (-parentWidth) * 0.76,
 			zIndex: '-1',
 			cursor: 'default',
     		fontFamily: universalStyle.fontFamily,
+    		// Radius to limit the mouse events to around
+    		// the visible area of the thought bubble.
+		    borderBottomRightRadius: '100%',
+		    borderTopLeftRadius: '90%',
+		    borderTopRightRadius: '30%',
+
 		};
 		var smallBubbleStyle = {
 			background: bubbleBackground,
@@ -166,7 +176,7 @@ var SnoozeButton = React.createClass({
 			width: 4,
 			height: 4,
 			left: 12,
-			bottom: 23,
+			bottom: 18,
 		};
 		var mediumBubbleStyle = {
 			background: bubbleBackground,
@@ -176,8 +186,8 @@ var SnoozeButton = React.createClass({
 			borderRadius: '50%',
 			width: 12,
 			height: 12,
-			left: 17,
-			bottom: 27,
+			left: 15,
+			bottom: 24,
 		};
 		var bigBubbleHeight = 30;
 		var bigBubbleStyle = {
@@ -189,7 +199,7 @@ var SnoozeButton = React.createClass({
 			borderRadius: '50%',
 			width: 40,
 			left: 24,
-			bottom: 35,
+			bottom: 30,
 			fontSize: 11,
 			textAlign: 'center',
 			color: textColor,
