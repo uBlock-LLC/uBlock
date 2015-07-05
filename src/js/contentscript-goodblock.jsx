@@ -15,6 +15,7 @@ var _goodblockData = {
 		isVisible: true,
 		snooze: {
 			isHovering: false,
+			isClicked: false,
 		}
 	}
 };
@@ -58,6 +59,10 @@ var goodblockDataActions = {
 		_goodblockData.uiState.snooze.isHovering = isHovering;
 		goodblockDataStore.emitChange();
 	},
+	snoozeClick: function(isClicked) {
+		_goodblockData.uiState.snooze.isClicked = isClicked;
+		goodblockDataStore.emitChange();
+	},
 }
 
 /******************************************************************************/
@@ -89,7 +94,37 @@ var GoodblockIcon = React.createClass({
 	}
 });
 
+var SpeechBubble = React.createClass({
+	render: function() {
+		var goodblockData = this.props.goodblockData;
+		var text = this.props.text;
+		var speechBubbleHeight = 24;
+		var speechBubbleWidth = 70;
+		var style = {
+			fontFamily: universalStyle.fontFamily,
+			fontSize: 12,
+			color: '#757575',
+			height: speechBubbleHeight,
+			width: speechBubbleWidth,
+			position: 'absolute',
+			bottom: 9,
+			right: (-speechBubbleWidth) * 0.87,
+			textAlign: 'center',
+			boxSizing: 'content-box',
+		};
+		return (
+			<div style={style} className='speech-bubble'>
+				{text}
+			</div>
+		);
+	}
+});
+
 var SnoozeButton = React.createClass({
+	onClick: function(event) {
+		var goodblockData = this.props.goodblockData;
+		goodblockDataActions.snoozeClick(!goodblockData.uiState.snooze.isClicked);
+	},
 	changeHoverState: function(isHovering) {
 		goodblockDataActions.snoozeHover(isHovering);
 	},
@@ -164,6 +199,7 @@ var SnoozeButton = React.createClass({
 		return (
 			<div
 				style={parentStyle}
+				onClick={this.onClick}
 				onMouseEnter={this.onMouseEnter}
 				onMouseLeave={this.onMouseLeave} >
 				<div style={smallBubbleStyle} />
@@ -199,13 +235,24 @@ var GoodblockIconHolder = React.createClass({
 		var isVisible = goodblockData.uiState.isVisible;
 		var textColor = '#000';
 		var backgroundColor = 'rgba(0, 0, 0, 0.06)';
+
+		// Set up the snooze button and/or snooze text.
 		var snoozeButton;
-		if (goodblockData.uiState.isHovering) {
+		var speechBubble;
+		if (goodblockData.uiState.snooze.isClicked) {
+			var text = "Ok, I'll come back later!";
+			var speechBubble = (
+				<SpeechBubble key='snooze-speech-bubble' goodblockData={goodblockData} text={text} />
+			);
+		}
+		else if (goodblockData.uiState.isHovering) {
 			backgroundColor = 'rgba(0, 0, 0, 0.12)';
 			snoozeButton = (
 				<SnoozeButton key='snooze-button' goodblockData={goodblockData} />
 			);
 		}
+
+		// Style of the main icon.
 		if (goodblockData.uiState.isClicked) {
 			textColor = '#FFF';
 			backgroundColor = '#000';
@@ -240,6 +287,7 @@ var GoodblockIconHolder = React.createClass({
 							transitionAppear={true}
 							transitionLeave={true}>
 								{snoozeButton}
+								{speechBubble}
 						</ReactCSSTransitionGroup>
 				</div>
 			);
@@ -293,9 +341,16 @@ var GoodblockRootElem = React.createClass({
 			return <div></div>;
 		}
 		var id = 'goodblock-base-elem';
+		var style = {
+			lineHeight: '100%',
+			boxSizing: 'content-box',
+			fontSize: 12,
+			wordSpacing: 'normal',
+		}
 		return (
 			<div
 				id={id}
+				style={style}
 				dataGoodblockElem='true'>
 					<GoodblockIconHolder goodblockData={goodblockData} />
 			</div>

@@ -57,7 +57,7 @@
 
 .snooze-appear, .snooze-enter {
 	opacity: 0.01;
-	transition: opacity 0.3s ease-in;
+	transition: opacity 0.24s ease-in;
 }
 
 .snooze-appear-active, .snooze-enter-active {
@@ -66,9 +66,48 @@
 
 .snooze-leave {
 	opacity: 1;
-	transition: opacity 0.3s ease-in;
+	transition: opacity 0.15s ease-in;
 }
 
 .snooze-leave.snooze-leave-active {
 	opacity: 0.01;
+}
+
+.speech-bubble {
+	position: relative;
+    padding: 10px;
+    margin: 1em 0 3em;
+    /*border: 5px solid #FF0000;*/
+    border: 5px solid transparent;
+    color: #333;
+    background: #fff;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.2) 5px 6px 18px;
+}
+
+.speech-bubble:before {
+    content: "";
+    position: absolute;
+    bottom: -20px;
+    left: 10px;
+    border-width: 20px 20px 0;
+    border-style: solid;
+    /*border-color: #FF0000 transparent;*/
+    border-color: transparent;
+    display: block;
+    width: 0;
+}
+
+.speech-bubble:after {
+    content: "";
+    position: absolute;
+    bottom: -13px;
+    left: 17px;
+    border-width: 13px 13px 0;
+    border-style: solid;
+    border-color: #fff transparent;
+    display: block;
+    width: 0;
 }
