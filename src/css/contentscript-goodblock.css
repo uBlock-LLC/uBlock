@@ -54,3 +54,21 @@
 		transform: translateX(-150%);
 	}
 }
+
+.snooze-appear, .snooze-enter {
+	opacity: 0.01;
+	transition: opacity 0.3s ease-in;
+}
+
+.snooze-appear-active, .snooze-enter-active {
+	opacity: 1;
+}
+
+.snooze-leave {
+	opacity: 1;
+	transition: opacity 0.3s ease-in;
+}
+
+.snooze-leave.snooze-leave-active {
+	opacity: 0.01;
+}

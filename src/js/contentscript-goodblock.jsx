@@ -13,6 +13,9 @@ var _goodblockData = {
 		isClicked: false,
 		isHovering: false,
 		isVisible: true,
+		snooze: {
+			isHovering: false,
+		}
 	}
 };
 
@@ -51,6 +54,10 @@ var goodblockDataActions = {
 		_goodblockData.uiState.isVisible = isVisible;
 		goodblockDataStore.emitChange();
 	},
+	snoozeHover: function(isHovering) {
+		_goodblockData.uiState.snooze.isHovering = isHovering;
+		goodblockDataStore.emitChange();
+	},
 }
 
 /******************************************************************************/
@@ -59,6 +66,10 @@ var goodblockDataActions = {
 // Our React app code.
 
 var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
+
+var universalStyle = {
+	'fontFamily': "'Helvetica Neue', Roboto, 'Segoe UI', Calibri, sans-serif",
+}
 
 var GoodblockIcon = React.createClass({
 	render: function() {
@@ -78,6 +89,93 @@ var GoodblockIcon = React.createClass({
 	}
 });
 
+var SnoozeButton = React.createClass({
+	changeHoverState: function(isHovering) {
+		goodblockDataActions.snoozeHover(isHovering);
+	},
+	onMouseEnter: function(event) {		
+		this.changeHoverState(true);
+	},
+	onMouseLeave: function(event) {
+		this.changeHoverState(false);
+	},
+	render: function() {
+		var goodblockData = this.props.goodblockData;
+		var bubbleBackground = 'rgba(255, 255, 255, 0.62)';
+		var bubbleBoxShadow = 'rgba(0,0,0,0.2) 3px 3px 10px';
+		var bubbleTransition = 'background 0.3s, color 0.3s';
+		var textColor = '#949494';
+		if (goodblockData.uiState.snooze.isHovering) {
+			var textColor = '#757575';
+			var bubbleBackground = 'rgba(255, 255, 255, 1)';
+		}
+		var parentWidth = 70;
+		var parentHeight = 70;
+		var parentStyle = {
+			position: 'absolute',
+			width: parentWidth,
+			height: parentHeight,
+			top: (-parentHeight) * 0.6,
+			right: (-parentWidth) * 0.8,
+			zIndex: '-1',
+			cursor: 'default',
+    		fontFamily: universalStyle.fontFamily,
+		};
+		var smallBubbleStyle = {
+			background: bubbleBackground,
+			boxShadow: bubbleBoxShadow,
+			transition: bubbleTransition,
+			position: 'absolute',
+			borderRadius: '50%',
+			width: 4,
+			height: 4,
+			left: 12,
+			bottom: 23,
+		};
+		var mediumBubbleStyle = {
+			background: bubbleBackground,
+			boxShadow: bubbleBoxShadow,
+			transition: bubbleTransition,
+			position: 'absolute',
+			borderRadius: '50%',
+			width: 12,
+			height: 12,
+			left: 17,
+			bottom: 27,
+		};
+		var bigBubbleHeight = 30;
+		var bigBubbleStyle = {
+			height: bigBubbleHeight,
+			background: bubbleBackground,
+			boxShadow: bubbleBoxShadow,
+			transition: bubbleTransition,
+			position: 'absolute',
+			borderRadius: '50%',
+			width: 40,
+			left: 24,
+			bottom: 35,
+			fontSize: 11,
+			textAlign: 'center',
+			color: textColor,
+		};
+		var bubbleTextStyle = {
+			marginTop: bigBubbleHeight * 0.3,
+		};
+		return (
+			<div
+				style={parentStyle}
+				onMouseEnter={this.onMouseEnter}
+				onMouseLeave={this.onMouseLeave} >
+				<div style={smallBubbleStyle} />
+				<div style={mediumBubbleStyle} />
+				<div style={bigBubbleStyle}>
+					<div style={bubbleTextStyle}>zzz...</div>
+				</div>
+			</div>
+		);
+	}
+});
+
 var GoodblockIconHolder = React.createClass({
 	onClick: function() {
 		var goodblockData = this.props.goodblockData;
@@ -86,10 +184,10 @@ var GoodblockIconHolder = React.createClass({
 	changeHoverState: function(isHovering) {
 		goodblockDataActions.iconHover(isHovering);
 	},
-	onMouseEnter: function() {		
+	onMouseEnter: function(event) {		
 		this.changeHoverState(true);
 	},
-	onMouseLeave: function() {
+	onMouseLeave: function(event) {
 		this.changeHoverState(false);
 	},
 	render: function() {
@@ -101,8 +199,12 @@ var GoodblockIconHolder = React.createClass({
 		var isVisible = goodblockData.uiState.isVisible;
 		var textColor = '#000';
 		var backgroundColor = 'rgba(0, 0, 0, 0.06)';
+		var snoozeButton;
 		if (goodblockData.uiState.isHovering) {
 			backgroundColor = 'rgba(0, 0, 0, 0.12)';
+			snoozeButton = (
+				<SnoozeButton key='snooze-button' goodblockData={goodblockData} />
+			);
 		}
 		if (goodblockData.uiState.isClicked) {
 			textColor = '#FFF';
@@ -111,13 +213,14 @@ var GoodblockIconHolder = React.createClass({
 		var style = {
 			color: textColor,
 			backgroundColor: backgroundColor,
+			transition: 'background-color 0.3s',
 			left: 10,
 			bottom: 30,
 			width: 26,
 			height: 26,
 			padding: 6,
 			display: 'block',
-			zIndex: '10000000',
+			zIndex: '10000001',
 			position: 'fixed',
 			borderRadius: '50%',
 			boxSizing: 'content-box',
@@ -132,6 +235,12 @@ var GoodblockIconHolder = React.createClass({
 					onMouseEnter={this.onMouseEnter}
 					onMouseLeave={this.onMouseLeave} >
 					<GoodblockIcon goodblockData={goodblockData} />
+						<ReactCSSTransitionGroup
+							transitionName='snooze'
+							transitionAppear={true}
+							transitionLeave={true}>
+								{snoozeButton}
+						</ReactCSSTransitionGroup>
 				</div>
 			);
 		}
