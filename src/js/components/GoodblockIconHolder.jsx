@@ -41,7 +41,7 @@ var GoodblockIconHolder = React.createClass({
 				<SpeechBubble key='snooze-speech-bubble' goodblockData={goodblockData} text={text} />
 			);
 		}
-		else if (goodblockData.uiState.isHovering) {
+		else if (goodblockData.uiState.isHovering && !goodblockData.uiState.isClicked) {
 			backgroundColor = 'rgba(0, 0, 0, 0.12)';
 			snoozeButton = (
 				<SnoozeButton key='snooze-button' goodblockData={goodblockData} />
@@ -63,7 +63,7 @@ var GoodblockIconHolder = React.createClass({
 			height: 26,
 			padding: 6,
 			display: 'block',
-			zIndex: '10000001',
+			zIndex: 2147483647, // Max on some browsers,
 			position: 'fixed',
 			borderRadius: '50%',
 			boxSizing: 'content-box',

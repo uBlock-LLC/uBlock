@@ -111,3 +111,55 @@
     display: block;
     width: 0;
 }
+
+.ad-enter {
+	left: -100% !important;
+	
+}
+
+.ad-enter-active {
+	-webkit-animation: moveToRightFade .7s ease both;
+	animation: moveToRightFade .7s ease both;
+}
+
+@keyframes moveToRightFade {
+	from { }
+	to {
+		-webkit-transform: translateX(100%);
+		transform: translateX(100%);
+	}
+}
+
+.ad-leave {
+}
+
+.ad-leave-active {
+	-webkit-animation: moveToLeftFade .7s ease both;
+	animation: moveToLeftFade .7s ease both;
+}
+
+@keyframes moveToLeftFade {
+	from { }
+	to {
+		-webkit-transform: translateX(-100%);
+		transform: translateX(-100%);
+	}
+}
+
+.ad-dimmer-enter {
+	background: rgba(0, 0, 0, 0.01) !important;
+	transition: background 0.7s ease;
+}
+
+.ad-dimmer-enter-active {
+	background: rgba(0, 0, 0, 0.7) !important;
+}
+
+.ad-dimmer-leave {
+	background: rgba(0, 0, 0, 0.7) !important;
+	transition: background 0.7s ease;
+}
+
+.ad-dimmer-leave-active {
+	background: rgba(0, 0, 0, 0.01) !important;
+}
