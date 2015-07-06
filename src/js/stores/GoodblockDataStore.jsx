@@ -1,6 +1,7 @@
 
 var _goodblockData = require('./goodblockData.jsx');
 
+
 var ee = new EventEmitter();
 
 // Source-of-truth state for Goodblock in the content script.
