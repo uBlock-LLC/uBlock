@@ -4,77 +4,13 @@ console.log('Goodblock content script.');
 /******************************************************************************/
 
 var React = require('react/addons');
+var GoodblockDataStore = require('./stores/GoodblockDataStore.jsx');
+var GoodblockDataActions = require('./actions/GoodblockDataActions.jsx');
 
 // This module is a replacement for React's CSSTransitionGroup,
 // which is buggy when run background tabs.
 // See https://github.com/facebook/react/issues/1326
 var TimeoutTransitionGroup = require('./components/TimeoutTransitionGroup.jsx');
-
-/******************************************************************************/
-/******************************************************************************/
-
-// Data stores.
-
-var ee = new EventEmitter();
-// Initial Goodblockstate.
-var _goodblockData = {
-	imgUrls: {}, // We fetch these from the extension on load.
-	uiState: {
-		isClicked: false,
-		isHovering: false,
-		isVisible: true,
-		snooze: {
-			isHovering: false,
-			isClicked: false,
-		}
-	}
-};
-
-// Source-of-truth state for Goodblock on this page.
-var goodblockDataStore = {
-    get: function() {
-        return _goodblockData;
-    },
-    emitChange: function() {
-    	// console.log('Changed goodblockData:', _goodblockData);
-        ee.emitEvent('goodblockDataChange');
-    },
-    addChangeListener: function(callback) {
-        ee.addListener('goodblockDataChange', callback);
-    },
-    removeChangeListener: function(callback) {
-        ee.removeListener('goodblockDataChange', callback);
-    },
-};
-
-// Actions used to update the Goodblock state.
-var goodblockDataActions = {
-	iconClick: function(isClicked) {
-		_goodblockData.uiState.isClicked = isClicked;
-		goodblockDataStore.emitChange();
-	},
-	iconHover: function(isHovering) {
-		_goodblockData.uiState.isHovering = isHovering;
-		goodblockDataStore.emitChange();
-	},
-	setImgUrls: function(imgUrls) {
-		_goodblockData.imgUrls = imgUrls;
-		goodblockDataStore.emitChange();
-	},
-	changeVisibility: function(isVisible) {
-		console.log('Changing visibility. isVisible:', isVisible);
-		_goodblockData.uiState.isVisible = isVisible;
-		goodblockDataStore.emitChange();
-	},
-	snoozeHover: function(isHovering) {
-		_goodblockData.uiState.snooze.isHovering = isHovering;
-		goodblockDataStore.emitChange();
-	},
-	snoozeClick: function(isClicked) {
-		_goodblockData.uiState.snooze.isClicked = isClicked;
-		goodblockDataStore.emitChange();
-	},
-}
 
 /******************************************************************************/
 /******************************************************************************/
@@ -137,12 +73,12 @@ var SnoozeButton = React.createClass({
 	onClick: function(event) {
 		event.stopPropagation();
 		var goodblockData = this.props.goodblockData;
-		goodblockDataActions.snoozeClick(true);
+		GoodblockDataActions.snoozeClick(true);
 		this.changeHoverState(false);
 
 		// Hide the snooze text after some time.
 		setTimeout(function() {
-			goodblockDataActions.snoozeClick(false);
+			GoodblockDataActions.snoozeClick(false);
 		}, 2000);
 
 		// Tell the extension to snooze Goodblock
@@ -152,7 +88,7 @@ var SnoozeButton = React.createClass({
 		}, 2100);
 	},
 	changeHoverState: function(isHovering) {
-		goodblockDataActions.snoozeHover(isHovering);
+		GoodblockDataActions.snoozeHover(isHovering);
 	},
 	onMouseEnter: function(event) {		
 		this.changeHoverState(true);
@@ -247,10 +183,10 @@ var SnoozeButton = React.createClass({
 var GoodblockIconHolder = React.createClass({
 	onClick: function() {
 		var goodblockData = this.props.goodblockData;
-		goodblockDataActions.iconClick(!goodblockData.uiState.isClicked);
+		GoodblockDataActions.iconClick(!goodblockData.uiState.isClicked);
 	},
 	changeHoverState: function(isHovering) {
-		goodblockDataActions.iconHover(isHovering);
+		GoodblockDataActions.iconHover(isHovering);
 	},
 	onMouseEnter: function(event) {		
 		this.changeHoverState(true);
@@ -343,18 +279,18 @@ var GoodblockIconHolder = React.createClass({
 var GoodblockRootElem = React.createClass({
 	getInitialState: function() {
 		return {
-			goodblockData: goodblockDataStore.get(),
+			goodblockData: GoodblockDataStore.get(),
 		}
 	},
 	_onGoodblockDataChange: function() {
-		var updatedData = goodblockDataStore.get();
+		var updatedData = GoodblockDataStore.get();
         this.setState({goodblockData: updatedData});
 	},
 	componentDidMount: function() {
-		goodblockDataStore.addChangeListener(this._onGoodblockDataChange);
+		GoodblockDataStore.addChangeListener(this._onGoodblockDataChange);
 	},
 	componentWillUnmount: function() {
-		goodblockDataStore.removeChangeListener(this._onGoodblockDataChange);
+		GoodblockDataStore.removeChangeListener(this._onGoodblockDataChange);
 	},
 	shouldRender: function() {
 		function isNonemptyObject(obj) {
@@ -437,7 +373,7 @@ localMessager.listener = function(request) {
 	switch (request.what) {
 		// Listen for Goodblock data.
 		case 'goodblockVisibility':
-			goodblockDataActions.changeVisibility(request.data.isVisible);
+			GoodblockDataActions.changeVisibility(request.data.isVisible);
 			break;
 		default:
 			console.log('Unhandled message sent to contentscript-goodblock.js:', request);
@@ -451,7 +387,7 @@ localMessager.listener = function(request) {
 // On load, fetch any Goodblock data we need from the extension.
 
 var goodblockImgUrlHandler = function(imgUrlData) {
-	goodblockDataActions.setImgUrls(imgUrlData);
+	GoodblockDataActions.setImgUrls(imgUrlData);
 };
 
 localMessager.send(
