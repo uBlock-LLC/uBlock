@@ -15,7 +15,14 @@ var TimeoutTransitionGroup = require('./TimeoutTransitionGroup.jsx');
 var GoodblockIconHolder = React.createClass({
 	onClick: function() {
 		var goodblockData = this.props.goodblockData;
-		GoodblockDataActions.iconClick(!goodblockData.uiState.isClicked);
+		var prevClickState = goodblockData.uiState.isClicked;
+		GoodblockDataActions.iconClick(!prevClickState);
+
+		// If the user is clicking it a second time, they're closing
+		// the ad.
+		if (prevClickState) {
+			GoodblockDataActions.sendGoodblockToBed();
+		}
 	},
 	changeHoverState: function(isHovering) {
 		GoodblockDataActions.iconHover(isHovering);
@@ -35,23 +42,37 @@ var GoodblockIconHolder = React.createClass({
 		// Set up the snooze button and/or snooze text.
 		var snoozeButton;
 		var speechBubble;
-		if (goodblockData.uiState.snooze.isClicked) {
+		if (goodblockData.uiState.snooze.isSnoozing) {
 			var text = "Ok, I'll come back later!";
-			var speechBubble = (
+			speechBubble = (
 				<SpeechBubble key='snooze-speech-bubble' goodblockData={goodblockData} text={text} />
 			);
 		}
-		else if (goodblockData.uiState.isHovering && !goodblockData.uiState.isClicked) {
+		else if (
+			goodblockData.uiState.isHovering &&
+			!goodblockData.uiState.isClicked &&
+			!goodblockData.uiState.goodnight.goingToBed
+		) {
 			backgroundColor = 'rgba(0, 0, 0, 0.12)';
 			snoozeButton = (
 				<SnoozeButton key='snooze-button' goodblockData={goodblockData} />
 			);
 		}
 
+		// Say goodbye to the user after they view an ad.
+		if (goodblockData.uiState.goodnight.sayingGoodnight) {
+			var text = 'Thanks! See you later!';
+			speechBubble = (
+				<SpeechBubble
+					key='goodnight-speech-bubble'
+					goodblockData={goodblockData}
+					text={text} />
+			);
+		}
+
 		// Style of the main icon.
 		if (goodblockData.uiState.isClicked) {
-			textColor = '#FFF';
-			backgroundColor = '#000';
+			backgroundColor = 'rgba(0, 0, 0, 0.12)';
 		}
 		var style = {
 			color: textColor,

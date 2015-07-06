@@ -577,6 +577,10 @@ var onMessage = function(request, sender, callback) {
             response = µb.goodblock.snoozeGoodblock();
             break;
 
+        case 'goodnightGoodblock':
+            response = µb.goodblock.goodnightGoodblock();
+            break;
+
         default:
             return vAPI.messaging.UNHANDLED;
     }

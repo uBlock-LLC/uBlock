@@ -8,16 +8,11 @@ var SnoozeButton = React.createClass({
 	onClick: function(event) {
 		event.stopPropagation();
 		var goodblockData = this.props.goodblockData;
-		GoodblockDataActions.snoozeClick(true);
+		GoodblockDataActions.makeGoodblockSnooze();
 		this.changeHoverState(false);
-
-		// Hide the snooze text after some time.
-		setTimeout(function() {
-			GoodblockDataActions.snoozeClick(false);
-		}, 2000);
 	},
 	changeHoverState: function(isHovering) {
-		GoodblockDataActions.snoozeHover(isHovering);
+		GoodblockDataActions.snoozeIconHover(isHovering);
 	},
 	onMouseEnter: function(event) {		
 		this.changeHoverState(true);

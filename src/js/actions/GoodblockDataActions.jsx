@@ -20,6 +20,10 @@ goodblockMessager.listener = function(request) {
 		case 'goodblockVisibility':
 			GoodblockDataActions.changeVisibility(request.data.isVisible);
 			break;
+		case 'goToBed':
+			GoodblockDataActions.changeVisibility(false);
+			goingToBed(false);
+			break;
 		default:
 			console.log('Unhandled message sent to contentscript-goodblock.js:', request);
 			return;
@@ -52,14 +56,47 @@ var LocalMessager = {
 				what: 'snoozeGoodblock'
 			}
 		);
+	},
+
+	goodnightGoodblock: function() {
+		goodblockMessager.send(
+			{
+				what: 'goodnightGoodblock'
+			}
+		);
 	}
 }
 
 /******************************************************************************/
 /******************************************************************************/
 
+function setSnoozeMessageStatus(showSnoozeMessage) {
+	_goodblockData.uiState.snooze.isSnoozing = showSnoozeMessage;
+	GoodblockDataStore.emitChange();
+}
+
+// Set whether we're currently saying good night.
+function sayGoodnight(shouldSayGoodnight) {
+	_goodblockData.uiState.goodnight.sayingGoodnight = shouldSayGoodnight;
+	goingToBed(true);
+	GoodblockDataStore.emitChange();
+}
+
+// Set whether we're in the process of going to bed.
+function goingToBed(isGoingToBed) {
+	_goodblockData.uiState.goodnight.goingToBed = isGoingToBed;
+	GoodblockDataStore.emitChange();
+}
+
 // Actions used to update the Goodblock state.
 var GoodblockDataActions = {
+	fetchImgUrls: function() {
+		LocalMessager.fetchImgUrls();
+	},
+	setImgUrls: function(imgUrls) {
+		_goodblockData.imgUrls = imgUrls;
+		GoodblockDataStore.emitChange();
+	},
 	iconClick: function(isClicked) {
 		_goodblockData.uiState.isClicked = isClicked;
 		GoodblockDataStore.emitChange();
@@ -68,30 +105,46 @@ var GoodblockDataActions = {
 		_goodblockData.uiState.isHovering = isHovering;
 		GoodblockDataStore.emitChange();
 	},
-	setImgUrls: function(imgUrls) {
-		_goodblockData.imgUrls = imgUrls;
-		GoodblockDataStore.emitChange();
-	},
 	changeVisibility: function(isVisible) {
 		console.log('Changing visibility. isVisible:', isVisible);
 		_goodblockData.uiState.isVisible = isVisible;
 		GoodblockDataStore.emitChange();
 	},
-	snoozeHover: function(isHovering) {
+	snoozeIconHover: function(isHovering) {
 		_goodblockData.uiState.snooze.isHovering = isHovering;
 		GoodblockDataStore.emitChange();
 	},
-	snoozeClick: function(isClicked) {
-		_goodblockData.uiState.snooze.isClicked = isClicked;
-		GoodblockDataStore.emitChange();
+	makeGoodblockSnooze: function() {
+		setSnoozeMessageStatus(true);
+		var timeToSnooze = 2100;
+
+		// Hide the snooze text after some time.
+		setTimeout(function() {
+			setSnoozeMessageStatus(false);
+		}, timeToSnooze - 100);
+
 		// Tell the extension to snooze Goodblock
 		// after some time.
 		setTimeout(function() {
 			LocalMessager.snoozeGoodblock();
-		}, 2100);
+		}, timeToSnooze);
 	},
-	fetchImgUrls: function() {
-		LocalMessager.fetchImgUrls();
+	// Go through the process of going to bed.
+	sendGoodblockToBed: function(isViewed) {
+		sayGoodnight(true);
+		var timeToGoodnight = 2400;
+
+		// Hide the "goodnight" speech bubble after
+		// some time.
+		setTimeout(function() {
+			sayGoodnight(false);
+		}, timeToGoodnight - 400);
+
+		// Tell the extension to goodnight Goodblock
+		// after some time.
+		setTimeout(function() {
+			LocalMessager.goodnightGoodblock();
+		}, timeToGoodnight);
 	},
 }
 

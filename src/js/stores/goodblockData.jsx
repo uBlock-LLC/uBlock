@@ -8,8 +8,12 @@ var _goodblockData = {
 		isVisible: true,
 		snooze: {
 			isHovering: false,
-			isClicked: false,
-		}
+			isSnoozing: false,
+		},
+		goodnight: {
+			sayingGoodnight: false,
+			goingToBed: false,
+		},
 	}
 };
 

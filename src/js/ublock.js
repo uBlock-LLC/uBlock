@@ -398,7 +398,25 @@ var matchWhitelistDirective = function(url, hostname, directive) {
     µBlock.goodblock.updateGoodblockVisibility(false);
     setTimeout(function() {
         µBlock.goodblock.updateGoodblockVisibility(true);
-    }, 5000);
+    }, 3000);
+}
+
+/******************************************************************************/
+
+µBlock.goodblock.goodnightGoodblock = function() {
+    µBlock.goodblock.sendGoodblockToBed(false);
+    setTimeout(function() {
+        µBlock.goodblock.updateGoodblockVisibility(true);
+    }, 6000);
+}
+
+/******************************************************************************/
+
+µBlock.goodblock.sendGoodblockToBed = function() {
+    vAPI.messaging.broadcast({
+        what: 'goToBed',
+        data: {},
+    });
 }
 
 /******************************************************************************/
