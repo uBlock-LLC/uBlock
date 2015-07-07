@@ -6,6 +6,10 @@ var _goodblockData = {
 		isClicked: false,
 		isHovering: false,
 		isVisible: true,
+		ad: {
+			isFullyOpen: false,
+			iframeLoaded: false,
+		},
 		snooze: {
 			isHovering: false,
 			isSnoozing: false,

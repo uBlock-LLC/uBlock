@@ -163,3 +163,11 @@
 .ad-dimmer-leave-active {
 	background: rgba(0, 0, 0, 0.01) !important;
 }
+
+.goodblock-ad-unit-leave {
+	opacity: 1 !important;
+}
+
+.goodblock-ad-unit-leave-active {
+	opacity: 0 !important;
+}

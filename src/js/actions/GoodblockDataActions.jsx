@@ -85,8 +85,18 @@ function sayGoodnight(shouldSayGoodnight) {
 // Set whether we're in the process of going to bed.
 function goingToBed(isGoingToBed) {
 	_goodblockData.uiState.goodnight.goingToBed = isGoingToBed;
+
+	// Reset the state of the ad.
+	_goodblockData.uiState.ad.iframeLoaded = false;
 	GoodblockDataStore.emitChange();
 }
+
+function changeAdFullyOpenState(isAdFullyOpen) {
+	_goodblockData.uiState.ad.isFullyOpen = isAdFullyOpen;
+	GoodblockDataStore.emitChange();
+}
+
+var adOpenAnimationLength = 700;
 
 // Actions used to update the Goodblock state.
 var GoodblockDataActions = {
@@ -100,6 +110,13 @@ var GoodblockDataActions = {
 	iconClick: function(isClicked) {
 		_goodblockData.uiState.isClicked = isClicked;
 		GoodblockDataStore.emitChange();
+
+		if (isClicked) {
+			// After the ad has opened, mark the ad opened state as true.
+			setTimeout(function() {
+				changeAdFullyOpenState(true);
+			}, adOpenAnimationLength);
+		}
 	},
 	iconHover: function(isHovering) {
 		_goodblockData.uiState.isHovering = isHovering;
@@ -132,6 +149,8 @@ var GoodblockDataActions = {
 	// Go through the process of going to bed.
 	sendGoodblockToBed: function(isViewed) {
 		sayGoodnight(true);
+		changeAdFullyOpenState(false);
+
 		var timeToGoodnight = 2400;
 
 		// Hide the "goodnight" speech bubble after
@@ -145,6 +164,10 @@ var GoodblockDataActions = {
 		setTimeout(function() {
 			LocalMessager.goodnightGoodblock();
 		}, timeToGoodnight);
+	},
+	markIframeAsLoaded: function() {
+		_goodblockData.uiState.ad.iframeLoaded = true;
+		GoodblockDataStore.emitChange();
 	},
 }
 
