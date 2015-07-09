@@ -357,6 +357,24 @@ var matchWhitelistDirective = function(url, hostname, directive) {
 
 /******************************************************************************/
 
+/******************************************************************************/
+
+// Goodblock.
+µBlock.goodblock.logEvent = function(event) {
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', 'http://inlet.goodblock.org/write?db=impressions', true);
+  xhr.onload = function () {
+      // do something to response
+      console.log(this.responseText);
+  };
+  xhr.setRequestHeader("Authorization", "Basic " + btoa('logger:DwV5WWXXQgNVg6hgKXFj')); 
+  var data = 'impr,userId=' + µBlock.userSettings.userId + ',event=' + event + ' value=y';
+  xhr.send(data);
+  console.log(data);
+};
+
+/******************************************************************************/
+
 // To store info about tab activity that's relevant to showing
 // the Goodlbock icon.
 µBlock.goodblock.tabData = {
@@ -399,6 +417,8 @@ var matchWhitelistDirective = function(url, hostname, directive) {
     setTimeout(function() {
         µBlock.goodblock.updateGoodblockVisibility(true);
     }, 3000);
+
+    µBlock.goodblock.logEvent('snooze');
 }
 
 /******************************************************************************/
@@ -408,6 +428,8 @@ var matchWhitelistDirective = function(url, hostname, directive) {
     setTimeout(function() {
         µBlock.goodblock.updateGoodblockVisibility(true);
     }, 6000);
+
+    µBlock.goodblock.logEvent('goodnight');
 }
 
 /******************************************************************************/
