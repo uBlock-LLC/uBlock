@@ -65,8 +65,10 @@ var SnoozeButton = React.createClass({
 				color: textColor,
 			},
 			bubbleText: {
-				marginTop: bigBubbleHeight * 0.2,
-				color: 'rgba(255, 255, 255, 0.8)',
+				marginTop: 3,
+				width: 14,
+				height: 14,
+				fill: 'rgba(255, 255, 255, 0.8)',
 			},
 		});
 	},
@@ -79,7 +81,16 @@ var SnoozeButton = React.createClass({
 				onMouseEnter={this.onMouseEnter}
 				onMouseLeave={this.onMouseLeave} >
 				<div style={styles.bigBubble}>
-					<div style={styles.bubbleText}>ZZ</div>
+				<svg style={styles.bubbleText} 
+					x="0px" y="0px" viewBox="0 0 512 512">
+					<path d="M256,0C114.609,0,0,114.625,0,
+					256s114.609,256,256,256c141.375,0,256-114.625,256-256S397.375,0,
+					256,0z M256,448  c-105.875,0-192-86.125-192-192S150.125,64,256,
+					64s192,86.125,192,192S361.875,448,256,448z M416,256c0,
+					17.688-14.313,32-32,32H256  c-17.672,
+					0-32-14.313-32-32V128c0-17.688,14.328-32,32-32s32,
+					14.313,32,32v96h96C401.688,224,416,238.313,416,256z"/>
+				</svg>
 				</div>
 			</div>
 		);

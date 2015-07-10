@@ -15,7 +15,7 @@ var SpeechBubble = React.createClass({
 		var style = {
 			fontFamily: universalStyle.fontFamily,
 			fontSize: 12,
-			color: '#757575',
+			color: '#fff',
 			height: speechBubbleHeight,
 			width: speechBubbleWidth,
 			position: 'absolute',
