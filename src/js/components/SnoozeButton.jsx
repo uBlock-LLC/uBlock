@@ -32,7 +32,7 @@ var SnoozeButton = React.createClass({
 		}
 		var parentWidth = 70;
 		var parentHeight = 65;
-		var bigBubbleHeight = 20;
+		var bigBubbleDiameter = 28;
 		
 		return ({
 			parent: {
@@ -51,13 +51,13 @@ var SnoozeButton = React.createClass({
 			    borderTopRightRadius: '30%',
 			},
 			bigBubble: {
-				height: bigBubbleHeight,
+				height: bigBubbleDiameter,
+				width: bigBubbleDiameter,
 				background: bubbleBackground,
 				boxShadow: bubbleBoxShadow,
 				transition: bubbleTransition,
 				position: 'absolute',
 				borderRadius: '50%',
-				width: 20,
 				left: 14,
 				bottom: 20,
 				fontSize: 11,
@@ -65,9 +65,9 @@ var SnoozeButton = React.createClass({
 				color: textColor,
 			},
 			bubbleText: {
-				marginTop: 3,
-				width: 14,
-				height: 14,
+				marginTop: 5,
+				width: 18,
+				height: 18,
 				fill: 'rgba(255, 255, 255, 0.8)',
 			},
 		});
