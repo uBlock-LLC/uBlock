@@ -80,7 +80,7 @@
     /*border: 5px solid #FF0000;*/
     border: 5px solid transparent;
     color: #333;
-    background: #fff;
+    background: #000;
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
     border-radius: 10px;
@@ -107,7 +107,7 @@
     left: 17px;
     border-width: 13px 13px 0;
     border-style: solid;
-    border-color: #fff transparent;
+    border-color: #000 transparent;
     display: block;
     width: 0;
 }
