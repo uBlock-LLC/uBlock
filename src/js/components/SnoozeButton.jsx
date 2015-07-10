@@ -22,17 +22,17 @@ var SnoozeButton = React.createClass({
 	},
 	getStyles: function(name) {
 		var goodblockData = this.props.goodblockData;
-		var bubbleBackground = 'rgba(255, 255, 255, 0.62)';
+		var bubbleBackground = 'rgba(0, 0, 0, 0.7)';
 		var bubbleBoxShadow = 'rgba(0,0,0,0.2) 3px 3px 8px';
 		var bubbleTransition = 'background 0.3s, color 0.3s';
 		var textColor = '#949494';
 		if (goodblockData.uiState.snooze.isHovering) {
 			var textColor = '#757575';
-			var bubbleBackground = 'rgba(255, 255, 255, 1)';
+			var bubbleBackground = 'rgba(0, 0, 0, 0.8)';
 		}
 		var parentWidth = 70;
 		var parentHeight = 65;
-		var bigBubbleHeight = 30;
+		var bigBubbleHeight = 20;
 		
 		return ({
 			parent: {
@@ -50,28 +50,6 @@ var SnoozeButton = React.createClass({
 			    borderTopLeftRadius: '90%',
 			    borderTopRightRadius: '30%',
 			},
-			smallBubble: {
-				background: bubbleBackground,
-				boxShadow: bubbleBoxShadow,
-				transition: bubbleTransition,
-				position: 'absolute',
-				borderRadius: '50%',
-				width: 4,
-				height: 4,
-				left: 12,
-				bottom: 18,
-			},
-			mediumBubble: {
-				background: bubbleBackground,
-				boxShadow: bubbleBoxShadow,
-				transition: bubbleTransition,
-				position: 'absolute',
-				borderRadius: '50%',
-				width: 12,
-				height: 12,
-				left: 15,
-				bottom: 24,
-			},
 			bigBubble: {
 				height: bigBubbleHeight,
 				background: bubbleBackground,
@@ -79,15 +57,16 @@ var SnoozeButton = React.createClass({
 				transition: bubbleTransition,
 				position: 'absolute',
 				borderRadius: '50%',
-				width: 40,
-				left: 24,
-				bottom: 30,
+				width: 20,
+				left: 14,
+				bottom: 20,
 				fontSize: 11,
 				textAlign: 'center',
 				color: textColor,
 			},
 			bubbleText: {
-				marginTop: bigBubbleHeight * 0.3,
+				marginTop: bigBubbleHeight * 0.2,
+				color: 'rgba(255, 255, 255, 0.8)',
 			},
 		});
 	},
@@ -99,10 +78,8 @@ var SnoozeButton = React.createClass({
 				onClick={this.onClick}
 				onMouseEnter={this.onMouseEnter}
 				onMouseLeave={this.onMouseLeave} >
-				<div style={styles.smallBubble} />
-				<div style={styles.mediumBubble} />
 				<div style={styles.bigBubble}>
-					<div style={styles.bubbleText}>zzz...</div>
+					<div style={styles.bubbleText}>ZZ</div>
 				</div>
 			</div>
 		);
