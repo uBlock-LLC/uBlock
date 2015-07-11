@@ -385,9 +385,8 @@ var matchWhitelistDirective = function(url, hostname, directive) {
 
 /******************************************************************************/
 
-// To store info about tab activity that's relevant to showing
-// the Goodlbock icon.
-µBlock.goodblock.tabData = {
+// To store info about browser activity that's relevant to Goodblock.
+µBlock.goodblock.browserState = {
     activeTabId: null,
 }
 
@@ -410,10 +409,10 @@ var matchWhitelistDirective = function(url, hostname, directive) {
 // Control Goodblock visibility
 
 µBlock.goodblock.updateActiveTab = function(activeTabId) {
-    var oldActiveTabId = µBlock.goodblock.tabData['activeTabId'];
+    var oldActiveTabId = µBlock.goodblock.browserState['activeTabId'];
 
     // Set the new active tab.
-    µBlock.goodblock.tabData['activeTabId'] = activeTabId;
+    µBlock.goodblock.browserState['activeTabId'] = activeTabId;
 
     // // Update Goodblock visibility on old and new tabs.
     // µBlock.goodblock.updateGoodblockVisibilityByTabId(oldActiveTabId, false);
