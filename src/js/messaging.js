@@ -581,6 +581,9 @@ var onMessage = function(request, sender, callback) {
             response = µb.goodblock.goodnightGoodblock();
             break;
 
+        case 'logAdView':
+            break;
+            
         default:
             return vAPI.messaging.UNHANDLED;
     }

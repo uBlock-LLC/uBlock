@@ -64,6 +64,14 @@ var LocalMessager = {
 				what: 'goodnightGoodblock'
 			}
 		);
+	},
+
+	logAdView: function() {
+		goodblockMessager.send(
+			{
+				what: 'logAdView'
+			}
+		);
 	}
 }
 
