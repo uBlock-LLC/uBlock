@@ -87,7 +87,7 @@ return {
         tadProcessedAdCount: 0,
         impactConversion: 6,
         adsViewed: 0,
-        vcConverstion: 100,
+        vcConversion: 100,
     },
     localSettingsModifyTime: 0,
     localSettingsSaveTime: 0,

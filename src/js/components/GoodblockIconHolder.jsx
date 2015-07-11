@@ -22,6 +22,10 @@ var GoodblockIconHolder = React.createClass({
 		// the ad.
 		if (prevClickState) {
 			GoodblockDataActions.sendGoodblockToBed();
+		} else {
+			// if the user is clicking it the first time
+			// log that they're viewing the ad
+			GoodblockDataActions.logAdView();
 		}
 	},
 	changeHoverState: function(isHovering) {

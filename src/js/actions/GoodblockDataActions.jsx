@@ -173,6 +173,9 @@ var GoodblockDataActions = {
 			LocalMessager.goodnightGoodblock();
 		}, timeToGoodnight);
 	},
+	logAdView: function() {
+		LocalMessager.logAdView();
+	},
 	markIframeAsLoaded: function() {
 		_goodblockData.uiState.ad.iframeLoaded = true;
 		GoodblockDataStore.emitChange();
