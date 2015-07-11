@@ -68,6 +68,13 @@ var matchWhitelistDirective = function(url, hostname, directive) {
     var netWhitelist = this.netWhitelist;
     var buckets, i, pos;
     var targetHostname = this.URI.hostnameFromURI(url);
+
+    // Goodblock.
+    // If this is a Gladly whitelisted page, turn off filtering.
+    if (µBlock.goodblock.isGladlyHostname(targetHostname)) {
+        return false;
+    }
+
     var key = targetHostname;
     for (;;) {
         if ( netWhitelist.hasOwnProperty(key) ) {
