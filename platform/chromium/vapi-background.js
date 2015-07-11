@@ -898,6 +898,15 @@ vAPI.onLoadAllCompleted = function() {
         var i = tabs.length, tab;
         while ( i-- ) {
             tab = tabs[i];
+
+            // Goodblock.
+            // Do not inject content scripts into Gladly
+            // whitelisted pages.
+            var hostname = µb.URI.hostnameFromURI(tab.url);
+            if (µBlock.goodblock.isGladlyHostname(hostname)) {
+                continue;
+            }
+
             µb.tabContextManager.commit(tab.id, tab.url);
             µb.bindTabToPageStats(tab.id);
             // https://github.com/chrisaljoudi/uBlock/issues/129
