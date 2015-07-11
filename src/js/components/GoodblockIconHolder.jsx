@@ -37,7 +37,7 @@ var GoodblockIconHolder = React.createClass({
 		var goodblockData = this.props.goodblockData;
 		var isVisible = goodblockData.uiState.isVisible;
 		var textColor = '#000';
-		var backgroundColor = 'rgba(0, 0, 0, 0.06)';
+		var backgroundColor = 'rgba(0, 0, 0, 0.7)';
 
 		// Set up the snooze button and/or snooze text.
 		var snoozeButton;
@@ -53,7 +53,7 @@ var GoodblockIconHolder = React.createClass({
 			!goodblockData.uiState.isClicked &&
 			!goodblockData.uiState.goodnight.goingToBed
 		) {
-			backgroundColor = 'rgba(0, 0, 0, 0.12)';
+			backgroundColor = 'rgba(0, 0, 0, 0.9)';
 			snoozeButton = (
 				<SnoozeButton key='snooze-button' goodblockData={goodblockData} />
 			);
@@ -72,7 +72,7 @@ var GoodblockIconHolder = React.createClass({
 
 		// Style of the main icon.
 		if (goodblockData.uiState.isClicked) {
-			backgroundColor = 'rgba(0, 0, 0, 0.12)';
+			backgroundColor = 'rgba(0, 0, 0, 0.9)';
 		}
 		var style = {
 			color: textColor,
