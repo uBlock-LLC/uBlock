@@ -574,11 +574,11 @@ var onMessage = function(request, sender, callback) {
             break;
 
         case 'snoozeGoodblock':
-            response = µb.goodblock.snoozeGoodblock();
+            µb.goodblock.snoozeGoodblock();
             break;
 
         case 'goodnightGoodblock':
-            response = µb.goodblock.goodnightGoodblock();
+            µb.goodblock.goodnightGoodblock();
             break;
 
         default:
