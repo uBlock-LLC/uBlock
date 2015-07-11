@@ -81,6 +81,25 @@ var onBeforeRequest = function(details) {
     // https://github.com/chrisaljoudi/uBlock/issues/114
     var requestContext = pageStore.createContextFromFrameId(frameId);
 
+    // Goodblock.
+    // Check if the context is within a whitelisted Gladly domain.
+    requestContext.frameIsOnGladlyPage = false;
+    var parentFrame = pageStore.getFrame(details.parentFrameId);
+    if (
+        // If the parent is a Gladly page or on a Gladly page,
+        // this subframe is also on a Gladly page.
+        (parentFrame && parentFrame.frameIsOnGladlyPage) ||
+        (parentFrame &&
+            µBlock.goodblock.isGladlyHostname(parentFrame.parentPageHostname)
+        ) ||
+        µBlock.goodblock.isGladlyHostname(requestContext.pageDomain) ||
+        µBlock.goodblock.isGladlyHostname(requestContext.pageHostname) ||
+        µBlock.goodblock.isGladlyHostname(requestContext.requestHostname) ||
+        µBlock.goodblock.isGladlyHostname(requestContext.rootHostname)
+    ) {
+        requestContext.frameIsOnGladlyPage = true;
+    }
+
     // Setup context and evaluate
     var requestURL = details.url;
     requestContext.requestURL = requestURL;
@@ -105,6 +124,12 @@ var onBeforeRequest = function(details) {
                 pageStore.setFrame(frameId, requestURL);
             } else if ( pageStore.getFrame(frameId) === null ) {
                 pageStore.setFrame(frameId, requestURL);
+            }
+            // Goodblock.
+            // If the current frame was a Gladly page,
+            // save it in the frame info.
+            if (requestContext.frameIsOnGladlyPage) {
+                pageStore.setFrameIsOnGladlyPage(frameId);
             }
         }
 

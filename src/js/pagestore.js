@@ -397,6 +397,17 @@ PageStore.prototype.setFrame = function(frameId, frameURL) {
 
 /******************************************************************************/
 
+// Goodblock.
+// Set that the frame with ID frameId is within a whitelisted
+// Gladly page. Then, if this frame is a parent to another frame,
+// we know the child frame should also be whitelisted.
+PageStore.prototype.setFrameIsOnGladlyPage = function(frameId) {
+    var frameStore = this.frames[frameId];
+    frameStore.frameIsOnGladlyPage = true;
+};
+
+/******************************************************************************/
+
 PageStore.prototype.createContextFromPage = function() {
     var context = new µb.tabContextManager.createContext(this.tabId);
     context.pageHostname = context.rootHostname;

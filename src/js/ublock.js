@@ -375,6 +375,16 @@ var matchWhitelistDirective = function(url, hostname, directive) {
 
 /******************************************************************************/
 
+µBlock.goodblock.gladlyHostnames = ['gladlyads.xyz'];
+
+/******************************************************************************/
+
+µBlock.goodblock.isGladlyHostname = function(hostname) {
+    return (µBlock.goodblock.gladlyHostnames.indexOf(hostname) > -1);
+}
+
+/******************************************************************************/
+
 // To store info about tab activity that's relevant to showing
 // the Goodlbock icon.
 µBlock.goodblock.tabData = {

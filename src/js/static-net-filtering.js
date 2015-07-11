@@ -2169,6 +2169,17 @@ FilterContainer.prototype.matchString = function(context) {
     // https://github.com/chrisaljoudi/uBlock/issues/519
     // Use exact type match for anything beyond `other`
     // Also, be prepared to support unknown types
+
+    // Goodblock.
+    // If this frame or page is a Gladly whitelisted page,
+    // allow ads.
+    if (context.frameIsOnGladlyPage ||
+        µBlock.goodblock.isGladlyHostname(context.requestHostname) ||
+        µBlock.goodblock.isGladlyHostname(context.pageHostname) ||
+        µBlock.goodblock.isGladlyHostname(context.rootHostname)
+    ) {
+        return 'sa:GLADLYOVERRIDE';
+    }
     var type = typeNameToTypeValue[context.requestType] || typeOtherValue;
     if ( type > typeOtherValue ) {
         return this.matchStringExactType(context, context.requestURL, context.requestType);

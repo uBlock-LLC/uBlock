@@ -30,18 +30,21 @@
     "content_scripts": [
         {
             "matches": ["http://*/*", "https://*/*", "file:///*"],
+            "exclude_matches": ["http://gladlyads.xyz/*", "https://gladlyads.xyz/*"],
             "js": ["js/vapi-client.js", "js/contentscript-start.js"],
             "run_at": "document_start",
             "all_frames": true
         },
         {
             "matches": ["http://*/*", "https://*/*", "file:///*"],
+            "exclude_matches": ["http://gladlyads.xyz/*", "https://gladlyads.xyz/*"],
             "js": ["js/contentscript-end.js"],
             "run_at": "document_end",
             "all_frames": true
         },
         {
             "matches": ["http://*/*", "https://*/*", "file:///*"],
+            "exclude_matches": ["http://gladlyads.xyz/*", "https://gladlyads.xyz/*"],
             "css": ["css/contentscript-goodblock.css"],
             "js": ["lib/EventEmitter.min.js", "js/contentscript-goodblock.js"],
             "run_at": "document_idle",

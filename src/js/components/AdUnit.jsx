@@ -8,8 +8,8 @@ var AdUnit = React.createClass({
 	},
 	render: function() {
 		var goodblockData = this.props.goodblockData;
-		// TODO: change this placeholder.
-		var src = 'https://www.google.com';
+		// TODO: update to HTTPS when ready.
+		var src = 'http://gladlyads.xyz/adserver/goodblock-adserver.html';
 
 		// Only show the ad unit if it has loaded.
 		var adUnitOpacity;
