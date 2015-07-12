@@ -56,10 +56,10 @@ var GoodblockRootElem = React.createClass({
 		var adContainer;
 		var adDimmer;
 		if (goodblockData.uiState.isClicked) {
-			var adContainer = (
+			adContainer = (
 				<AdContainer goodblockData={goodblockData} />
 			);
-			var adDimmer = (
+			adDimmer = (
 				<AdDimmer goodblockData={goodblockData} />
 			);
 		}

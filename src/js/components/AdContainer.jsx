@@ -20,8 +20,8 @@ var AdContainer = React.createClass({
 		// Only load the ad unit after the slider is fully open.
 		var adUnit;
 		if (goodblockData.uiState.ad.isFullyOpen) {
-			var adUnit = (
-				<AdUnit goodblockData={goodblockData} />
+			adUnit = (
+				<AdUnit key='goodblock-ad-unit' goodblockData={goodblockData} />
 			);
 		}
 
