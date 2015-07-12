@@ -64,7 +64,16 @@ var LocalMessager = {
 				what: 'goodnightGoodblock'
 			}
 		);
-	}
+	},
+
+	adOpenStateChange: function(isAdOpen) {
+		goodblockMessager.send(
+			{
+				what: 'adOpenStateChange',
+				isAdOpen: isAdOpen,
+			}
+		);
+	},
 }
 
 /******************************************************************************/
@@ -110,6 +119,9 @@ var GoodblockDataActions = {
 	iconClick: function(isClicked) {
 		_goodblockData.uiState.isClicked = isClicked;
 		GoodblockDataStore.emitChange();
+
+		// Tell the extension the ad unit has opened/closed.
+		LocalMessager.adOpenStateChange(isClicked);
 
 		if (isClicked) {
 			// After the ad has opened, mark the ad opened state as true.

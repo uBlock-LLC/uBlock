@@ -581,6 +581,15 @@ var onMessage = function(request, sender, callback) {
             µb.goodblock.goodnightGoodblock();
             break;
 
+        case 'adOpenStateChange':
+            if (request.isAdOpen) {
+                µb.goodblock.markAdAsOpen(pageStore);
+            }
+            else {
+                µb.goodblock.markAdAsClosed();
+            }
+            break;
+
         default:
             return vAPI.messaging.UNHANDLED;
     }

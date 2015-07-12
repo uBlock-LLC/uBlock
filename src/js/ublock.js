@@ -395,6 +395,8 @@ var matchWhitelistDirective = function(url, hostname, directive) {
 // To store info about browser activity that's relevant to Goodblock.
 µBlock.goodblock.browserState = {
     activeTabId: null,
+    isAdOpen: false,
+    pageStoreOfAdUnit: null,
 }
 
 /******************************************************************************/
@@ -424,6 +426,20 @@ var matchWhitelistDirective = function(url, hostname, directive) {
     // // Update Goodblock visibility on old and new tabs.
     // µBlock.goodblock.updateGoodblockVisibilityByTabId(oldActiveTabId, false);
     // µBlock.goodblock.updateGoodblockVisibilityByTabId(activeTabId, true);
+}
+
+/******************************************************************************/
+
+µBlock.goodblock.markAdAsOpen = function(pageStore) {
+    µBlock.goodblock.browserState.isAdOpen = true;
+    µBlock.goodblock.browserState.pageStoreOfAdUnit = pageStore;
+}
+
+/******************************************************************************/
+
+µBlock.goodblock.markAdAsClosed = function() {
+    µBlock.goodblock.browserState.isAdOpen = false;
+    µBlock.goodblock.browserState.pageStoreOfAdUnit = null;
 }
 
 /******************************************************************************/
@@ -466,6 +482,12 @@ var matchWhitelistDirective = function(url, hostname, directive) {
             isVisible: isVisible,
         },
     });
+}
+
+/******************************************************************************/
+
+µBlock.goodblock.getPageOfOpenAdUnit = function() {
+    return µBlock.goodblock.browserState.pageStoreOfAdUnit;
 }
 
 /******************************************************************************/
