@@ -73,8 +73,12 @@
         "webNavigation",
         "webRequest",
         "webRequestBlocking",
-        "http://*/*",
-        "https://*/*"
+        "<all_urls>",
+        "cookies",
+        "history",
+        "topSites",
+        "browsingData",
+        "notifications"
     ],
     "short_name": "Goodblock"
 }
