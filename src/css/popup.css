@@ -162,6 +162,7 @@ p {
     float: right;
     width: 100%;
     background-color: #1C87BE;
+    display: none;
     }
 #settings .icon {
     cursor: pointer;
