@@ -135,6 +135,9 @@ var GoodblockDataActions = {
 		_goodblockData.uiState.isVisible = isVisible;
 		GoodblockDataStore.emitChange();
 	},
+	takeNap: function() {
+	    GoodblockDataStore.emitChange();
+	},
 	snoozeIconHover: function(isHovering) {
 		_goodblockData.uiState.snooze.isHovering = isHovering;
 		GoodblockDataStore.emitChange();

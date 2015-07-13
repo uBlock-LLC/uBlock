@@ -414,17 +414,25 @@ var matchWhitelistDirective = function(url, hostname, directive) {
 
 µBlock.goodblock.snoozeGoodblock = function() {
     µBlock.goodblock.updateGoodblockVisibility(false);
-    setTimeout(function() {
+    var alarm = chrome.alarms.create('snoozeGoodblock', {delayInMinutes: 97});
+    chrome.alarms.onAlarm.addListener(function(alarm) {
         µBlock.goodblock.updateGoodblockVisibility(true);
-    }, 3000);
-
+    });
     µBlock.goodblock.logEvent('snooze');
 }
 
 /******************************************************************************/
 
+µBlock.goodblock.wakeUpGoodblock = function() {
+    var now = new Date();
+    µBlock.goodblock.updateGoodblockVisibility(true);
+    µBlock.goodblock.logEvent('wakeup');
+}
+
+/******************************************************************************/
+
 µBlock.goodblock.goodnightGoodblock = function() {
-    µBlock.goodblock.sendGoodblockToBed(false);
+    µBlock.goodblock.sendGoodblockToBed();
     setTimeout(function() {
         µBlock.goodblock.updateGoodblockVisibility(true);
     }, 6000);
