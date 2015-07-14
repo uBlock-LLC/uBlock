@@ -33,7 +33,7 @@ var µBlock = (function() {
 var oneSecond = 1000;
 var oneMinute = 60 * oneSecond;
 var oneHour = 60 * oneMinute;
-// var oneDay = 24 * oneHour;
+var oneDay = 24 * oneHour;
 
 /******************************************************************************/
 
@@ -88,6 +88,8 @@ return {
         impactConversion: 6,
         adsViewed: 0,
         vcConversion: 100,
+        snoozeTil: 0,
+        sleepTil: 0,
     },
     localSettingsModifyTime: 0,
     localSettingsSaveTime: 0,

@@ -29,6 +29,47 @@
 
 /******************************************************************************/
 
+var wakeUpGoodblock = function(µb) {
+    console.log('should we wake up tad??')
+    var snoozeTil = µb.localSettings.snoozeTil;
+    var sleepTil = µb.localSettings.sleepTil;
+    console.log('shhh, snoozing...', snoozeTil)
+    console.log('shhh, sleeping...', sleepTil)
+    
+    var d = new Date();
+
+    if ( snoozeTil > d.getTime() ) {
+        // keep snoozing
+        var alarm = chrome.alarms.create(
+            'snoozeGoodblock',
+            {when: snoozeTil}
+        );
+        chrome.alarms.onAlarm.addListener(function(alarm) {
+            µBlock.goodblock.updateGoodblockVisibility(true);
+        });
+    } else if ( sleepTil > d.getTime() ) {
+        // keep sleeping
+        var alarm = chrome.alarms.create(
+            'sleepGoodblock',
+            {when: sleepTil}
+        );
+        chrome.alarms.onAlarm.addListener(function(alarm) {
+            µBlock.goodblock.updateGoodblockVisibility(true);
+        });
+    } else {
+        // wake up
+        µb.localSettings.snoozeTil = 0;
+        µb.localSettings.sleepTil = 0;
+    }
+}
+
+// Check if we should hide Tad
+// (aka, it is currently snoozing or sleeping)
+var µb = µBlock;
+wakeUpGoodblock(µb);
+
+/******************************************************************************/
+
 // https://github.com/chrisaljoudi/uBlock/issues/405
 // Be more flexible with whitelist syntax
 
@@ -414,28 +455,74 @@ var matchWhitelistDirective = function(url, hostname, directive) {
 
 µBlock.goodblock.snoozeGoodblock = function() {
     µBlock.goodblock.updateGoodblockVisibility(false);
-    var alarm = chrome.alarms.create('snoozeGoodblock', {delayInMinutes: 97});
+
+    µb.localSettings.sleepTil = 0;
+    var d = new Date();
+    var snoozeTime = 5820000;
+    µb.localSettings.snoozeTil = d.getTime() + snoozeTime;
+
+    console.log('snoozeTil', µb.localSettings.snoozeTil)
+    var alarm = chrome.alarms.create(
+        'snoozeGoodblock',
+        {when: µb.localSettings.snoozeTil}
+    );
     chrome.alarms.onAlarm.addListener(function(alarm) {
         µBlock.goodblock.updateGoodblockVisibility(true);
     });
-    µBlock.goodblock.logEvent('snooze');
-}
-
-/******************************************************************************/
-
-µBlock.goodblock.wakeUpGoodblock = function() {
-    var now = new Date();
-    µBlock.goodblock.updateGoodblockVisibility(true);
-    µBlock.goodblock.logEvent('wakeup');
 }
 
 /******************************************************************************/
 
 µBlock.goodblock.goodnightGoodblock = function() {
     µBlock.goodblock.sendGoodblockToBed();
-    setTimeout(function() {
+
+    µb.localSettings.snoozeTil = 0;
+    
+    var isLastDayofYear = function(d,m) {
+        return (d == 31 && m == 11)
+    }
+    var isLastDayofMonth = function(d,m) {
+        var shortMonths = [3, 5, 8, 10];
+        if (m == 1) {
+            return (d == 28);
+        } else if (shortMonths.indexOf(m) != -1) {
+            return (d == 30);
+        } else {
+            return (d == 31);
+        }
+    }
+    
+    var now = new Date();
+    var h = now.getHours();
+    var d = now.getDate();
+    var m = now.getMonth();
+    var y = now.getFullYear();
+
+    var yT;
+    var mT;
+    var dT;
+    if (isLastDayofYear(d,m)) {
+        yT = int(y) + 1;
+        mT = 1;
+        dT = 1;
+    } else {
+        dT = isLastDayofMonth(d, m) ? 1 : d+1;
+        mT = isLastDayofMonth(d, m) ? m+1 : m;
+        yT = y;
+    }
+
+    var eightAmTomorrow = new Date(yT, mT, dT, 8);
+    var sleepTime = eightAmTomorrow.getTime() - now.getTime();
+    console.log('asleep until', eightAmTomorrow)
+    µb.localSettings.sleepTil = eightAmTomorrow.getTime();
+    
+    var alarm = chrome.alarms.create(
+        'sleepGoodblock',
+        {when: eightAmTomorrow.getTime()}
+    );
+    chrome.alarms.onAlarm.addListener(function(alarm) {
         µBlock.goodblock.updateGoodblockVisibility(true);
-    }, 6000);
+    });
 
     µBlock.goodblock.logEvent('goodnight');
 }
