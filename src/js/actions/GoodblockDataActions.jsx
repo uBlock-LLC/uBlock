@@ -49,6 +49,14 @@ var LocalMessager = {
 		);
 	},
 
+	updateVisibility: function() {
+		goodblockMessager.send(
+			{
+				what: 'updateVisibility'
+			}
+		);
+	},
+
 	// Tell the extension to snooze Goodblock.
 	snoozeGoodblock: function() {
 		goodblockMessager.send(
@@ -121,6 +129,9 @@ var GoodblockDataActions = {
 	fetchImgUrls: function() {
 		LocalMessager.fetchImgUrls();
 	},
+	updateVisibility: function() {
+		LocalMessager.updateVisibility();
+	},
 	setImgUrls: function(imgUrls) {
 		_goodblockData.imgUrls = imgUrls;
 		GoodblockDataStore.emitChange();
@@ -147,9 +158,6 @@ var GoodblockDataActions = {
 		console.log('Changing visibility. isVisible:', isVisible);
 		_goodblockData.uiState.isVisible = isVisible;
 		GoodblockDataStore.emitChange();
-	},
-	takeNap: function() {
-	    GoodblockDataStore.emitChange();
 	},
 	snoozeIconHover: function(isHovering) {
 		_goodblockData.uiState.snooze.isHovering = isHovering;

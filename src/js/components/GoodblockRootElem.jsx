@@ -30,12 +30,17 @@ var GoodblockRootElem = React.createClass({
             return (Object.keys(obj).length);
         }
 		var goodblockData = this.state.goodblockData;
+		var isVisible = (
+			isNonemptyObject(goodblockData.uiState) ? 
+			goodblockData.uiState.isVisible : false
+		);
 		return (
 			goodblockData &&
 			goodblockData.imgUrls &&
 			isNonemptyObject(goodblockData.imgUrls) &&
 			goodblockData.uiState &&
-			isNonemptyObject(goodblockData.uiState)
+			isNonemptyObject(goodblockData.uiState) &&
+			isVisible
 		);
 	},
 	render: function() {
@@ -67,7 +72,6 @@ var GoodblockRootElem = React.createClass({
 				<AdCloseButton />
 			);
 		}
-		console.log('goodblockData.uiState.isClicked', goodblockData.uiState.isClicked)
 		return (
 			<div
 				id={id}
