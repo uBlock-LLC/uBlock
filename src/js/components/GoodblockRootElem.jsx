@@ -6,8 +6,8 @@ var universalStyle = require('./universalStyle.jsx');
 var GoodblockIconHolder = require('./GoodblockIconHolder.jsx');
 var AdContainer = require('./AdContainer.jsx');
 var AdDimmer = require('./AdDimmer.jsx');
+var AdCloseButton = require('./AdCloseButton.jsx');
 var TimeoutTransitionGroup = require('./TimeoutTransitionGroup.jsx');
-
 
 var GoodblockRootElem = React.createClass({
 	getInitialState: function() {
@@ -55,6 +55,7 @@ var GoodblockRootElem = React.createClass({
 		// Set up the ad-related elements.
 		var adContainer;
 		var adDimmer;
+		var adCloseButton;
 		if (goodblockData.uiState.isClicked) {
 			adContainer = (
 				<AdContainer goodblockData={goodblockData} />
@@ -62,13 +63,25 @@ var GoodblockRootElem = React.createClass({
 			adDimmer = (
 				<AdDimmer goodblockData={goodblockData} />
 			);
+			var adCloseButton = (
+				<AdCloseButton />
+			);
 		}
+		console.log('goodblockData.uiState.isClicked', goodblockData.uiState.isClicked)
 		return (
 			<div
 				id={id}
 				style={style}
 				dataGoodblockElem='true'>
 					<GoodblockIconHolder goodblockData={goodblockData} />
+					<TimeoutTransitionGroup
+						transitionName='ad-dimmer'
+						enterTimeout={700}
+						leaveTimeout={700}
+						transitionEnter={true}
+						transitionLeave={true}>
+							{adCloseButton}
+					</TimeoutTransitionGroup>
 					<TimeoutTransitionGroup
 						transitionName='ad'
 						enterTimeout={700}

@@ -74,6 +74,15 @@ var LocalMessager = {
 			}
 		);
 	},
+	
+	logAdView: function() {
+		goodblockMessager.send(
+			{
+				what: 'logAdView'
+			}
+		);
+	}
+	
 }
 
 /******************************************************************************/
@@ -176,6 +185,9 @@ var GoodblockDataActions = {
 		setTimeout(function() {
 			LocalMessager.goodnightGoodblock();
 		}, timeToGoodnight);
+	},
+	logAdView: function() {
+		LocalMessager.logAdView();
 	},
 	markIframeAsLoaded: function() {
 		_goodblockData.uiState.ad.iframeLoaded = true;

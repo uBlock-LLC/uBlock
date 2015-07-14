@@ -89,8 +89,7 @@ var messager = vAPI.messaging.channel('popup.js');
 
 /******************************************************************************/
 
-var calculateImpact = function(vcCount, conversion) {
-    var days = Math.round(vcCount / conversion);
+var calculateImpact = function(days) {
     var value;
     var units;
     if (days >= 7 && days < 30) {
@@ -446,7 +445,9 @@ var renderPopup = function() {
 
     var text;
 
-    var totalVc = popupData.tadProcessedAdCount;
+    var adsViewed = popupData.adsViewed;
+    var conversion = popupData.vcConversion;
+    var totalVc = adsViewed * conversion;
     if ( totalVc === 0 ) {
         text = formatNumber(0);
     } else {
@@ -454,7 +455,7 @@ var renderPopup = function() {
     }
     uDom('#vc-earned').text(text);
 
-    var impact = calculateImpact(totalVc, popupData.conversion);
+    var impact = calculateImpact(adsViewed);
     var impactAmount = impact.value;
     var impactUnits = vAPI.i18n(impact.units);
 
@@ -470,7 +471,7 @@ var renderPopup = function() {
                        .replace('{{units}}', impactUnits)
                        .replace('{{name}}', water_dot_org);
     }
-    uDom('#impact-text').html(text)
+    uDom('#impact-text').html(text);
 
     // This will collate all domains, touched or not
     renderPrivacyExposure();

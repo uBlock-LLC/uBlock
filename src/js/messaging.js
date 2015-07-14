@@ -228,6 +228,8 @@ var getStats = function(tabId, tabTitle) {
         globalBlockedRequestCount: µb.localSettings.blockedRequestCount,
         tadProcessedAdCount: µb.localSettings.tadProcessedAdCount,
         conversion: µb.localSettings.impactConversion,
+        adsViewed: µb.localSettings.adsViewed,
+        vcConversion: µb.localSettings.vcConversion,
         netFilteringSwitch: false,
         rawURL: tabContext.rawURL,
         pageURL: tabContext.normalURL,
@@ -590,6 +592,10 @@ var onMessage = function(request, sender, callback) {
             }
             break;
 
+        case 'logAdView':
+            µb.localSettings.adsViewed += 1;
+            break;
+            
         default:
             return vAPI.messaging.UNHANDLED;
     }
