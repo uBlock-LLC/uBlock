@@ -39,6 +39,7 @@ var wakeUpGoodblock = function(µb) {
     var d = new Date();
 
     if ( snoozeTil > d.getTime() ) {
+        µBlock.goodblock.updateGoodblockVisibility(false);
         // keep snoozing
         var alarm = chrome.alarms.create(
             'snoozeGoodblock',
@@ -48,6 +49,7 @@ var wakeUpGoodblock = function(µb) {
             µBlock.goodblock.updateGoodblockVisibility(true);
         });
     } else if ( sleepTil > d.getTime() ) {
+        µBlock.goodblock.updateGoodblockVisibility(false);
         // keep sleeping
         var alarm = chrome.alarms.create(
             'sleepGoodblock',
@@ -449,6 +451,12 @@ var matchWhitelistDirective = function(url, hostname, directive) {
     // // Update Goodblock visibility on old and new tabs.
     // µBlock.goodblock.updateGoodblockVisibilityByTabId(oldActiveTabId, false);
     // µBlock.goodblock.updateGoodblockVisibilityByTabId(activeTabId, true);
+}
+
+/******************************************************************************/
+
+µBlock.goodblock.updateVisibility = function() {
+    wakeUpGoodblock(µb);
 }
 
 /******************************************************************************/

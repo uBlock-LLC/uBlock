@@ -49,6 +49,14 @@ var LocalMessager = {
 		);
 	},
 
+	updateVisibility: function() {
+		goodblockMessager.send(
+			{
+				what: 'updateVisibility'
+			}
+		);
+	},
+
 	// Tell the extension to snooze Goodblock.
 	snoozeGoodblock: function() {
 		goodblockMessager.send(
@@ -110,6 +118,9 @@ var adOpenAnimationLength = 700;
 var GoodblockDataActions = {
 	fetchImgUrls: function() {
 		LocalMessager.fetchImgUrls();
+	},
+	updateVisibility: function() {
+		LocalMessager.updateVisibility();
 	},
 	setImgUrls: function(imgUrls) {
 		_goodblockData.imgUrls = imgUrls;
