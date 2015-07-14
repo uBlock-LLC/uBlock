@@ -30,17 +30,15 @@
 /******************************************************************************/
 
 var wakeUpGoodblock = function(µb) {
-    console.log('should we wake up tad??')
     var snoozeTil = µb.localSettings.snoozeTil;
     var sleepTil = µb.localSettings.sleepTil;
-    console.log('shhh, snoozing...', snoozeTil)
-    console.log('shhh, sleeping...', sleepTil)
     
     var d = new Date();
 
     if ( snoozeTil > d.getTime() ) {
         µBlock.goodblock.updateGoodblockVisibility(false);
         // keep snoozing
+        console.log('shhhh, tad is napping');
         var alarm = chrome.alarms.create(
             'snoozeGoodblock',
             {when: snoozeTil}
@@ -51,6 +49,7 @@ var wakeUpGoodblock = function(µb) {
     } else if ( sleepTil > d.getTime() ) {
         µBlock.goodblock.updateGoodblockVisibility(false);
         // keep sleeping
+        console.log('shhhh, tad is sleeping');
         var alarm = chrome.alarms.create(
             'sleepGoodblock',
             {when: sleepTil}
