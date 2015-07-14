@@ -69,6 +69,7 @@
         "contextMenus",
         "storage",
         "tabs",
+        "alarms",
         "unlimitedStorage",
         "webNavigation",
         "webRequest",
