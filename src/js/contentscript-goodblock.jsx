@@ -1,4 +1,4 @@
-console.log('Goodblock content script.');
+// console.log('Goodblock content script.');
 
 /******************************************************************************/
 /******************************************************************************/
@@ -31,6 +31,14 @@ var initGoodblock = function() {
 	if (!baseElem) {
 		baseElem = createBaseElem();
 	}
+
+	// TODO: fix error:
+	// 		Invariant Violation: ReactMount:
+	//  	Two valid but unequal nodes with the same `data-reactid`
+	// The error happens when re-running the content script on
+	// pages where the React app has already rendered, e.g. on
+	// extension reload. This could potentially cause errors when
+	// the extension updates.
 	React.render(<GoodblockRootElem />, baseElem);
 }
 

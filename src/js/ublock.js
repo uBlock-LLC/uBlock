@@ -556,13 +556,13 @@ var matchWhitelistDirective = function(url, hostname, directive) {
 µBlock.goodblock.setGoodblockWakeTimeAlarm = function(timeToWake) {
     // Debugging.
     if (timeToWake <= 0) {
-        console.log('Goodblock will wake up now!');
+        // console.log('Goodblock will wake up now!');
     }
     else {
         // convert UTC milliseconds to readable date.
         var d = new Date(0);
         d.setUTCMilliseconds(timeToWake);
-        console.log('Goodblock will wake up at', d);
+        // console.log('Goodblock will wake up at', d);
     }
 
     // Store the time Goodblock should wake up.
@@ -645,7 +645,7 @@ var matchWhitelistDirective = function(url, hostname, directive) {
 
     // It's not time to wake Goodblock.
     if (timeToWakeUp > today.getTime()) {
-        console.log('Shhhh, Tad is asleep!');
+        // console.log('Shhhh, Tad is asleep!');
         µBlock.goodblock.markIfGoodblockIsAwake(false);
         µBlock.goodblock.setGoodblockWakeTimeAlarm(timeToWakeUp);
     }

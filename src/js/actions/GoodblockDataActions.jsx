@@ -51,10 +51,7 @@ var LocalMessager = {
 
 	fetchGoodblockVisibilityState: function() {
 
-		console.log('fetchGoodblockVisibilityState');
-
 		var goodblockVisibilityHandler = function(isVisible) {
-			console.log('isVisible', isVisible);
 			GoodblockDataActions.changeVisibility(isVisible);
 		}
 
@@ -164,7 +161,7 @@ var GoodblockDataActions = {
 		GoodblockDataStore.emitChange();
 	},
 	changeVisibility: function(isVisible) {
-		console.log('Changing visibility. isVisible:', isVisible);
+		// console.log('Changing visibility. isVisible:', isVisible);
 		_goodblockData.uiState.isVisible = isVisible;
 		GoodblockDataStore.emitChange();
 	},

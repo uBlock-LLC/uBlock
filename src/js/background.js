@@ -39,21 +39,20 @@ var oneDay = 24 * oneHour;
 
 // Goodblock.
 var checkNewInstall = function() {
-    console.log('checking if this is a new install');
     function openInNewTab(url) {
         var win = window.open(url, '_blank');
         win.focus();
     }
     function onInstall() {
-        // console.log('new install');
         openInNewTab('/welcome.html')
     }
 
     function onUpdate() {
-        console.log("Extension Updated");
+        // console.log("Extension Updated");
     }
 
     function getVersion() {
+        // TODO: generalize so not browser-specific.
         var details = chrome.app.getDetails();
         return details.version;
     }
@@ -61,8 +60,6 @@ var checkNewInstall = function() {
     // Check if the version has changed.
     var currVersion = getVersion();
     var prevVersion = localStorage['version']
-    console.log('currVersion', currVersion);
-    console.log('prevVersion', prevVersion);
     if (currVersion != prevVersion) {
         // Check if we just installed this extension.
         if (typeof prevVersion === 'undefined') {
