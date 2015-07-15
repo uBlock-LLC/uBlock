@@ -72,6 +72,7 @@ var checkNewInstall = function() {
       localStorage['version'] = currVersion;
     }
 }
+
 checkNewInstall();
 
 /******************************************************************************/
