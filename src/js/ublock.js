@@ -395,6 +395,7 @@ var matchWhitelistDirective = function(url, hostname, directive) {
 // To store info about browser activity that's relevant to Goodblock.
 µBlock.goodblock.browserState = {
     isAwake: false,
+    wakeTimeout: null,
     activeTabId: null,
     isAdOpen: false,
     pageStoreOfAdUnit: null,
@@ -567,17 +568,22 @@ var matchWhitelistDirective = function(url, hostname, directive) {
     // Store the time Goodblock should wake up.
     µBlock.localSettings.timeToWake = timeToWake;
 
+    var today = new Date();
+    var timeUntilWakeMs = timeToWake - today.getTime();
+
+    // If a previous alarm exists, clear it.
+    var oldWakeTimeout = µBlock.goodblock.browserState.wakeTimeout;
+    if (oldWakeTimeout) {
+        clearTimeout(oldWakeTimeout);
+    }
+
     // Set an alarm to make Goodblock visible when
     // it's time to wake up.
-    var alarm = chrome.alarms.create(
-        'sleepGoodblock',
-        {when: timeToWake}
-    );
-    // FIXME: it looks like the alarm is calling the callback
-    // multiple times (alarm getting registered more than once?)
-    chrome.alarms.onAlarm.addListener(function(alarm) {
+    var wakeTimeout = setTimeout(function() {
         µBlock.goodblock.updateGoodblockVisibility(true);
-    });
+    }, timeUntilWakeMs);
+
+    µBlock.goodblock.browserState.wakeTimeout = wakeTimeout;
 }
 
 /******************************************************************************/
