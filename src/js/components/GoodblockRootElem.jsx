@@ -39,8 +39,7 @@ var GoodblockRootElem = React.createClass({
 			goodblockData.imgUrls &&
 			isNonemptyObject(goodblockData.imgUrls) &&
 			goodblockData.uiState &&
-			isNonemptyObject(goodblockData.uiState) &&
-			isVisible
+			isNonemptyObject(goodblockData.uiState)
 		);
 	},
 	render: function() {

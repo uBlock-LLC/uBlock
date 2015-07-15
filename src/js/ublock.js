@@ -594,6 +594,7 @@ var matchWhitelistDirective = function(url, hostname, directive) {
     // Get the time to wake up after snoozing.
     var timeToWakeMs = µBlock.goodblock.getTimeToWake('snooze');
     µBlock.goodblock.setGoodblockWakeTimeAlarm(timeToWakeMs);
+    µBlock.goodblock.logEvent('snooze');
 }
 
 /******************************************************************************/
