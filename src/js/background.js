@@ -60,8 +60,6 @@ var checkNewInstall = function() {
     // Check if the version has changed.
     var currVersion = getVersion();
     var prevVersion = localStorage['version']
-    console.log('currVersion', currVersion);
-    console.log('prevVersion', prevVersion);
     if (currVersion != prevVersion) {
       // Check if we just installed this extension.
       if (typeof prevVersion === 'undefined') {
