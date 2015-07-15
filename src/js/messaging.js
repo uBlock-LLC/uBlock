@@ -575,16 +575,25 @@ var onMessage = function(request, sender, callback) {
             response = vAPI.getGoodblockImgUrls();
             break;
 
-        case 'updateVisibility':
-            response = µb.goodblock.updateVisibility();
+        case 'getGoodblockVisibilityState':
+            response = µb.goodblock.isGoodblockAwake();
             break;
 
         case 'snoozeGoodblock':
-            response = µb.goodblock.snoozeGoodblock();
+            µb.goodblock.snoozeGoodblock();
             break;
 
         case 'goodnightGoodblock':
-            response = µb.goodblock.goodnightGoodblock();
+            µb.goodblock.goodnightGoodblock();
+            break;
+
+        case 'adOpenStateChange':
+            if (request.isAdOpen) {
+                µb.goodblock.markAdAsOpen(pageStore);
+            }
+            else {
+                µb.goodblock.markAdAsClosed();
+            }
             break;
 
         case 'logAdView':

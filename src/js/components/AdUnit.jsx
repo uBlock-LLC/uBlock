@@ -8,8 +8,7 @@ var AdUnit = React.createClass({
 	},
 	render: function() {
 		var goodblockData = this.props.goodblockData;
-		// TODO: change this placeholder.
-		var src = 'https://www.google.com';
+		var src = 'https://gladlyads.xyz/adserver/';
 
 		// Only show the ad unit if it has loaded.
 		var adUnitOpacity;

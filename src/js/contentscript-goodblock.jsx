@@ -41,7 +41,7 @@ initGoodblock();
 
 // On load, fetch Goodblock image URLs from the extension.
 GoodblockDataActions.fetchImgUrls();
-GoodblockDataActions.updateVisibility();
+GoodblockDataActions.fetchGoodblockVisibilityState();
 
 /******************************************************************************/
 /******************************************************************************/

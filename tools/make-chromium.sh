@@ -2,10 +2,10 @@
 #
 # This script assumes a linux environment
 
-echo "*** uBlock.chromium: Creating web store package"
-echo "*** uBlock.chromium: Copying files"
+echo "*** goodblock.chromium: Creating web store package"
+echo "*** goodblock.chromium: Copying files"
 
-DES=dist/build/uBlock.chromium
+DES=dist/build/goodblock.chromium
 rm -rf $DES
 mkdir -p $DES
 
@@ -15,7 +15,7 @@ cp -R src/css $DES/
 cp -R src/img $DES/
 mkdir $DES/js
 cp src/js/*.js $DES/js/
-echo "*** uBlock.chromium: Transforming browserify/JSX files."
+echo "*** goodblock.chromium: Transforming browserify/JSX files."
 browserify -t reactify src/js/contentscript-goodblock.jsx > $DES/js/contentscript-goodblock.js
 cp -R src/lib $DES/
 cp -R src/_locales $DES/
@@ -28,10 +28,10 @@ cp platform/chromium/manifest.json $DES/
 cp LICENSE.txt $DES/
 
 if [ "$1" = all ]; then
-    echo "*** uBlock.chromium: Creating package..."
+    echo "*** goodblock.chromium: Creating package..."
     pushd $(dirname $DES/)
-    zip uBlock.chromium.zip -qr $(basename $DES/)/*
+    zip goodblock.chromium.zip -qr $(basename $DES/)/*
     popd
 fi
 
-echo "*** uBlock.chromium: Package done."
+echo "*** goodblock.chromium: Package done."

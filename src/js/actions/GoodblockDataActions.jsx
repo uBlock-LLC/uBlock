@@ -49,11 +49,20 @@ var LocalMessager = {
 		);
 	},
 
-	updateVisibility: function() {
+	fetchGoodblockVisibilityState: function() {
+
+		console.log('fetchGoodblockVisibilityState');
+
+		var goodblockVisibilityHandler = function(isVisible) {
+			console.log('isVisible', isVisible);
+			GoodblockDataActions.changeVisibility(isVisible);
+		}
+
 		goodblockMessager.send(
 			{
-				what: 'updateVisibility'
-			}
+				what: 'getGoodblockVisibilityState'
+			},
+			goodblockVisibilityHandler
 		);
 	},
 
@@ -74,6 +83,15 @@ var LocalMessager = {
 		);
 	},
 
+	adOpenStateChange: function(isAdOpen) {
+		goodblockMessager.send(
+			{
+				what: 'adOpenStateChange',
+				isAdOpen: isAdOpen,
+			}
+		);
+	},
+	
 	logAdView: function() {
 		goodblockMessager.send(
 			{
@@ -81,6 +99,7 @@ var LocalMessager = {
 			}
 		);
 	}
+	
 }
 
 /******************************************************************************/
@@ -119,8 +138,8 @@ var GoodblockDataActions = {
 	fetchImgUrls: function() {
 		LocalMessager.fetchImgUrls();
 	},
-	updateVisibility: function() {
-		LocalMessager.updateVisibility();
+	fetchGoodblockVisibilityState: function() {
+		LocalMessager.fetchGoodblockVisibilityState();
 	},
 	setImgUrls: function(imgUrls) {
 		_goodblockData.imgUrls = imgUrls;
@@ -129,6 +148,9 @@ var GoodblockDataActions = {
 	iconClick: function(isClicked) {
 		_goodblockData.uiState.isClicked = isClicked;
 		GoodblockDataStore.emitChange();
+
+		// Tell the extension the ad unit has opened/closed.
+		LocalMessager.adOpenStateChange(isClicked);
 
 		if (isClicked) {
 			// After the ad has opened, mark the ad opened state as true.
