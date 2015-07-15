@@ -29,13 +29,13 @@ a {
     float: left;
     display: block;
     padding: 10px;
-    width: 70%;
+    width: 65%;
     font-size: 18px;
 }
 #tad-preview {
     float: left;
     display: block;
-    width: 25%;
+    width: 20%;
     padding: 10px;
 }
 #tad-preview > img {

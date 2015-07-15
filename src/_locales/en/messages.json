@@ -100,20 +100,20 @@
     "description": "English: We're happy to have you! Together, you and Tad can help shape the future of online advertising. Just a few things to get you started:"
   },
   "welcome1":{
-    "message": "Tad lights up when you visit one of our partner pages",
-    "description": "English: Tad lights up when you visit one of our partner pages"
+    "message": "Goodblock gives you an ad-free browsing experience.",
+    "description": "English: Goodblock gives you an ad-free browsing experience."
   },
   "welcome2":{
-    "message": "If you see Tad on an ad, you know it's doing good!",
-    "description": "English: If you see Tad on an ad, you know it's doing good!"
+    "message": "View ads on your terms, by clicking on Tad at the bottom corner of your screen",
+    "description": "English: View ads on your terms, by clicking on Tad at the bottom corner of your screen"
   },
   "welcome3": {
-    "message": "Every ad you see raises money for charity!",
-    "description": "English: Every ad you see raises money for charity!"
+    "message": "For every ad you view, we give a day of clean water to someone in need via water.org",
+    "description": "For every ad you view, we give a day of clean water to someone in need via water.org"
   },
   "welcome4":{
-    "message": "Keep track of your impact by clicking on Tad",
-    "description": "English: Keep track of your impact by clicking on Tad"
+    "message": "Keep track of your impact by clicking on Tad on your browser bar.",
+    "description": "Keep track of your impact by clicking on Tad on your browser bar."
   },
   "popupOr":{
     "message":"or",
