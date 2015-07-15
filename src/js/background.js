@@ -88,8 +88,7 @@ return {
         impactConversion: 6,
         adsViewed: 0,
         vcConversion: 100,
-        snoozeTil: 0,
-        sleepTil: 0,
+        timeToWakeUp: 0, // UTC time (milliseconds)
     },
     localSettingsModifyTime: 0,
     localSettingsSaveTime: 0,

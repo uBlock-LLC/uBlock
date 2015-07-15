@@ -29,48 +29,6 @@
 
 /******************************************************************************/
 
-var wakeUpGoodblock = function(µb) {
-    var snoozeTil = µb.localSettings.snoozeTil;
-    var sleepTil = µb.localSettings.sleepTil;
-    
-    var d = new Date();
-
-    if ( snoozeTil > d.getTime() ) {
-        µBlock.goodblock.updateGoodblockVisibility(false);
-        // keep snoozing
-        console.log('shhhh, tad is napping');
-        var alarm = chrome.alarms.create(
-            'snoozeGoodblock',
-            {when: snoozeTil}
-        );
-        chrome.alarms.onAlarm.addListener(function(alarm) {
-            µBlock.goodblock.updateGoodblockVisibility(true);
-        });
-    } else if ( sleepTil > d.getTime() ) {
-        µBlock.goodblock.updateGoodblockVisibility(false);
-        // keep sleeping
-        console.log('shhhh, tad is sleeping');
-        var alarm = chrome.alarms.create(
-            'sleepGoodblock',
-            {when: sleepTil}
-        );
-        chrome.alarms.onAlarm.addListener(function(alarm) {
-            µBlock.goodblock.updateGoodblockVisibility(true);
-        });
-    } else {
-        // wake up
-        µb.localSettings.snoozeTil = 0;
-        µb.localSettings.sleepTil = 0;
-    }
-}
-
-// Check if we should hide Tad
-// (aka, it is currently snoozing or sleeping)
-var µb = µBlock;
-wakeUpGoodblock(µb);
-
-/******************************************************************************/
-
 // https://github.com/chrisaljoudi/uBlock/issues/405
 // Be more flexible with whitelist syntax
 
@@ -436,9 +394,23 @@ var matchWhitelistDirective = function(url, hostname, directive) {
 
 // To store info about browser activity that's relevant to Goodblock.
 µBlock.goodblock.browserState = {
+    isAwake: false,
     activeTabId: null,
     isAdOpen: false,
     pageStoreOfAdUnit: null,
+}
+
+/******************************************************************************/
+
+// To store config info.
+µBlock.goodblock.config = {
+    // FIXME: turn off isDev.
+    isDev: true,
+    devConfig: {
+        timeMsToSnooze: 6 * 1000,
+        timeMsToSleep: 20 * 1000,
+    },
+    timeMsToSnooze: 97 * 60 * 1000,
 }
 
 /******************************************************************************/
@@ -486,37 +458,19 @@ var matchWhitelistDirective = function(url, hostname, directive) {
 
 /******************************************************************************/
 
-µBlock.goodblock.updateVisibility = function() {
-    wakeUpGoodblock(µb);
+µBlock.goodblock.markIfGoodblockIsAwake = function(isAwake) {
+    µBlock.goodblock.browserState.isAwake = isAwake;
 }
 
 /******************************************************************************/
 
-µBlock.goodblock.snoozeGoodblock = function() {
-    µBlock.goodblock.updateGoodblockVisibility(false);
-
-    µb.localSettings.sleepTil = 0;
-    var d = new Date();
-    var snoozeTime = 5820000;
-    µb.localSettings.snoozeTil = d.getTime() + snoozeTime;
-
-    console.log('snoozeTil', µb.localSettings.snoozeTil)
-    var alarm = chrome.alarms.create(
-        'snoozeGoodblock',
-        {when: µb.localSettings.snoozeTil}
-    );
-    chrome.alarms.onAlarm.addListener(function(alarm) {
-        µBlock.goodblock.updateGoodblockVisibility(true);
-    });
+µBlock.goodblock.isGoodblockAwake = function() {
+    return µBlock.goodblock.browserState.isAwake;
 }
 
 /******************************************************************************/
 
-µBlock.goodblock.goodnightGoodblock = function() {
-    µBlock.goodblock.sendGoodblockToBed();
-
-    µb.localSettings.snoozeTil = 0;
-    
+µBlock.goodblock.getTimeAtEightAmTomorrow = function() {
     var isLastDayofYear = function(d,m) {
         return (d == 31 && m == 11)
     }
@@ -551,28 +505,107 @@ var matchWhitelistDirective = function(url, hostname, directive) {
     }
 
     var eightAmTomorrow = new Date(yT, mT, dT, 8);
-    var sleepTime = eightAmTomorrow.getTime() - now.getTime();
-    console.log('asleep until', eightAmTomorrow)
-    µb.localSettings.sleepTil = eightAmTomorrow.getTime();
-    
-    var alarm = chrome.alarms.create(
-        'sleepGoodblock',
-        {when: eightAmTomorrow.getTime()}
-    );
-    chrome.alarms.onAlarm.addListener(function(alarm) {
-        µBlock.goodblock.updateGoodblockVisibility(true);
-    });
+    return eightAmTomorrow.getTime();
+}
 
-    µBlock.goodblock.logEvent('goodnight');
+µBlock.goodblock.getDevTimeToWake = function() {
+    var today = new Date();
+    var now = today.getTime();
+    var timeToSleep = µBlock.goodblock.config.devConfig.timeMsToSleep;
+    return now + timeToSleep;
+}
+
+// Takes a sleepEvent string.
+// Returns the number of milliseconds until Goodblock should
+// wake up.
+µBlock.goodblock.getTimeToWake = function(sleepEvent) {
+
+    var wakeTime;
+
+    // Handle sleep and snooze differently.
+    switch (sleepEvent) {
+        case 'sleep':
+            if (µBlock.goodblock.config.isDev) {
+                wakeTime = µBlock.goodblock.getDevTimeToWake();
+            }
+            else {
+                wakeTime = µBlock.goodblock.getTimeAtEightAmTomorrow();
+            }
+            break;
+        case 'snooze':
+            var snoozeTime;
+            if (µBlock.goodblock.config.isDev) {
+                snoozeTime = µBlock.goodblock.config.devConfig.timeMsToSnooze;
+            }
+            else {
+                snoozeTime = µBlock.goodblock.config.timeMsToSnooze;
+            }
+            var today = new Date();
+            wakeTime = today.getTime() + snoozeTime;
+            break;
+        default:
+            break;
+    }
+    return wakeTime;
 }
 
 /******************************************************************************/
 
-µBlock.goodblock.sendGoodblockToBed = function() {
+// Takes the UTC time (milliseconds) Goodblock should wake.
+µBlock.goodblock.setGoodblockWakeTimeAlarm = function(timeToWake) {
+    // Debugging.
+    if (timeToWake <= 0) {
+        console.log('Goodblock will wake up now!');
+    }
+    else {
+        // convert UTC milliseconds to readable date.
+        var d = new Date(0);
+        d.setUTCMilliseconds(timeToWake);
+        console.log('Goodblock will wake up at', d);
+    }
+
+    // Store the time Goodblock should wake up.
+    µBlock.localSettings.timeToWake = timeToWake;
+
+    // Set an alarm to make Goodblock visible when
+    // it's time to wake up.
+    var alarm = chrome.alarms.create(
+        'sleepGoodblock',
+        {when: timeToWake}
+    );
+    // FIXME: it looks like the alarm is calling the callback
+    // multiple times (alarm getting registered more than once?)
+    chrome.alarms.onAlarm.addListener(function(alarm) {
+        µBlock.goodblock.updateGoodblockVisibility(true);
+    });
+}
+
+/******************************************************************************/
+
+µBlock.goodblock.snoozeGoodblock = function() {
+    µBlock.goodblock.updateGoodblockVisibility(false);
+
+    // Get the time to wake up after snoozing.
+    var timeToWakeMs = µBlock.goodblock.getTimeToWake('snooze');
+    µBlock.goodblock.setGoodblockWakeTimeAlarm(timeToWakeMs);
+}
+
+/******************************************************************************/
+
+µBlock.goodblock.goodnightGoodblock = function() {
+
     vAPI.messaging.broadcast({
         what: 'goToBed',
         data: {},
     });
+
+    // Mark that Goodblock is asleep.
+    µBlock.goodblock.markIfGoodblockIsAwake(false);
+
+    // Get the time to wake up after sleeping.
+    var timeToWakeMs = µBlock.goodblock.getTimeToWake('sleep');
+    µBlock.goodblock.setGoodblockWakeTimeAlarm(timeToWakeMs);
+    µBlock.goodblock.logEvent('goodnight');
 }
 
 /******************************************************************************/
@@ -584,6 +617,9 @@ var matchWhitelistDirective = function(url, hostname, directive) {
             isVisible: isVisible,
         },
     });
+
+    // Mark whether Goodblock is asleep.
+    µBlock.goodblock.markIfGoodblockIsAwake(isVisible);
 }
 
 /******************************************************************************/
@@ -591,6 +627,34 @@ var matchWhitelistDirective = function(url, hostname, directive) {
 µBlock.goodblock.getPageOfOpenAdUnit = function() {
     return µBlock.goodblock.browserState.pageStoreOfAdUnit;
 }
+
+/******************************************************************************/
+
+µBlock.goodblock.checkIfShouldWakeUpGoodblock = function() {
+
+    // Get the UTC time to wake up in milliseconds.
+    var timeToWakeUp = µBlock.localSettings.timeToWakeUp;
+    
+    var today = new Date();
+
+    // It's not time to wake Goodblock.
+    if (timeToWakeUp > today.getTime()) {
+        console.log('Shhhh, Tad is asleep!');
+        µBlock.goodblock.markIfGoodblockIsAwake(false);
+        µBlock.goodblock.setGoodblockWakeTimeAlarm(timeToWakeUp);
+    }
+    // It is time to wake Goodblock.
+    else {
+        µBlock.goodblock.markIfGoodblockIsAwake(true);
+        µBlock.goodblock.setGoodblockWakeTimeAlarm(0);
+    }
+}
+
+/******************************************************************************/
+
+// Check if we should hide Tad
+// (aka, it is currently snoozing or sleeping)
+µBlock.goodblock.checkIfShouldWakeUpGoodblock();
 
 /******************************************************************************/
 

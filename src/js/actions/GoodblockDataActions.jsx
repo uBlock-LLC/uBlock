@@ -49,11 +49,20 @@ var LocalMessager = {
 		);
 	},
 
-	updateVisibility: function() {
+	fetchGoodblockVisibilityState: function() {
+
+		console.log('fetchGoodblockVisibilityState');
+
+		var goodblockVisibilityHandler = function(isVisible) {
+			console.log('isVisible', isVisible);
+			GoodblockDataActions.changeVisibility(isVisible);
+		}
+
 		goodblockMessager.send(
 			{
-				what: 'updateVisibility'
-			}
+				what: 'getGoodblockVisibilityState'
+			},
+			goodblockVisibilityHandler
 		);
 	},
 
@@ -129,8 +138,8 @@ var GoodblockDataActions = {
 	fetchImgUrls: function() {
 		LocalMessager.fetchImgUrls();
 	},
-	updateVisibility: function() {
-		LocalMessager.updateVisibility();
+	fetchGoodblockVisibilityState: function() {
+		LocalMessager.fetchGoodblockVisibilityState();
 	},
 	setImgUrls: function(imgUrls) {
 		_goodblockData.imgUrls = imgUrls;

@@ -575,8 +575,8 @@ var onMessage = function(request, sender, callback) {
             response = vAPI.getGoodblockImgUrls();
             break;
 
-        case 'updateVisibility':
-            response = µb.goodblock.updateVisibility();
+        case 'getGoodblockVisibilityState':
+            response = µb.goodblock.isGoodblockAwake();
             break;
 
         case 'snoozeGoodblock':

@@ -5,7 +5,7 @@ var _goodblockData = {
 	uiState: {
 		isClicked: false,
 		isHovering: false,
-		isVisible: true,
+		isVisible: false,
 		ad: {
 			isFullyOpen: false,
 			iframeLoaded: false,
