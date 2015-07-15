@@ -4,7 +4,7 @@
     "description":"extension name."
   },
   "extShortDesc":{
-    "message":"An adblocker that gives clean water via water.org while you surf the web.",
+    "message":"An adblocker for a new internet. Never see an ad you don’t want, and when you do you’ll earn money for people in need.",
     "description":"this will be in the chrome web store: must be 132 characters or less"
   },
   "dashboardName":{
