@@ -57,7 +57,7 @@
 
 .snooze-appear, .snooze-enter {
 	opacity: 0.01;
-	transition: opacity 0.25s ease-in;
+	transition: opacity 0.25s linear;
 }
 
 .snooze-appear-active, .snooze-enter-active {
@@ -66,7 +66,7 @@
 
 .snooze-leave {
 	opacity: 1;
-	transition: opacity 0.15s ease-in;
+	transition: opacity 0.15s linear;
 }
 
 .snooze-leave.snooze-leave-active {
