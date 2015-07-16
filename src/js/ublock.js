@@ -361,16 +361,15 @@ var matchWhitelistDirective = function(url, hostname, directive) {
 
 // Goodblock.
 µBlock.goodblock.logEvent = function(event) {
-    // var xhr = new XMLHttpRequest();
-    // xhr.open('POST', 'http://inlet.goodblock.org/write?db=impressions', true);
-    // xhr.onload = function () {
-    //   // do something to response
-    //   console.log(this.responseText);
-    // };
-    // xhr.setRequestHeader("Authorization", "Basic " + btoa('logger:DwV5WWXXQgNVg6hgKXFj')); 
-    // var data = 'impr,userId=' + µBlock.userSettings.userId + ',event=' + event + ' value=y';
-    // xhr.send(data);
-    // console.log(data);
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'http://inlet.goodblock.org/write?db=impressions', true);
+    xhr.onload = function () {
+      // do something to response
+      console.log(this.responseText);
+    };
+    xhr.setRequestHeader("Authorization", "Basic " + btoa('logger:DwV5WWXXQgNVg6hgKXFj'));
+    var data = event + ',userId=' + µBlock.userSettings.userId + ',event=' + event + ' value=' + event;
+    xhr.send(data);
 };
 
 /******************************************************************************/
@@ -400,6 +399,20 @@ var matchWhitelistDirective = function(url, hostname, directive) {
     isAdOpen: false,
     pageStoreOfAdUnit: null,
     adTabId: null,
+}
+
+/******************************************************************************/
+
+// To store config info.
+µBlock.goodblock.config = {
+    // TODO: move this into an environment variable
+    // or local storage.
+    isDev: true,
+    devConfig: {
+        timeMsToSnooze: 6 * 1000,
+        timeMsToSleep: 20 * 1000,
+    },
+    timeMsToSnooze: 97 * 60 * 1000,
 }
 
 /******************************************************************************/
@@ -440,6 +453,8 @@ var matchWhitelistDirective = function(url, hostname, directive) {
         'index': -1,
         'select': true,
     });
+    µBlock.goodblock.browserState.pageStoreOfAdUnit = pageStore;
+    µBlock.goodblock.logEvent('adOpened');
 }
 
 /******************************************************************************/
@@ -462,6 +477,7 @@ var matchWhitelistDirective = function(url, hostname, directive) {
     µBlock.goodblock.browserState.adTabId = null;
 
     µBlock.goodblock.goodnightGoodblock();
+    µBlock.goodblock.logEvent('adClosed');
 }
 
 /******************************************************************************/
@@ -492,7 +508,7 @@ var matchWhitelistDirective = function(url, hostname, directive) {
             return (d == 31);
         }
     }
-    
+
     var now = new Date();
     var h = now.getHours();
     var d = now.getDate();
@@ -634,6 +650,9 @@ var matchWhitelistDirective = function(url, hostname, directive) {
 
     // Mark whether Goodblock is asleep.
     µBlock.goodblock.markIfGoodblockIsAwake(isVisible);
+    // if (isVisible) {
+    //   µBlock.goodblock.logEvent('wokeUp');
+    // }
 }
 
 /******************************************************************************/
@@ -648,7 +667,7 @@ var matchWhitelistDirective = function(url, hostname, directive) {
 
     // Get the UTC time to wake up in milliseconds.
     var timeToWakeUp = µBlock.localSettings.timeToWakeUp;
-    
+
     var today = new Date();
 
     // It's not time to wake Goodblock.
