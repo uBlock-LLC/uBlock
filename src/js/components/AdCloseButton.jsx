@@ -27,7 +27,7 @@ var AdCloseButton = React.createClass({
 		var adCloseButtonStyle = {
 			position: 'fixed',
 			top: 10,
-			left: '90%',
+			right: 10,
 			width: 15,
 			height: 15,
 			background: backgroundColor,

@@ -59,16 +59,12 @@ var GoodblockRootElem = React.createClass({
 		// Set up the ad-related elements.
 		var adContainer;
 		var adDimmer;
-		var adCloseButton;
 		if (goodblockData.uiState.isClicked) {
 			adContainer = (
 				<AdContainer goodblockData={goodblockData} />
 			);
 			adDimmer = (
 				<AdDimmer goodblockData={goodblockData} />
-			);
-			var adCloseButton = (
-				<AdCloseButton />
 			);
 		}
 		return (
@@ -77,14 +73,6 @@ var GoodblockRootElem = React.createClass({
 				style={style}
 				dataGoodblockElem='true'>
 					<GoodblockIconHolder goodblockData={goodblockData} />
-					<TimeoutTransitionGroup
-						transitionName='ad-dimmer'
-						enterTimeout={700}
-						leaveTimeout={700}
-						transitionEnter={true}
-						transitionLeave={true}>
-							{adCloseButton}
-					</TimeoutTransitionGroup>
 					<TimeoutTransitionGroup
 						transitionName='ad'
 						enterTimeout={700}

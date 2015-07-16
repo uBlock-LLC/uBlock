@@ -1,6 +1,7 @@
 
 var React = require('react/addons');
 var AdUnit = require('./AdUnit.jsx');
+var AdCloseButton = require('./AdCloseButton.jsx');
 var TimeoutTransitionGroup = require('./TimeoutTransitionGroup.jsx');
 
 var AdContainer = React.createClass({
@@ -19,14 +20,26 @@ var AdContainer = React.createClass({
 
 		// Only load the ad unit after the slider is fully open.
 		var adUnit;
+		var adCloseButton;
 		if (goodblockData.uiState.ad.isFullyOpen) {
 			adUnit = (
 				<AdUnit key='goodblock-ad-unit' goodblockData={goodblockData} />
+			);
+			adCloseButton = (
+				<AdCloseButton />
 			);
 		}
 
 		return (
 			<div style={adContainerStyle}>
+				<TimeoutTransitionGroup
+					transitionName='ad-dimmer'
+					enterTimeout={700}
+					leaveTimeout={700}
+					transitionEnter={true}
+					transitionLeave={true}>
+						{adCloseButton}
+				</TimeoutTransitionGroup>
 				<TimeoutTransitionGroup
 					transitionName='goodblock-ad-unit'
 					transitionEnter={false}
