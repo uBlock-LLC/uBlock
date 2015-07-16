@@ -360,16 +360,31 @@ var matchWhitelistDirective = function(url, hostname, directive) {
 /******************************************************************************/
 
 // Goodblock.
+µBlock.goodblock = {};
+
+/******************************************************************************/
+
+/******************************************************************************/
+
+// Goodblock logging
 µBlock.goodblock.logEvent = function(event) {
+    var data =  'impr,userId=' + µBlock.userSettings.userId + ',event=' + event + ' value=' + event;
+    µBlock.goodblock.sendToDb(data);
+    console.log('Sent ' + event);
+};
+
+µBlock.goodblock.logMetric = function(metric, value) {
+    var data =  metric + ',userId=' + µBlock.userSettings.userId + ' value=' + value;
+    µBlock.goodblock.sendToDb(data);
+    console.log('Sent Metric ' + metric + ' with  value ' + value);
+};
+
+µBlock.goodblock.sendToDb = function(data) {
     var xhr = new XMLHttpRequest();
     xhr.open('POST', 'http://inlet.goodblock.org/write?db=impressions', true);
-    xhr.onload = function () {
-      // do something to response
-      console.log(this.responseText);
-    };
     xhr.setRequestHeader("Authorization", "Basic " + btoa('logger:DwV5WWXXQgNVg6hgKXFj'));
-    var data = event + ',userId=' + µBlock.userSettings.userId + ',event=' + event + ' value=' + event;
     xhr.send(data);
+    console.log('Sent ' + event);
 };
 
 /******************************************************************************/
@@ -399,6 +414,7 @@ var matchWhitelistDirective = function(url, hostname, directive) {
     isAdOpen: false,
     pageStoreOfAdUnit: null,
     adTabId: null,
+    lastWakeTime: null
 }
 
 /******************************************************************************/
@@ -483,6 +499,10 @@ var matchWhitelistDirective = function(url, hostname, directive) {
 /******************************************************************************/
 
 µBlock.goodblock.markIfGoodblockIsAwake = function(isAwake) {
+    if (!µBlock.goodblock.browserState.isAwake && isAwake) {
+      // When tranisitioning from asleep to awake, set last wake time
+      µBlock.goodblock.browserState.lastWakeTime = new Date().getTime();
+    }
     µBlock.goodblock.browserState.isAwake = isAwake;
 }
 
@@ -618,6 +638,10 @@ var matchWhitelistDirective = function(url, hostname, directive) {
     var timeToWakeUpMs = µBlock.goodblock.getTimeToWakeUp('snooze');
     µBlock.goodblock.setGoodblockWakeTimeAlarm(timeToWakeUpMs);
     µBlock.goodblock.logEvent('snooze');
+    if (µBlock.goodblock.browserState.lastWakeTime) {
+      var timeTilSnooze = new Date().getTime() - µBlock.goodblock.browserState.lastWakeTime;
+      µBlock.goodblock.logMetric('timeUntilSnooze', timeTilSnooze);
+    }
 }
 
 /******************************************************************************/
@@ -636,6 +660,10 @@ var matchWhitelistDirective = function(url, hostname, directive) {
     var timeToWakeUpMs = µBlock.goodblock.getTimeToWakeUp('sleep');
     µBlock.goodblock.setGoodblockWakeTimeAlarm(timeToWakeUpMs);
     µBlock.goodblock.logEvent('goodnight');
+    if (µBlock.goodblock.browserState.lastWakeTime) {
+      var timeTilAd = new Date().getTime() - µBlock.goodblock.browserState.lastWakeTime;
+      µBlock.goodblock.logMetric('timeUntilAd', timeTilAd);
+    }
 }
 
 /******************************************************************************/
@@ -650,9 +678,9 @@ var matchWhitelistDirective = function(url, hostname, directive) {
 
     // Mark whether Goodblock is asleep.
     µBlock.goodblock.markIfGoodblockIsAwake(isVisible);
-    // if (isVisible) {
-    //   µBlock.goodblock.logEvent('wokeUp');
-    // }
+    if (isVisible) {
+      µBlock.goodblock.logEvent('wokeUp');
+    }
 }
 
 /******************************************************************************/
