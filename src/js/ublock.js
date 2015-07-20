@@ -367,24 +367,89 @@ var matchWhitelistDirective = function(url, hostname, directive) {
 /******************************************************************************/
 
 // Goodblock logging
-µBlock.goodblock.logEvent = function(event) {
-    var data =  'impr,userId=' + µBlock.userSettings.userId + ',event=' + event + ' value=' + event;
+
+µBlock.goodblock.log = {};
+
+// Inputs:
+// - measurementName, a string
+// - fieldsObj, an object
+// - tagsObj, an object (or null)
+// Output: a string to post to InfluxDB.
+// TODO: Key values for fieldsObj and tagsObj cannot currently contain spaces
+// or commas, because this function doesn't escape characters. Fix this.
+// This automatically includes userId in the fields and meta tags.
+µBlock.goodblock.log.formInfluxDbDataStr = function(measurementName, fieldsObj, tagsObj) {
+    function objToStr(obj) {
+        var str = '';
+
+        for(var keys = Object.keys(obj), i = 0; i < keys.length; i++) {
+            var key = keys[i];
+            var value = obj[key];
+            str = str + key + '=' + value;
+
+            // See if we should add a trailing comma.
+            var isLastKey = i == (keys.length - 1);
+            if (!isLastKey) {
+                str = str + ',';
+            }
+        };
+        return str;
+    }
+
+    var dataStr = '';
+    dataStr = dataStr + measurementName;
+
+    // Add tag values.
+    if (tagsObj) {
+        dataStr = dataStr + ',' + objToStr(tagsObj);
+    }
+
+    // Add field values.
+    dataStr = dataStr + ' ' + objToStr(fieldsObj);
+
+    // Add userId to the fields.
+    // We don't make userId a tag because we want to keep cardinality low. See:
+    // https://influxdb.com/docs/v0.9/concepts/schema_and_data_layout.html
+    dataStr = dataStr + ',userId=' + µBlock.userSettings.userId;
+
+    return dataStr;
+}
+
+
+
+µBlock.goodblock.log.logEvent = function(event) {
+    var data = µBlock.goodblock.log.formInfluxDbDataStr(
+        event,
+        {
+            'event': event,
+        },
+        {
+            'event': event,
+        }
+    );
+
     µBlock.goodblock.sendToDb(data);
     console.log('Sent ' + event);
 };
 
-µBlock.goodblock.logMetric = function(metric, value) {
-    var data =  metric + ',userId=' + µBlock.userSettings.userId + ' value=' + value;
+µBlock.goodblock.log.logMetric = function(metric, value) {
+    var data = µBlock.goodblock.log.formInfluxDbDataStr(
+        metric,
+        {
+            'value': value,
+        }
+    );
     µBlock.goodblock.sendToDb(data);
-    console.log('Sent Metric ' + metric + ' with  value ' + value);
+    console.log('Sent metric ' + metric + ' with  value ' + value);
 };
 
+// Takes a string.
 µBlock.goodblock.sendToDb = function(data) {
     var xhr = new XMLHttpRequest();
     xhr.open('POST', 'http://inlet.goodblock.org/write?db=impressions', true);
     xhr.setRequestHeader("Authorization", "Basic " + btoa('logger:DwV5WWXXQgNVg6hgKXFj'));
     xhr.send(data);
-    console.log('Sent ' + event);
+    console.log('Sent data:', data);
 };
 
 /******************************************************************************/
@@ -470,7 +535,7 @@ var matchWhitelistDirective = function(url, hostname, directive) {
         'select': true,
     });
     µBlock.goodblock.browserState.pageStoreOfAdUnit = pageStore;
-    µBlock.goodblock.logEvent('adOpened');
+    µBlock.goodblock.log.logEvent('adOpened');
 }
 
 /******************************************************************************/
@@ -493,7 +558,7 @@ var matchWhitelistDirective = function(url, hostname, directive) {
     µBlock.goodblock.browserState.adTabId = null;
 
     µBlock.goodblock.goodnightGoodblock();
-    µBlock.goodblock.logEvent('adClosed');
+    µBlock.goodblock.log.logEvent('adClosed');
 }
 
 /******************************************************************************/
@@ -637,10 +702,10 @@ var matchWhitelistDirective = function(url, hostname, directive) {
     // Get the time to wake up after snoozing.
     var timeToWakeUpMs = µBlock.goodblock.getTimeToWakeUp('snooze');
     µBlock.goodblock.setGoodblockWakeTimeAlarm(timeToWakeUpMs);
-    µBlock.goodblock.logEvent('snooze');
+    µBlock.goodblock.log.logEvent('snooze');
     if (µBlock.goodblock.browserState.lastWakeTime) {
       var timeTilSnooze = new Date().getTime() - µBlock.goodblock.browserState.lastWakeTime;
-      µBlock.goodblock.logMetric('timeUntilSnooze', timeTilSnooze);
+      µBlock.goodblock.log.logMetric('timeUntilSnooze', timeTilSnooze);
     }
 }
 
@@ -662,7 +727,7 @@ var matchWhitelistDirective = function(url, hostname, directive) {
     µBlock.goodblock.logEvent('goodnight');
     if (µBlock.goodblock.browserState.lastWakeTime) {
       var timeTilAd = new Date().getTime() - µBlock.goodblock.browserState.lastWakeTime;
-      µBlock.goodblock.logMetric('timeUntilAd', timeTilAd);
+      µBlock.goodblock.log.logMetric('timeUntilAd', timeTilAd);
     }
 }
 
@@ -679,7 +744,7 @@ var matchWhitelistDirective = function(url, hostname, directive) {
     // Mark whether Goodblock is asleep.
     µBlock.goodblock.markIfGoodblockIsAwake(isVisible);
     if (isVisible) {
-      µBlock.goodblock.logEvent('wokeUp');
+      µBlock.goodblock.log.logEvent('wokeUp');
     }
 }
 
