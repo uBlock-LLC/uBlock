@@ -7,7 +7,7 @@ var _goodblockData = {
 		isHovering: false,
 		isVisible: false,
 		ad: {
-			isFullyOpen: false,
+			isOpen: false,
 			iframeLoaded: false,
 		},
 		snooze: {

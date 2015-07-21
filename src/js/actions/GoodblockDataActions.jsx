@@ -21,8 +21,7 @@ goodblockMessager.listener = function(request) {
 			GoodblockDataActions.changeVisibility(request.data.isVisible);
 			break;
 		case 'goToBed':
-			GoodblockDataActions.changeVisibility(false);
-			goingToBed(false);
+			GoodblockDataActions.sendGoodblockToBed();
 			break;
 		default:
 			console.log('Unhandled message sent to contentscript-goodblock.js:', request);
@@ -123,8 +122,8 @@ function goingToBed(isGoingToBed) {
 	GoodblockDataStore.emitChange();
 }
 
-function changeAdFullyOpenState(isAdFullyOpen) {
-	_goodblockData.uiState.ad.isFullyOpen = isAdFullyOpen;
+function changeAdOpenState(isOpen) {
+	_goodblockData.uiState.ad.isOpen = isOpen;
 	GoodblockDataStore.emitChange();
 }
 
@@ -142,19 +141,22 @@ var GoodblockDataActions = {
 		_goodblockData.imgUrls = imgUrls;
 		GoodblockDataStore.emitChange();
 	},
-	iconClick: function(isClicked) {
-		_goodblockData.uiState.isClicked = isClicked;
-		GoodblockDataStore.emitChange();
+	iconClick: function() {
+		if (!_goodblockData.uiState.isClicked) {
+			_goodblockData.uiState.isClicked = true;
+			GoodblockDataStore.emitChange();
 
-		// Tell the extension the ad unit has opened/closed.
-		LocalMessager.adOpenStateChange(isClicked);
+			// if the user is clicking it the first time
+			// log that they're viewing the ad
+			GoodblockDataActions.logAdView();
 
-		if (isClicked) {
-			// After the ad has opened, mark the ad opened state as true.
-			setTimeout(function() {
-				changeAdFullyOpenState(true);
-			}, adOpenAnimationLength);
+			// Mark the ad opened state as true.
+			changeAdOpenState(true);
 		}
+
+		// Tell the extension the ad unit has opened.
+		LocalMessager.adOpenStateChange(true);
+
 	},
 	iconHover: function(isHovering) {
 		_goodblockData.uiState.isHovering = isHovering;
@@ -185,11 +187,18 @@ var GoodblockDataActions = {
 		}, timeToSnooze);
 	},
 	// Go through the process of going to bed.
-	sendGoodblockToBed: function(isViewed) {
-		sayGoodnight(true);
-		changeAdFullyOpenState(false);
+	sendGoodblockToBed: function() {
+		// Reset state.
+		changeAdOpenState(false);
+		_goodblockData.uiState.isClicked = false;
+		GoodblockDataStore.emitChange();
 
 		var timeToGoodnight = 2400;
+
+		// Show the "goodnight" speech bubble.
+		setTimeout(function() {
+			sayGoodnight(true);
+		}, 200);
 
 		// Hide the "goodnight" speech bubble after
 		// some time.
@@ -197,10 +206,10 @@ var GoodblockDataActions = {
 			sayGoodnight(false);
 		}, timeToGoodnight - 400);
 
-		// Tell the extension to goodnight Goodblock
-		// after some time.
+		// Change the Goodblock visibility.
 		setTimeout(function() {
-			LocalMessager.goodnightGoodblock();
+			GoodblockDataActions.changeVisibility(false);
+			goingToBed(false);
 		}, timeToGoodnight);
 	},
 	logAdView: function() {

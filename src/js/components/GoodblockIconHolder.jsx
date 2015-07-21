@@ -16,17 +16,7 @@ var GoodblockIconHolder = React.createClass({
 	onClick: function() {
 		var goodblockData = this.props.goodblockData;
 		var prevClickState = goodblockData.uiState.isClicked;
-		GoodblockDataActions.iconClick(!prevClickState);
-
-		// If the user is clicking it a second time, they're closing
-		// the ad.
-		if (prevClickState) {
-			GoodblockDataActions.sendGoodblockToBed();
-		} else {
-			// if the user is clicking it the first time
-			// log that they're viewing the ad
-			GoodblockDataActions.logAdView();
-		}
+		GoodblockDataActions.iconClick();
 	},
 	changeHoverState: function(isHovering) {
 		GoodblockDataActions.iconHover(isHovering);
