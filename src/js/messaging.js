@@ -589,10 +589,10 @@ var onMessage = function(request, sender, callback) {
 
         case 'adOpenStateChange':
             if (request.isAdOpen) {
-                µb.goodblock.markAdAsOpen(pageStore);
+                µb.goodblock.openAd();
             }
             else {
-                µb.goodblock.markAdAsClosed();
+                µb.goodblock.closeAd();
             }
             break;
 

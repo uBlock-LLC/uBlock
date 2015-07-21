@@ -175,6 +175,32 @@ vAPI.tabs.registerListeners = function() {
     //          http://raymondhill.net/ublock/popup.html
     var reGoodForWebRequestAPI = /^https?:\/\//;
 
+    // Goodblock.
+    // If the tab has a URL that is a Gladly ad server domain,
+    // mark this tab as the Gladly ad tab.
+    var checkIfNewTabIsGladlyAd = function(tab) {
+        if (!tab.url) {
+            return;
+        }
+        var hostname = µBlock.URI.hostnameFromURI(tab.url);
+        if (!µBlock.goodblock.isGladlyAdServer(hostname)) {
+            return;
+        }
+        µBlock.goodblock.saveGladlyAdTabId(tab.id.toString());
+    }
+
+    // Goodblock.
+    // Check if the closed tab is the Gladly ad tab.
+    // If so, perform actions related to ad closing.
+    var checkIfClosedTabIsGladlyAd = function(tabId) {
+        if (µBlock.goodblock.getGladlyAdTabId() === tabId.toString()) {
+            µBlock.goodblock.closeAd();
+
+            // Reset the Gladly ad tab ID.
+            µBlock.goodblock.saveGladlyAdTabId(null);
+        }
+    }
+
     var onCreatedNavigationTarget = function(details) {
         //console.debug('onCreatedNavigationTarget: popup candidate tab id %d = "%s"', details.tabId, details.url);
         if ( reGoodForWebRequestAPI.test(details.url) === false ) {
@@ -208,6 +234,9 @@ vAPI.tabs.registerListeners = function() {
             return;
         }
         onUpdatedClient(tabId, changeInfo, tab);
+
+        // Goodblock.
+        checkIfNewTabIsGladlyAd(tab);
     };
 
     var onCommitted = function(details) {
@@ -225,6 +254,9 @@ vAPI.tabs.registerListeners = function() {
     var onClosed = function(tabId) {
         delete iconStateForTabId[tabId];
         onClosedClient(tabId);
+
+        // Goodblock.
+        checkIfClosedTabIsGladlyAd(tabId);
     };
 
     chrome.webNavigation.onCreatedNavigationTarget.addListener(onCreatedNavigationTarget);

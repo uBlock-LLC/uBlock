@@ -383,11 +383,18 @@ var matchWhitelistDirective = function(url, hostname, directive) {
 /******************************************************************************/
 
 µBlock.goodblock.gladlyHostnames = ['gladlyads.xyz'];
+µBlock.goodblock.gladlyAdServerDomains = ['gladlyads.xyz'];
 
 /******************************************************************************/
 
 µBlock.goodblock.isGladlyHostname = function(hostname) {
     return (µBlock.goodblock.gladlyHostnames.indexOf(hostname) > -1);
+}
+
+/******************************************************************************/
+
+µBlock.goodblock.isGladlyAdServer = function(hostname) {
+    return (µBlock.goodblock.gladlyAdServerDomains.indexOf(hostname) > -1);
 }
 
 /******************************************************************************/
@@ -399,6 +406,7 @@ var matchWhitelistDirective = function(url, hostname, directive) {
     activeTabId: null,
     isAdOpen: false,
     pageStoreOfAdUnit: null,
+    adTabId: null,
 }
 
 /******************************************************************************/
@@ -446,16 +454,34 @@ var matchWhitelistDirective = function(url, hostname, directive) {
 
 /******************************************************************************/
 
-µBlock.goodblock.markAdAsOpen = function(pageStore) {
+µBlock.goodblock.openAd = function() {
     µBlock.goodblock.browserState.isAdOpen = true;
-    µBlock.goodblock.browserState.pageStoreOfAdUnit = pageStore;
+    var thing = vAPI.tabs.open({
+        'url': 'https://gladlyads.xyz/adserver/',
+        'index': -1,
+    });
 }
 
 /******************************************************************************/
 
-µBlock.goodblock.markAdAsClosed = function() {
+// Saves the tab ID of the tab showing a Gladly ad.
+// tabId is a string.
+µBlock.goodblock.saveGladlyAdTabId = function(tabId) {
+    µBlock.goodblock.browserState.adTabId = tabId;
+}
+
+µBlock.goodblock.getGladlyAdTabId = function() {
+    return µBlock.goodblock.browserState.adTabId;
+}
+
+/******************************************************************************/
+
+µBlock.goodblock.closeAd = function() {
     µBlock.goodblock.browserState.isAdOpen = false;
     µBlock.goodblock.browserState.pageStoreOfAdUnit = null;
+    µBlock.goodblock.browserState.adTabId = null;
+
+    µBlock.goodblock.goodnightGoodblock();
 }
 
 /******************************************************************************/
