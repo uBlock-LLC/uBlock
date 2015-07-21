@@ -459,6 +459,7 @@ var matchWhitelistDirective = function(url, hostname, directive) {
     var thing = vAPI.tabs.open({
         'url': 'https://gladlyads.xyz/adserver/',
         'index': -1,
+        'select': true,
     });
 }
 
