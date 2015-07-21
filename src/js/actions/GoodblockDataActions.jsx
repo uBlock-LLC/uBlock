@@ -191,6 +191,7 @@ var GoodblockDataActions = {
 		// Reset state.
 		changeAdOpenState(false);
 		_goodblockData.uiState.isClicked = false;
+		_goodblockData.uiState.isHovering = false;
 		GoodblockDataStore.emitChange();
 
 		var timeToGoodnight = 2400;
