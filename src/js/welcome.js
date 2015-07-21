@@ -48,7 +48,7 @@ var populatePage = function() {
     uDom('#point1').text(point1Text);
     uDom('#point2').text(point2Text);
     uDom('#point3').text(point3Text);
-    uDom('#poin4t').text(point4Text);
+    uDom('#point4').text(point4Text);
 };
 
 // populate the text once the page is fully rendered
