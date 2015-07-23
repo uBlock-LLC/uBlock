@@ -360,13 +360,6 @@ var matchWhitelistDirective = function(url, hostname, directive) {
 /******************************************************************************/
 
 // Goodblock.
-µBlock.goodblock = {};
-
-/******************************************************************************/
-
-/******************************************************************************/
-
-// Goodblock.
 µBlock.goodblock.logEvent = function(event) {
     // var xhr = new XMLHttpRequest();
     // xhr.open('POST', 'http://inlet.goodblock.org/write?db=impressions', true);
@@ -407,20 +400,6 @@ var matchWhitelistDirective = function(url, hostname, directive) {
     isAdOpen: false,
     pageStoreOfAdUnit: null,
     adTabId: null,
-}
-
-/******************************************************************************/
-
-// To store config info.
-µBlock.goodblock.config = {
-    // TODO: move this into an environment variable
-    // or local storage.
-    isDev: false,
-    devConfig: {
-        timeMsToSnooze: 6 * 1000,
-        timeMsToSleep: 20 * 1000,
-    },
-    timeMsToSnooze: 97 * 60 * 1000,
 }
 
 /******************************************************************************/
