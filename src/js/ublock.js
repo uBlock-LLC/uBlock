@@ -379,12 +379,12 @@ var matchWhitelistDirective = function(url, hostname, directive) {
 // or commas, because this function doesn't escape characters. Fix this.
 // This automatically includes userId in the fields and meta tags.
 µBlock.goodblock.log.formInfluxDbDataStr = function(measurementName, fieldsObj, tagsObj) {
-    function objToStr(obj) {
+    function objToStr(obj, useQuotes) {
         var str = '';
 
         for(var keys = Object.keys(obj), i = 0; i < keys.length; i++) {
             var key = keys[i];
-            var value = typeof(obj[key]) == 'string' ? '"' + obj[key] + '"' : obj[key];
+            var value = typeof(obj[key]) == 'string' && useQuotes ? '"' + obj[key] + '"' : obj[key];
             str = str + key + '=' + value;
 
             // See if we should add a trailing comma.
@@ -401,11 +401,11 @@ var matchWhitelistDirective = function(url, hostname, directive) {
 
     // Add tag values.
     if (tagsObj) {
-        dataStr = dataStr + ',' + objToStr(tagsObj);
+        dataStr = dataStr + ',' + objToStr(tagsObj, false);
     }
 
     // Add field values.
-    dataStr = dataStr + ' ' + objToStr(fieldsObj);
+    dataStr = dataStr + ' ' + objToStr(fieldsObj, true);
 
     // Add userId to the fields.
     // We don't make userId a tag because we want to keep cardinality low. See:
