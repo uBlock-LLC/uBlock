@@ -396,7 +396,7 @@ var matchWhitelistDirective = function(url, hostname, directive) {
         return str;
     }
 
-    var dataStr = '';
+    var dataStr = 'extension.';
     dataStr = dataStr + measurementName;
 
     // Add tag values.
@@ -410,7 +410,7 @@ var matchWhitelistDirective = function(url, hostname, directive) {
     // Add userId to the fields.
     // We don't make userId a tag because we want to keep cardinality low. See:
     // https://influxdb.com/docs/v0.9/concepts/schema_and_data_layout.html
-    dataStr = dataStr + ',userId=' + µBlock.userSettings.userId;
+    dataStr = dataStr + ',userId="' + µBlock.userSettings.userId + '"';
 
     return dataStr;
 }
@@ -437,6 +437,7 @@ var matchWhitelistDirective = function(url, hostname, directive) {
         metric,
         {
             'value': value,
+            'event': metric,
         }
     );
     µBlock.goodblock.sendToDb(data);
