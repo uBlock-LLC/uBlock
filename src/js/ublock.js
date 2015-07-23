@@ -537,7 +537,7 @@ var matchWhitelistDirective = function(url, hostname, directive) {
     return eightAmTomorrow.getTime();
 }
 
-µBlock.goodblock.getDevTimeToWake = function() {
+µBlock.goodblock.getDevTimeToWakeUp = function() {
     var today = new Date();
     var now = today.getTime();
     var timeToSleep = µBlock.goodblock.config.devConfig.timeMsToSleep;
@@ -547,7 +547,7 @@ var matchWhitelistDirective = function(url, hostname, directive) {
 // Takes a sleepEvent string.
 // Returns the number of milliseconds until Goodblock should
 // wake up.
-µBlock.goodblock.getTimeToWake = function(sleepEvent) {
+µBlock.goodblock.getTimeToWakeUp = function(sleepEvent) {
 
     var wakeTime;
 
@@ -555,7 +555,7 @@ var matchWhitelistDirective = function(url, hostname, directive) {
     switch (sleepEvent) {
         case 'sleep':
             if (µBlock.goodblock.config.isDev) {
-                wakeTime = µBlock.goodblock.getDevTimeToWake();
+                wakeTime = µBlock.goodblock.getDevTimeToWakeUp();
             }
             else {
                 wakeTime = µBlock.goodblock.getTimeAtEightAmTomorrow();
@@ -581,23 +581,23 @@ var matchWhitelistDirective = function(url, hostname, directive) {
 /******************************************************************************/
 
 // Takes the UTC time (milliseconds) Goodblock should wake.
-µBlock.goodblock.setGoodblockWakeTimeAlarm = function(timeToWake) {
+µBlock.goodblock.setGoodblockWakeTimeAlarm = function(timeToWakeUp) {
     // Debugging.
-    if (timeToWake <= 0) {
+    if (timeToWakeUp <= 0) {
         // console.log('Goodblock will wake up now!');
     }
     else {
         // convert UTC milliseconds to readable date.
         var d = new Date(0);
-        d.setUTCMilliseconds(timeToWake);
+        d.setUTCMilliseconds(timeToWakeUp);
         // console.log('Goodblock will wake up at', d);
     }
 
     // Store the time Goodblock should wake up.
-    µBlock.localSettings.timeToWake = timeToWake;
+    µBlock.localSettings.timeToWakeUp = timeToWakeUp;
 
     var today = new Date();
-    var timeUntilWakeMs = timeToWake - today.getTime();
+    var timeUntilWakeMs = timeToWakeUp - today.getTime();
 
     // If a previous alarm exists, clear it.
     var oldWakeTimeout = µBlock.goodblock.browserState.wakeTimeout;
@@ -620,8 +620,8 @@ var matchWhitelistDirective = function(url, hostname, directive) {
     µBlock.goodblock.updateGoodblockVisibility(false);
 
     // Get the time to wake up after snoozing.
-    var timeToWakeMs = µBlock.goodblock.getTimeToWake('snooze');
-    µBlock.goodblock.setGoodblockWakeTimeAlarm(timeToWakeMs);
+    var timeToWakeUpMs = µBlock.goodblock.getTimeToWakeUp('snooze');
+    µBlock.goodblock.setGoodblockWakeTimeAlarm(timeToWakeUpMs);
     µBlock.goodblock.logEvent('snooze');
 }
 
@@ -638,8 +638,8 @@ var matchWhitelistDirective = function(url, hostname, directive) {
     µBlock.goodblock.markIfGoodblockIsAwake(false);
 
     // Get the time to wake up after sleeping.
-    var timeToWakeMs = µBlock.goodblock.getTimeToWake('sleep');
-    µBlock.goodblock.setGoodblockWakeTimeAlarm(timeToWakeMs);
+    var timeToWakeUpMs = µBlock.goodblock.getTimeToWakeUp('sleep');
+    µBlock.goodblock.setGoodblockWakeTimeAlarm(timeToWakeUpMs);
     µBlock.goodblock.logEvent('goodnight');
 }
 
