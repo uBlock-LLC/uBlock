@@ -27,8 +27,8 @@
 
 /******************************************************************************/
 
-// Modify the config here for dev or testing.
-// Modifications to this file should not be included in version control.
+// Copy this config and remove the .example extension. Use that file
+// to change the config for your local environment.
 // For example:
 // µBlock.goodblock.config.isDev = false;
 // µBlock.goodblock.config.timeMsToSnooze = 6 * 1000;
