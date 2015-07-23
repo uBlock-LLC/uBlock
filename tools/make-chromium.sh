@@ -6,6 +6,7 @@ echo "*** goodblock.chromium: Creating web store package"
 echo "*** goodblock.chromium: Copying files"
 
 DES=dist/build/goodblock.chromium
+LOCAL_SETTINGS_FILENAME=goodblock-config-dev.js
 rm -rf $DES
 mkdir -p $DES
 
@@ -26,6 +27,12 @@ cp -R platform/chromium/img $DES/
 cp platform/chromium/*.html $DES/
 cp platform/chromium/manifest.json $DES/
 cp LICENSE.txt $DES/
+
+if [ "$1" != dev ]; then
+    echo "*** goodblock.chromium: Removing dev config..."
+    rm $DES/js/$LOCAL_SETTINGS_FILENAME
+    touch $DES/js/$LOCAL_SETTINGS_FILENAME
+fi
 
 if [ "$1" = all ]; then
     echo "*** goodblock.chromium: Creating package..."
