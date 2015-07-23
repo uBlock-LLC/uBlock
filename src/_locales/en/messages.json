@@ -75,6 +75,22 @@
     "message": "Give clean water via {{name}} just by browsing the web! Keep browsing to see your impact.",
     "description": "English: Give clean water via {{name}} just by browsing the web! Keep browsing to see your impact."
   },
+  "day":{
+    "message": "day",
+    "description": "English: day"
+  },
+  "week":{
+    "message": "week",
+    "description": "English: week"
+  },
+  "month":{
+    "message": "month",
+    "description": "English: month"
+  },
+  "year":{
+    "message": "year",
+    "description": "English: year"
+  },
   "days":{
     "message": "days",
     "description": "English: days"

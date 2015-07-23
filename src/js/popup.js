@@ -94,13 +94,13 @@ var calculateImpact = function(days) {
     var units;
     if (days >= 7 && days < 30) {
         value = Math.round(days / 7);
-        units = value == 1 ? 'week' : 'weeks';
+        units = (value == 1) ? 'week' : 'weeks';
     } else if (days >= 30 && days < 365) {
         value = Math.round(days / 30);
-        units = value == 1 ? 'month' : 'months';
+        units = (value == 1) ? 'month' : 'months';
     } else {
         value = days;
-        units = value == 1 ? 'day' : 'days';
+        units = (value == 1) ? 'day' : 'days';
     }
     var impact = {
         'value': value,
