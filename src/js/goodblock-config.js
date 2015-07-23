@@ -29,7 +29,11 @@
 
 // To store config info.
 µBlock.goodblock.config = {
-    isDev: false,
+
+	// DO NOT MODIFY isDev.
+	// Instead, override it in goodblock-config-dev.js.
+    isDev: false, // Do not modify.
+
     devConfig: {
         timeMsToSnooze: 6 * 1000,
         timeMsToSleep: 20 * 1000,
