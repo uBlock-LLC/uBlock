@@ -384,7 +384,7 @@ var matchWhitelistDirective = function(url, hostname, directive) {
 
         for(var keys = Object.keys(obj), i = 0; i < keys.length; i++) {
             var key = keys[i];
-            var value = obj[key];
+            var value = typeof(obj[key]) == 'string' ? '"' + obj[key] + '"' : obj[key];
             str = str + key + '=' + value;
 
             // See if we should add a trailing comma.
