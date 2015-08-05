@@ -15,7 +15,8 @@ var GoodblockIcon = React.createClass({
 		return (
 			<img
 				src={imgSrc}
-				style={imgStyle} />
+				style={imgStyle}
+				data-goodblock-elem='icon-img' />
 		);
 	}
 });
