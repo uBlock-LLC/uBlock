@@ -1,0 +1,25 @@
+{
+  "name": "Goodblock",
+  "version": "0.0.5",
+  "description": "Goodblock: the good adblocker.",
+  "dependencies": {
+    "react": "0.13.3",
+    "react-tools": "~0.13.3",
+    "reactify": "1.1.1",
+    "jest-cli": "0.4.18"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:gladly-team/goodblock.git"
+  },
+  "author": "Gladly",
+  "directories": {
+    "doc": "doc",
+    "example": "example",
+    "test": "tests"
+  }
+}
