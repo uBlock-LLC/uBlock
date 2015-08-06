@@ -7,6 +7,7 @@ echo "*** goodblock.chromium: Copying files"
 
 DES=dist/build/goodblock.chromium
 LOCAL_SETTINGS_FILENAME=goodblock-config-dev.js
+TESTING_SETTINGS_FILENAME=goodblock-config-testing.js
 rm -rf $DES
 mkdir -p $DES
 
@@ -36,6 +37,13 @@ if [ "$1" != dev ]; then
     echo "*** goodblock.chromium: Wiping dev config clean..."
     rm $DES/js/$LOCAL_SETTINGS_FILENAME
     touch $DES/js/$LOCAL_SETTINGS_FILENAME
+fi
+
+# If this isn't a testing build, remove the testing config.
+if [ "$1" != testing ]; then
+    echo "*** goodblock.chromium: Wiping testing config clean..."
+    rm $DES/js/$TESTING_SETTINGS_FILENAME
+    touch $DES/js/$TESTING_SETTINGS_FILENAME
 fi
 
 if [ "$1" = all ]; then
