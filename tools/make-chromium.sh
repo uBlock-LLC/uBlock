@@ -38,11 +38,6 @@ if [ "$1" != dev ]; then
     touch $DES/js/$LOCAL_SETTINGS_FILENAME
 fi
 
-if [[ $* == *--include-tests* ]]; then
-	echo "*** goodblock.chromium: Including test extension pages."
-	cp -R tests/extension-test-pages $DES/tests/
-fi
-
 if [ "$1" = all ]; then
     echo "*** goodblock.chromium: Creating package..."
     pushd $(dirname $DES/)
