@@ -100,6 +100,7 @@ var SnoozeButton = React.createClass({
 			<div
 				style={styles.parent}
 				onClick={this.onClick}
+				data-goodblock-elem='snooze-button'
 				onMouseEnter={this.onMouseEnter}
 				onMouseLeave={this.onMouseLeave} >
 				<div style={styles.bigBubble}>
