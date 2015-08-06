@@ -66,13 +66,13 @@ class GoodblockIconHoverTestCase(unittest.TestCase):
         )
 
     def wait_for_goodblock_icon_img_load(self):
-        wait = WebDriverWait(self.driver, 5)
+        wait = WebDriverWait(self.driver, 10)
         wait.until(
             EC.presence_of_element_located((By.CSS_SELECTOR, 'img[data-goodblock-elem="icon-img"]'))
         )
 
     def wait_for_goodblock_icon_appearance(self):
-        wait = WebDriverWait(self.driver, 5)
+        wait = WebDriverWait(self.driver, 10)
         wait.until(
             EC.element_to_be_clickable((By.CSS_SELECTOR, 'img[data-goodblock-elem="icon-img"]'))
         )
