@@ -485,20 +485,6 @@ var matchWhitelistDirective = function(url, hostname, directive) {
 
 /******************************************************************************/
 
-// To store config info.
-µBlock.goodblock.config = {
-    // TODO: move this into an environment variable
-    // or local storage.
-    isDev: true,
-    devConfig: {
-        timeMsToSnooze: 6 * 1000,
-        timeMsToSleep: 20 * 1000,
-    },
-    timeMsToSnooze: 97 * 60 * 1000,
-}
-
-/******************************************************************************/
-
 µBlock.goodblock.updateGoodblockVisibilityByTabId = function(tabId, isVisible) {
     if (!tabId) {
         return;
