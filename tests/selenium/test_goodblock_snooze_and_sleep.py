@@ -95,6 +95,15 @@ class GoodblockIconHoverTestCase(unittest.TestCase):
         self.assertEqual(snooze_button.value_of_css_property('width'), '70px')
         self.assertEqual(snooze_button.value_of_css_property('height'), '65px')
 
+        # Move mouse off the icon.
+        actions.move_to_element(goodblock_icon).move_by_offset(200, 10).perform()
+
+        # Ensure the snooze button isn't visible.
+        wait = WebDriverWait(self.driver, 4)
+        wait.until(
+            EC.invisibility_of_element_located((By.CSS_SELECTOR, '[data-goodblock-elem="snooze-button"]'))
+        )
+
 
 # TODO
 class GoodblockSnoozeTestCase(unittest.TestCase):
