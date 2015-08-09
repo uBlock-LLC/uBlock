@@ -18,6 +18,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.action_chains import ActionChains
 
+import helpers
+
 
 # Returns the driver for the browser with Goodblock installed.
 def get_goodblock_web_driver():
@@ -36,8 +38,18 @@ def setUpModule():
     # This is so we don't have to launch a browser and reinstall the extension
     # between every test.
     driver = get_goodblock_web_driver()
+
     global DRIVER
     DRIVER = driver
+
+    # Save this original window so we can easily close the others.
+    global ORIGINAL_WINDOW_HANDLE
+    ORIGINAL_WINDOW_HANDLE = driver.current_window_handle
+
+    # Wait for the extension's post-install tab to open and close
+    # the tab so we can watch what's going on in the main tab.
+    helpers.expect_new_window(driver, 5)
+    helpers.close_all_other_windows(driver, ORIGINAL_WINDOW_HANDLE)
 
 def tearDownModule():
     # Close the browser.
