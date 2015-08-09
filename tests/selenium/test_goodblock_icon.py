@@ -57,24 +57,24 @@ def tearDownModule():
 
 GOODBLOCK_BASE_ELEM_CSS_SELECTOR = '#goodblock-react-base[data-goodblock-initialized="true"]'
 
-# Ensure that the extension installed properly.
-class GoodblockIsInstalledTestCase(unittest.TestCase):
+# # Ensure that the extension installed properly.
+# class GoodblockIsInstalledTestCase(unittest.TestCase):
 
-    def setUp(self):
-        # self.driver = get_goodblock_web_driver()
-        # ensure_goodblock_is_installed(self.driver)
-        self.driver = DRIVER
+#     def setUp(self):
+#         # self.driver = get_goodblock_web_driver()
+#         # ensure_goodblock_is_installed(self.driver)
+#         self.driver = DRIVER
 
-    def ensure_goodblock_is_installed(self):
-        # First ensure goodblock is installed
-        self.driver.get('chrome://extensions')
-        time.sleep(1) # The page takes a moment to init.
-        # Switch to the extensions iframe and ensure that we're installed
-        self.driver.switch_to.frame(self.driver.find_element_by_name("extensions"))
-        self.driver.find_element_by_xpath('//span[text()="Goodblock"]')
+#     def ensure_goodblock_is_installed(self):
+#         # First ensure goodblock is installed
+#         self.driver.get('chrome://extensions')
+#         time.sleep(1) # The page takes a moment to init.
+#         # Switch to the extensions iframe and ensure that we're installed
+#         self.driver.switch_to.frame(self.driver.find_element_by_name("extensions"))
+#         self.driver.find_element_by_xpath('//span[text()="Goodblock"]')
 
-    def test_goodblock_is_installed(self):
-        self.ensure_goodblock_is_installed()
+#     def test_goodblock_is_installed(self):
+#         self.ensure_goodblock_is_installed()
 
 
 # Ensure the Goodblock icon is created on our HTML page.
