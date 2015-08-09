@@ -55,8 +55,6 @@ def tearDownModule():
     # Close the browser.
     DRIVER.quit()
 
-GOODBLOCK_BASE_ELEM_CSS_SELECTOR = '#goodblock-react-base[data-goodblock-initialized="true"]'
-
 # # Ensure that the extension installed properly.
 # class GoodblockIsInstalledTestCase(unittest.TestCase):
 
@@ -101,25 +99,19 @@ class GoodblockIconExistsTestCase(unittest.TestCase):
 
     # Return the base HTML element created by the extension.
     def get_goodblock_app_base_elem(self):
-        return self.driver.find_element_by_css_selector(GOODBLOCK_BASE_ELEM_CSS_SELECTOR)
+        return self.driver.find_element_by_css_selector(
+            '#goodblock-react-base[data-goodblock-initialized="true"]')
 
     def test_goodblock_app_exists(self):
-        EC.presence_of_element_located((By.CSS_SELECTOR, GOODBLOCK_BASE_ELEM_CSS_SELECTOR))
-
-    # Wait for the icon image to load. It may take some time because the extension's
-    # content script has to fetch the image from the extension.
-    def wait_for_goodblock_icon_img_load(self):
-        wait = WebDriverWait(self.driver, 10)
-        wait.until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, 'img[data-goodblock-elem="icon-img"]'))
-        )
+        EC.presence_of_element_located((By.CSS_SELECTOR,
+            '#goodblock-react-base[data-goodblock-initialized="true"]'))
 
     def test_icon_exists(self):
-        self.wait_for_goodblock_icon_img_load()
+        helpers.wait_for_goodblock_icon_img_load(self.driver)
         EC.presence_of_element_located((By.CSS_SELECTOR, 'img[data-goodblock-elem="icon-img"]'))
 
     def test_icon_dimensions(self):
-        self.wait_for_goodblock_icon_img_load()
+        helpers.wait_for_goodblock_icon_img_load(self.driver)
         icon = self.driver.find_element_by_css_selector('img[data-goodblock-elem="icon-img"]')
         icon_width = icon.value_of_css_property('width')
         icon_height = icon.value_of_css_property('height')
