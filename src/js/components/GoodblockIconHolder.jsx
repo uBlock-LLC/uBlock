@@ -91,7 +91,8 @@ var GoodblockIconHolder = React.createClass({
 					style={style}
 					onClick={this.onClick}
 					onMouseEnter={this.onMouseEnter}
-					onMouseLeave={this.onMouseLeave} >
+					onMouseLeave={this.onMouseLeave}
+					data-goodblock-elem='icon' >
 					<GoodblockIcon goodblockData={goodblockData} />
 						<TimeoutTransitionGroup
 							appearTimeout={200}

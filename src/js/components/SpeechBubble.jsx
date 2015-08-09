@@ -26,7 +26,10 @@ var SpeechBubble = React.createClass({
 			cursor: 'default',
 		};
 		return (
-			<div style={style} className='speech-bubble' onClick={this.onClick}>
+			<div style={style}
+				className='speech-bubble'
+				onClick={this.onClick}
+				data-goodblock-elem='speech-bubble'>
 				{text}
 			</div>
 		);

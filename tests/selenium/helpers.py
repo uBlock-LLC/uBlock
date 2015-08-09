@@ -23,3 +23,13 @@ def get_chrome_extension_id(driver):
     
     return goodblock_ext_id
 
+
+def get_animation_times():
+    # Time in seconds.
+    # Note these will use testing time lengths as defined in
+    # goodblock-config-testing.js.
+    data = {
+        'snooze': 0.5,
+        'sleep': 1,
+    }
+    return data

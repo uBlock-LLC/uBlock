@@ -18,6 +18,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.action_chains import ActionChains
 
+import helpers
+
 
 # Returns the driver for the browser with Goodblock installed.
 def get_goodblock_web_driver():
@@ -105,11 +107,59 @@ class GoodblockIconHoverTestCase(unittest.TestCase):
         )
 
 
-# TODO
 class GoodblockSnoozeTestCase(unittest.TestCase):
 
     def setUp(self):
         self.driver = DRIVER
 
     def test_snooze(self):
-        pass
+        # Hover over the Goodblock icon.
+        goodblock_icon = self.driver.find_element_by_css_selector('img[data-goodblock-elem="icon-img"]')
+        actions = ActionChains(self.driver)
+        actions.move_to_element(goodblock_icon).perform()
+
+        # Wait for the snooze button to appear.
+        wait = WebDriverWait(self.driver, 1)
+        wait.until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, '[data-goodblock-elem="snooze-button"]'))
+        )
+
+        snooze_button = self.driver.find_element_by_css_selector('[data-goodblock-elem="snooze-button"]')
+        snooze_button.click()
+
+        # Wait for the snooze speech bubble to appear.
+        wait = WebDriverWait(self.driver, 2)
+        wait.until(
+            EC.visibility_of_element_located((By.CSS_SELECTOR, '[data-goodblock-elem="speech-bubble"]'))
+        )
+
+        # Test the speech bubble
+        speech_bubble = self.driver.find_element_by_css_selector('[data-goodblock-elem="speech-bubble"]')
+        self.assertEqual(speech_bubble.text, "Ok, I'll come back later!")
+        self.assertEqual(speech_bubble.size['width'], 100)
+        self.assertEqual(speech_bubble.size['height'], 54)
+
+        # Wait for the speech bubble to disappear.
+        wait = WebDriverWait(self.driver, 7)
+        wait.until(
+            EC.invisibility_of_element_located((By.CSS_SELECTOR, '[data-goodblock-elem="speech-bubble"]'))
+        )
+
+        # Wait for the Goodblock icon to disappear.
+        wait = WebDriverWait(self.driver, 5)
+        wait.until(
+            EC.invisibility_of_element_located((By.CSS_SELECTOR, '[data-goodblock-elem="icon"]'))
+        )
+
+        snooze_time = helpers.get_animation_times()['snooze']
+
+        # Make sure the icon is still invisible right before waking up from snooze.
+        time.sleep(snooze_time - 0.01)
+        EC.invisibility_of_element_located((By.CSS_SELECTOR, '[data-goodblock-elem="icon"]'))
+
+        # Wait for the Goodblock icon to reappear.
+        wait = WebDriverWait(self.driver, 5)
+        wait.until(
+            EC.visibility_of_element_located((By.CSS_SELECTOR, '[data-goodblock-elem="icon"]'))
+        )
+
