@@ -1,10 +1,35 @@
 
-from contextlib import contextmanager
+import imp
 import time
+from contextlib import contextmanager
 
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+
+# Try importing local settings.
+try:
+    imp.find_module('local_settings')
+    import local_settings
+    local_settings_found = True
+except ImportError:
+    local_settings_found = False
+
+
+# Returns the driver for the browser with Goodblock installed.
+def get_goodblock_web_driver():
+    chrome_options = Options()
+    dist_path = './dist/build/goodblock.chromium'
+    chrome_options.add_argument('load-extension=%s' % dist_path)
+    if local_settings_found:
+        # If the user specified a custom binary path, use it.
+        google_chrome_binary_path = getattr(local_settings, 'GOOGLE_CHROME_BINARY_PATH', None)
+        if google_chrome_binary_path:
+            chrome_options._binary_location = google_chrome_binary_path
+    return webdriver.Chrome(chrome_options=chrome_options)
+
 
 # A function that expects a new window to open.
 # If no window opens before timeout seconds, it throws a timeout exception.
