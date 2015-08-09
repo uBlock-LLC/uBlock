@@ -1,5 +1,30 @@
 
+from contextlib import contextmanager
 import time
+
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
+# A function that expects a new window to open.
+# If no window opens before timeout seconds, it throws a timeout exception.
+# This is useful when a new window will open, but not directly because
+# of our own code (e.g. post-install of a browser extension).
+# Adapted from: http://stackoverflow.com/a/26648414/1332513
+def expect_new_window(driver, timeout=10):
+    handles_before = driver.window_handles
+    WebDriverWait(driver, timeout).until(
+        lambda driver: len(handles_before) != len(driver.window_handles))
+
+# A function that waits for a new window to open.
+# If no window opens before timeout seconds, throws a timeout exception.
+# From: http://stackoverflow.com/a/26648414/1332513
+@contextmanager
+def wait_for_new_window(driver, timeout=10):
+    handles_before = driver.window_handles
+    yield
+    WebDriverWait(driver, timeout).until(
+        lambda driver: len(handles_before) != len(driver.window_handles))
 
 # FIXME
 # Get the extension ID for Goodblock by looking it up in
@@ -30,6 +55,34 @@ def get_animation_times():
     # goodblock-config-testing.js.
     data = {
         'snooze': 0.5,
-        'sleep': 1,
+        'sleep': 3,
     }
     return data
+
+def open_test_page(driver):
+    driver.get('localhost:8000/blank-goodblock.html')
+    # Wait until the page loads.
+    wait = WebDriverWait(driver, 5)
+    wait.until(
+        EC.presence_of_element_located((By.CSS_SELECTOR, '[data-test-elem="page-title"]'))
+    )
+
+def wait_for_goodblock_icon_img_load(driver, timeout=20):
+    wait = WebDriverWait(driver, timeout)
+    wait.until(
+        EC.presence_of_element_located((By.CSS_SELECTOR, 'img[data-goodblock-elem="icon-img"]'))
+    )
+
+def wait_for_goodblock_icon_to_appear(driver, timeout=5):
+    # Wait for the Goodblock icon to reappear.
+    wait = WebDriverWait(driver, timeout)
+    wait.until(
+        EC.visibility_of_element_located((By.CSS_SELECTOR, '[data-goodblock-elem="icon"]'))
+    )
+
+def close_all_other_windows(driver, window_to_keep):
+    for handle in driver.window_handles:
+        if handle != window_to_keep:
+            driver.switch_to.window(handle)
+            driver.close()
+    driver.switch_to.window(window_to_keep)
