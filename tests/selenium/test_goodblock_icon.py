@@ -97,7 +97,7 @@ class GoodblockIconExistsTestCase(unittest.TestCase):
     # Wait for the icon image to load. It may take some time because the extension's
     # content script has to fetch the image from the extension.
     def wait_for_goodblock_icon_img_load(self):
-        wait = WebDriverWait(self.driver, 5)
+        wait = WebDriverWait(self.driver, 10)
         wait.until(
             EC.presence_of_element_located((By.CSS_SELECTOR, 'img[data-goodblock-elem="icon-img"]'))
         )
