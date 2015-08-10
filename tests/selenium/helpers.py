@@ -56,8 +56,8 @@ def get_animation_times():
     # Note these will use testing time lengths as defined in
     # goodblock-config-testing.js.
     data = {
-        'snooze': 0.5,
-        'sleep': 3,
+        'snooze': 2,
+        'sleep': 4,
     }
     return data
 
