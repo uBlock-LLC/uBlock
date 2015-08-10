@@ -22,6 +22,8 @@ touch $DES/js/$LOCAL_SETTINGS_FILENAME
 cp src/js/*.js $DES/js/
 echo "*** goodblock.chromium: Transforming browserify/JSX files."
 browserify -t reactify src/js/contentscript-goodblock.jsx > $DES/js/contentscript-goodblock.js
+echo "*** goodblock.chromium: Browserifying ublock.js."
+browserify src/js/ublock.js > $DES/js/ublock.js
 cp -R src/lib $DES/
 cp -R src/_locales $DES/
 cp -R $DES/_locales/nb $DES/_locales/no
