@@ -122,6 +122,17 @@ function goingToBed(isGoingToBed) {
 	GoodblockDataStore.emitChange();
 }
 
+// Set whether we're in the process of snozing.
+function inProcessOfSnoozing(isSnoozing) {
+	_goodblockData.uiState.snooze.inProcessOfSnoozing = isSnoozing;
+}
+
+// Resets the UI state to defaults.
+function resetUiState() {
+	_goodblockData.resetUiState();
+	GoodblockDataStore.emitChange();
+}
+
 function changeAdOpenState(isOpen) {
 	_goodblockData.uiState.ad.isOpen = isOpen;
 	GoodblockDataStore.emitChange();
@@ -174,6 +185,9 @@ var GoodblockDataActions = {
 	makeGoodblockSnooze: function() {
 		setSnoozeMessageStatus(true);
 		var timeToSnooze = 2100;
+		var exitAnimationTime = 500;
+
+		inProcessOfSnoozing(true);
 
 		// Hide the snooze text after some time.
 		setTimeout(function() {
@@ -184,17 +198,19 @@ var GoodblockDataActions = {
 		// after some time.
 		setTimeout(function() {
 			LocalMessager.snoozeGoodblock();
+			inProcessOfSnoozing(false);
 		}, timeToSnooze);
+
+		// Reset Goodblock UI state once the icon is hidden.
+		setTimeout(function() {
+			resetUiState();
+		}, timeToSnooze + exitAnimationTime);
 	},
 	// Go through the process of going to bed.
 	sendGoodblockToBed: function() {
-		// Reset state.
-		changeAdOpenState(false);
-		_goodblockData.uiState.isClicked = false;
-		_goodblockData.uiState.isHovering = false;
-		GoodblockDataStore.emitChange();
 
 		var timeToGoodnight = 2400;
+		var exitAnimationTime = 500;
 
 		// Show the "goodnight" speech bubble.
 		setTimeout(function() {
@@ -212,6 +228,11 @@ var GoodblockDataActions = {
 			GoodblockDataActions.changeVisibility(false);
 			goingToBed(false);
 		}, timeToGoodnight);
+
+		// Reset Goodblock UI state once the icon is hidden.
+		setTimeout(function() {
+			resetUiState();
+		}, timeToGoodnight + exitAnimationTime);
 	},
 	logAdView: function() {
 		LocalMessager.logAdView();

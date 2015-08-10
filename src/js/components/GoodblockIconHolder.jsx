@@ -45,7 +45,8 @@ var GoodblockIconHolder = React.createClass({
 		else if (
 			goodblockData.uiState.isHovering &&
 			!goodblockData.uiState.isClicked &&
-			!goodblockData.uiState.goodnight.goingToBed
+			!goodblockData.uiState.goodnight.goingToBed &&
+			!goodblockData.uiState.snooze.inProcessOfSnoozing
 		) {
 			backgroundColor = 'rgba(0, 0, 0, 0.9)';
 			snoozeButton = (
