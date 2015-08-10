@@ -7,9 +7,8 @@ from selenium.webdriver.support import expected_conditions as EC
 global EXTENSION_ID
 EXTENSION_ID = None
 
-# TODO: move to url_helpers.py. Save the extension ID the first time we get it.
-# Get the extension ID for Goodblock by looking it up in
-# chrome://extensions.
+# Gets the Chrome extension ID by looking at the HTML of the
+# chrome://extensions page.
 def get_chrome_extension_id(driver):
 
     # So that we only have to look up the extension ID
