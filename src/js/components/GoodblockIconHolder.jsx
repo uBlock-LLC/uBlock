@@ -112,8 +112,8 @@ var GoodblockIconHolder = React.createClass({
 		var SHOULD_ANIMATE_ICON = true;
 		return (
 			<TimeoutTransitionGroup
-				appearTimeout={3000}
-				enterTimeout={3000}
+				appearTimeout={1000}
+				enterTimeout={1000}
 				leaveTimeout={500}
 				transitionName='goodblock-icon'
 				transitionAppear={SHOULD_ANIMATE_ICON}

@@ -14,10 +14,9 @@
 }
 
 .goodblock-icon-enter-active, .goodblock-icon-appear-active {
-	visibility: hidden !important;
+	visibility: visible !important;
 	animation-name: slideRight;
 	animation-duration: 1s;
-	animation-delay: 2s;
 	animation-timing-function: ease-in-out;
 }
 
@@ -29,7 +28,6 @@
 
 @keyframes slideRight {
 	0% {
-		visibility: visible !important;
 		transform: translateX(-150%);
 	}
 	50%{
