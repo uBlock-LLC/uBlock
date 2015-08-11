@@ -436,17 +436,6 @@ vAPI.tabs.onPopup = function(details) {
         return;
     }
 
-    // Goodblock.
-    // Get the tab of the open Goodblock ad unit, if the ad unit
-    // is open. If the opener tab for this popup is the same as
-    // the tab of the open Goodblock ad unit, don't block the popup.
-    var goodblockAdPage = µBlock.goodblock.getPageOfOpenAdUnit();
-    if (goodblockAdPage &&
-        (goodblockAdPage.tabId.toString() === tabContext.tabId)
-    ) {
-        return;
-    }
-
     var µburi = µb.URI;
     var openerHostname = µburi.hostnameFromURI(openerURL);
     var openerDomain = µburi.domainFromHostname(openerHostname);

@@ -115,7 +115,6 @@ var getTimeAtEightAmTomorrow = require('./goodblock/get-time-at-eight-am-tomorro
     wakeTimeout: null,
     activeTabId: null,
     isAdOpen: false,
-    pageStoreOfAdUnit: null,
     adTabId: null,
     lastWakeTime: null
 }
@@ -158,7 +157,6 @@ var getTimeAtEightAmTomorrow = require('./goodblock/get-time-at-eight-am-tomorro
         'index': -1,
         'select': true,
     });
-    µBlock.goodblock.browserState.pageStoreOfAdUnit = pageStore;
     µBlock.goodblock.log.logEvent('adOpened');
 }
 
@@ -178,7 +176,6 @@ var getTimeAtEightAmTomorrow = require('./goodblock/get-time-at-eight-am-tomorro
 
 µBlock.goodblock.closeAd = function() {
     µBlock.goodblock.browserState.isAdOpen = false;
-    µBlock.goodblock.browserState.pageStoreOfAdUnit = null;
     µBlock.goodblock.browserState.adTabId = null;
 
     µBlock.goodblock.goodnightGoodblock();
@@ -312,7 +309,7 @@ var getTimeAtEightAmTomorrow = require('./goodblock/get-time-at-eight-am-tomorro
     // Get the time to wake up after sleeping.
     var timeToWakeUpMs = µBlock.goodblock.getTimeToWakeUp('sleep');
     µBlock.goodblock.setGoodblockWakeTimeAlarm(timeToWakeUpMs);
-    µBlock.goodblock.logEvent('goodnight');
+    µBlock.goodblock.log.logEvent('goodnight');
     if (µBlock.goodblock.browserState.lastWakeTime) {
       var timeTilAd = new Date().getTime() - µBlock.goodblock.browserState.lastWakeTime;
       µBlock.goodblock.log.logMetric('timeUntilAd', timeTilAd);
@@ -334,12 +331,6 @@ var getTimeAtEightAmTomorrow = require('./goodblock/get-time-at-eight-am-tomorro
     if (isVisible) {
       µBlock.goodblock.log.logEvent('wokeUp');
     }
-}
-
-/******************************************************************************/
-
-µBlock.goodblock.getPageOfOpenAdUnit = function() {
-    return µBlock.goodblock.browserState.pageStoreOfAdUnit;
 }
 
 /******************************************************************************/
