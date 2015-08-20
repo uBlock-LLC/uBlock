@@ -6,6 +6,14 @@
 <link rel="stylesheet" type="text/css" href="css/common.css">
 <link rel="stylesheet" type="text/css" href="css/dashboard-common.css">
 <link rel="stylesheet" type="text/css" href="css/3p-filters.css">
+<style>
+#externalListsDiv > p {
+    margin: 0.25em 0 0 0
+    }
+#externalListsDiv > p[data-i18n="3pExternalListsHint"] {
+    font-size: 13px;
+    }
+</style>
 </head>
 
 <body>
@@ -48,9 +56,9 @@
             </li>
         </ul>
         <div id="externalListsDiv">
-        <p data-i18n="3pExternalListsHint" style="margin: 0 0 0.25em 0; font-size: 13px;"></p>
+        <p data-i18n="3pExternalListsHint"></p>
         <textarea id="externalLists" dir="ltr" spellcheck="false"></textarea>
-        <p style="margin: 0.25em 0 0 0"><button id="externalListsApply" disabled="true" data-i18n="3pExternalListsApply"></button></p>
+        <p><button id="externalListsApply" disabled="true" data-i18n="3pExternalListsApply"></button></p>
         </div>
     </div>
 
