@@ -13,7 +13,8 @@
     "adblock.schack.dk/block.txt": {
         "off": true,
         "title": "DNK: Schacks Adblock Plus liste",
-        "group": "regions"
+        "group": "regions",
+        "homeURL": "https://adblock.schack.dk/block.txt"
         },
     "cjxlist1.googlecode.com/svn/cjxlist.txt": {
         "off": true,
