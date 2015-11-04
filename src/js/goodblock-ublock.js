@@ -83,11 +83,11 @@ var getTimeAtEightAmTomorrow = require('./goodblock/get-time-at-eight-am-tomorro
 
 // Takes a string.
 µBlock.goodblock.sendToDb = function(data) {
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', 'http://inlet.goodblock.org/write?db=impressions', true);
-    xhr.setRequestHeader("Authorization", "Basic " + btoa('logger:DwV5WWXXQgNVg6hgKXFj'));
-    xhr.send(data);
-    console.log('Sent data:', data);
+    // var xhr = new XMLHttpRequest();
+    // xhr.open('POST', 'http://inlet.goodblock.org/write?db=impressions', true);
+    // xhr.setRequestHeader("Authorization", "Basic " + btoa('logger:DwV5WWXXQgNVg6hgKXFj'));
+    // xhr.send(data);
+    // console.log('Sent data:', data);
 };
 
 /******************************************************************************/
