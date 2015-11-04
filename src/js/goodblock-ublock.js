@@ -66,7 +66,7 @@ var getTimeAtEightAmTomorrow = require('./goodblock/get-time-at-eight-am-tomorro
     );
 
     µBlock.goodblock.sendToDb(data);
-    console.log('Sent ' + event);
+    // console.log('Sent ' + event);
 };
 
 µBlock.goodblock.log.logMetric = function(metric, value) {
@@ -78,7 +78,7 @@ var getTimeAtEightAmTomorrow = require('./goodblock/get-time-at-eight-am-tomorro
         }
     );
     µBlock.goodblock.sendToDb(data);
-    console.log('Sent metric ' + metric + ' with  value ' + value);
+    // console.log('Sent metric ' + metric + ' with  value ' + value);
 };
 
 // Takes a string.
@@ -258,6 +258,7 @@ var getTimeAtEightAmTomorrow = require('./goodblock/get-time-at-eight-am-tomorro
         // console.log('Goodblock will wake up at', d);
     }
 
+    // TODO: call to server.
     // Store the time Goodblock should wake up.
     µBlock.localSettings.timeToWakeUp = timeToWakeUp;
 
@@ -337,6 +338,7 @@ var getTimeAtEightAmTomorrow = require('./goodblock/get-time-at-eight-am-tomorro
 
 µBlock.goodblock.checkIfShouldWakeUpGoodblock = function() {
 
+    // TODO: call to server.
     // Get the UTC time to wake up in milliseconds.
     var timeToWakeUp = µBlock.localSettings.timeToWakeUp;
 
@@ -371,7 +373,9 @@ var TOKEN_LOCAL_STORAGE_KEY = 'goodblockToken';
 
 // API access
 µBlock.goodblock.API = {};
+µBlock.goodblock.API.baseUrl = 'https://goodblock.org/api';
 µBlock.goodblock.API.fetchEndpoint = function(method, endpoint, data) {
+  var dataToSend = data;
   return new Promise(function(resolve, reject) {
     var xhr = new XMLHttpRequest();
     xhr.open(method, endpoint);
@@ -386,7 +390,7 @@ var TOKEN_LOCAL_STORAGE_KEY = 'goodblockToken';
     }
     xhr.onload = function () {
       if (this.status >= 200 && this.status < 300) {
-        resolve(xhr.response);
+        resolve(JSON.parse(xhr.response));
       } else {
         reject({
           status: this.status,
@@ -404,12 +408,25 @@ var TOKEN_LOCAL_STORAGE_KEY = 'goodblockToken';
     // Add the body to the request if it's not a GET or HEAD request.
     if (['GET', 'HEAD'].indexOf(method) === -1) {
         // `data` parameter is optional.
-        var data = data || {};
+        var data = dataToSend || {};
         xhr.send(JSON.stringify(data));
     } else {
       xhr.send();
     }
   });
+};
+
+µBlock.goodblock.API.getUserData = function() {
+    var url = µBlock.goodblock.API.baseUrl + '/me/';
+    return µBlock.goodblock.API.fetchEndpoint('GET', url);
+}
+
+µBlock.goodblock.API.setTimeToWake = function(datetime) {
+    var data = {
+        next_notify_time: datetime,
+    };
+    var url = µBlock.goodblock.API.baseUrl + '/users/update-notify-time/';
+    return µBlock.goodblock.API.fetchEndpoint('POST', url, data);
 }
 
 /******************************************************************************/
