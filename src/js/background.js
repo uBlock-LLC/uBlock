@@ -116,7 +116,7 @@ return {
         'loopconversation.about-scheme',
         'opera-scheme'
     ].join('\n').trim(),
-    
+
     userFiltersPath: "assets/user/filters.txt",
 
     localSettings: {

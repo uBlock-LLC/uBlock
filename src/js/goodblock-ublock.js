@@ -357,6 +357,19 @@ var getTimeAtEightAmTomorrow = require('./goodblock/get-time-at-eight-am-tomorro
 
 /******************************************************************************/
 
+var TOKEN_LOCAL_STORAGE_KEY = 'goodblockToken';
+
+µBlock.goodblock.setUserAuthToken = function(token) {
+  vAPI.localStorage.setItem(TOKEN_LOCAL_STORAGE_KEY, token);
+}
+
+µBlock.goodblock.getUserAuthToken = function(token) {
+  return vAPI.localStorage.getItem(TOKEN_LOCAL_STORAGE_KEY)
+}
+
+
+/******************************************************************************/
+
 // Check if we should hide Tad
 // (aka, it is currently snoozing or sleeping)
 µBlock.goodblock.checkIfShouldWakeUpGoodblock();
