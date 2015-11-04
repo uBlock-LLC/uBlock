@@ -51,6 +51,13 @@
             "all_frames": false
         },
         {
+            "matches": ["https://goodblock.org/app/*"],
+            "exclude_matches": [],
+            "js": ["js/vapi-client.js", "js/contentscript-app.js"],
+            "run_at": "document_start",
+            "all_frames": true
+        },
+        {
             "matches": [
                 "https://*.adblockplus.org/*",
                 "https://*.adblockplus.me/*",

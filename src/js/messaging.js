@@ -599,7 +599,7 @@ var onMessage = function(request, sender, callback) {
         case 'logAdView':
             µb.localSettings.adsViewed += 1;
             break;
-            
+
         default:
             return vAPI.messaging.UNHANDLED;
     }
@@ -612,6 +612,51 @@ vAPI.messaging.listen('contentscript-goodblock.js', onMessage);
 /******************************************************************************/
 
 })();
+
+/******************************************************************************/
+/******************************************************************************/
+
+// Goodblock App
+// contentscript-app.js
+
+(function() {
+
+'use strict';
+
+/******************************************************************************/
+
+var µb = µBlock;
+
+/******************************************************************************/
+
+var onMessage = function(request, sender, callback) {
+    // Async
+    switch ( request.what ) {
+        default:
+            break;
+    }
+
+    // Sync
+    var response;
+
+    switch ( request.what ) {
+
+        case 'setUserAuthToken':
+          µb.goodblock.setUserAuthToken(request.token);
+          break;
+
+        default:
+            return vAPI.messaging.UNHANDLED;
+    }
+
+    callback(response);
+};
+
+vAPI.messaging.listen('contentscript-app.js', onMessage);
+
+/******************************************************************************/
+
+})(); // Goodblock App
 
 /******************************************************************************/
 /******************************************************************************/
