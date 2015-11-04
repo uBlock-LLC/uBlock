@@ -93,7 +93,7 @@ var getTimeAtEightAmTomorrow = require('./goodblock/get-time-at-eight-am-tomorro
 /******************************************************************************/
 
 µBlock.goodblock.gladlyHostnames = ['gladlyads.xyz', 'goodblock.org'];
-µBlock.goodblock.gladlyAdServerDomains = ['gladlyads.xyz'];
+µBlock.goodblock.gladlyAdServerDomains = ['goodblock.org'];
 
 /******************************************************************************/
 
@@ -153,7 +153,7 @@ var getTimeAtEightAmTomorrow = require('./goodblock/get-time-at-eight-am-tomorro
 µBlock.goodblock.openAd = function() {
     µBlock.goodblock.browserState.isAdOpen = true;
     var thing = vAPI.tabs.open({
-        'url': 'https://gladlyads.xyz/adserver/',
+        'url': 'https://goodblock.org/app/ad/',
         'index': -1,
         'select': true,
     });
