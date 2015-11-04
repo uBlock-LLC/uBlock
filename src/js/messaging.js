@@ -600,10 +600,6 @@ var onMessage = function(request, sender, callback) {
             µb.localSettings.adsViewed += 1;
             break;
 
-        case 'setUserAuthToken':
-          µb.goodblock.setUserAuthToken(request.token);
-          break;
-
         default:
             return vAPI.messaging.UNHANDLED;
     }
