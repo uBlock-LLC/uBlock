@@ -4,64 +4,36 @@
 <head>
 <!-- <meta name="viewport" content="width=470"> --> <!-- When showing as a tab in fennec, scale to full size (150px + 320px)-->
 <meta charset="utf-8">
-<link rel="stylesheet" href="css/common.css" type="text/css">
-<link rel="stylesheet" href="css/popup.css" type="text/css">
 <title>Goodblock</title>
+
+<style>
+body {
+    margin: 0px;
+    padding: 0px;
+    width: 400px;
+    height: 300px;
+    display: inline-block;
+}
+#dashboard {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    margin: 0px;
+    padding: 0px;
+    border: 0px;
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+}
+</style>
+
 </head>
 
 <body>
-<div id="panes">
-    <div id="header">
-        <img src="img/icon_32.png"><span id="appname">&nbsp;</span>
-    </div>
-    <div id="wave-pane"><img style="width:400px" src="img/waves_blue.png"/></div>
-    <div id="statsPane">
-        <div class="statWrapper" style="width: 20%">
-            <svg class="icon icon-heart statSymbol"><use xlink:href="img/icons.svg#icon-heart"></use></svg>
-            <div class="statValue" id="vc-earned">Calculating...</div>
-        </div>
-        <div class="statWrapper" style="width: 25%">
-            <svg class="icon icon-water statSymbol" style="padding-left:5px"><use xlink:href="img/icons.svg#icon-water"></use></svg>
-            <div class="statValue" id="total-impact">Calculating...</div>
-        </div>
-        <div class="statWrapper" style="width: 55%">
-            <p id="impact-text">Calculating...</p>
-        </div>
-    </div>
-    <div id="settings">
-        <a href="dashboard.html" target="_blank"><svg class="icon icon-preferences"><use xlink:href="img/icons.svg#icon-preferences"></use></svg></a>
-        <a href="http://www.goodblock.org/" target="_blank"><svg class="icon icon-faq"><use xlink:href="img/icons.svg#icon-faq"></use></svg></a>
-    </div><!--no spaces--><div id="dfPane">
-        <div id="firewallContainer">
-            <div><span data-i18n="popupAnyRulePrompt"></span><span data-src="." data-des="*" data-type="*"> </span><span data-src="/" data-des="*" data-type="*"> </span></div>
-            <div><span data-i18n="popupImageRulePrompt"></span><span data-src="." data-des="*" data-type="image"> </span><span data-src="/" data-des="*" data-type="image"> </span></div>
-            <div><span data-i18n="popup3pAnyRulePrompt"></span><span data-src="." data-des="*" data-type="3p"> </span><span data-src="/" data-des="*" data-type="3p"> </span></div>
-            <div><span data-i18n="popupInlineScriptRulePrompt"></span><span data-src="." data-des="*" data-type="inline-script"> </span><span data-src="/" data-des="*" data-type="inline-script"> </span></div>
-            <div><span data-i18n="popup1pScriptRulePrompt"></span><span data-src="." data-des="*" data-type="1p-script"> </span><span data-src="/" data-des="*" data-type="1p-script"> </span></div>
-            <div><span data-i18n="popup3pScriptRulePrompt"></span><span data-src="." data-des="*" data-type="3p-script"> </span><span data-src="/" data-des="*" data-type="3p-script"> </span></div>
-            <div><span data-i18n="popup3pFrameRulePrompt"></span><span data-src="." data-des="*" data-type="3p-frame"> </span><span data-src="/" data-des="*" data-type="3p-frame"> </span></div>
-            </div>
-            <div id="saveflushButtonGroup">
-              <div id="flushRules"><svg class="icon icon-trash"><use xlink:href="img/icons.svg#icon-trash"></use></svg></div>
-              <div id="saveRules"><svg class="icon icon-lock"><use xlink:href="img/icons.svg#icon-save"></use></svg></div>
-            </div>
-            <div id="scopeIcons"><span> </span><span><svg class="icon icon-pin"><use xlink:href="img/icons.svg#icon-pin"></use></svg></span><span><svg class="icon icon-globe"><use xlink:href="img/icons.svg#icon-globe"></use></svg></span></div>
-        </div>
-    </div>
 
-<div id="templates" style="display: none">
-    <div><span></span><span data-src="." data-des="" data-type="*"> </span><span data-src="." data-des="" data-type="*"> </span><span data-src="/" data-des="" data-type="*"> </span></div>
-    <div id="actionSelector"><span id="dynaAllow"></span><span id="dynaNoop"></span><span id="dynaBlock"></span></div>
-    <div id="hotspotTip"></div>
-    </div>
-
-<script src="lib/punycode.js"></script>
-<script src="js/vapi-common.js"></script>
-<script src="js/vapi-client.js"></script>
-<script src="js/vapi-popup.js"></script>
-<script src="js/udom.js"></script>
-<script src="js/i18n.js"></script>
-<script src="js/popup.js"></script>
+<iframe id="dashboard" src="https://goodblock.org/app/dashboard/"></iframe>
 
 </body>
 
