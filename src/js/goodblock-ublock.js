@@ -363,10 +363,54 @@ var TOKEN_LOCAL_STORAGE_KEY = 'goodblockToken';
   vAPI.localStorage.setItem(TOKEN_LOCAL_STORAGE_KEY, token);
 }
 
-µBlock.goodblock.getUserAuthToken = function(token) {
+µBlock.goodblock.getUserAuthToken = function() {
   return vAPI.localStorage.getItem(TOKEN_LOCAL_STORAGE_KEY)
 }
 
+/******************************************************************************/
+
+// API access
+µBlock.goodblock.API = {};
+µBlock.goodblock.API.fetchEndpoint = function(method, endpoint, data) {
+  return new Promise(function(resolve, reject) {
+    var xhr = new XMLHttpRequest();
+    xhr.open(method, endpoint);
+
+    xhr.setRequestHeader('Accept', 'application/json');
+    xhr.setRequestHeader('Content-Type', 'application/json');
+
+    // If we have a token, use it.
+    var token = µBlock.goodblock.getUserAuthToken();
+    if (token) {
+        xhr.setRequestHeader('Authorization', 'Token ' + token);
+    }
+    xhr.onload = function () {
+      if (this.status >= 200 && this.status < 300) {
+        resolve(xhr.response);
+      } else {
+        reject({
+          status: this.status,
+          statusText: xhr.statusText
+        });
+      }
+    };
+    xhr.onerror = function () {
+      reject({
+        status: this.status,
+        statusText: xhr.statusText
+      });
+    };
+
+    // Add the body to the request if it's not a GET or HEAD request.
+    if (['GET', 'HEAD'].indexOf(method) === -1) {
+        // `data` parameter is optional.
+        var data = data || {};
+        xhr.send(JSON.stringify(data));
+    } else {
+      xhr.send();
+    }
+  });
+}
 
 /******************************************************************************/
 
