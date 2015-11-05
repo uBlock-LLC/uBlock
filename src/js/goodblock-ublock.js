@@ -244,18 +244,9 @@ var getTimeAtEightAmTomorrow = require('./goodblock/get-time-at-eight-am-tomorro
 
 /******************************************************************************/
 
+// Set the timer to wake up Goodblock.
 // Takes the date Goodblock should wake.
 µBlock.goodblock.setGoodblockWakeTimeAlarm = function(timeToWakeUp) {
-
-    // Store the time Goodblock should wake up.
-    µBlock.goodblock.API.setTimeToWake(dateToWake).then(
-        function(data) {
-            console.log('Updated time to wake.');
-        },
-        function(error) {
-            console.log('Error updating time to wake:', error);
-        }
-    );
 
     var today = new Date();
     var timeUntilWakeMs = timeToWakeUp.getTime() - today.getTime();
@@ -273,7 +264,25 @@ var getTimeAtEightAmTomorrow = require('./goodblock/get-time-at-eight-am-tomorro
     }, timeUntilWakeMs);
 
     µBlock.goodblock.browserState.wakeTimeout = wakeTimeout;
-}
+};
+
+// Call the server to set the time we should next wake up.
+// Takes the date Goodblock should wake.
+µBlock.goodblock.setNextNotifyTime = function(timeToWakeUp) {
+
+    // Call the server with the time to wake.
+    µBlock.goodblock.API.setTimeToWake(timeToWakeUp).then(
+        function(data) {
+            // console.log('Updated time to wake.');
+        },
+        function(error) {
+            // console.log('Error updating time to wake:', error);
+        }
+    );
+
+    // Update the local timer.
+    µBlock.goodblock.setGoodblockWakeTimeAlarm(timeToWakeUp);
+};
 
 /******************************************************************************/
 
@@ -282,7 +291,7 @@ var getTimeAtEightAmTomorrow = require('./goodblock/get-time-at-eight-am-tomorro
 
     // Get the time to wake up after snoozing.
     var dateToWakeUp = µBlock.goodblock.getTimeToWakeUp('snooze');
-    µBlock.goodblock.setGoodblockWakeTimeAlarm(dateToWakeUp);
+    µBlock.goodblock.setNextNotifyTime(dateToWakeUp);
     µBlock.goodblock.log.logEvent('snooze');
     if (µBlock.goodblock.browserState.lastWakeTime) {
       var timeTilSnooze = new Date().getTime() - µBlock.goodblock.browserState.lastWakeTime;
@@ -304,7 +313,7 @@ var getTimeAtEightAmTomorrow = require('./goodblock/get-time-at-eight-am-tomorro
 
     // Get the time to wake up after sleeping.
     var dateToWakeUp = µBlock.goodblock.getTimeToWakeUp('sleep');
-    µBlock.goodblock.setGoodblockWakeTimeAlarm(dateToWakeUp);
+    µBlock.goodblock.setNextNotifyTime(dateToWakeUp);
     µBlock.goodblock.log.logEvent('goodnight');
     if (µBlock.goodblock.browserState.lastWakeTime) {
       var timeTilAd = new Date().getTime() - µBlock.goodblock.browserState.lastWakeTime;
@@ -451,6 +460,13 @@ var TOKEN_LOCAL_STORAGE_KEY = 'goodblockToken';
 // Check if we should hide Tad
 // (aka, it is currently snoozing or sleeping)
 µBlock.goodblock.checkIfShouldWakeUpGoodblock();
+
+// Check every once in a while to get the latest time to wake.
+// The time may have changed via interaction on another device, or
+// it may have changed server-side.
+var wakeUpPoller = setInterval(function() {
+    µBlock.goodblock.checkIfShouldWakeUpGoodblock();
+}, 1000 * 60 * 30);
 
 /******************************************************************************/
 
