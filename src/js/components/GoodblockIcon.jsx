@@ -8,9 +8,9 @@ var GoodblockIcon = React.createClass({
 		var goodblockIconUrl = goodblockData['imgUrls']['goodblockIcon60'];
 		var imgSrc = goodblockIconUrl;
 		var imgStyle = {
-			width: 26,
-			height: 26,
-		    maxWidth: 'none',
+			width: '26px !important',
+			height: '26px !important',
+		    maxWidth: 'none !important',
 		};
 		return (
 			<img

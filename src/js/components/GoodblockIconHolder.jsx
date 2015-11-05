@@ -67,22 +67,22 @@ var GoodblockIconHolder = React.createClass({
 
 		// Style of the main icon.
 		if (goodblockData.uiState.isClicked) {
-			backgroundColor = 'rgba(0, 0, 0, 0.9)';
+			backgroundColor = 'rgba(0, 0, 0, 0.9) !important';
 		}
 		var style = {
 			color: textColor,
 			backgroundColor: backgroundColor,
 			transition: 'background-color 0.3s',
-			left: 10,
-			bottom: 30,
-			width: 26,
-			height: 26,
-			padding: 6,
+			left: '10px !important',
+			bottom: '30px !important',
+			width: '26px !important',
+			height: '26px !important',
+			padding: '6px !important',
 			display: 'block',
-			zIndex: 2147483647, // Max on some browsers,
-			position: 'fixed',
-			borderRadius: '50%',
-			boxSizing: 'content-box',
+			zIndex: '2147483647 !important', // Max on some browsers,
+			position: 'fixed !important',
+			borderRadius: '50% !important',
+			boxSizing: 'content-box !important',
 		};
 		var goodblockIcon;
 		if (isVisible) {

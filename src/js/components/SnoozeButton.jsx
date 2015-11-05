@@ -22,55 +22,55 @@ var SnoozeButton = React.createClass({
 	},
 	getStyles: function(name) {
 		var goodblockData = this.props.goodblockData;
-		var bubbleBackground = 'rgba(0, 0, 0, 0.7)';
-		var bubbleBoxShadow = 'rgba(0,0,0,0.2) 3px 3px 8px';
-		var bubbleTransition = 'background 0.3s, color 0.3s';
-		var textColor = '#949494';
+		var bubbleBackground = 'rgba(0, 0, 0, 0.7) !important';
+		var bubbleBoxShadow = 'rgba(0,0,0,0.2) 3px 3px 8px !important';
+		var bubbleTransition = 'background 0.3s, color 0.3s !important';
+		var textColor = '#949494 !important';
 		if (goodblockData.uiState.snooze.isHovering) {
-			var textColor = '#757575';
-			var bubbleBackground = 'rgba(0, 0, 0, 0.8)';
+			var textColor = '#757575 !important';
+			var bubbleBackground = 'rgba(0, 0, 0, 0.8) !important';
 		}
-		var parentWidth = 70;
-		var parentHeight = 65;
-		var bigBubbleDiameter = 28;
+		var parentWidth = '70px !important';
+		var parentHeight = '65px !important';
+		var bigBubbleDiameter = '28px !important';
 		
 		return ({
 			parent: {
-				position: 'absolute',
+				position: 'absolute !important',
 				width: parentWidth,
 				height: parentHeight,
-				top: (-parentHeight) * 0.6,
-				right: (-parentWidth) * 0.76,
-				zIndex: '-1',
-				cursor: 'default',
+				top: '-42px !important',
+				right: '-53px !important',
+				zIndex: '-1 !important',
+				cursor: 'default !important',
 	    		fontFamily: universalStyle.fontFamily,
 	    		// Radius to limit the mouse events to around
 	    		// the visible area of the thought bubble.
-			    borderBottomRightRadius: '100%',
-			    borderTopLeftRadius: '90%',
-			    borderTopRightRadius: '30%',
+			    borderBottomRightRadius: '100% !important',
+			    borderTopLeftRadius: '90% !important',
+			    borderTopRightRadius: '30% !important',
 			},
 			mediumBubble: {
 				background: bubbleBackground,
 				boxShadow: bubbleBoxShadow,
 				transition: bubbleTransition,
-				position: 'absolute',
-				borderRadius: '50%',
-				width: 12,
-				height: 12,
-				left: 15,
-				bottom: 24,
+				position: 'absolute !important',
+				borderRadius: '50% !important',
+				width: '12px !important',
+				height: '12px !important',
+				left: '15px !important',
+				bottom: '24px !important',
 			},
 			smallBubble: {
 				background: bubbleBackground,
 				boxShadow: bubbleBoxShadow,
 				transition: bubbleTransition,
-				position: 'absolute',
-				borderRadius: '50%',
-				width: 4,
-				height: 4,
-				left: 12,
-				bottom: 18,
+				position: 'absolute !important',
+				borderRadius: '50% !important',
+				width: '4px !important',
+				height: '4px !important',
+				left: '12px !important',
+				bottom: '18px !important',
 			},
 			bigBubble: {
 				height: bigBubbleDiameter,
@@ -80,16 +80,16 @@ var SnoozeButton = React.createClass({
 				transition: bubbleTransition,
 				position: 'absolute',
 				borderRadius: '50%',
-				left: 12,
-				bottom: 18,
-				fontSize: 11,
+				left: '12px !important',
+				bottom: '18px !important',
+				fontSize: '11px !important',
 				textAlign: 'center',
 				color: textColor,
 			},
 			bubbleText: {
-				marginTop: 5,
-				width: 18,
-				height: 18,
+				marginTop: '5px !important',
+				width: '18px !important',
+				height: '18px !important',
 				fill: 'rgba(255, 255, 255, 0.8)',
 			},
 		});

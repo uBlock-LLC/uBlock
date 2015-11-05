@@ -47,10 +47,10 @@ var GoodblockRootElem = React.createClass({
 		}
 		var id = 'goodblock-base-elem';
 		var style = {
-			lineHeight: '100%',
-			boxSizing: 'content-box',
-			fontSize: 12,
-			wordSpacing: 'normal',
+			lineHeight: '100% !important',
+			boxSizing: 'content-box !important',
+			fontSize: '12px !important',
+			wordSpacing: 'normal !important',
 		};
 
 		return (

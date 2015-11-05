@@ -10,20 +10,20 @@ var SpeechBubble = React.createClass({
 	render: function() {
 		var goodblockData = this.props.goodblockData;
 		var text = this.props.text;
-		var speechBubbleHeight = 24;
-		var speechBubbleWidth = 70;
 		var style = {
 			fontFamily: universalStyle.fontFamily,
-			fontSize: 12,
-			color: '#fff',
-			height: speechBubbleHeight,
-			width: speechBubbleWidth,
-			position: 'absolute',
-			bottom: 9,
-			right: (-speechBubbleWidth) * 0.87,
-			textAlign: 'center',
-			boxSizing: 'content-box',
-			cursor: 'default',
+			fontSize: '12px !important',
+			lineHeight: '100% !important',
+			background: '#000 !important',
+			color: '#FFF !important',
+			height: '24px !important',
+			width: '70px !important',
+			position: 'absolute  !important',
+			bottom: '9px !important',
+			right: '-61px !important',
+			textAlign: 'center !important',
+			boxSizing: 'content-box !important',
+			cursor: 'default !important',
 		};
 		return (
 			<div style={style}
