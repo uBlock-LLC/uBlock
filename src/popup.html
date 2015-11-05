@@ -27,6 +27,33 @@ body {
     height: 100%;
     width: 100%;
 }
+#settings {
+    position: fixed;
+    bottom: -2px;
+    right: 0px;
+    background: transparent;
+}
+svg.icon {
+    width: 14px;
+    height: 14px;
+    margin-bottom: 4px;
+    margin-top: 2px;
+    margin-right: 4px;
+    margin-left: 4px;
+    display: inline-block; 
+    fill: currentColor;
+}
+svg.icon {
+    color: #C7C7C7;
+}
+svg.icon:hover {
+    color: #0CA4E5;
+    /*color: #FFCB62;*/
+}
+svg.icon.icon-faq {
+    width: 13px;
+    height: 13px;
+}
 </style>
 
 </head>
@@ -34,6 +61,19 @@ body {
 <body>
 
 <iframe id="dashboard" src="https://goodblock.org/app/dashboard/"></iframe>
+
+<div id="settings">
+    <a href="dashboard.html" target="_blank">
+        <svg class="icon icon-preferences">
+            <use xlink:href="img/icons.svg#icon-preferences"></use>
+        </svg>
+    </a>
+<!--     <a href="http://www.goodblock.org/" target="_blank">
+        <svg class="icon icon-faq">
+            <use xlink:href="img/icons.svg#icon-faq"></use>
+        </svg>
+    </a> -->
+</div>
 
 </body>
 
