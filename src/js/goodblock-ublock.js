@@ -247,20 +247,12 @@ var getTimeAtEightAmTomorrow = require('./goodblock/get-time-at-eight-am-tomorro
 
 // Takes the UTC time (milliseconds) Goodblock should wake.
 µBlock.goodblock.setGoodblockWakeTimeAlarm = function(timeToWakeUp) {
-    // Debugging.
-    if (timeToWakeUp <= 0) {
-        // console.log('Goodblock will wake up now!');
-    }
-    else {
-        // convert UTC milliseconds to readable date.
-        var d = new Date(0);
-        d.setUTCMilliseconds(timeToWakeUp);
-        // console.log('Goodblock will wake up at', d);
-    }
+    // Convert UTC milliseconds to date.
+    var dateToWake = new Date(0);
+    dateToWake.setUTCMilliseconds(timeToWakeUp);
 
-    // TODO: call to server.
     // Store the time Goodblock should wake up.
-    µBlock.localSettings.timeToWakeUp = timeToWakeUp;
+    µBlock.goodblock.API.setTimeToWake(dateToWake);
 
     var today = new Date();
     var timeUntilWakeMs = timeToWakeUp - today.getTime();
@@ -337,24 +329,23 @@ var getTimeAtEightAmTomorrow = require('./goodblock/get-time-at-eight-am-tomorro
 /******************************************************************************/
 
 µBlock.goodblock.checkIfShouldWakeUpGoodblock = function() {
-
-    // TODO: call to server.
+    
     // Get the UTC time to wake up in milliseconds.
-    var timeToWakeUp = µBlock.localSettings.timeToWakeUp;
-
-    var today = new Date();
-
-    // It's not time to wake Goodblock.
-    if (timeToWakeUp > today.getTime()) {
-        // console.log('Shhhh, Tad is asleep!');
-        µBlock.goodblock.markIfGoodblockIsAwake(false);
-        µBlock.goodblock.setGoodblockWakeTimeAlarm(timeToWakeUp);
-    }
-    // It is time to wake Goodblock.
-    else {
-        µBlock.goodblock.markIfGoodblockIsAwake(true);
-        µBlock.goodblock.setGoodblockWakeTimeAlarm(0);
-    }
+    µBlock.goodblock.API.getUserData().then(function(data) {
+        var datetimeToWakeUp = new Date(data['next_notify_time']);
+        var now = new Date()
+        // It's not time to wake Goodblock.
+        if (datetimeToWakeUp > now) {
+            // console.log('Shhhh, Tad is asleep!');
+            µBlock.goodblock.markIfGoodblockIsAwake(false);
+            µBlock.goodblock.setGoodblockWakeTimeAlarm(datetimeToWakeUp.getTime());
+        }
+        // It is time to wake Goodblock.
+        else {
+            µBlock.goodblock.markIfGoodblockIsAwake(true);
+            µBlock.goodblock.setGoodblockWakeTimeAlarm(now.getTime());
+        }
+    });
 }
 
 /******************************************************************************/
