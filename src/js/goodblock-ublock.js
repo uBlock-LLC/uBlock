@@ -366,15 +366,29 @@ var getTimeAtEightAmTomorrow = require('./goodblock/get-time-at-eight-am-tomorro
 
 /******************************************************************************/
 
+µBlock.goodblock.postLogin = function() {
+    µBlock.goodblock.checkIfShouldWakeUpGoodblock();
+};
+
+/******************************************************************************/
+
 var TOKEN_LOCAL_STORAGE_KEY = 'goodblockToken';
 
 µBlock.goodblock.setUserAuthToken = function(token) {
-  vAPI.localStorage.setItem(TOKEN_LOCAL_STORAGE_KEY, token);
-}
+  var currentToken = µBlock.goodblock.getUserAuthToken();
+
+  // If the new token is different from the old one, set it.
+  if (token != currentToken) {
+    vAPI.localStorage.setItem(TOKEN_LOCAL_STORAGE_KEY, token);
+
+    // Handle anything we need to do after logging in.
+    µBlock.goodblock.postLogin();
+  } 
+};
 
 µBlock.goodblock.getUserAuthToken = function() {
   return vAPI.localStorage.getItem(TOKEN_LOCAL_STORAGE_KEY)
-}
+};
 
 /******************************************************************************/
 
