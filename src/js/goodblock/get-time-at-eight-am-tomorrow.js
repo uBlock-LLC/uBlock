@@ -33,7 +33,7 @@ var getTimeAtEightAmTomorrow = function() {
     }
 
     var eightAmTomorrow = new Date(yT, mT, dT, 8);
-    return eightAmTomorrow.getTime();
+    return eightAmTomorrow;
 }
 
 module.exports = getTimeAtEightAmTomorrow;

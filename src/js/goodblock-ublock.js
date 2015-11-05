@@ -203,53 +203,49 @@ var getTimeAtEightAmTomorrow = require('./goodblock/get-time-at-eight-am-tomorro
 µBlock.goodblock.getTimeAtEightAmTomorrow = getTimeAtEightAmTomorrow;
 
 µBlock.goodblock.getDevTimeToWakeUp = function() {
-    var today = new Date();
-    var now = today.getTime();
-    var timeToSleep = µBlock.goodblock.config.devConfig.timeMsToSleep;
-    return now + timeToSleep;
+    var now = new Date();
+    var secondsToSleep = µBlock.goodblock.config.devConfig.timeMsToSleep / 1000;
+    now.setSeconds(now.getSeconds() + secondsToSleep);
+    return now;
 }
 
 // Takes a sleepEvent string.
-// Returns the number of milliseconds until Goodblock should
-// wake up.
+// Returns the date Goodblock should wake up.
 µBlock.goodblock.getTimeToWakeUp = function(sleepEvent) {
-
-    var wakeTime;
 
     // Handle sleep and snooze differently.
     switch (sleepEvent) {
         case 'sleep':
+            var wakeTime;
             if (µBlock.goodblock.config.isDev) {
                 wakeTime = µBlock.goodblock.getDevTimeToWakeUp();
             }
             else {
                 wakeTime = µBlock.goodblock.getTimeAtEightAmTomorrow();
             }
+            return wakeTime;
             break;
         case 'snooze':
-            var snoozeTime;
+            var secondsToSnooze;
             if (µBlock.goodblock.config.isDev) {
-                snoozeTime = µBlock.goodblock.config.devConfig.timeMsToSnooze;
+                secondsToSnooze = µBlock.goodblock.config.devConfig.timeMsToSnooze / 1000;
             }
             else {
-                snoozeTime = µBlock.goodblock.config.timeMsToSnooze;
+                secondsToSnooze = µBlock.goodblock.config.timeMsToSnooze / 1000;
             }
-            var today = new Date();
-            wakeTime = today.getTime() + snoozeTime;
+            var now = new Date();
+            now.setSeconds(now.getSeconds() + secondsToSnooze);
+            return now;
             break;
         default:
             break;
     }
-    return wakeTime;
 }
 
 /******************************************************************************/
 
-// Takes the UTC time (milliseconds) Goodblock should wake.
+// Takes the date Goodblock should wake.
 µBlock.goodblock.setGoodblockWakeTimeAlarm = function(timeToWakeUp) {
-    // Convert UTC milliseconds to date.
-    var dateToWake = new Date(0);
-    dateToWake.setUTCMilliseconds(timeToWakeUp);
 
     // Store the time Goodblock should wake up.
     µBlock.goodblock.API.setTimeToWake(dateToWake).then(
@@ -262,7 +258,7 @@ var getTimeAtEightAmTomorrow = require('./goodblock/get-time-at-eight-am-tomorro
     );
 
     var today = new Date();
-    var timeUntilWakeMs = timeToWakeUp - today.getTime();
+    var timeUntilWakeMs = timeToWakeUp.getTime() - today.getTime();
 
     // If a previous alarm exists, clear it.
     var oldWakeTimeout = µBlock.goodblock.browserState.wakeTimeout;
@@ -285,8 +281,8 @@ var getTimeAtEightAmTomorrow = require('./goodblock/get-time-at-eight-am-tomorro
     µBlock.goodblock.updateGoodblockVisibility(false);
 
     // Get the time to wake up after snoozing.
-    var timeToWakeUpMs = µBlock.goodblock.getTimeToWakeUp('snooze');
-    µBlock.goodblock.setGoodblockWakeTimeAlarm(timeToWakeUpMs);
+    var dateToWakeUp = µBlock.goodblock.getTimeToWakeUp('snooze');
+    µBlock.goodblock.setGoodblockWakeTimeAlarm(dateToWakeUp);
     µBlock.goodblock.log.logEvent('snooze');
     if (µBlock.goodblock.browserState.lastWakeTime) {
       var timeTilSnooze = new Date().getTime() - µBlock.goodblock.browserState.lastWakeTime;
@@ -307,8 +303,8 @@ var getTimeAtEightAmTomorrow = require('./goodblock/get-time-at-eight-am-tomorro
     µBlock.goodblock.markIfGoodblockIsAwake(false);
 
     // Get the time to wake up after sleeping.
-    var timeToWakeUpMs = µBlock.goodblock.getTimeToWakeUp('sleep');
-    µBlock.goodblock.setGoodblockWakeTimeAlarm(timeToWakeUpMs);
+    var dateToWakeUp = µBlock.goodblock.getTimeToWakeUp('sleep');
+    µBlock.goodblock.setGoodblockWakeTimeAlarm(dateToWakeUp);
     µBlock.goodblock.log.logEvent('goodnight');
     if (µBlock.goodblock.browserState.lastWakeTime) {
       var timeTilAd = new Date().getTime() - µBlock.goodblock.browserState.lastWakeTime;
@@ -336,22 +332,22 @@ var getTimeAtEightAmTomorrow = require('./goodblock/get-time-at-eight-am-tomorro
 /******************************************************************************/
 
 µBlock.goodblock.checkIfShouldWakeUpGoodblock = function() {
-    
+
     // Get the UTC time to wake up in milliseconds.
     µBlock.goodblock.API.getUserData().then(
         function(data) {
-            var datetimeToWakeUp = new Date(data['next_notify_time']);
+            var dateToWakeUp = new Date(data['next_notify_time']);
             var now = new Date();
             // It's not time to wake Goodblock.
-            if (datetimeToWakeUp > now) {
+            if (dateToWakeUp > now) {
                 // console.log('Shhhh, Tad is asleep!');
                 µBlock.goodblock.markIfGoodblockIsAwake(false);
-                µBlock.goodblock.setGoodblockWakeTimeAlarm(datetimeToWakeUp.getTime());
+                µBlock.goodblock.setGoodblockWakeTimeAlarm(dateToWakeUp);
             }
             // It is time to wake Goodblock.
             else {
                 µBlock.goodblock.markIfGoodblockIsAwake(true);
-                µBlock.goodblock.setGoodblockWakeTimeAlarm(now.getTime());
+                µBlock.goodblock.setGoodblockWakeTimeAlarm(now);
             }
         },
         function(error) {
@@ -359,7 +355,7 @@ var getTimeAtEightAmTomorrow = require('./goodblock/get-time-at-eight-am-tomorro
             console.log('User is not logged in.');
             µBlock.goodblock.markIfGoodblockIsAwake(true);
             var now = new Date();
-            µBlock.goodblock.setGoodblockWakeTimeAlarm(now.getTime());
+            µBlock.goodblock.setGoodblockWakeTimeAlarm(now);
         }
     );
 }
