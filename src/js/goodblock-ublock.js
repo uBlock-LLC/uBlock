@@ -352,6 +352,9 @@ var getTimeAtEightAmTomorrow = require('./goodblock/get-time-at-eight-am-tomorro
                 // console.log('Shhhh, Tad is asleep!');
                 µBlock.goodblock.markIfGoodblockIsAwake(false);
                 µBlock.goodblock.setGoodblockWakeTimeAlarm(dateToWakeUp);
+
+                // Make sure the icon is invisible.
+                µBlock.goodblock.updateGoodblockVisibility(false);
             }
             // It is time to wake Goodblock.
             else {
