@@ -39,7 +39,7 @@
         timeMsToSleep: 20 * 1000,
     },
     timeMsToSnooze: 97 * 60 * 1000,
-    timeMsToPollServer: 60 * 1000 * 30, // 30 minutes
+    timeMsToPollServer: 60 * 1000 * 15, // 15 minutes
 }
 
 /******************************************************************************/
