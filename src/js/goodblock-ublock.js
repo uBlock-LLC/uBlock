@@ -252,7 +252,14 @@ var getTimeAtEightAmTomorrow = require('./goodblock/get-time-at-eight-am-tomorro
     dateToWake.setUTCMilliseconds(timeToWakeUp);
 
     // Store the time Goodblock should wake up.
-    µBlock.goodblock.API.setTimeToWake(dateToWake);
+    µBlock.goodblock.API.setTimeToWake(dateToWake).then(
+        function(data) {
+            console.log('Updated time to wake.');
+        },
+        function(error) {
+            console.log('Error updating time to wake:', error);
+        }
+    );
 
     var today = new Date();
     var timeUntilWakeMs = timeToWakeUp - today.getTime();
@@ -331,21 +338,30 @@ var getTimeAtEightAmTomorrow = require('./goodblock/get-time-at-eight-am-tomorro
 µBlock.goodblock.checkIfShouldWakeUpGoodblock = function() {
     
     // Get the UTC time to wake up in milliseconds.
-    µBlock.goodblock.API.getUserData().then(function(data) {
-        var datetimeToWakeUp = new Date(data['next_notify_time']);
-        var now = new Date()
-        // It's not time to wake Goodblock.
-        if (datetimeToWakeUp > now) {
-            // console.log('Shhhh, Tad is asleep!');
-            µBlock.goodblock.markIfGoodblockIsAwake(false);
-            µBlock.goodblock.setGoodblockWakeTimeAlarm(datetimeToWakeUp.getTime());
-        }
-        // It is time to wake Goodblock.
-        else {
+    µBlock.goodblock.API.getUserData().then(
+        function(data) {
+            var datetimeToWakeUp = new Date(data['next_notify_time']);
+            var now = new Date();
+            // It's not time to wake Goodblock.
+            if (datetimeToWakeUp > now) {
+                // console.log('Shhhh, Tad is asleep!');
+                µBlock.goodblock.markIfGoodblockIsAwake(false);
+                µBlock.goodblock.setGoodblockWakeTimeAlarm(datetimeToWakeUp.getTime());
+            }
+            // It is time to wake Goodblock.
+            else {
+                µBlock.goodblock.markIfGoodblockIsAwake(true);
+                µBlock.goodblock.setGoodblockWakeTimeAlarm(now.getTime());
+            }
+        },
+        function(error) {
+            // If the user isn't logged in, default to showing Tad.
+            console.log('User is not logged in.');
             µBlock.goodblock.markIfGoodblockIsAwake(true);
+            var now = new Date();
             µBlock.goodblock.setGoodblockWakeTimeAlarm(now.getTime());
         }
-    });
+    );
 }
 
 /******************************************************************************/
