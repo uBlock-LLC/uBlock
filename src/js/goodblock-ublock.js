@@ -465,8 +465,9 @@ var TOKEN_LOCAL_STORAGE_KEY = 'goodblockToken';
 // The time may have changed via interaction on another device, or
 // it may have changed server-side.
 var wakeUpPoller = setInterval(function() {
+    // console.log('Polling server.');
     µBlock.goodblock.checkIfShouldWakeUpGoodblock();
-}, 1000 * 60 * 30);
+}, µBlock.goodblock.config.timeMsToPollServer);
 
 /******************************************************************************/
 
