@@ -93,7 +93,8 @@ var getTimeAtEightAmTomorrow = require('./goodblock/get-time-at-eight-am-tomorro
 /******************************************************************************/
 
 µBlock.goodblock.gladlyHostnames = ['gladlyads.xyz', 'goodblock.org'];
-µBlock.goodblock.gladlyAdServerDomains = ['goodblock.org'];
+µBlock.goodblock.gladlyAdServerDomains = ['gladlyads.xyz', 'goodblock.org'];
+µBlock.goodblock.gladlyAdUrl = 'https://goodblock.org/app/ad/';
 
 /******************************************************************************/
 

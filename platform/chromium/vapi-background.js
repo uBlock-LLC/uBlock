@@ -176,17 +176,15 @@ vAPI.tabs.registerListeners = function() {
     var reGoodForWebRequestAPI = /^https?:\/\//;
 
     // Goodblock.
-    // If the tab has a URL that is a Gladly ad server domain,
+    // If the tab has the URL of our Gladly ad webapge,
     // mark this tab as the Gladly ad tab.
     var checkIfNewTabIsGladlyAd = function(tab) {
         if (!tab.url) {
             return;
         }
-        var hostname = µBlock.URI.hostnameFromURI(tab.url);
-        if (!µBlock.goodblock.isGladlyAdServer(hostname)) {
-            return;
+        if (tab.url == µBlock.goodblock.gladlyAdUrl) {
+            µBlock.goodblock.saveGladlyAdTabId(tab.id.toString());
         }
-        µBlock.goodblock.saveGladlyAdTabId(tab.id.toString());
     }
 
     // Goodblock.
