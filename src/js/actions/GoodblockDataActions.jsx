@@ -185,7 +185,7 @@ var GoodblockDataActions = {
 	makeGoodblockSnooze: function() {
 		setSnoozeMessageStatus(true);
 		var timeToSnooze = 2100;
-		var exitAnimationTime = 500;
+		var exitAnimationTime = 1000;
 
 		inProcessOfSnoozing(true);
 
@@ -210,7 +210,7 @@ var GoodblockDataActions = {
 	sendGoodblockToBed: function() {
 
 		var timeToGoodnight = 2400;
-		var exitAnimationTime = 500;
+		var exitAnimationTime = 1000;
 
 		// Show the "goodnight" speech bubble.
 		setTimeout(function() {

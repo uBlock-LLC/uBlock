@@ -21,13 +21,22 @@ var GoodblockIconHolder = React.createClass({
 		}
 	},
 	setIconToMount: function() {
-		// 
+		// Delay the mounting so we can give the web page time to load
+		// before the Goodblock icon slides in.
 		var self = this;
 		setTimeout(function() {
 			self.setState({
 				mountIcon: true,
 			});
 		}, SECONDS_TO_DELAY_ICON_APPEARANCE * 1000);
+	},
+	setIconToUnmount: function() {
+		var self = this;
+		setTimeout(function() {
+			self.setState({
+				mountIcon: false,
+			});
+		}, 50);
 	},
 	onClick: function() {
 		var goodblockData = this.props.goodblockData;
@@ -102,8 +111,16 @@ var GoodblockIconHolder = React.createClass({
 		};
 		var goodblockIcon;
 
+		// If the Goodblock icon should be visible but isn't,
+		// set the icon to mount after a delay.
 		if (isVisible && !this.state.mountIcon) {
 			this.setIconToMount();
+		}
+
+		// If the Goodblock icon should be hidden but isn't,
+		// hide it.
+		if (!isVisible && this.state.mountIcon) {
+			this.setIconToUnmount();
 		}
 
 		if (this.state.mountIcon) {
