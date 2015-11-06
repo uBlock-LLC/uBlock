@@ -11,8 +11,24 @@ var SpeechBubble = require('./SpeechBubble.jsx');
 // See https://github.com/facebook/react/issues/1326
 var TimeoutTransitionGroup = require('./TimeoutTransitionGroup.jsx');
 
+var SECONDS_TO_DELAY_ICON_APPEARANCE = 4;
+
 
 var GoodblockIconHolder = React.createClass({
+	getInitialState: function() {
+		return {
+			mountIcon: false,
+		}
+	},
+	setIconToMount: function() {
+		// 
+		var self = this;
+		setTimeout(function() {
+			self.setState({
+				mountIcon: true,
+			});
+		}, SECONDS_TO_DELAY_ICON_APPEARANCE * 1000);
+	},
 	onClick: function() {
 		var goodblockData = this.props.goodblockData;
 		var prevClickState = goodblockData.uiState.isClicked;
@@ -85,7 +101,12 @@ var GoodblockIconHolder = React.createClass({
 			boxSizing: 'content-box !important',
 		};
 		var goodblockIcon;
-		if (isVisible) {
+
+		if (isVisible && !this.state.mountIcon) {
+			this.setIconToMount();
+		}
+
+		if (this.state.mountIcon) {
 			goodblockIcon = (
 				<div
 					key='goodblock-icon-holder'
