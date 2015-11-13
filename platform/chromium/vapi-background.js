@@ -62,6 +62,16 @@ if ( !chrome.runtime ) {
 
 /******************************************************************************/
 
+// Goodblock.
+if ( chrome.runtime.setUninstallURL ) {
+    // On uninstall, send the users to our webpage for analytics logging
+    // and feedback.
+    var url = 'https://goodblock.org/app/goodbye/';
+    chrome.runtime.setUninstallURL(url);
+}
+
+/******************************************************************************/
+
 vAPI.app.restart = function() {
     chrome.runtime.reload();
 };
