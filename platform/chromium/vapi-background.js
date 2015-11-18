@@ -498,7 +498,7 @@ var iconStateForTabId = {}; // {tabId: IconState}
 
 var ICON_PATHS = {
     "on": { '19': 'img/browsericons/icon19.png',     '38': 'img/browsericons/icon38.png' },
-    "off": { '19': 'img/browsericons/icon19-off.png', '38': 'img/browsericons/icon38-off.png' },
+    "off": { '19': 'img/browsericons/icon19.png', '38': 'img/browsericons/icon38.png' },
     // Goodblock
     "goodblock": {
         'goodblockIcon20': 'img/browsericons/icon20.png',

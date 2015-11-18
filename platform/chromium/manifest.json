@@ -12,7 +12,7 @@
     },
 
     "browser_action": {
-        "default_icon": "img/browsericons/icon19-off.png",
+        "default_icon": "img/browsericons/icon19.png",
         "default_title": "Goodblock",
         "default_popup": "popup.html"
     },
