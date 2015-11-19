@@ -298,6 +298,9 @@ var getTimeAtEightAmTomorrow = require('./goodblock/get-time-at-eight-am-tomorro
       var timeTilSnooze = new Date().getTime() - µBlock.goodblock.browserState.lastWakeTime;
       µBlock.goodblock.log.logMetric('timeUntilSnooze', timeTilSnooze);
     }
+
+    //Log the snooze event
+    µBlock.goodblock.API.logSnoozeEvent();
 }
 
 /******************************************************************************/
@@ -336,6 +339,8 @@ var getTimeAtEightAmTomorrow = require('./goodblock/get-time-at-eight-am-tomorro
     µBlock.goodblock.markIfGoodblockIsAwake(isVisible);
     if (isVisible) {
       µBlock.goodblock.log.logEvent('wokeUp');
+      //Log that Tad is showing on the page.
+      µBlock.goodblock.API.logHelloTadEvent();
     }
 }
 
@@ -457,6 +462,16 @@ var TOKEN_LOCAL_STORAGE_KEY = 'goodblockToken';
     };
     var url = µBlock.goodblock.API.baseUrl + '/users/update-notify-time/';
     return µBlock.goodblock.API.fetchEndpoint('POST', url, data);
+}
+
+µBlock.goodblock.API.logSnoozeEvent = function() {
+    var url = µBlock.goodblock.API.baseUrl + '/snooze-click/';
+    return µBlock.goodblock.API.fetchEndpoint('POST', url);
+}
+
+µBlock.goodblock.API.logHelloTadEvent = function() {
+    var url = µBlock.goodblock.API.baseUrl + '/gbicon-appear/';
+    return µBlock.goodblock.API.fetchEndpoint('POST', url);
 }
 
 /******************************************************************************/
