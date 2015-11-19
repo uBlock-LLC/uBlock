@@ -14,7 +14,7 @@ body {
     height: 300px;
     display: inline-block;
 }
-#dashboard {
+#dashboard, #dashboard-container {
     position: absolute;
     top: 0px;
     left: 0px;
@@ -60,7 +60,7 @@ svg.icon.icon-faq {
 
 <body>
 
-<iframe id="dashboard" src="https://goodblock.org/app/dashboard/"></iframe>
+<div id='dashboard-container'></div>
 
 <div id="settings">
     <a href="dashboard.html" target="_blank">
@@ -74,6 +74,8 @@ svg.icon.icon-faq {
         </svg>
     </a> -->
 </div>
+
+<script src='js/goodblock-popup.js'></script>
 
 </body>
 
