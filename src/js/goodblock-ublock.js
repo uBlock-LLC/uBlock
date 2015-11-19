@@ -470,7 +470,7 @@ var TOKEN_LOCAL_STORAGE_KEY = 'goodblockToken';
 }
 
 µBlock.goodblock.API.logHelloTadEvent = function() {
-    var url = µBlock.goodblock.API.baseUrl + '/hello-tad/';
+    var url = µBlock.goodblock.API.baseUrl + '/gbicon-appear/';
     return µBlock.goodblock.API.fetchEndpoint('POST', url);
 }
 
