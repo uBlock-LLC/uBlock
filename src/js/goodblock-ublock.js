@@ -159,6 +159,9 @@ var getTimeAtEightAmTomorrow = require('./goodblock/get-time-at-eight-am-tomorro
         'select': true,
     });
     µBlock.goodblock.log.logEvent('adOpened');
+
+    // Hide the Goodblock icon.
+    µBlock.goodblock.goodnightGoodblock();
 }
 
 /******************************************************************************/
@@ -178,8 +181,6 @@ var getTimeAtEightAmTomorrow = require('./goodblock/get-time-at-eight-am-tomorro
 µBlock.goodblock.closeAd = function() {
     µBlock.goodblock.browserState.isAdOpen = false;
     µBlock.goodblock.browserState.adTabId = null;
-
-    µBlock.goodblock.goodnightGoodblock();
     µBlock.goodblock.log.logEvent('adClosed');
 }
 
