@@ -2,6 +2,7 @@
 var React = require('react/addons');
 var GoodblockDataActions = require('../actions/GoodblockDataActions.jsx');
 var universalStyle = require('./universalStyle.jsx');
+var Tooltip = require('./Tooltip.jsx');
 
 
 var SnoozeButton = React.createClass({
@@ -83,19 +84,28 @@ var SnoozeButton = React.createClass({
 				left: '12px !important',
 				bottom: '18px !important',
 				fontSize: '11px !important',
-				textAlign: 'center',
+				textAlign: 'center !important',
 				color: textColor,
 			},
 			bubbleText: {
 				marginTop: '5px !important',
 				width: '18px !important',
 				height: '18px !important',
-				fill: 'rgba(255, 255, 255, 0.8)',
+				fill: 'rgba(255, 255, 255, 0.8) !important',
 			},
 		});
 	},
 	render: function() {
 		var styles = this.getStyles();
+		var goodblockData = this.props.goodblockData;
+
+		var tooltip;
+		if (goodblockData.uiState.snooze.isHovering) {
+			tooltip = (
+				<Tooltip key='tooltip' text='Snooze' />
+			);
+		}
+
 		return (
 			<div
 				style={styles.parent}
@@ -115,6 +125,7 @@ var SnoozeButton = React.createClass({
 					14.313,32,32v96h96C401.688,224,416,238.313,416,256z"/>
 				</svg>
 				</div>
+					{tooltip}
 			</div>
 		);
 	}
