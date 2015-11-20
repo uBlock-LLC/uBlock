@@ -54,60 +54,60 @@
 }
 
 .snooze-appear, .snooze-enter {
-	opacity: 0.01;
-	transition: opacity 0.25s linear;
+	opacity: 0.01 !important;
+	transition: opacity 0.25s linear !important;
 }
 
 .snooze-appear-active, .snooze-enter-active {
-	opacity: 1;
+	opacity: 1 !important;
 }
 
 .snooze-leave {
-	opacity: 1;
-	transition: opacity 0.15s linear;
+	opacity: 1 !important;
+	transition: opacity 0.15s linear !important;
 }
 
 .snooze-leave.snooze-leave-active {
-	opacity: 0.01;
+	opacity: 0.01 !important;
 }
 
 .speech-bubble {
-	position: relative;
-    padding: 10px;
-    margin: 1em 0 3em;
-    /*border: 5px solid #FF0000;*/
-    border: 5px solid transparent;
-    color: #333;
-    background: #000;
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    border-radius: 10px;
-    box-shadow: rgba(0, 0, 0, 0.2) 5px 6px 18px;
+	position: relative !important;
+    padding: 10px !important;
+    margin: 1em 0 3em !important;
+    /*border: 5px solid #FF0000 !important;*/
+    border: 5px solid transparent !important;
+    color: #333 !important;
+    background: #000 !important;
+    -webkit-border-radius: 10px !important;
+    -moz-border-radius: 10px !important;
+    border-radius: 10px !important;
+    box-shadow: rgba(0, 0, 0, 0.2) 5px 6px 18px !important;
 }
 
 .speech-bubble:before {
-    content: "";
-    position: absolute;
-    bottom: -20px;
-    left: 10px;
-    border-width: 20px 20px 0;
-    border-style: solid;
-    /*border-color: #FF0000 transparent;*/
-    border-color: transparent;
-    display: block;
-    width: 0;
+    content: "" !important;
+    position: absolute !important;
+    bottom: -20px !important;
+    left: 10px !important;
+    border-width: 20px 20px 0 !important;
+    border-style: solid !important;
+    /*border-color: #FF0000 transparent !important;*/
+    border-color: transparent !important;
+    display: block !important;
+    width: 0 !important;
 }
 
 .speech-bubble:after {
-    content: "";
-    position: absolute;
-    bottom: -13px;
-    left: 17px;
-    border-width: 13px 13px 0;
-    border-style: solid;
-    border-color: #000 transparent;
-    display: block;
-    width: 0;
+    content: "" !important;
+    position: absolute !important;
+    bottom: -13px !important;
+    left: 17px !important;
+    border-width: 13px 13px 0 !important;
+    border-style: solid !important;
+    border-color: #000 transparent !important;
+    display: block !important;
+    width: 0 !important;
 }
 
 .ad-enter {
@@ -116,15 +116,15 @@
 }
 
 .ad-enter-active {
-	-webkit-animation: moveToRightFade .7s ease both;
-	animation: moveToRightFade .7s ease both;
+	-webkit-animation: moveToRightFade .7s ease both !important;
+	animation: moveToRightFade .7s ease both !important;
 }
 
 @keyframes moveToRightFade {
 	from { }
 	to {
-		-webkit-transform: translateX(100%);
-		transform: translateX(100%);
+		-webkit-transform: translateX(100%) !important;
+		transform: translateX(100%) !important;
 	}
 }
 
@@ -132,15 +132,15 @@
 }
 
 .ad-leave-active {
-	-webkit-animation: moveToLeftFade .7s ease both;
-	animation: moveToLeftFade .7s ease both;
+	-webkit-animation: moveToLeftFade .7s ease both !important;
+	animation: moveToLeftFade .7s ease both !important;
 }
 
 @keyframes moveToLeftFade {
 	from { }
 	to {
-		-webkit-transform: translateX(-100%);
-		transform: translateX(-100%);
+		-webkit-transform: translateX(-100%) !important;
+		transform: translateX(-100%) !important;
 	}
 }
 
