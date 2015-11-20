@@ -2,6 +2,7 @@
 var React = require('react/addons');
 var GoodblockDataActions = require('../actions/GoodblockDataActions.jsx');
 var universalStyle = require('./universalStyle.jsx');
+var TimeoutTransitionGroup = require('./TimeoutTransitionGroup.jsx');
 var Tooltip = require('./Tooltip.jsx');
 
 
@@ -125,7 +126,16 @@ var SnoozeButton = React.createClass({
 					14.313,32,32v96h96C401.688,224,416,238.313,416,256z"/>
 				</svg>
 				</div>
-					{tooltip}
+				<TimeoutTransitionGroup
+					appearTimeout={200}
+					enterTimeout={200}
+					leaveTimeout={150}
+					transitionName='snooze-tooltip'
+					transitionAppear={true}
+					transitionEnter={true}
+					transitionLeave={true}>
+						{tooltip}
+				</TimeoutTransitionGroup>
 			</div>
 		);
 	}

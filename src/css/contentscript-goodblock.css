@@ -71,6 +71,24 @@
 	opacity: 0.01 !important;
 }
 
+.snooze-tooltip-appear, .snooze-tooltip-enter {
+	opacity: 0.01 !important;
+	transition: opacity 0.10s linear !important;
+}
+
+.snooze-tooltip-appear-active, .snooze-tooltip-enter-active {
+	opacity: 1 !important;
+}
+
+.snooze-tooltip-leave {
+	opacity: 1 !important;
+	transition: opacity 0.10s linear !important;
+}
+
+.snooze-tooltip-leave.snooze-tooltip-leave-active {
+	opacity: 0.01 !important;
+}
+
 .speech-bubble {
 	position: relative !important;
     padding: 10px !important;

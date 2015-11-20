@@ -108,6 +108,7 @@ var GoodblockIconHolder = React.createClass({
 			position: 'fixed !important',
 			borderRadius: '50% !important',
 			boxSizing: 'content-box !important',
+			cursor: 'pointer !important',
 		};
 		var goodblockIcon;
 

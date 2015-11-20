@@ -10,7 +10,6 @@ var ToolTip = React.createClass({
 
 		var bubbleBackground = '#555555 !important';
 		var bubbleBoxShadow = 'rgba(0,0,0,0.2) 3px 3px 8px !important';
-		var bubbleTransition = 'background 0.3s, color 0.3s !important';
 		var textColor = 'rgba(255, 255, 255, 0.8) !important';
 
 		var style = {
@@ -29,7 +28,6 @@ var ToolTip = React.createClass({
 			cursor: 'default !important',
 			background: bubbleBackground,
 			boxShadow: bubbleBoxShadow,
-			transition: bubbleTransition,
 			textAlign: 'center',
 			color: textColor,
 			borderRadius: '3px !important',
