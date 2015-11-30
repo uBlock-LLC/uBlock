@@ -11,7 +11,7 @@ body {
     margin: 0px;
     padding: 0px;
     width: 400px;
-    height: 300px;
+    height: 400px;
     display: inline-block;
 }
 #dashboard, #dashboard-container {
@@ -24,29 +24,40 @@ body {
     padding: 0px;
     border: 0px;
     overflow: hidden;
-    height: 100%;
+    height: 90%;
     width: 100%;
 }
 #settings {
-    position: fixed;
-    bottom: -2px;
-    right: 0px;
     background: transparent;
+    position: absolute;
+    right: 5px;
+    top: 25%;
 }
+#toolbar {
+  border-top: 1px #ECECEC solid;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 10px;
+}
+
+#toolbar div{
+  display: inline-block;
+}
+
 svg.icon {
     width: 14px;
     height: 14px;
-    margin-bottom: 4px;
-    margin-top: 2px;
-    margin-right: 4px;
-    margin-left: 4px;
+    margin: 2px;
     display: inline-block; 
     fill: currentColor;
 }
-svg.icon {
+
+#settings svg.icon {
     color: #C7C7C7;
 }
-svg.icon:hover {
+#settings svg.icon:hover {
     color: #0CA4E5;
     /*color: #FFCB62;*/
 }
@@ -54,6 +65,116 @@ svg.icon.icon-faq {
     width: 13px;
     height: 13px;
 }
+
+.menu-item {
+  text-align: center;
+}
+
+.menu-item div{
+  display: block !important;
+}
+
+#refresh {
+    background-color: #444;
+    border-radius: 4px;
+    color: #dedede;
+    opacity: 0.7;
+    cursor: pointer;
+    display: none !important;
+    width: 30px;
+    height: 30px;
+    font-size: 25px;
+    text-align: center;
+    padding: 5px;
+    position: absolute;
+    left: 90px;
+    }
+body.dirty #refresh {
+    display: inline-block !important;
+    }
+body.dirty #refresh:hover {
+    opacity: 1;
+    }
+
+
+/* ============================================================
+  COMMON
+============================================================ */
+
+.cmn-toggle {
+  position: absolute;
+  margin-left: -9999px;
+  visibility: hidden;
+}
+.cmn-toggle + label {
+  display: block;
+  position: relative;
+  cursor: pointer;
+  outline: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* ============================================================
+  SWITCH 1 - ROUND
+============================================================ */
+input.cmn-toggle-round + label {
+  padding: 2px;
+  width: 60px;
+  height: 30px;
+  background-color: #FFCB62;
+  -webkit-border-radius: 30px;
+  -moz-border-radius: 30px;
+  -ms-border-radius: 30px;
+  -o-border-radius: 30px;
+  border-radius: 30px;
+}
+input.cmn-toggle-round + label:before, input.cmn-toggle-round + label:after {
+  display: block;
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  bottom: 1px;
+  content: "";
+}
+input.cmn-toggle-round + label:before {
+  right: 1px;
+  background-color: #f1f1f1;
+  -webkit-border-radius: 30px;
+  -moz-border-radius: 30px;
+  -ms-border-radius: 30px;
+  -o-border-radius: 30px;
+  border-radius: 30px;
+  -webkit-transition: background 0.4s;
+  -moz-transition: background 0.4s;
+  -o-transition: background 0.4s;
+  transition: background 0.4s;
+}
+input.cmn-toggle-round + label:after {
+  width: 30px;
+  background-color: #FFCB62;
+  -webkit-border-radius: 100%;
+  -moz-border-radius: 100%;
+  -ms-border-radius: 100%;
+  -o-border-radius: 100%;
+  border-radius: 100%;
+  -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  -webkit-transition: margin 0.4s;
+  -moz-transition: margin 0.4s;
+  -o-transition: margin 0.4s;
+  transition: margin 0.4s;
+}
+input.cmn-toggle-round:checked + label:before {
+  background-color: #0CA4E5;
+}
+input.cmn-toggle-round:checked + label:after {
+  margin-left: 34px;
+}
+
 </style>
 
 </head>
@@ -61,21 +182,39 @@ svg.icon.icon-faq {
 <body>
 
 <div id='dashboard-container'></div>
-
-<div id="settings">
+<div id='toolbar'>
+  <div id="refresh">
+    <svg class="icon icon-reload">
+      <use xlink:href="img/icons.svg#icon-reload"></use>
+    </svg>
+  </div>
+  <div class="menu-item">
+    <div>  
+      <h6>Turn On\Off Adblocking for this site</h6>  
+    </div>
+    <div class="switch">  
+      <input id="switch" class="cmn-toggle cmn-toggle-round" type="checkbox"> 
+      <label for="switch"></label>  
+    </div>
+  </div>
+  <div id="settings">
     <a href="dashboard.html" target="_blank" tabIndex='-1'>
         <svg class="icon icon-preferences">
             <use xlink:href="img/icons.svg#icon-preferences"></use>
         </svg>
     </a>
-<!--     <a href="http://www.goodblock.org/" target="_blank">
-        <svg class="icon icon-faq">
-            <use xlink:href="img/icons.svg#icon-faq"></use>
-        </svg>
-    </a> -->
+  </div>
 </div>
 
+
+<script src="lib/punycode.js"></script>
+<script src="js/vapi-common.js"></script>
+<script src="js/vapi-client.js"></script>
+<script src="js/vapi-popup.js"></script>
+<script src="js/udom.js"></script>
+<script src="js/i18n.js"></script>
 <script src='js/goodblock-popup.js'></script>
+
 
 </body>
 
