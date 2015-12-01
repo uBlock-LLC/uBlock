@@ -40,6 +40,8 @@
     },
     timeMsToSnooze: 97 * 60 * 1000,
     timeMsToPollServer: 60 * 1000 * 15, // 15 minutes
+    gladlyHostnames: ['gladlyads.xyz', 'goodblock.org'],
+    gladlyAdUrls: ['https://goodblock.org/app/ad/'],
 }
 
 /******************************************************************************/
