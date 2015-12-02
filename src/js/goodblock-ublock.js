@@ -108,7 +108,7 @@ function getGladlyAdUrlsFromConfig() {
 
 µBlock.goodblock.gladlyHostnames = getGladlyHostnamesFromConfig();
 µBlock.goodblock.gladlyAdServerDomains = getGladlyHostnamesFromConfig();
-µBlock.goodblock.gladlyAdUrls = getGladlyAdUrlsFromConfig;
+µBlock.goodblock.gladlyAdUrls = getGladlyAdUrlsFromConfig();
 
 /******************************************************************************/
 

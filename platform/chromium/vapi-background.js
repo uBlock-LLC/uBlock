@@ -192,7 +192,7 @@ vAPI.tabs.registerListeners = function() {
         if (!tab.url) {
             return;
         }
-        if (µBlock.goodblock.gladlyAdUrl.indexOf(tab.url) > -1) {
+        if (µBlock.goodblock.gladlyAdUrls.indexOf(tab.url) > -1) {
             µBlock.goodblock.saveGladlyAdTabId(tab.id.toString());
         }
     }
