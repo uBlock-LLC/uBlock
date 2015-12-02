@@ -13,6 +13,7 @@ body {
     width: 400px;
     height: 400px;
     display: inline-block;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 #dashboard, #dashboard-container {
     position: absolute;
@@ -47,8 +48,9 @@ svg.icon.icon-faq {
 ============================================================ */
 
 #settings {
-    float: right;
-    padding-top: 10px; 
+    position: absolute;
+    right: 2px;
+    bottom: 0px;
 }
 
 .row .question,
@@ -58,8 +60,9 @@ svg.icon.icon-faq {
   padding: 5px;
 }
 .row .question {
-  font-family: "Roboto Slab", serif;
   font-size: 14px;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  color: #9e9e9e;
 }
 
 svg.icon {
@@ -128,11 +131,11 @@ input.cmn-toggle-yes-no + label:before, input.cmn-toggle-yes-no + label:after {
   bottom: 0;
   right: 0;
   color: #fff;
-  font-family: "Roboto Slab", serif;
-  font-size: 18px;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 16px;
   text-align: center;
   line-height: 30px;
-  border-radius: 5px;
+  border-radius: 4px;
 }
 input.cmn-toggle-yes-no + label:before {
   background-color: #dddddd;
@@ -191,11 +194,11 @@ input.cmn-toggle-yes-no:checked + label:after {
 
     <div class="row">
       <div class="question">
-        Ad blocking
+        Ad blocking for this site is:
       </div>
        <div class="switch">
         <input id="switch" class="cmn-toggle cmn-toggle-yes-no" type="checkbox">
-        <label for="switch" data-on="Turn Off" data-off="Turn On"></label>
+        <label for="switch" data-on="On" data-off="Off"></label>
       </div>
       <div id="refresh">
         <svg class="icon icon-reload">
