@@ -30,28 +30,50 @@
     "content_scripts": [
         {
             "matches": ["http://*/*", "https://*/*", "file:///*"],
-            "exclude_matches": ["http://gladlyads.xyz/*", "https://gladlyads.xyz/*", "https://goodblock.org/app/*"],
+            "exclude_matches": [
+                "http://gladlyads.xyz/*",
+                "https://gladlyads.xyz/*",
+                "https://goodblock.org/app/*",
+                "*://gladly.io/*",
+                "*://*.gladly.io/*"
+            ],
             "js": ["js/vapi-client.js", "js/contentscript-start.js"],
             "run_at": "document_start",
             "all_frames": true
         },
         {
             "matches": ["http://*/*", "https://*/*", "file:///*"],
-            "exclude_matches": ["http://gladlyads.xyz/*", "https://gladlyads.xyz/*", "https://goodblock.org/app/*"],
+            "exclude_matches": [
+                "http://gladlyads.xyz/*",
+                "https://gladlyads.xyz/*",
+                "https://goodblock.org/app/*",
+                "*://gladly.io/*",
+                "*://*.gladly.io/*"
+            ],
             "js": ["js/contentscript-end.js"],
             "run_at": "document_end",
             "all_frames": true
         },
         {
             "matches": ["http://*/*", "https://*/*", "file:///*"],
-            "exclude_matches": ["http://gladlyads.xyz/*", "https://gladlyads.xyz/*", "https://goodblock.org/app/*"],
+            "exclude_matches": [
+                "http://gladlyads.xyz/*",
+                "https://gladlyads.xyz/*",
+                "https://goodblock.org/app/*",
+                "*://goodblock.gladly.io/app/*",
+                "*://www.goodblock.gladly.io/app/*"
+            ],
             "css": ["css/contentscript-goodblock.css"],
             "js": ["lib/EventEmitter.min.js", "js/contentscript-goodblock.js"],
             "run_at": "document_idle",
             "all_frames": false
         },
         {
-            "matches": ["https://goodblock.org/app/*"],
+            "matches": [
+                "https://goodblock.org/app/*",
+                "*://goodblock.gladly.io/app/*",
+                "*://www.goodblock.gladly.io/app/*"
+            ],
             "exclude_matches": [],
             "js": ["js/vapi-client.js", "js/contentscript-app.js"],
             "run_at": "document_start",

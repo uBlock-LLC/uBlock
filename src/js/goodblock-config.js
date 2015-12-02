@@ -40,8 +40,25 @@
     },
     timeMsToSnooze: 97 * 60 * 1000,
     timeMsToPollServer: 60 * 1000 * 15, // 15 minutes
-    gladlyHostnames: ['gladlyads.xyz', 'goodblock.org'],
-    gladlyAdUrls: ['https://goodblock.org/app/ad/'],
+    gladlyHostnames: [
+        'gladly.io',
+        'blog.gladly.io',
+        'goodblock.gladly.io',
+        'tab.gladly.io',
+        'tabforacause.gladly.io',
+        'gladlyads.xyz',
+        'goodblock.org',
+        'tabforacause.org',
+    ],
+    gladlyAdUrls: [
+        'https://goodblock.org/app/ad/',
+        // Some uncertainty about what we will choose
+        // as the final URL.
+        'https://gladly.io/app/ad/',
+        'https://www.gladly.io/app/ad/',
+        'https://goodblock.gladly.io/app/ad/',
+        'https://www.goodblock.gladly.io/app/ad/',
+    ],
 }
 
 /******************************************************************************/

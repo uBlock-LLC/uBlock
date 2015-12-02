@@ -93,17 +93,11 @@ var getTimeAtEightAmTomorrow = require('./goodblock/get-time-at-eight-am-tomorro
 /******************************************************************************/
 
 function getGladlyHostnamesFromConfig() {
-    if (µBlock.goodblock.config.gladlyHostnames) {
-        return µBlock.goodblock.config.gladlyHostnames;
-    }
-    return ['gladlyads.xyz', 'goodblock.org'];
+    return µBlock.goodblock.config.gladlyHostnames;
 }
 
 function getGladlyAdUrlsFromConfig() {
-    if (µBlock.goodblock.config.gladlyAdUrls) {
-        return µBlock.goodblock.config.gladlyAdUrls;
-    }
-    return ['https://goodblock.org/app/ad/'];
+    return µBlock.goodblock.config.gladlyAdUrls;
 }
 
 µBlock.goodblock.gladlyHostnames = getGladlyHostnamesFromConfig();
