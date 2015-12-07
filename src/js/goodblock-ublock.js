@@ -492,11 +492,10 @@ var TOKEN_LOCAL_STORAGE_KEY = 'goodblockToken';
 // Check every once in a while to get the latest time to wake.
 // The time may have changed via interaction on another device, or
 // it may have changed server-side.
-// TODO: enable after migrating to gladly.io subdomain.
-// var wakeUpPoller = setInterval(function() {
-//     // console.log('Polling server.');
-//     µBlock.goodblock.checkIfShouldWakeUpGoodblock();
-// }, µBlock.goodblock.config.timeMsToPollServer);
+var wakeUpPoller = setInterval(function() {
+    // console.log('Polling server.');
+    µBlock.goodblock.checkIfShouldWakeUpGoodblock();
+}, µBlock.goodblock.config.timeMsToPollServer);
 
 /******************************************************************************/
 
