@@ -84,7 +84,7 @@ var getTimeAtEightAmTomorrow = require('./goodblock/get-time-at-eight-am-tomorro
 // Takes a string.
 µBlock.goodblock.sendToDb = function(data) {
     // var xhr = new XMLHttpRequest();
-    // xhr.open('POST', 'http://inlet.goodblock.org/write?db=impressions', true);
+    // xhr.open('POST', 'http://inlet.goodblock.gladly.io/write?db=impressions', true);
     // xhr.setRequestHeader("Authorization", "Basic " + btoa('logger:DwV5WWXXQgNVg6hgKXFj'));
     // xhr.send(data);
     // console.log('Sent data:', data);
@@ -162,7 +162,7 @@ function getGladlyAdUrlsFromConfig() {
 µBlock.goodblock.openAd = function() {
     µBlock.goodblock.browserState.isAdOpen = true;
     var thing = vAPI.tabs.open({
-        'url': 'https://goodblock.org/app/ad/',
+        'url': 'https://goodblock.gladly.io/app/ad/',
         'index': -1,
         'select': true,
     });
@@ -417,7 +417,7 @@ var TOKEN_LOCAL_STORAGE_KEY = 'goodblockToken';
 
 // API access
 µBlock.goodblock.API = {};
-µBlock.goodblock.API.baseUrl = 'https://goodblock.org/api';
+µBlock.goodblock.API.baseUrl = 'https://goodblock.gladly.io/api';
 µBlock.goodblock.API.fetchEndpoint = function(method, endpoint, data) {
   var dataToSend = data;
   return new Promise(function(resolve, reject) {

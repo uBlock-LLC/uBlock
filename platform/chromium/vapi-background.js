@@ -66,7 +66,7 @@ if ( !chrome.runtime ) {
 if ( chrome.runtime.setUninstallURL ) {
     // On uninstall, send the users to our webpage for analytics logging
     // and feedback.
-    var url = 'https://goodblock.org/app/goodbye/';
+    var url = 'https://goodblock.gladly.io/app/goodbye/';
     chrome.runtime.setUninstallURL(url);
 }
 

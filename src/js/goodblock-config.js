@@ -51,12 +51,12 @@
         'tabforacause.org',
     ],
     gladlyAdUrls: [
-        'https://goodblock.org/app/ad/',
+        'https://goodblock.gladly.io/app/ad/',
         // Some uncertainty about what we will choose
         // as the final URL.
         'https://gladly.io/app/ad/',
         'https://www.gladly.io/app/ad/',
-        'https://goodblock.gladly.io/app/ad/',
+        'https://goodblock.org/app/ad/',
         'https://www.goodblock.gladly.io/app/ad/',
     ],
 }

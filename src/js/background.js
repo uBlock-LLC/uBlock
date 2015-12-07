@@ -44,7 +44,7 @@ var checkNewInstall = function() {
         win.focus();
     }
     function onInstall() {
-        openInNewTab('https://goodblock.org/app/welcome/')
+        openInNewTab('https://goodblock.gladly.io/app/welcome/')
     }
 
     function onUpdate() {

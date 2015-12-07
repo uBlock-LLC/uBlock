@@ -198,7 +198,7 @@ var getPopupData = function(tabId) {
 var setupDashboard = function() {
 	var iframe = document.createElement('iframe');
 	iframe.id = 'dashboard';
-	iframe.src = 'https://goodblock.org/app/dashboard/';
+	iframe.src = 'https://goodblock.gladly.io/app/dashboard/';
 	var parent = document.getElementById('dashboard-container');
 	parent.appendChild(iframe);		      
 }
