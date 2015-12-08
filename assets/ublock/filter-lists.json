@@ -215,6 +215,12 @@
         "group": "regions",
         "homeURL": "https://raw.githubusercontent.com/wiltteri/wiltteri.txt/master/wiltteri.txt"
         },
+    "raw.githubusercontent.com/yous/YousList/master/youslist.txt": {
+        "off": true,
+        "title": "KOR: YousList",
+        "group": "regions",
+        "homeURL": "https://raw.githubusercontent.com/yous/YousList/master/youslist.txt"
+        },
     "someonewhocares.org/hosts/hosts": {
         "off": true,
         "title": "Dan Pollock’s hosts file",

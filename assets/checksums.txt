@@ -42,6 +42,7 @@ cbde6559e6100aca9690fd01f2a93ad3 assets/thirdparties/raw.githubusercontent.com/a
 60cf4cbe51fc6a1396ac7aed90849736 assets/thirdparties/raw.githubusercontent.com/szpeter80/hufilter/master/hufilter.txt
 1b03843c2e9c4d49258e821ce22778e4 assets/thirdparties/raw.githubusercontent.com/tomasko126/easylistczechandslovak/master/filters.txt
 78025ca6e00f12ecd5819bcb049138a0 assets/thirdparties/raw.githubusercontent.com/wiltteri/wiltteri.txt/master/wiltteri.txt
+7503f2f930073d80e22a352e98728996 assets/thirdparties/raw.githubusercontent.com/yous/YousList/master/youslist.txt
 e5f83168a99501284bb7a5cada325bd0 assets/thirdparties/someonewhocares.org/hosts/hosts
 f219989a6efcec36c0f34610c10cdeb8 assets/thirdparties/spam404bl.com/spam404scamlist.txt
 d44a43b368b64c22916aab9d28753fe5 assets/thirdparties/stanev.org/abp/adblock_bg.txt
