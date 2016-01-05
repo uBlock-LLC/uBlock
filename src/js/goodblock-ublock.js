@@ -92,6 +92,28 @@ var getTimeAtEightAmTomorrow = require('./goodblock/get-time-at-eight-am-tomorro
 
 /******************************************************************************/
 
+µBlock.goodblock.tests = {
+    contentSupport: {
+        isTestUser: false,
+        testGroup: null,
+        constants: {
+            TEST_GROUP_AD_VIEW: 1,
+            TEST_GROUP_DONATE_HEARTS: 2,
+        },
+    }
+};
+
+µBlock.goodblock.addUserToTestGroups = function(userProfile) {
+    if (userProfile.support_content_test) {
+        µBlock.goodblock.tests.contentSupport.isTestUser = true;
+        var testGroup = userProfile.support_content_test_channel;
+        µBlock.goodblock.tests.contentSupport.testGroup = testGroup;
+    }
+};
+
+
+/******************************************************************************/
+
 function getGladlyHostnamesFromConfig() {
     return µBlock.goodblock.config.gladlyHostnames;
 }
@@ -355,27 +377,40 @@ function getGladlyAdUrlsFromConfig() {
 
 /******************************************************************************/
 
-µBlock.goodblock.checkIfShouldWakeUpGoodblock = function() {
-
+µBlock.goodblock.checkIfShouldWakeUpGoodblock = function(userProfile) {
     // Get the UTC time to wake up in milliseconds.
-    µBlock.goodblock.API.getUserData().then(
-        function(data) {
-            var dateToWakeUp = new Date(data['next_notify_time']);
-            var now = new Date();
-            // It's not time to wake Goodblock.
-            if (dateToWakeUp > now) {
-                // console.log('Shhhh, Tad is asleep!');
-                µBlock.goodblock.markIfGoodblockIsAwake(false);
-                µBlock.goodblock.setGoodblockWakeTimeAlarm(dateToWakeUp);
+    var dateToWakeUp = new Date(userProfile['next_notify_time']);
+    var now = new Date();
+    // It's not time to wake Goodblock.
+    if (dateToWakeUp > now) {
+        // console.log('Shhhh, Tad is asleep!');
+        µBlock.goodblock.markIfGoodblockIsAwake(false);
+        µBlock.goodblock.setGoodblockWakeTimeAlarm(dateToWakeUp);
 
-                // Make sure the icon is invisible.
-                µBlock.goodblock.updateGoodblockVisibility(false);
-            }
-            // It is time to wake Goodblock.
-            else {
-                µBlock.goodblock.markIfGoodblockIsAwake(true);
-                µBlock.goodblock.setGoodblockWakeTimeAlarm(now);
-            }
+        // Make sure the icon is invisible.
+        µBlock.goodblock.updateGoodblockVisibility(false);
+    }
+    // It is time to wake Goodblock.
+    else {
+        µBlock.goodblock.markIfGoodblockIsAwake(true);
+        µBlock.goodblock.setGoodblockWakeTimeAlarm(now);
+    }
+}
+
+µBlock.goodblock.syncUserDataFromRemote = function() {
+
+    µBlock.goodblock.API.getUserData().then(
+        function(userProfile) {
+
+            // TODO: remove after testing.
+            userProfile.support_content_test = true;
+            userProfile.support_content_test_channel = 1;
+
+            // Initialize test groups for this user.
+            µBlock.goodblock.addUserToTestGroups(userProfile);
+
+            // See if we should wake up Tad.
+            µBlock.goodblock.checkIfShouldWakeUpGoodblock(userProfile);
         },
         function(error) {
             // If the user isn't logged in, default to showing Tad.
@@ -390,7 +425,7 @@ function getGladlyAdUrlsFromConfig() {
 /******************************************************************************/
 
 µBlock.goodblock.postLogin = function() {
-    µBlock.goodblock.checkIfShouldWakeUpGoodblock();
+    µBlock.goodblock.syncUserDataFromRemote();
 };
 
 /******************************************************************************/
@@ -487,14 +522,14 @@ var TOKEN_LOCAL_STORAGE_KEY = 'goodblockToken';
 
 // Check if we should hide Tad
 // (aka, it is currently snoozing or sleeping)
-µBlock.goodblock.checkIfShouldWakeUpGoodblock();
+µBlock.goodblock.syncUserDataFromRemote();
 
 // Check every once in a while to get the latest time to wake.
 // The time may have changed via interaction on another device, or
 // it may have changed server-side.
-var wakeUpPoller = setInterval(function() {
+var poller = setInterval(function() {
     // console.log('Polling server.');
-    µBlock.goodblock.checkIfShouldWakeUpGoodblock();
+    µBlock.goodblock.syncUserDataFromRemote();
 }, µBlock.goodblock.config.timeMsToPollServer);
 
 /******************************************************************************/
