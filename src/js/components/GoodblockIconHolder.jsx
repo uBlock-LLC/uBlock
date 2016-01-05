@@ -22,9 +22,28 @@ var GoodblockIconHolder = React.createClass({
 	},
 	// Logic on when to show Goodblock for content support test.
 	showGoodblockForContentSupport: function() {
+
+		var self = this;
 		setTimeout(function() {
-			GoodblockDataActions.changeVisibility(true);
+			// To refresh the domain blacklist.
+			GoodblockDataActions.fetchGoodblockTestGroupData();
+
+			setTimeout(function() {
+				// Check the blacklist one last time before showing.
+				var currentPageBlacklisted = self.isPageBlacklisted();
+				if (currentPageBlacklisted) {
+					return;
+				}
+				// Show the Goodblock icon.
+				GoodblockDataActions.changeVisibility(true);
+			}, 1000);
 		}, 2000);
+	},
+	isPageBlacklisted: function() {
+		var goodblockData = this.props.goodblockData;
+		var domainBlacklist = goodblockData.testData.contentSupport.domainBlacklist;
+		var hostname = window.location.hostname;
+		return (domainBlacklist.indexOf(hostname) > -1);
 	},
 	handleTestCases: function() {
 		var goodblockData = this.props.goodblockData;
@@ -36,11 +55,11 @@ var GoodblockIconHolder = React.createClass({
 			return;
 		}
 
-		var domainBlacklist = goodblockData.testData.contentSupport.domainBlacklist;
-		var hostname = window.location.hostname;
-		var currentPageBlacklisted = (domainBlacklist.indexOf(hostname) > -1);
+		var currentPageBlacklisted = this.isPageBlacklisted();
 		if(!currentPageBlacklisted) {
 			this.showGoodblockForContentSupport();
+		} else {
+			GoodblockDataActions.changeVisibility(false);
 		}
 	},
 	componentDidMount: function() {
