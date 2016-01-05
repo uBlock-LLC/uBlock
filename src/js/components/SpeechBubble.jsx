@@ -7,6 +7,11 @@ var SpeechBubble = React.createClass({
 	onClick: function(event) {
 		event.stopPropagation();
 	},
+	getDefaultProps: function() {
+		return {
+			type: 'text',
+		}
+	},
 	render: function() {
 		var goodblockData = this.props.goodblockData;
 		var text = this.props.text;
@@ -25,12 +30,57 @@ var SpeechBubble = React.createClass({
 			boxSizing: 'content-box !important',
 			cursor: 'default !important',
 		};
+
+		var twoButtonStyle = {
+			height: '60px !important',
+			width: '120px !important',
+			right: '-90px !important',
+			padding: '2px !important'
+		};
+
+		var buttonContainerStyle = {
+			marginTop: '14px !important',
+		};
+		var buttonStyle = {
+			cursor: 'pointer !important',
+			paddingTop: '4px !important',
+			paddingBottom: '4px !important',
+			paddingLeft: '8px !important',
+			paddingRight: '8px !important',
+		    borderRadius: '2px !important',
+		    marginLeft: '2px !important',
+		    marginRight: '2px !important',
+		};
+		var noButtonStyle = Object.assign({}, buttonStyle, {
+			background: '#a94442 !important',
+		});
+		var yesButtonStyle = Object.assign({}, buttonStyle, {
+			background: '#10992A !important',
+		});
+
+		var finalStyle;
+		var buttons;
+		switch (this.props.type) {
+			case 'two-button':
+				finalStyle = Object.assign({}, style, twoButtonStyle);
+				buttons = (
+					<div style={buttonContainerStyle}>
+						<span style={noButtonStyle}>No</span>
+						<span style={yesButtonStyle}>Yes</span>
+					</div>
+				);
+				break;
+			default:
+				finalStyle = Object.assign({}, style);
+		}
+
 		return (
-			<div style={style}
+			<div style={finalStyle}
 				className='speech-bubble'
 				onClick={this.onClick}
 				data-goodblock-elem='speech-bubble'>
 				{text}
+				{buttons}
 			</div>
 		);
 	}

@@ -36,7 +36,6 @@ var GoodblockIconHolder = React.createClass({
 			return;
 		}
 
-		var contentSupportTestChannel = goodblockData.testData.contentSupport.testGroup;
 		var domainBlacklist = goodblockData.testData.contentSupport.domainBlacklist;
 		var hostname = window.location.hostname;
 		var currentPageBlacklisted = (domainBlacklist.indexOf(hostname) > -1);
@@ -82,6 +81,8 @@ var GoodblockIconHolder = React.createClass({
 	render: function() {
 		var goodblockData = this.props.goodblockData;
 		var isVisible = goodblockData.uiState.isVisible;
+		var userIsContentSupportTester = goodblockData.testData.contentSupport.isTestUser;
+		var contentSupportTestChannel = goodblockData.testData.contentSupport.testGroup;
 		var textColor = '#000';
 		var backgroundColor = 'rgba(0, 0, 0, 0.7)';
 
@@ -98,7 +99,9 @@ var GoodblockIconHolder = React.createClass({
 			goodblockData.uiState.isHovering &&
 			!goodblockData.uiState.isClicked &&
 			!goodblockData.uiState.goodnight.goingToBed &&
-			!goodblockData.uiState.snooze.inProcessOfSnoozing
+			!goodblockData.uiState.snooze.inProcessOfSnoozing &&
+			// don't show the snooze button for content support testers
+			!userIsContentSupportTester
 		) {
 			backgroundColor = 'rgba(0, 0, 0, 0.9)';
 			snoozeButton = (
@@ -113,6 +116,28 @@ var GoodblockIconHolder = React.createClass({
 				<SpeechBubble
 					key='goodnight-speech-bubble'
 					goodblockData={goodblockData}
+					text={text} />
+			);
+		}
+
+		// Show speech bubble for supporting content test.
+		if (userIsContentSupportTester) {
+			var text;
+			switch (contentSupportTestChannel) {
+				case 1:
+					text = 'Like this site? View an ad to support it!'
+					break;
+				case 2:
+					text = 'Like this site? Give it 25 Hearts!'
+					break;
+				default:
+					text = 'Like this site? View an ad to support it!'
+			}
+			speechBubble = (
+				<SpeechBubble
+					key='content-test-speech-bubble'
+					goodblockData={goodblockData}
+					type='two-button'
 					text={text} />
 			);
 		}
