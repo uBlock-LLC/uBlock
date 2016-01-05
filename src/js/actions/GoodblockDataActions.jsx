@@ -18,6 +18,7 @@ goodblockMessager.listener = function(request) {
 	switch (request.what) {
 		// Listen for Goodblock data.
 		case 'goodblockVisibility':
+			// console.log('Changing visibility from extension: ', request.data.isVisible);
 			GoodblockDataActions.changeVisibility(request.data.isVisible);
 			break;
 		case 'goToBed':

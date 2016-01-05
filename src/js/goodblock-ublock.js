@@ -393,6 +393,7 @@ function getGladlyAdUrlsFromConfig() {
     // content support test.
     if (µBlock.goodblock.tests.contentSupport.isTestUser) {
         µBlock.goodblock.markIfGoodblockIsAwake(false);
+        return;
     }
 
     // Get the UTC time to wake up in milliseconds.
@@ -556,7 +557,13 @@ var TOKEN_LOCAL_STORAGE_KEY = 'goodblockToken';
 
     // TODO: remove when API is available.
     return new Promise(function(resolve, reject) {
-        resolve(['google.com', 'netflix.com']);
+        resolve([
+            'docs.google.com',
+            'drive.google.com',
+            'google.com',
+            'mail.google.com',
+            'www.netflix.com'
+        ]);
     });
 }
 

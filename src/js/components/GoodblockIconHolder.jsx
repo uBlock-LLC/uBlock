@@ -20,6 +20,33 @@ var GoodblockIconHolder = React.createClass({
 			mountIcon: false,
 		}
 	},
+	// Logic on when to show Goodblock for content support test.
+	showGoodblockForContentSupport: function() {
+		setTimeout(function() {
+			GoodblockDataActions.changeVisibility(true);
+		}, 2000);
+	},
+	handleTestCases: function() {
+		var goodblockData = this.props.goodblockData;
+
+		// If the user is in the content support test group, let's
+		// control when Goodblock will appear. If not, return.
+		var userIsContentSupportTester = goodblockData.testData.contentSupport.isTestUser;
+		if (!userIsContentSupportTester) {
+			return;
+		}
+
+		var contentSupportTestChannel = goodblockData.testData.contentSupport.testGroup;
+		var domainBlacklist = goodblockData.testData.contentSupport.domainBlacklist;
+		var hostname = window.location.hostname;
+		var currentPageBlacklisted = (domainBlacklist.indexOf(hostname) > -1);
+		if(!currentPageBlacklisted) {
+			this.showGoodblockForContentSupport();
+		}
+	},
+	componentDidMount: function() {
+		this.handleTestCases();
+	},
 	setIconToMount: function() {
 		// Delay the mounting so we can give the web page time to load
 		// before the Goodblock icon slides in.

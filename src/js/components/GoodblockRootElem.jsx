@@ -55,8 +55,8 @@ var GoodblockRootElem = React.createClass({
 		};
 
 		// Test info.
-		console.log('User is in content support test: ', goodblockData.testData.contentSupport.isTestUser);
-		console.log('User is in content support test channel: ', goodblockData.testData.contentSupport.testGroup);
+		// console.log('User is in content support test: ', goodblockData.testData.contentSupport.isTestUser);
+		// console.log('User is in content support test channel: ', goodblockData.testData.contentSupport.testGroup);
 
 		return (
 			<div
