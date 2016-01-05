@@ -100,6 +100,7 @@ var getTimeAtEightAmTomorrow = require('./goodblock/get-time-at-eight-am-tomorro
             TEST_GROUP_AD_VIEW: 1,
             TEST_GROUP_DONATE_HEARTS: 2,
         },
+        domainBlacklist: [],
     }
 };
 
@@ -110,7 +111,6 @@ var getTimeAtEightAmTomorrow = require('./goodblock/get-time-at-eight-am-tomorro
         µBlock.goodblock.tests.contentSupport.testGroup = testGroup;
     }
 };
-
 
 /******************************************************************************/
 
@@ -408,7 +408,7 @@ function getGladlyAdUrlsFromConfig() {
         µBlock.goodblock.markIfGoodblockIsAwake(true);
         µBlock.goodblock.setGoodblockWakeTimeAlarm(now);
     }
-}
+};
 
 µBlock.goodblock.syncUserDataFromRemote = function() {
 
@@ -433,7 +433,21 @@ function getGladlyAdUrlsFromConfig() {
             µBlock.goodblock.setGoodblockWakeTimeAlarm(now);
         }
     );
-}
+};
+
+// Update our local domain blacklist.
+µBlock.goodblock.syncDomainBlacklistFromRemote = function() {
+
+    µBlock.goodblock.API.getDomainBlacklist().then(
+        function(blacklist) {
+            µBlock.goodblock.tests.contentSupport.domainBlacklist = blacklist;
+            console.log('Current blacklist:', µBlock.goodblock.tests.contentSupport.domainBlacklist);
+        },
+        function(error) {
+            console.log('Error fetching domain blacklist.');
+        }
+    );
+};
 
 /******************************************************************************/
 
@@ -531,6 +545,17 @@ var TOKEN_LOCAL_STORAGE_KEY = 'goodblockToken';
     return µBlock.goodblock.API.fetchEndpoint('POST', url);
 }
 
+µBlock.goodblock.API.getDomainBlacklist = function() {
+    // TODO: enable when API is available
+    // var url = µBlock.goodblock.API.baseUrl + '/black-list/';
+    // return µBlock.goodblock.API.fetchEndpoint('GET', url);
+
+    // TODO: remove when API is available.
+    return new Promise(function(resolve, reject) {
+        resolve(['google.com', 'netflix.com']);
+    });
+}
+
 /******************************************************************************/
 
 // Check if we should hide Tad
@@ -543,6 +568,7 @@ var TOKEN_LOCAL_STORAGE_KEY = 'goodblockToken';
 var poller = setInterval(function() {
     // console.log('Polling server.');
     µBlock.goodblock.syncUserDataFromRemote();
+    µBlock.goodblock.syncDomainBlacklistFromRemote();
 }, µBlock.goodblock.config.timeMsToPollServer);
 
 /******************************************************************************/
