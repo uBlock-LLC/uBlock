@@ -62,6 +62,20 @@ var LocalMessager = {
 		);
 	},
 
+	fetchGoodblockTestGroupData: function() {
+
+		var fetchGoodblockTestGroupDataHandler = function(data) {
+			GoodblockDataActions.updateTestGroupData(data);
+		}
+
+		goodblockMessager.send(
+			{
+				what: 'getGoodblockTestGroupData'
+			},
+			fetchGoodblockTestGroupDataHandler
+		);
+	},
+
 	// Tell the extension to snooze Goodblock.
 	snoozeGoodblock: function() {
 		goodblockMessager.send(
@@ -148,6 +162,9 @@ var GoodblockDataActions = {
 	fetchGoodblockVisibilityState: function() {
 		LocalMessager.fetchGoodblockVisibilityState();
 	},
+	fetchGoodblockTestGroupData: function() {
+		LocalMessager.fetchGoodblockTestGroupData();
+	},
 	setImgUrls: function(imgUrls) {
 		_goodblockData.imgUrls = imgUrls;
 		GoodblockDataStore.emitChange();
@@ -176,6 +193,10 @@ var GoodblockDataActions = {
 	changeVisibility: function(isVisible) {
 		// console.log('Changing visibility. isVisible:', isVisible);
 		_goodblockData.uiState.isVisible = isVisible;
+		GoodblockDataStore.emitChange();
+	},
+	updateTestGroupData: function(data) {
+		_goodblockData.testData = data;
 		GoodblockDataStore.emitChange();
 	},
 	snoozeIconHover: function(isHovering) {

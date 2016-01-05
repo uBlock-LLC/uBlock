@@ -30,6 +30,7 @@ var _goodblockData = {
 	resetUiState: function() {
 		_goodblockData.uiState = clone(defaultUiState);
 	},
+	testData: {},
 };
 
 module.exports = _goodblockData;

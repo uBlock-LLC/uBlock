@@ -112,6 +112,10 @@ var getTimeAtEightAmTomorrow = require('./goodblock/get-time-at-eight-am-tomorro
     }
 };
 
+µBlock.goodblock.getGoodblockTestGroupData = function() {
+    return µBlock.goodblock.tests;
+}
+
 /******************************************************************************/
 
 function getGladlyHostnamesFromConfig() {

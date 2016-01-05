@@ -36,7 +36,8 @@ var GoodblockRootElem = React.createClass({
 			goodblockData.imgUrls &&
 			isNonemptyObject(goodblockData.imgUrls) &&
 			goodblockData.uiState &&
-			isNonemptyObject(goodblockData.uiState)
+			isNonemptyObject(goodblockData.uiState) &&
+			isNonemptyObject(goodblockData.testData)
 		);
 	},
 	render: function() {
@@ -52,6 +53,10 @@ var GoodblockRootElem = React.createClass({
 			fontSize: '12px !important',
 			wordSpacing: 'normal !important',
 		};
+
+		// Test info.
+		console.log('User is in content support test: ', goodblockData.testData.contentSupport.isTestUser);
+		console.log('User is in content support test channel: ', goodblockData.testData.contentSupport.testGroup);
 
 		return (
 			<div

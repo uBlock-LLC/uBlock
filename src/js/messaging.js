@@ -579,6 +579,10 @@ var onMessage = function(request, sender, callback) {
             response = µb.goodblock.isGoodblockAwake();
             break;
 
+        case 'getGoodblockTestGroupData':
+            response = µb.goodblock.getGoodblockTestGroupData();
+            break;
+
         case 'snoozeGoodblock':
             µb.goodblock.snoozeGoodblock();
             break;
