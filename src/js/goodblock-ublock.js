@@ -280,6 +280,12 @@ function getGladlyAdUrlsFromConfig() {
 // Takes the date Goodblock should wake.
 µBlock.goodblock.setGoodblockWakeTimeAlarm = function(timeToWakeUp) {
 
+    // Don't wake up Goodblock on a timer if the user is in the
+    // content support test.
+    if (µBlock.goodblock.tests.contentSupport.isTestUser) {
+        return;
+    }
+
     var today = new Date();
     var timeUntilWakeMs = timeToWakeUp.getTime() - today.getTime();
 
@@ -378,6 +384,13 @@ function getGladlyAdUrlsFromConfig() {
 /******************************************************************************/
 
 µBlock.goodblock.checkIfShouldWakeUpGoodblock = function(userProfile) {
+
+    // Don't wake up Goodblock on a timer if the user is in the
+    // content support test.
+    if (µBlock.goodblock.tests.contentSupport.isTestUser) {
+        µBlock.goodblock.markIfGoodblockIsAwake(false);
+    }
+
     // Get the UTC time to wake up in milliseconds.
     var dateToWakeUp = new Date(userProfile['next_notify_time']);
     var now = new Date();
