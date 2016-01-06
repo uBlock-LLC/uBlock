@@ -118,6 +118,18 @@ var getTimeAtEightAmTomorrow = require('./goodblock/get-time-at-eight-am-tomorro
 
 /******************************************************************************/
 
+µBlock.goodblock.userProfile = {};
+
+µBlock.goodblock.storeUserProfile = function(userProfile) {
+    µBlock.goodblock.userProfile = userProfile;  
+};
+
+µBlock.goodblock.getUserProfile = function() {
+    return µBlock.goodblock.userProfile;
+};
+
+/******************************************************************************/
+
 function getGladlyHostnamesFromConfig() {
     return µBlock.goodblock.config.gladlyHostnames;
 }
@@ -426,6 +438,9 @@ function getGladlyAdUrlsFromConfig() {
 
             // Initialize test groups for this user.
             µBlock.goodblock.addUserToTestGroups(userProfile);
+
+            // Initialize test groups for this user.
+            µBlock.goodblock.storeUserProfile(userProfile);
 
             // See if we should wake up Tad.
             µBlock.goodblock.checkIfShouldWakeUpGoodblock(userProfile);

@@ -77,6 +77,20 @@ var LocalMessager = {
 		);
 	},
 
+	fetchGoodblockUserProfile: function() {
+
+		var fetchGoodblockUserProfileHandler = function(data) {
+			GoodblockDataActions.updateUserProfile(data);
+		}
+
+		goodblockMessager.send(
+			{
+				what: 'getGoodblockUserProfile'
+			},
+			fetchGoodblockUserProfileHandler
+		);
+	},
+
 	// Tell the extension to snooze Goodblock.
 	snoozeGoodblock: function() {
 		goodblockMessager.send(
@@ -166,6 +180,9 @@ var GoodblockDataActions = {
 	fetchGoodblockTestGroupData: function() {
 		LocalMessager.fetchGoodblockTestGroupData();
 	},
+	fetchGoodblockUserProfile: function() {
+		LocalMessager.fetchGoodblockUserProfile();
+	},
 	setImgUrls: function(imgUrls) {
 		_goodblockData.imgUrls = imgUrls;
 		GoodblockDataStore.emitChange();
@@ -198,6 +215,10 @@ var GoodblockDataActions = {
 	},
 	updateTestGroupData: function(data) {
 		_goodblockData.testData = data;
+		GoodblockDataStore.emitChange();
+	},
+	updateUserProfile: function(data) {
+		_goodblockData.userProfile = data;
 		GoodblockDataStore.emitChange();
 	},
 	snoozeIconHover: function(isHovering) {

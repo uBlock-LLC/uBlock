@@ -31,6 +31,7 @@ var _goodblockData = {
 		_goodblockData.uiState = clone(defaultUiState);
 	},
 	testData: {},
+	userProfile: {},
 };
 
 module.exports = _goodblockData;

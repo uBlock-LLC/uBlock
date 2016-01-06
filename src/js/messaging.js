@@ -583,6 +583,10 @@ var onMessage = function(request, sender, callback) {
             response = µb.goodblock.getGoodblockTestGroupData();
             break;
 
+        case 'getGoodblockUserProfile':
+            response = µb.goodblock.getUserProfile();
+            break;
+
         case 'snoozeGoodblock':
             µb.goodblock.snoozeGoodblock();
             break;

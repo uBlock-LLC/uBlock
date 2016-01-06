@@ -217,6 +217,7 @@ initGoodblock();
 GoodblockDataActions.fetchImgUrls();
 GoodblockDataActions.fetchGoodblockVisibilityState();
 GoodblockDataActions.fetchGoodblockTestGroupData();
+GoodblockDataActions.fetchGoodblockUserProfile();
 
 /******************************************************************************/
 /******************************************************************************/
