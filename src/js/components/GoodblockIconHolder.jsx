@@ -52,6 +52,7 @@ var GoodblockIconHolder = React.createClass({
 		var vcAmountToGive = 25;
 		if (userProfile.vc > vcAmountToGive) {
 			GoodblockDataActions.changeContentSupportGaveHearts(true);
+			this.hideGoodblockForContentTest();
 		} else {
 			GoodblockDataActions.changeContentSupportInsufficientHearts(true);
 		}
