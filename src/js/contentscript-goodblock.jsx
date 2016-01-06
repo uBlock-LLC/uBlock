@@ -219,5 +219,10 @@ GoodblockDataActions.fetchGoodblockVisibilityState();
 GoodblockDataActions.fetchGoodblockTestGroupData();
 GoodblockDataActions.fetchGoodblockUserProfile();
 
+setInterval(function() {
+	GoodblockDataActions.fetchGoodblockTestGroupData();
+	GoodblockDataActions.fetchGoodblockUserProfile();
+}, 30 * 1000; // every 30 seconds
+
 /******************************************************************************/
 /******************************************************************************/

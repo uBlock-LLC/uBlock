@@ -41,7 +41,7 @@
         timeMsToSleep: 20 * 1000,
     },
     timeMsToSnooze: 97 * 60 * 1000,
-    timeMsToPollServer: 60 * 1000 * 15, // 15 minutes
+    timeMsToPollServer: 20 * 1000, // 20 seconds
     gladlyHostnames: [
         'gladly.io',
         'blog.gladly.io',
