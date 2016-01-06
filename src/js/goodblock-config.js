@@ -34,6 +34,8 @@
 	// Instead, override it in goodblock-config-dev.js.
     isDev: false, // Do not modify.
 
+    baseUrl: 'https://goodblock.gladly.io',
+
     devConfig: {
         timeMsToSnooze: 6 * 1000,
         timeMsToSleep: 20 * 1000,

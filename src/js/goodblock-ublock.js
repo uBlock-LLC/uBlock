@@ -471,6 +471,21 @@ function getGladlyAdUrlsFromConfig() {
 
 /******************************************************************************/
 
+// Make sure this extension version is logged to the DB.
+µBlock.goodblock.syncExtensionVersion = function() {
+    µBlock.goodblock.API.getLoggedExtensionVersion().then(function(data) {
+
+        // If the current version doesn't match the remote version,
+        // update the remote version.
+        var version = chrome.app.getDetails().version;
+        if (version !== data.version) {
+            µBlock.goodblock.API.logExtensionVersion(version);
+        }
+    });
+}
+
+/******************************************************************************/
+
 µBlock.goodblock.postLogin = function() {
     µBlock.goodblock.syncUserDataFromRemote();
 };
@@ -499,7 +514,7 @@ var TOKEN_LOCAL_STORAGE_KEY = 'goodblockToken';
 
 // API access
 µBlock.goodblock.API = {};
-µBlock.goodblock.API.baseUrl = 'https://goodblock.gladly.io/api';
+µBlock.goodblock.API.baseUrl = µBlock.goodblock.config.baseUrl + '/api';
 µBlock.goodblock.API.fetchEndpoint = function(method, endpoint, data) {
   var dataToSend = data;
   return new Promise(function(resolve, reject) {
@@ -565,6 +580,19 @@ var TOKEN_LOCAL_STORAGE_KEY = 'goodblockToken';
     return µBlock.goodblock.API.fetchEndpoint('POST', url);
 }
 
+µBlock.goodblock.API.getLoggedExtensionVersion = function() {
+    var url = µBlock.goodblock.API.baseUrl + '/log-extversion/get-user-extension-version/';
+    return µBlock.goodblock.API.fetchEndpoint('GET', url);
+}
+
+µBlock.goodblock.API.logExtensionVersion = function(version) {
+    var data = {
+        version: version,
+    };
+    var url = µBlock.goodblock.API.baseUrl + '/log-extversion/';
+    return µBlock.goodblock.API.fetchEndpoint('POST', url, data);
+}
+
 µBlock.goodblock.API.getDomainBlacklist = function() {
     // TODO: enable when API is available
     // var url = µBlock.goodblock.API.baseUrl + '/black-list/';
@@ -587,6 +615,8 @@ var TOKEN_LOCAL_STORAGE_KEY = 'goodblockToken';
 // Check if we should hide Tad
 // (aka, it is currently snoozing or sleeping)
 µBlock.goodblock.syncUserDataFromRemote();
+
+µBlock.goodblock.syncExtensionVersion();
 
 // Check every once in a while to get the latest time to wake.
 // The time may have changed via interaction on another device, or
