@@ -222,7 +222,7 @@ GoodblockDataActions.fetchGoodblockUserProfile();
 setInterval(function() {
 	GoodblockDataActions.fetchGoodblockTestGroupData();
 	GoodblockDataActions.fetchGoodblockUserProfile();
-}, 30 * 1000; // every 30 seconds
+}, 30 * 1000); // every 30 seconds
 
 /******************************************************************************/
 /******************************************************************************/
