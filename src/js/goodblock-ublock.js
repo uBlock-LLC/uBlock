@@ -606,7 +606,9 @@ var TOKEN_LOCAL_STORAGE_KEY = 'goodblockToken';
 
 µBlock.goodblock.API.logContentSupportRequest = function() {
     var url = µBlock.goodblock.API.baseUrl + '/content-support/';
-    return µBlock.goodblock.API.fetchEndpoint('POST', url);
+    return µBlock.goodblock.API.fetchEndpoint('POST', url, {
+        responded: true,
+    });
 };
 
 /******************************************************************************/
