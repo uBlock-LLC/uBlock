@@ -101,6 +101,7 @@ var getTimeAtEightAmTomorrow = require('./goodblock/get-time-at-eight-am-tomorro
             TEST_GROUP_DONATE_HEARTS: 2,
         },
         domainBlacklist: [],
+        contentSupportHistory: {},
     }
 };
 
@@ -463,13 +464,28 @@ function getGladlyAdUrlsFromConfig() {
     µBlock.goodblock.API.getDomainBlacklist().then(
         function(blacklist) {
             µBlock.goodblock.tests.contentSupport.domainBlacklist = blacklist;
-            console.log('Current blacklist:', µBlock.goodblock.tests.contentSupport.domainBlacklist);
+            // console.log('Current blacklist:', µBlock.goodblock.tests.contentSupport.domainBlacklist);
         },
         function(error) {
             console.log('Error fetching domain blacklist.');
         }
     );
 };
+
+// Update our local content support history.
+µBlock.goodblock.syncContentSupportHistoryFromRemote = function() {
+
+    µBlock.goodblock.API.getContentSupportHistory().then(
+        function(data) {
+            µBlock.goodblock.tests.contentSupport.contentSupportHistory = data.results;
+            // console.log('Content support history:', µBlock.goodblock.tests.contentSupport.contentSupportHistory);
+        },
+        function(error) {
+            console.log('Error fetching domain blacklist.');
+        }
+    );
+};
+
 
 /******************************************************************************/
 
@@ -600,6 +616,11 @@ var TOKEN_LOCAL_STORAGE_KEY = 'goodblockToken';
     return µBlock.goodblock.API.fetchEndpoint('GET', url);
 };
 
+µBlock.goodblock.API.getContentSupportHistory = function() {
+    var url = µBlock.goodblock.API.baseUrl + '/content-support/';
+    return µBlock.goodblock.API.fetchEndpoint('GET', url);
+};
+
 µBlock.goodblock.API.logContentSupportRequest = function() {
     var url = µBlock.goodblock.API.baseUrl + '/content-support/';
     return µBlock.goodblock.API.fetchEndpoint('POST', url);
@@ -650,6 +671,7 @@ var poller = setInterval(function() {
     // console.log('Polling server.');
     µBlock.goodblock.syncUserDataFromRemote();
     µBlock.goodblock.syncDomainBlacklistFromRemote();
+    µBlock.goodblock.syncContentSupportHistoryFromRemote();
 }, µBlock.goodblock.config.timeMsToPollServer);
 
 /******************************************************************************/

@@ -79,31 +79,72 @@ var GoodblockIconHolder = React.createClass({
 	showGoodblockForContentSupport: function() {
 
 		var self = this;
+
 		setTimeout(function() {
-			// To refresh the domain blacklist.
-			GoodblockDataActions.fetchGoodblockTestGroupData();
+			var shouldShow = self.shouldShowContentSupport();
+			if (!shouldShow) {
+				return;
+			}
 
-			setTimeout(function() {
-				// Check the blacklist one last time before showing.
-				var currentPageBlacklisted = self.isPageBlacklisted();
-				if (currentPageBlacklisted) {
-					return;
-				}
+			// Show the Goodblock icon.
+			GoodblockDataActions.changeVisibility(true);
 
-				// Show the Goodblock icon.
-				GoodblockDataActions.changeVisibility(true);
+			// Log the Goodblock icon appearance.
+			GoodblockDataActions.logContentSupportRequest();
 
-				// Log the Goodblock icon appearance.
-				GoodblockDataActions.logContentSupportRequest();
-
-			}, 1000);
-		}, 2000);
+		}, 1000);
 	},
 	isPageBlacklisted: function() {
 		var goodblockData = this.props.goodblockData;
 		var domainBlacklist = goodblockData.testData.contentSupport.domainBlacklist;
 		var hostname = window.location.hostname;
 		return (domainBlacklist.indexOf(hostname) > -1);
+	},
+	hostnameFromURI: function(uri) {
+		var getLocation = function(href) {
+		    var l = document.createElement("a");
+		    l.href = href;
+		    return l;
+		};
+		var l = getLocation(uri);
+		return l.hostname;
+	},
+	shouldShowContentSupport: function() {
+		if (this.isPageBlacklisted()) {
+			return false;
+		}
+
+		// See if the user recently responded to a support content
+		// request on this domain.
+		var goodblockData = this.props.goodblockData;
+		var contentSupportHistory = goodblockData.testData.contentSupport.contentSupportHistory;
+
+		var currentHostname = window.location.hostname;
+
+		var SECONDS_WAIT_AFTER_SITE_SUPPORTED = 60 * 60 * 12; // 12 hours
+		var shouldShow = true;
+		for (var i = 0; i < contentSupportHistory.length; i++) {
+			var item = contentSupportHistory[i];
+
+			var itemHostname;
+			if (!item.domain || item.domain === '') {
+				continue;
+			} else {
+				itemHostname = this.hostnameFromURI(item.domain);
+			}
+
+			if (itemHostname === currentHostname) {
+				// See if the content support response was recent.
+				var timeResponded = new Date(item.datetime);
+				var now = new Date();
+				var dateDiffInSecs = (now - timeResponded) / 1000;
+				if (dateDiffInSecs < SECONDS_WAIT_AFTER_SITE_SUPPORTED) {
+					shouldShow = false;
+					break;
+				}
+			}
+		}
+		return shouldShow;
 	},
 	handleTestCases: function() {
 		var goodblockData = this.props.goodblockData;
