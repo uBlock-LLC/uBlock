@@ -438,10 +438,6 @@ function getGladlyAdUrlsFromConfig() {
     µBlock.goodblock.API.getUserData().then(
         function(userProfile) {
 
-            // TODO: remove after testing.
-            userProfile.support_content_test = true;
-            userProfile.support_content_test_channel = 1;
-
             // Initialize test groups for this user.
             µBlock.goodblock.addUserToTestGroups(userProfile);
 
