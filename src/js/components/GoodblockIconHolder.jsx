@@ -196,6 +196,12 @@ var GoodblockIconHolder = React.createClass({
 						text = 'Great! You just gave 25 Hearts. Thanks!';
 						speechBubbleType = 'text';
 						speechBubbleSize = 'small-small-medium';
+					} else if (goodblockData.uiState.tests.contentSupport.didNotSupport) {
+						// User chose not to support the site
+						text = 'Ok, no worries. See you later!';
+						speechBubbleType = 'text';
+						speechBubbleSize = 'small-small-medium';
+
 					} else if (goodblockData.uiState.tests.contentSupport.insufficientHearts) {
 						// User does not have enough Hearts to give
 						text = 'Aw, you don’t have enough Hearts. Want to see an ad now to get more?';
@@ -203,12 +209,6 @@ var GoodblockIconHolder = React.createClass({
 						speechBubbleSize = 'medium';
 						buttonOneOnClick = this.doNotSupportClick;
 						buttonTwoOnClick = this.openAd;
-
-					} else if (goodblockData.uiState.tests.contentSupport.didNotSupport) {
-						// User chose not to support the site
-						text = 'Ok, no worries. See you later!';
-						speechBubbleType = 'text';
-						speechBubbleSize = 'small-small-medium';
 
 					} else {
 						// Introductory speech bubble
