@@ -575,7 +575,7 @@ var TOKEN_LOCAL_STORAGE_KEY = 'goodblockToken';
         resolve([
             'docs.google.com',
             'drive.google.com',
-            'google.com',
+            'www.google.com',
             'mail.google.com',
             'www.netflix.com'
         ]);
