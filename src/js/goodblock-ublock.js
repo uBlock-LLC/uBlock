@@ -594,20 +594,8 @@ var TOKEN_LOCAL_STORAGE_KEY = 'goodblockToken';
 }
 
 µBlock.goodblock.API.getDomainBlacklist = function() {
-    // TODO: enable when API is available
-    // var url = µBlock.goodblock.API.baseUrl + '/black-list/';
-    // return µBlock.goodblock.API.fetchEndpoint('GET', url);
-
-    // TODO: remove when API is available.
-    return new Promise(function(resolve, reject) {
-        resolve([
-            'docs.google.com',
-            'drive.google.com',
-            'www.google.com',
-            'mail.google.com',
-            'www.netflix.com'
-        ]);
-    });
+    var url = µBlock.goodblock.API.baseUrl + '/black-list/';
+    return µBlock.goodblock.API.fetchEndpoint('GET', url);
 }
 
 /******************************************************************************/
