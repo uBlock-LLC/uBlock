@@ -20,6 +20,22 @@ var GoodblockIconHolder = React.createClass({
 			mountIcon: false,
 		}
 	},
+	// When users click "no", choosing to not support a site.
+	doNotSupportClick: function() {
+		// TODO: log no support
+		console.log('Not supporting.');
+	},
+	openAd: function() {
+		// TODO: log support and ad view
+		console.log('Opening ad.');
+		var adUrl = 'https://goodblock.gladly.io/app/ad/';
+		window.open(adUrl, '_blank');
+	},
+	giveHeartsToSite: function() {
+		// TODO: log support
+		console.log('Planning to give Hearts.');
+
+	},
 	// Logic on when to show Goodblock for content support test.
 	showGoodblockForContentSupport: function() {
 
@@ -142,12 +158,19 @@ var GoodblockIconHolder = React.createClass({
 		// Show speech bubble for supporting content test.
 		if (userIsContentSupportTester) {
 			var text;
+			var buttonOneOnClick;
+			var buttonTwoOnClick;
+			// var buttonTwoUrl;
 			switch (contentSupportTestChannel) {
 				case 1:
 					text = 'Like this site? View an ad to support it!'
+					buttonOneOnClick = this.doNotSupportClick;
+					buttonTwoOnClick = this.openAd;
 					break;
 				case 2:
 					text = 'Like this site? Give it 25 Hearts!'
+					buttonOneOnClick = this.doNotSupportClick;
+					buttonTwoOnClick = this.giveHeartsToSite;
 					break;
 				default:
 					text = 'Like this site? View an ad to support it!'
@@ -157,6 +180,8 @@ var GoodblockIconHolder = React.createClass({
 					key='content-test-speech-bubble'
 					goodblockData={goodblockData}
 					type='two-button'
+					buttonOneOnClick={buttonOneOnClick}
+					buttonTwoOnClick={buttonTwoOnClick}
 					text={text} />
 			);
 		}

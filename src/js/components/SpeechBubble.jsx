@@ -10,6 +10,8 @@ var SpeechBubble = React.createClass({
 	getDefaultProps: function() {
 		return {
 			type: 'text',
+			buttonOneOnClick: function(){},
+			buttonTwoOnClick: function(){},
 		}
 	},
 	render: function() {
@@ -65,8 +67,16 @@ var SpeechBubble = React.createClass({
 				finalStyle = Object.assign({}, style, twoButtonStyle);
 				buttons = (
 					<div style={buttonContainerStyle}>
-						<span style={noButtonStyle}>No</span>
-						<span style={yesButtonStyle}>Yes</span>
+						<span
+							style={noButtonStyle}
+							onClick={this.props.buttonOneOnClick}>
+								No
+						</span>
+						<span
+							style={yesButtonStyle}
+							onClick={this.props.buttonTwoOnClick}>
+								Yes
+						</span>
 					</div>
 				);
 				break;
