@@ -609,7 +609,7 @@ var onMessage = function(request, sender, callback) {
             break;
 
         case 'logContentSupportRequest':
-            
+
             µb.goodblock.logContentSupportRequest()
                 .then(function(data) {
                     callback(data);
@@ -619,6 +619,21 @@ var onMessage = function(request, sender, callback) {
             // See: https://developer.chrome.com/extensions/runtime#event-onMessage
             return true;
 
+            break;
+
+        case 'logContentNotSupported':
+            µBlock.goodblock.API.logContentNotSupported(
+                request.pageUrl, request.objUrl);
+            break;
+
+        case 'logContentSupportedWithAd':
+            µBlock.goodblock.API.logContentSupportedWithAd(
+                request.pageUrl, request.objUrl);
+            break;
+
+        case 'logContentSupportedWithHearts':
+            µBlock.goodblock.API.logContentSupportedWithHearts(
+                request.pageUrl, request.objUrl);
             break;
 
         default:

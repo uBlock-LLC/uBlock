@@ -23,6 +23,7 @@ var defaultUiState = {
 			didNotSupport: false,
 			openedAd: false,
 			inProcessOfHiding: false,
+			logObjUrl: '',
 		}
 	}
 };

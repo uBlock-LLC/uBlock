@@ -606,8 +606,36 @@ var TOKEN_LOCAL_STORAGE_KEY = 'goodblockToken';
 
 µBlock.goodblock.API.logContentSupportRequest = function() {
     var url = µBlock.goodblock.API.baseUrl + '/content-support/';
-    return µBlock.goodblock.API.fetchEndpoint('POST', url, {
+    return µBlock.goodblock.API.fetchEndpoint('POST', url);
+};
+
+µBlock.goodblock.API.logContentNotSupported = function(pageUrl, objUrl) {
+    var url = objUrl;
+    return µBlock.goodblock.API.fetchEndpoint('PATCH', url, {
         responded: true,
+        supported: false,
+        viewed_ad: false,
+        domain: pageUrl,
+    });
+};
+
+µBlock.goodblock.API.logContentSupportedWithAd = function(pageUrl, objUrl) {
+    var url = objUrl;
+    return µBlock.goodblock.API.fetchEndpoint('PATCH', url, {
+        responded: true,
+        supported: true,
+        viewed_ad: true,
+        domain: pageUrl,
+    });
+};
+
+µBlock.goodblock.API.logContentSupportedWithHearts = function(pageUrl, objUrl) {
+    var url = objUrl;
+    return µBlock.goodblock.API.fetchEndpoint('PATCH', url, {
+        responded: true,
+        supported: true,
+        viewed_ad: false,
+        domain: pageUrl,
     });
 };
 

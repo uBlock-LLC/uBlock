@@ -25,30 +25,48 @@ var GoodblockIconHolder = React.createClass({
 	},
 	// When users click "no", choosing to not support a site.
 	doNotSupportClick: function() {
-		// TODO: log no support
-		console.log('Not supporting.');
 		GoodblockDataActions.changeContentSupportDidNotSupport(true);
+
+		// Log event
+		var pageUrl = window.location.href;
+		var objUrl = this.props.goodblockData.uiState.tests.contentSupport.logObjUrl;
+		GoodblockDataActions.logContentNotSupported(pageUrl, objUrl);
 
 		// Hide the Goodblock icon.
 		this.hideGoodblockForContentTest();
 	},
+	// When users click "no", choosing to not support a site, after trying
+	// to donate Hearts.
+	doNotSupportClickHeart: function() {
+		GoodblockDataActions.changeContentSupportDidNotSupport(true);
+
+		// Hide the Goodblock icon.
+		this.hideGoodblockForContentTest();
+
+	},
 	openAd: function() {
-		// TODO: log support and ad view
 		console.log('Opening ad.');
 		var hostname = window.location.hostname;
 		var adUrl = 'https://goodblock.gladly.io/app/ad/?type=content&site=' + hostname;
 		window.open(adUrl, '_blank');
 		GoodblockDataActions.changeContentSupportOpenedAd(true);
 
+		// Log event
+		var pageUrl = window.location.href;
+		var objUrl = this.props.goodblockData.uiState.tests.contentSupport.logObjUrl;
+		GoodblockDataActions.logContentSupportedWithAd(pageUrl, objUrl);
+
 		// Hide the Goodblock icon.
 		this.hideGoodblockForContentTest();
 	},
 	giveHeartsToSite: function() {
-		// TODO: log support
-		console.log('Planning to give Hearts.');
-		var userProfile = this.props.goodblockData.userProfile;
-		console.log('Current Heart count:', userProfile.vc);
 
+		// Log event
+		var pageUrl = window.location.href;
+		var objUrl = this.props.goodblockData.uiState.tests.contentSupport.logObjUrl;
+		GoodblockDataActions.logContentSupportedWithHearts(pageUrl, objUrl);
+
+		var userProfile = this.props.goodblockData.userProfile;
 		var vcAmountToGive = 25;
 		if (userProfile.vc >= vcAmountToGive) {
 			GoodblockDataActions.changeContentSupportGaveHearts(true);
@@ -222,7 +240,7 @@ var GoodblockIconHolder = React.createClass({
 						text = 'Aw, you don’t have enough Hearts. Want to see an ad now to get more?';
 						speechBubbleType = 'two-button';
 						speechBubbleSize = 'medium';
-						buttonOneOnClick = this.doNotSupportClick;
+						buttonOneOnClick = this.doNotSupportClickHeart;
 						buttonTwoOnClick = this.openAd;
 
 					} else {

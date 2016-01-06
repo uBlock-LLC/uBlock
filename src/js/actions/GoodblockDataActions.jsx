@@ -145,6 +145,36 @@ var LocalMessager = {
 		);
 	},
 
+	logContentNotSupported: function(pageUrl, objUrl) {
+		goodblockMessager.send(
+			{
+				what: 'logContentNotSupported',
+				pageUrl: pageUrl,
+				objUrl: objUrl,
+			}
+		);
+	},
+
+	logContentSupportedWithAd: function(pageUrl, objUrl) {
+		goodblockMessager.send(
+			{
+				what: 'logContentSupportedWithAd',
+				pageUrl: pageUrl,
+				objUrl: objUrl,
+			}
+		);
+	},
+
+	logContentSupportedWithHearts: function(pageUrl, objUrl) {
+		goodblockMessager.send(
+			{
+				what: 'logContentSupportedWithHearts',
+				pageUrl: pageUrl,
+				objUrl: objUrl,
+			}
+		);
+	},
+
 	// End content support test
 	
 }
@@ -340,6 +370,16 @@ var GoodblockDataActions = {
 	saveContentSupportRequestObjUrl: function(url) {
 		_goodblockData.uiState.tests.contentSupport.logObjUrl = url;
 		GoodblockDataStore.emitChange();
+	},
+	logContentNotSupported: function(pageUrl, objUrl) {
+		LocalMessager.logContentNotSupported(pageUrl, objUrl);
+	},
+
+	logContentSupportedWithAd: function(pageUrl, objUrl) {
+		LocalMessager.logContentSupportedWithAd(pageUrl, objUrl);
+	},
+	logContentSupportedWithHearts: function(pageUrl, objUrl) {
+		LocalMessager.logContentSupportedWithHearts(pageUrl, objUrl);
 	},
 	// End content support test.
 }
