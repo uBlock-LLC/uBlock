@@ -10,6 +10,7 @@ var SpeechBubble = React.createClass({
 	getDefaultProps: function() {
 		return {
 			type: 'text',
+			bubbleSize: 'small',
 			buttonOneOnClick: function(){},
 			buttonTwoOnClick: function(){},
 		}
@@ -17,29 +18,60 @@ var SpeechBubble = React.createClass({
 	render: function() {
 		var goodblockData = this.props.goodblockData;
 		var text = this.props.text;
-		var style = {
+		var bubbleElemKey = 'speech-bubble-' + this.props.bubbleSize;
+		var baseStyle = {
 			fontFamily: universalStyle.fontFamily,
 			fontSize: '12px !important',
 			lineHeight: '100% !important',
 			background: '#000 !important',
 			color: '#FFF !important',
-			height: '24px !important',
-			width: '70px !important',
+			height: 24,
+			width: 70,
+			right: -61,
 			position: 'absolute  !important',
 			bottom: '9px !important',
-			right: '-61px !important',
 			textAlign: 'center !important',
 			boxSizing: 'content-box !important',
 			cursor: 'default !important',
 		};
+		var sizingStyle;
+		switch (this.props.bubbleSize) {
+			case 'small':
+				sizingStyle = {
+					height: 24,
+					width: 70,
+					right: -61,
+					padding: '10px !important',
+				};
+				break;
+			case 'small-small-medium':
+				sizingStyle = {
+					height: 44,
+					width: 108,
+					right: -90,
+					padding: '6px !important',
+				};
+				break;
+			case 'small-medium':
+				sizingStyle = {
+					height: 60,
+					width: 120,
+					right: -90,
+					padding: '2px !important',
+				};
+				break;
+			case 'medium':
+				sizingStyle = {
+					height: 70,
+					width: 150,
+					right: -120,
+					padding: '2px !important',
+				};
+				break;
+		}
+		var style = Object.assign({}, baseStyle, sizingStyle);
 
-		var twoButtonStyle = {
-			height: '60px !important',
-			width: '120px !important',
-			right: '-90px !important',
-			padding: '2px !important'
-		};
-
+		// Button style.
 		var buttonContainerStyle = {
 			marginTop: '14px !important',
 		};
@@ -60,11 +92,9 @@ var SpeechBubble = React.createClass({
 			background: '#10992A !important',
 		});
 
-		var finalStyle;
 		var buttons;
 		switch (this.props.type) {
 			case 'two-button':
-				finalStyle = Object.assign({}, style, twoButtonStyle);
 				buttons = (
 					<div style={buttonContainerStyle}>
 						<span
@@ -80,16 +110,20 @@ var SpeechBubble = React.createClass({
 					</div>
 				);
 				break;
+			case 'text':
+				break;
 			default:
-				finalStyle = Object.assign({}, style);
+				break;
 		}
 
 		return (
-			<div style={finalStyle}
+			<div
+				key={bubbleElemKey}
+				style={style}
 				className='speech-bubble'
 				onClick={this.onClick}
 				data-goodblock-elem='speech-bubble'>
-				{text}
+					{text}
 				{buttons}
 			</div>
 		);

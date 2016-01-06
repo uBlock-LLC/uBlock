@@ -24,17 +24,27 @@ var GoodblockIconHolder = React.createClass({
 	doNotSupportClick: function() {
 		// TODO: log no support
 		console.log('Not supporting.');
+		GoodblockDataActions.changeContentSupportDidNotSupport(true);
 	},
 	openAd: function() {
 		// TODO: log support and ad view
 		console.log('Opening ad.');
 		var adUrl = 'https://goodblock.gladly.io/app/ad/';
 		window.open(adUrl, '_blank');
+		GoodblockDataActions.changeContentSupportOpenedAd(true);
 	},
 	giveHeartsToSite: function() {
 		// TODO: log support
 		console.log('Planning to give Hearts.');
+		var userProfile = this.props.goodblockData.userProfile;
+		console.log('Current Heart count:', userProfile.vc);
 
+		var vcAmountToGive = 25;
+		if (userProfile.vc > vcAmountToGive) {
+			GoodblockDataActions.changeContentSupportGaveHearts(true);
+		} else {
+			GoodblockDataActions.changeContentSupportInsufficientHearts(true);
+		}
 	},
 	// Logic on when to show Goodblock for content support test.
 	showGoodblockForContentSupport: function() {
@@ -158,28 +168,66 @@ var GoodblockIconHolder = React.createClass({
 		// Show speech bubble for supporting content test.
 		if (userIsContentSupportTester) {
 			var text;
+			var speechBubbleType = 'text';
+			var speechBubbleSize = 'small';
 			var buttonOneOnClick;
 			var buttonTwoOnClick;
 			// var buttonTwoUrl;
 			switch (contentSupportTestChannel) {
 				case 1:
-					text = 'Like this site? View an ad to support it!'
-					buttonOneOnClick = this.doNotSupportClick;
-					buttonTwoOnClick = this.openAd;
+					if (goodblockData.uiState.tests.contentSupport.didNotSupport) {
+						// User chose not to support the site
+						text = 'Ok, no worries. See you later!';
+						speechBubbleType = 'text';
+						speechBubbleSize = 'small-small-medium';
+					} else {
+						// Introductory speech bubble
+						text = 'Like this site? View an ad to support it!'
+						speechBubbleType = 'two-button';
+						speechBubbleSize = 'small-medium';
+						buttonOneOnClick = this.doNotSupportClick;
+						buttonTwoOnClick = this.openAd;
+					}
 					break;
 				case 2:
-					text = 'Like this site? Give it 25 Hearts!'
-					buttonOneOnClick = this.doNotSupportClick;
-					buttonTwoOnClick = this.giveHeartsToSite;
+					if (goodblockData.uiState.tests.contentSupport.gaveHearts) {
+						// User gave Hearts
+						text = 'Great! You just gave 25 Hearts. Thanks!';
+						speechBubbleType = 'text';
+						speechBubbleSize = 'small-small-medium';
+					} else if (goodblockData.uiState.tests.contentSupport.insufficientHearts) {
+						// User does not have enough Hearts to give
+						text = 'Aw, you don’t have enough Hearts. Want to see an ad now to get more?';
+						speechBubbleType = 'two-button';
+						speechBubbleSize = 'medium';
+						buttonOneOnClick = this.doNotSupportClick;
+						buttonTwoOnClick = this.openAd;
+
+					} else if (goodblockData.uiState.tests.contentSupport.didNotSupport) {
+						// User chose not to support the site
+						text = 'Ok, no worries. See you later!';
+						speechBubbleType = 'text';
+						speechBubbleSize = 'small-small-medium';
+
+					} else {
+						// Introductory speech bubble
+						text = 'Like this site? Give it 25 Hearts!';
+						speechBubbleType = 'two-button';
+						speechBubbleSize = 'small-medium';
+						buttonOneOnClick = this.doNotSupportClick;
+						buttonTwoOnClick = this.giveHeartsToSite;
+					}
+
 					break;
 				default:
-					text = 'Like this site? View an ad to support it!'
+					break;
 			}
 			speechBubble = (
 				<SpeechBubble
 					key='content-test-speech-bubble'
 					goodblockData={goodblockData}
-					type='two-button'
+					type={speechBubbleType}
+					bubbleSize={speechBubbleSize}
 					buttonOneOnClick={buttonOneOnClick}
 					buttonTwoOnClick={buttonTwoOnClick}
 					text={text} />

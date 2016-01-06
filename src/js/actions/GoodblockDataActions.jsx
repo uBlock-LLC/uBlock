@@ -284,6 +284,24 @@ var GoodblockDataActions = {
 		_goodblockData.uiState.ad.iframeLoaded = true;
 		GoodblockDataStore.emitChange();
 	},
+	// Begin content support test.
+	changeContentSupportInsufficientHearts: function(isInsufficient) {
+		_goodblockData.uiState.tests.contentSupport.insufficientHearts = isInsufficient;
+		GoodblockDataStore.emitChange();
+	},
+	changeContentSupportGaveHearts: function(gaveHearts) {
+		_goodblockData.uiState.tests.contentSupport.gaveHearts = gaveHearts;
+		GoodblockDataStore.emitChange();
+	},
+	changeContentSupportOpenedAd: function(openedAd) {
+		_goodblockData.uiState.tests.contentSupport.openedAd = openedAd;
+		GoodblockDataStore.emitChange();
+	},
+	changeContentSupportDidNotSupport: function(didNotSupport) {
+		_goodblockData.uiState.tests.contentSupport.didNotSupport = didNotSupport;
+		GoodblockDataStore.emitChange();
+	},
+	// End content support test.
 }
 
 /******************************************************************************/

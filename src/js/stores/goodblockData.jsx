@@ -16,6 +16,14 @@ var defaultUiState = {
 		sayingGoodnight: false,
 		goingToBed: false,
 	},
+	tests: {
+		contentSupport: {
+			insufficientHearts: false,
+			gaveHearts: false,
+			didNotSupport: false,
+			openedAd: false,
+		}
+	}
 };
 
 // "Clone" an object.
