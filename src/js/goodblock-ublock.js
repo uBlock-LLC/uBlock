@@ -653,6 +653,7 @@ var TOKEN_LOCAL_STORAGE_KEY = 'goodblockToken';
         supported: true,
         viewed_ad: false,
         domain: pageUrl,
+        vc_donated: 25,
     });
 };
 
