@@ -114,7 +114,13 @@ var getTimeAtEightAmTomorrow = require('./goodblock/get-time-at-eight-am-tomorro
 
 µBlock.goodblock.getGoodblockTestGroupData = function() {
     return µBlock.goodblock.tests;
-}
+};
+
+/******************************************************************************/
+
+µBlock.goodblock.logContentSupportRequest = function() {
+    return µBlock.goodblock.API.logContentSupportRequest();
+};
 
 /******************************************************************************/
 
@@ -596,7 +602,12 @@ var TOKEN_LOCAL_STORAGE_KEY = 'goodblockToken';
 µBlock.goodblock.API.getDomainBlacklist = function() {
     var url = µBlock.goodblock.API.baseUrl + '/black-list/';
     return µBlock.goodblock.API.fetchEndpoint('GET', url);
-}
+};
+
+µBlock.goodblock.API.logContentSupportRequest = function() {
+    var url = µBlock.goodblock.API.baseUrl + '/content-support/';
+    return µBlock.goodblock.API.fetchEndpoint('POST', url);
+};
 
 /******************************************************************************/
 

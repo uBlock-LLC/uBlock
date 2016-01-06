@@ -608,6 +608,19 @@ var onMessage = function(request, sender, callback) {
             µb.localSettings.adsViewed += 1;
             break;
 
+        case 'logContentSupportRequest':
+            
+            µb.goodblock.logContentSupportRequest()
+                .then(function(data) {
+                    callback(data);
+                });
+
+            // Return true to keep the listener open for an async response.
+            // See: https://developer.chrome.com/extensions/runtime#event-onMessage
+            return true;
+
+            break;
+
         default:
             return vAPI.messaging.UNHANDLED;
     }

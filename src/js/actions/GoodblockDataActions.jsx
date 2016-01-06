@@ -123,7 +123,29 @@ var LocalMessager = {
 				what: 'logAdView'
 			}
 		);
-	}
+	},
+
+	// Begin content support test
+
+	logContentSupportRequest: function() {
+
+		var logContentSupportRequestHandler = function(data) {
+
+			// Store the object URL that we're logging so that we can update it
+            // when the user responds to whether they want to support the
+            // site.
+            GoodblockDataActions.saveContentSupportRequestObjUrl(data.url);
+		}
+
+		goodblockMessager.send(
+			{
+				what: 'logContentSupportRequest'
+			},
+			logContentSupportRequestHandler
+		);
+	},
+
+	// End content support test
 	
 }
 
@@ -311,7 +333,14 @@ var GoodblockDataActions = {
 		setTimeout(function() {
 			resetUiState();
 		}, 3000);
-	}
+	},
+	logContentSupportRequest: function() {
+		LocalMessager.logContentSupportRequest();
+	},
+	saveContentSupportRequestObjUrl: function(url) {
+		_goodblockData.uiState.tests.contentSupport.logObjUrl = url;
+		GoodblockDataStore.emitChange();
+	},
 	// End content support test.
 }
 

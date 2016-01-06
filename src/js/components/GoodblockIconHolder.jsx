@@ -71,8 +71,13 @@ var GoodblockIconHolder = React.createClass({
 				if (currentPageBlacklisted) {
 					return;
 				}
+
 				// Show the Goodblock icon.
 				GoodblockDataActions.changeVisibility(true);
+
+				// Log the Goodblock icon appearance.
+				GoodblockDataActions.logContentSupportRequest();
+
 			}, 1000);
 		}, 2000);
 	},
