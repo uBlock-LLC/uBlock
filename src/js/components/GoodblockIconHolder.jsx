@@ -50,7 +50,7 @@ var GoodblockIconHolder = React.createClass({
 		console.log('Current Heart count:', userProfile.vc);
 
 		var vcAmountToGive = 25;
-		if (userProfile.vc > vcAmountToGive) {
+		if (userProfile.vc >= vcAmountToGive) {
 			GoodblockDataActions.changeContentSupportGaveHearts(true);
 			this.hideGoodblockForContentTest();
 		} else {
