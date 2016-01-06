@@ -29,7 +29,8 @@ var GoodblockIconHolder = React.createClass({
 	openAd: function() {
 		// TODO: log support and ad view
 		console.log('Opening ad.');
-		var adUrl = 'https://goodblock.gladly.io/app/ad/';
+		var hostname = window.location.hostname;
+		var adUrl = 'https://goodblock.gladly.io/app/ad/?type=content&site=' + hostname;
 		window.open(adUrl, '_blank');
 		GoodblockDataActions.changeContentSupportOpenedAd(true);
 	},
