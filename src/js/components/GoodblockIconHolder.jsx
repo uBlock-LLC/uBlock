@@ -122,6 +122,7 @@ var GoodblockIconHolder = React.createClass({
 		var currentHostname = window.location.hostname;
 
 		var SECONDS_WAIT_AFTER_SITE_SUPPORTED = 60 * 60 * 12; // 12 hours
+		var SECONDS_WAIT_AFTER_SITE_NOT_SUPPORTED = 60 * 60 * 24 * 5; // 5 days
 		var shouldShow = true;
 		for (var i = 0; i < contentSupportHistory.length; i++) {
 			var item = contentSupportHistory[i];
@@ -138,7 +139,16 @@ var GoodblockIconHolder = React.createClass({
 				var timeResponded = new Date(item.datetime);
 				var now = new Date();
 				var dateDiffInSecs = (now - timeResponded) / 1000;
-				if (dateDiffInSecs < SECONDS_WAIT_AFTER_SITE_SUPPORTED) {
+
+				// If the user supported the site, wait less time to
+				// ask again.
+				var waitTimeInSecs;
+				if (item.supported) {
+					waitTimeInSecs = SECONDS_WAIT_AFTER_SITE_SUPPORTED;
+				} else {
+					waitTimeInSecs = SECONDS_WAIT_AFTER_SITE_NOT_SUPPORTED;
+				}
+				if (dateDiffInSecs < waitTimeInSecs) {
 					shouldShow = false;
 					break;
 				}
