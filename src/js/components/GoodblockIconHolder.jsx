@@ -92,7 +92,7 @@ var GoodblockIconHolder = React.createClass({
 			// Log the Goodblock icon appearance.
 			GoodblockDataActions.logContentSupportRequest();
 
-		}, 1000);
+		}, 30 * 1000);
 	},
 	isPageBlacklisted: function() {
 		var goodblockData = this.props.goodblockData;
