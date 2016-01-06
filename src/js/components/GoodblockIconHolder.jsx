@@ -20,11 +20,17 @@ var GoodblockIconHolder = React.createClass({
 			mountIcon: false,
 		}
 	},
+	hideGoodblockForContentTest: function() {
+		GoodblockDataActions.hideGoodblockForContentTest();
+	},
 	// When users click "no", choosing to not support a site.
 	doNotSupportClick: function() {
 		// TODO: log no support
 		console.log('Not supporting.');
 		GoodblockDataActions.changeContentSupportDidNotSupport(true);
+
+		// Hide the Goodblock icon.
+		this.hideGoodblockForContentTest();
 	},
 	openAd: function() {
 		// TODO: log support and ad view
@@ -33,6 +39,9 @@ var GoodblockIconHolder = React.createClass({
 		var adUrl = 'https://goodblock.gladly.io/app/ad/?type=content&site=' + hostname;
 		window.open(adUrl, '_blank');
 		GoodblockDataActions.changeContentSupportOpenedAd(true);
+
+		// Hide the Goodblock icon.
+		this.hideGoodblockForContentTest();
 	},
 	giveHeartsToSite: function() {
 		// TODO: log support
@@ -223,16 +232,20 @@ var GoodblockIconHolder = React.createClass({
 				default:
 					break;
 			}
-			speechBubble = (
-				<SpeechBubble
-					key='content-test-speech-bubble'
-					goodblockData={goodblockData}
-					type={speechBubbleType}
-					bubbleSize={speechBubbleSize}
-					buttonOneOnClick={buttonOneOnClick}
-					buttonTwoOnClick={buttonTwoOnClick}
-					text={text} />
-			);
+
+			// Don't show the speech bubble if the icon is leaving.
+			if (!goodblockData.uiState.tests.contentSupport.inProcessOfHiding) {
+				speechBubble = (
+					<SpeechBubble
+						key='content-test-speech-bubble'
+						goodblockData={goodblockData}
+						type={speechBubbleType}
+						bubbleSize={speechBubbleSize}
+						buttonOneOnClick={buttonOneOnClick}
+						buttonTwoOnClick={buttonTwoOnClick}
+						text={text} />
+				);
+			}
 		}
 
 		// Style of the main icon.

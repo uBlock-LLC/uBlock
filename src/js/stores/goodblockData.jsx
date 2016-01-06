@@ -22,6 +22,7 @@ var defaultUiState = {
 			gaveHearts: false,
 			didNotSupport: false,
 			openedAd: false,
+			inProcessOfHiding: false,
 		}
 	}
 };

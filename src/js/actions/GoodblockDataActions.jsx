@@ -301,6 +301,17 @@ var GoodblockDataActions = {
 		_goodblockData.uiState.tests.contentSupport.didNotSupport = didNotSupport;
 		GoodblockDataStore.emitChange();
 	},
+	hideGoodblockForContentTest: function() {
+		setTimeout(function() {
+			GoodblockDataActions.changeVisibility(false);
+			_goodblockData.uiState.tests.contentSupport.inProcessOfHiding = true;
+			GoodblockDataStore.emitChange();
+		}, 2000);
+
+		setTimeout(function() {
+			resetUiState();
+		}, 3000);
+	}
 	// End content support test.
 }
 
