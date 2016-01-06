@@ -560,7 +560,7 @@ var TOKEN_LOCAL_STORAGE_KEY = 'goodblockToken';
 µBlock.goodblock.API.getUserData = function() {
     var url = µBlock.goodblock.API.baseUrl + '/me/';
     return µBlock.goodblock.API.fetchEndpoint('GET', url);
-}
+};
 
 µBlock.goodblock.API.setTimeToWake = function(datetime) {
     var data = {
@@ -568,22 +568,22 @@ var TOKEN_LOCAL_STORAGE_KEY = 'goodblockToken';
     };
     var url = µBlock.goodblock.API.baseUrl + '/users/update-notify-time/';
     return µBlock.goodblock.API.fetchEndpoint('POST', url, data);
-}
+};
 
 µBlock.goodblock.API.logSnoozeEvent = function() {
     var url = µBlock.goodblock.API.baseUrl + '/snooze-click/';
     return µBlock.goodblock.API.fetchEndpoint('POST', url);
-}
+};
 
 µBlock.goodblock.API.logHelloTadEvent = function() {
     var url = µBlock.goodblock.API.baseUrl + '/gbicon-appear/';
     return µBlock.goodblock.API.fetchEndpoint('POST', url);
-}
+};
 
 µBlock.goodblock.API.getLoggedExtensionVersion = function() {
     var url = µBlock.goodblock.API.baseUrl + '/log-extversion/get-user-extension-version/';
     return µBlock.goodblock.API.fetchEndpoint('GET', url);
-}
+};
 
 µBlock.goodblock.API.logExtensionVersion = function(version) {
     var data = {
@@ -591,7 +591,7 @@ var TOKEN_LOCAL_STORAGE_KEY = 'goodblockToken';
     };
     var url = µBlock.goodblock.API.baseUrl + '/log-extversion/';
     return µBlock.goodblock.API.fetchEndpoint('POST', url, data);
-}
+};
 
 µBlock.goodblock.API.getDomainBlacklist = function() {
     var url = µBlock.goodblock.API.baseUrl + '/black-list/';
