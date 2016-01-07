@@ -106,7 +106,7 @@ var getTimeAtEightAmTomorrow = require('./goodblock/get-time-at-eight-am-tomorro
 };
 
 µBlock.goodblock.addUserToTestGroups = function(userProfile) {
-    if (userProfile.support_content_test) {
+    if (userProfile.support_content_test !== µBlock.goodblock.tests.contentSupport.isTestUser) {
         µBlock.goodblock.tests.contentSupport.isTestUser = true;
         var testGroup = userProfile.support_content_test_channel;
         µBlock.goodblock.tests.contentSupport.testGroup = testGroup;
