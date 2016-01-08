@@ -38,6 +38,8 @@ var GoodblockRootElem = React.createClass({
 			goodblockData.uiState &&
 			isNonemptyObject(goodblockData.uiState) &&
 			isNonemptyObject(goodblockData.testData) &&
+			// TODO: handle non-logged-in user. We want to show the Goodblock
+			// icon if the user isn't logged in.
 			isNonemptyObject(goodblockData.userProfile)
 		);
 	},
