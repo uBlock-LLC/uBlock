@@ -145,6 +145,16 @@ var LocalMessager = {
 		);
 	},
 
+	shouldShowContentSupportRequest: function(pageUrl, handler) {
+		goodblockMessager.send(
+			{
+				what: 'shouldShowContentSupportRequest',
+				pageUrl: pageUrl,
+			},
+			handler
+		);
+	},
+
 	logContentNotSupported: function(pageUrl, objUrl) {
 		goodblockMessager.send(
 			{
@@ -374,12 +384,14 @@ var GoodblockDataActions = {
 	logContentNotSupported: function(pageUrl, objUrl) {
 		LocalMessager.logContentNotSupported(pageUrl, objUrl);
 	},
-
 	logContentSupportedWithAd: function(pageUrl, objUrl) {
 		LocalMessager.logContentSupportedWithAd(pageUrl, objUrl);
 	},
 	logContentSupportedWithHearts: function(pageUrl, objUrl) {
 		LocalMessager.logContentSupportedWithHearts(pageUrl, objUrl);
+	},
+	shouldShowContentSupportRequest: function(pageUrl, handler) {
+		LocalMessager.shouldShowContentSupportRequest(pageUrl, handler);
 	},
 	// End content support test.
 }

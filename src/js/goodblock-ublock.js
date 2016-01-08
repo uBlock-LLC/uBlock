@@ -135,6 +135,82 @@ var getTimeAtEightAmTomorrow = require('./goodblock/get-time-at-eight-am-tomorro
     return µBlock.goodblock.API.logContentSupportRequest();
 };
 
+// Takes a page URL. Returns a boolean.
+µBlock.goodblock.shouldShowContentSupportRequest = function(pageUrl) {
+
+    var hostname = µBlock.URI.hostnameFromURI(pageUrl);
+
+    // See if the user recently saw or responded to a Goodblock request.
+    function isTooSoon() {
+        // TODO
+        return false;
+    }
+
+    function isPageBlacklisted() {
+        var testData = µBlock.goodblock.tests;
+        var domainBlacklist = testData.contentSupport.domainBlacklist;
+        return (domainBlacklist.indexOf(hostname) > -1);
+    }
+
+    // See if the user recently responded to a support content
+    // request on this domain.
+    function userRecentlyRespondedToThisDomain() {
+        var testData = µBlock.goodblock.tests;
+        var contentSupportHistory = testData.contentSupport.contentSupportHistory;
+
+        var supportThrottleMs = testData.contentSupport.supportThrottleMs;
+        var rejectThrottleMs = testData.contentSupport.rejectThrottleMs;
+
+        var userRecentlyResponded = false;
+        for (var i = 0; i < contentSupportHistory.length; i++) {
+            var item = contentSupportHistory[i];
+
+            var itemHostname;
+            if (!item.domain || item.domain === '') {
+                continue;
+            } else {
+                itemHostname = µBlock.URI.hostnameFromURI(item.domain);
+            }
+
+            if (itemHostname === hostname) {
+                // See if the content support response was recent.
+                var timeResponded = new Date(item.datetime);
+                var now = new Date();
+                var dateDiffInSecs = (now - timeResponded) / 1000;
+
+                // If the user supported the site, wait less time to
+                // ask again.
+                var waitTimeInSecs;
+                if (item.supported) {
+                    waitTimeInSecs = supportThrottleMs / 1000;
+                } else {
+                    waitTimeInSecs = rejectThrottleMs / 1000;
+                }
+                if (dateDiffInSecs < waitTimeInSecs) {
+                    userRecentlyResponded = true;
+                    break;
+                }
+            }
+        }
+        return userRecentlyResponded;
+    }
+
+    var shouldShow = (
+        !isTooSoon() &&
+        !isPageBlacklisted() &&
+        !userRecentlyRespondedToThisDomain()
+    );
+
+    // console.log(pageUrl);
+    // console.log(hostname);
+    // console.log('isTooSoon', isTooSoon());
+    // console.log('isPageBlacklisted', isPageBlacklisted());
+    // console.log('userRecentlyResponded', userRecentlyRespondedToThisDomain());
+    // console.log('shouldShow', shouldShow);
+
+    return shouldShow;
+};
+
 /******************************************************************************/
 
 µBlock.goodblock.userProfile = {};
@@ -671,21 +747,20 @@ var TOKEN_LOCAL_STORAGE_KEY = 'goodblockToken';
 
 /******************************************************************************/
 
-// Check if we should hide Tad
-// (aka, it is currently snoozing or sleeping)
-µBlock.goodblock.syncUserDataFromRemote();
-
 µBlock.goodblock.syncExtensionVersion();
+
+var syncData = function() {
+     // console.log('Polling server.');
+    µBlock.goodblock.syncUserDataFromRemote();
+    µBlock.goodblock.syncDomainBlacklistFromRemote();
+    µBlock.goodblock.syncContentSupportHistoryFromRemote();   
+};
+syncData();
 
 // Check every once in a while to get the latest time to wake.
 // The time may have changed via interaction on another device, or
 // it may have changed server-side.
-var poller = setInterval(function() {
-    // console.log('Polling server.');
-    µBlock.goodblock.syncUserDataFromRemote();
-    µBlock.goodblock.syncDomainBlacklistFromRemote();
-    µBlock.goodblock.syncContentSupportHistoryFromRemote();
-}, µBlock.goodblock.config.timeMsToPollServer);
+var poller = setInterval(syncData, µBlock.goodblock.config.timeMsToPollServer);
 
 /******************************************************************************/
 

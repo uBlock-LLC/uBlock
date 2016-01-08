@@ -588,11 +588,11 @@ var onMessage = function(request, sender, callback) {
             break;
 
         case 'snoozeGoodblock':
-            µb.goodblock.snoozeGoodblock();
+            response = µb.goodblock.snoozeGoodblock();
             break;
 
         case 'goodnightGoodblock':
-            µb.goodblock.goodnightGoodblock();
+            response = µb.goodblock.goodnightGoodblock();
             break;
 
         case 'adOpenStateChange':
@@ -621,18 +621,22 @@ var onMessage = function(request, sender, callback) {
 
             break;
 
+        case 'shouldShowContentSupportRequest':
+            response = µBlock.goodblock.shouldShowContentSupportRequest(request.pageUrl);
+            break;
+
         case 'logContentNotSupported':
-            µBlock.goodblock.API.logContentNotSupported(
+            response = µBlock.goodblock.API.logContentNotSupported(
                 request.pageUrl, request.objUrl);
             break;
 
         case 'logContentSupportedWithAd':
-            µBlock.goodblock.API.logContentSupportedWithAd(
+            response = µBlock.goodblock.API.logContentSupportedWithAd(
                 request.pageUrl, request.objUrl);
             break;
 
         case 'logContentSupportedWithHearts':
-            µBlock.goodblock.API.logContentSupportedWithHearts(
+            response = µBlock.goodblock.API.logContentSupportedWithHearts(
                 request.pageUrl, request.objUrl);
             break;
 

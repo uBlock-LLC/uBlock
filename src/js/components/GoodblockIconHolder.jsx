@@ -76,88 +76,30 @@ var GoodblockIconHolder = React.createClass({
 		}
 	},
 	// Logic on when to show Goodblock for content support test.
-	showGoodblockForContentSupport: function() {
+	planToShowGoodblockForContentSupport: function() {
 
 		var appearDelayMs = this.props.goodblockData.testData.contentSupport.domainBlacklist.appearDelayMs;
 
 		var self = this;
 
 		setTimeout(function() {
-			var shouldShow = self.shouldShowContentSupport();
-			if (!shouldShow) {
-				return;
-			}
+			var shouldShow = self.shouldShowContentSupport(function(shouldShow) {
+				if (!shouldShow) {
+					return;
+				}
 
-			// Show the Goodblock icon.
-			GoodblockDataActions.changeVisibility(true);
+				// Show the Goodblock icon.
+				GoodblockDataActions.changeVisibility(true);
 
-			// Log the Goodblock icon appearance.
-			GoodblockDataActions.logContentSupportRequest();
+				// Log the Goodblock icon appearance.
+				GoodblockDataActions.logContentSupportRequest();
+			});
 
 		}, appearDelayMs);
 	},
-	isPageBlacklisted: function() {
-		var goodblockData = this.props.goodblockData;
-		var domainBlacklist = goodblockData.testData.contentSupport.domainBlacklist;
-		var hostname = window.location.hostname;
-		return (domainBlacklist.indexOf(hostname) > -1);
-	},
-	hostnameFromURI: function(uri) {
-		var getLocation = function(href) {
-		    var l = document.createElement("a");
-		    l.href = href;
-		    return l;
-		};
-		var l = getLocation(uri);
-		return l.hostname;
-	},
-	shouldShowContentSupport: function() {
-		if (this.isPageBlacklisted()) {
-			return false;
-		}
-
-		// See if the user recently responded to a support content
-		// request on this domain.
-		var goodblockData = this.props.goodblockData;
-		var contentSupportHistory = goodblockData.testData.contentSupport.contentSupportHistory;
-
-		var currentHostname = window.location.hostname;
-
-		console.log(goodblockData.testData.contentSupport);
-		var supportThrottleMs = goodblockData.testData.contentSupport.domainBlacklist.supportThrottleMs;
-		var rejectThrottleMs = goodblockData.testData.contentSupport.domainBlacklist.rejectThrottleMs;
-		var shouldShow = true;
-		for (var i = 0; i < contentSupportHistory.length; i++) {
-			var item = contentSupportHistory[i];
-
-			var itemHostname;
-			if (!item.domain || item.domain === '') {
-				continue;
-			} else {
-				itemHostname = this.hostnameFromURI(item.domain);
-			}
-
-			if (itemHostname === currentHostname) {
-				// See if the content support response was recent.
-				var timeResponded = new Date(item.datetime);
-				var now = new Date();
-				var dateDiffInSecs = (now - timeResponded) / 1000;
-
-				// If the user supported the site, wait less time to
-				// ask again.
-				var waitTimeInSecs;
-				if (item.supported) {
-					waitTimeInSecs = supportThrottleMs;
-				} else {
-					waitTimeInSecs = rejectThrottleMs;
-				}
-				if (dateDiffInSecs < waitTimeInSecs) {
-					shouldShow = false;
-					break;
-				}
-			}
-		}
-		return shouldShow;
+	shouldShowContentSupport: function(callback) {
+		var pageUrl = window.location.href;
+		var shouldShow = GoodblockDataActions.shouldShowContentSupportRequest(pageUrl, callback);
 	},
 	handleTestCases: function() {
 		var goodblockData = this.props.goodblockData;
@@ -169,12 +111,7 @@ var GoodblockIconHolder = React.createClass({
 			return;
 		}
 
-		var currentPageBlacklisted = this.isPageBlacklisted();
-		if(!currentPageBlacklisted) {
-			this.showGoodblockForContentSupport();
-		} else {
-			GoodblockDataActions.changeVisibility(false);
-		}
+		this.planToShowGoodblockForContentSupport();
 	},
 	componentDidMount: function() {
 		this.handleTestCases();
