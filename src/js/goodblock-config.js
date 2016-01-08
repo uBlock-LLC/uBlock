@@ -61,6 +61,31 @@
         'https://goodblock.org/app/ad/',
         'https://www.goodblock.gladly.io/app/ad/',
     ],
+
+    // Begin content support test config.
+
+    // Milliseconds of staying on the same webpage before the Goodblock
+    // icon checks if it should appear.
+    contentSupportTestAppearDelayMs: 30 * 1000, // 30 seconds
+
+    // Milliseconds after the Goodblock icon appears before we
+    // allow another Goodblock icon to appear.
+    contentSupportTestAppearanceThrottleMs: 5 * 60 * 1000, // 5 minutes
+
+    // Milliseconds after a user responds to a content support request
+    // before we allow another Goodblock icon to appear.
+    contentSupportTestResponseThrottleMs: 60 * 60 * 1000, // 60 minutes
+
+    // Milliseconds to wait after a user supports a website before
+    // we ask again for that hostname.
+    contentSupportTestSupportThrottleMs: 12 * 60 * 60 * 1000, // 12 hours
+
+    // Milliseconds to wait after a user supports a website before
+    // we ask again for that hostname.
+    contentSupportTestRejectThrottleMs: 5 * 24 * 60 * 60 * 1000, // 5 days
+
+    // End content support test config.
+
 }
 
 /******************************************************************************/

@@ -78,6 +78,8 @@ var GoodblockIconHolder = React.createClass({
 	// Logic on when to show Goodblock for content support test.
 	showGoodblockForContentSupport: function() {
 
+		var appearDelayMs = this.props.goodblockData.testData.contentSupport.domainBlacklist.appearDelayMs;
+
 		var self = this;
 
 		setTimeout(function() {
@@ -92,7 +94,7 @@ var GoodblockIconHolder = React.createClass({
 			// Log the Goodblock icon appearance.
 			GoodblockDataActions.logContentSupportRequest();
 
-		}, 30 * 1000);
+		}, appearDelayMs);
 	},
 	isPageBlacklisted: function() {
 		var goodblockData = this.props.goodblockData;
@@ -121,8 +123,9 @@ var GoodblockIconHolder = React.createClass({
 
 		var currentHostname = window.location.hostname;
 
-		var SECONDS_WAIT_AFTER_SITE_SUPPORTED = 60 * 60 * 12; // 12 hours
-		var SECONDS_WAIT_AFTER_SITE_NOT_SUPPORTED = 60 * 60 * 24 * 5; // 5 days
+		console.log(goodblockData.testData.contentSupport);
+		var supportThrottleMs = goodblockData.testData.contentSupport.domainBlacklist.supportThrottleMs;
+		var rejectThrottleMs = goodblockData.testData.contentSupport.domainBlacklist.rejectThrottleMs;
 		var shouldShow = true;
 		for (var i = 0; i < contentSupportHistory.length; i++) {
 			var item = contentSupportHistory[i];
@@ -144,9 +147,9 @@ var GoodblockIconHolder = React.createClass({
 				// ask again.
 				var waitTimeInSecs;
 				if (item.supported) {
-					waitTimeInSecs = SECONDS_WAIT_AFTER_SITE_SUPPORTED;
+					waitTimeInSecs = supportThrottleMs;
 				} else {
-					waitTimeInSecs = SECONDS_WAIT_AFTER_SITE_NOT_SUPPORTED;
+					waitTimeInSecs = rejectThrottleMs;
 				}
 				if (dateDiffInSecs < waitTimeInSecs) {
 					shouldShow = false;

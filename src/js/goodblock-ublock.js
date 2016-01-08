@@ -102,7 +102,19 @@ var getTimeAtEightAmTomorrow = require('./goodblock/get-time-at-eight-am-tomorro
         },
         domainBlacklist: [],
         contentSupportHistory: {},
-    }
+
+        // Timing settings
+        appearDelayMs: µBlock.goodblock.config.contentSupportTestAppearDelayMs,
+        appearanceThrottleMs: µBlock.goodblock.config.contentSupportTestAppearanceThrottleMs,
+        responseThrottleMs: µBlock.goodblock.config.contentSupportTestResponseThrottleMs,
+        supportThrottleMs: µBlock.goodblock.config.contentSupportTestSupportThrottleMs,
+        rejectThrottleMs: µBlock.goodblock.config.contentSupportTestRejectThrottleMs,
+
+        // TODO: set these and check them to determine if we should
+        // show the Goodblock icon.
+        dateOfLastGoodblockIconAppear: null,
+        dateOfLastGoodblockIconResponse: null,
+    },
 };
 
 µBlock.goodblock.addUserToTestGroups = function(userProfile) {
