@@ -185,6 +185,14 @@ var LocalMessager = {
 		);
 	},
 
+	changeIconVisibilityForContentSupportTest: function() {
+		goodblockMessager.send(
+			{
+				what: 'changeIconVisibilityForContentSupportTest',
+			}
+		);
+	},
+
 	// End content support test
 	
 }
@@ -368,6 +376,10 @@ var GoodblockDataActions = {
 			GoodblockDataActions.changeVisibility(false);
 			_goodblockData.uiState.tests.contentSupport.inProcessOfHiding = true;
 			GoodblockDataStore.emitChange();
+
+			// Hide Goodblock icon on all other tabs too.
+			LocalMessager.changeIconVisibilityForContentSupportTest();
+
 		}, 2000);
 
 		setTimeout(function() {

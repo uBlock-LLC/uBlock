@@ -640,6 +640,10 @@ var onMessage = function(request, sender, callback) {
                 request.pageUrl, request.objUrl);
             break;
 
+        case 'changeIconVisibilityForContentSupportTest':
+            response = µBlock.goodblock.changeIconVisibilityForContentSupportTest();
+            break;
+
         default:
             return vAPI.messaging.UNHANDLED;
     }

@@ -230,6 +230,11 @@ var getTimeAtEightAmTomorrow = require('./goodblock/get-time-at-eight-am-tomorro
     return shouldShow;
 };
 
+// Called to hide the Goodblock icon across all tabs.
+µBlock.goodblock.changeIconVisibilityForContentSupportTest = function() {
+    µBlock.goodblock.updateGoodblockVisibility(false);
+};
+
 /******************************************************************************/
 
 µBlock.goodblock.userProfile = {};
