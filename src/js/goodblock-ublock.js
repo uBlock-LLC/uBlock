@@ -117,8 +117,15 @@ var getTimeAtEightAmTomorrow = require('./goodblock/get-time-at-eight-am-tomorro
 };
 
 µBlock.goodblock.addUserToTestGroups = function(userProfile) {
-    if (userProfile.support_content_test !== µBlock.goodblock.tests.contentSupport.isTestUser) {
-        µBlock.goodblock.tests.contentSupport.isTestUser = true;
+
+    if (userProfile.support_content_test && !µBlock.goodblock.tests.contentSupport.isTestUser) {
+        // If the user just opted in to the test, hide existing Goodblock
+        // icons.
+        µBlock.goodblock.changeIconVisibilityForContentSupportTest();
+    }
+
+    if (userProfile.support_content_test != µBlock.goodblock.tests.contentSupport.isTestUser) {
+        µBlock.goodblock.tests.contentSupport.isTestUser = userProfile.support_content_test;
         var testGroup = userProfile.support_content_test_channel;
         µBlock.goodblock.tests.contentSupport.testGroup = testGroup;
     }
