@@ -66,7 +66,7 @@
 
     // Milliseconds of staying on the same webpage before the Goodblock
     // icon checks if it should appear.
-    contentSupportTestAppearDelayMs: 30 * 1000, // 30 seconds
+    contentSupportTestAppearDelayMs: 15 * 1000, // 15 seconds
 
     // Milliseconds after the Goodblock icon appears before we
     // allow another Goodblock icon to appear.
