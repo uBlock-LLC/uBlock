@@ -110,10 +110,9 @@ var getTimeAtEightAmTomorrow = require('./goodblock/get-time-at-eight-am-tomorro
         supportThrottleMs: µBlock.goodblock.config.contentSupportTestSupportThrottleMs,
         rejectThrottleMs: µBlock.goodblock.config.contentSupportTestRejectThrottleMs,
 
-        // TODO: set these and check them to determine if we should
-        // show the Goodblock icon.
-        dateOfLastGoodblockIconAppear: null,
-        dateOfLastGoodblockIconResponse: null,
+
+        dateOfLastGoodblockIconAppear: new Date(),
+        dateOfLastGoodblockIconResponse: new Date(),
     },
 };
 
@@ -142,7 +141,27 @@ var getTimeAtEightAmTomorrow = require('./goodblock/get-time-at-eight-am-tomorro
 
     // See if the user recently saw or responded to a Goodblock request.
     function isTooSoon() {
-        // TODO
+
+        var testData = µBlock.goodblock.tests;
+        var appearanceThrottleMs = testData.contentSupport.appearanceThrottleMs;
+        var responseThrottleMs = testData.contentSupport.responseThrottleMs;
+        var now = new Date();
+
+        var dateOfLastAppear = testData.contentSupport.dateOfLastGoodblockIconAppear;
+        var dateOfLastResponse = testData.contentSupport.dateOfLastGoodblockIconResponse;
+
+        // See if the Goodblock icon has appeared too recently.
+        var msSinceAppear = (now - dateOfLastAppear);
+        if (msSinceAppear < appearanceThrottleMs) {
+            return true;
+        }
+
+        // See if the user has responded to the Goodblock icon 
+        // too recently.
+        var msSinceResponse = (now - dateOfLastResponse);
+        if (msSinceResponse < responseThrottleMs) {
+            return true;
+        }
         return false;
     }
 
@@ -710,11 +729,19 @@ var TOKEN_LOCAL_STORAGE_KEY = 'goodblockToken';
 };
 
 µBlock.goodblock.API.logContentSupportRequest = function() {
+
+    // Update the last time a Goodblock icon appeared.
+    µBlock.goodblock.tests.contentSupport.dateOfLastGoodblockIconAppear = new Date();
+
     var url = µBlock.goodblock.API.baseUrl + '/content-support/';
     return µBlock.goodblock.API.fetchEndpoint('POST', url);
 };
 
 µBlock.goodblock.API.logContentNotSupported = function(pageUrl, objUrl) {
+
+    // Update the last time the user responded to a Goodblock icon request.
+    µBlock.goodblock.tests.contentSupport.dateOfLastGoodblockIconResponse = new Date();
+
     var url = objUrl;
     return µBlock.goodblock.API.fetchEndpoint('PATCH', url, {
         responded: true,
@@ -725,6 +752,10 @@ var TOKEN_LOCAL_STORAGE_KEY = 'goodblockToken';
 };
 
 µBlock.goodblock.API.logContentSupportedWithAd = function(pageUrl, objUrl) {
+
+    // Update the last time the user responded to a Goodblock icon request.
+    µBlock.goodblock.tests.contentSupport.dateOfLastGoodblockIconResponse = new Date();
+
     var url = objUrl;
     return µBlock.goodblock.API.fetchEndpoint('PATCH', url, {
         responded: true,
@@ -735,6 +766,10 @@ var TOKEN_LOCAL_STORAGE_KEY = 'goodblockToken';
 };
 
 µBlock.goodblock.API.logContentSupportedWithHearts = function(pageUrl, objUrl) {
+
+    // Update the last time the user responded to a Goodblock icon request.
+    µBlock.goodblock.tests.contentSupport.dateOfLastGoodblockIconResponse = new Date();
+
     var url = objUrl;
     return µBlock.goodblock.API.fetchEndpoint('PATCH', url, {
         responded: true,
