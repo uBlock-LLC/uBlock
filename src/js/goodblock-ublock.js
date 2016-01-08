@@ -738,6 +738,9 @@ var TOKEN_LOCAL_STORAGE_KEY = 'goodblockToken';
     // Update the last time a Goodblock icon appeared.
     µBlock.goodblock.tests.contentSupport.dateOfLastGoodblockIconAppear = new Date();
 
+    // Log that we showed the Goodblock icon.
+    µBlock.goodblock.API.logHelloTadEvent();
+
     var url = µBlock.goodblock.API.baseUrl + '/content-support/';
     return µBlock.goodblock.API.fetchEndpoint('POST', url);
 };
