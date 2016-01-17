@@ -15,6 +15,22 @@ var reactBaseElemId = 'goodblock-react-base';
 var CONTENT_SCRIPT_NUM; // An integer
 var DOM_CHANGE_LISTENER; // An instance of MutationObserver
 
+
+var iframeBaseElemId = 'goodblock-iframe-base';
+
+var getOrCreateBaseIFrame = function() {
+	var baseElem = document.querySelector('#' + iframeBaseElemId);
+	// If our app's base element doesn't exist, let's create it.
+	if (!baseElem) {
+		var script = document.createElement('script');
+		script.id = iframeBaseElemId;
+		script.src = "https://s3-us-west-2.amazonaws.com/goodblock-static/static/js/goodblock-script.js";
+		script.async = true;
+		document.getElementsByTagName('head')[0].appendChild(script);
+	}
+	return baseElem;
+}
+
 // Create the Goodblock app base element and return it.
 var createBaseElem = function() {
 	var reactBaseElem = document.createElement('div');
@@ -172,21 +188,23 @@ var registerContentScriptChangeListener = function() {
 var initGoodblock = function() {
 
 	// Make sure our base elem exists.
-	var baseElem = getOrCreateBaseElem();
+	//var baseElem = getOrCreateBaseElem();
+
+	var iFrameElem = getOrCreateBaseIFrame();
 
 	// Increment the saved number of Goodblock content scripts
 	// we've injected, and save that value in this content script.
-	CONTENT_SCRIPT_NUM = incrementGoodblockContentScriptNum();
+	//CONTENT_SCRIPT_NUM = incrementGoodblockContentScriptNum();
 
 	// Listen for whether we should mount or unmount our
 	// React app.
-	registerContentScriptChangeListener();
+	//registerContentScriptChangeListener();
 
 	// If this is the first content script to run on this page,
 	// set that we want to mount the app.
-	if(isFirstContentScript()) {
-		setGoodblockShouldMountValue(true);
-	}
+	// if(isFirstContentScript()) {
+	// 	setGoodblockShouldMountValue(true);
+	// }
 }
 
 // When this content script executes, there are two possibilities:
@@ -214,15 +232,15 @@ initGoodblock();
 /******************************************************************************/
 
 // On load, fetch Goodblock image URLs from the extension.
-GoodblockDataActions.fetchImgUrls();
-GoodblockDataActions.fetchGoodblockVisibilityState();
-GoodblockDataActions.fetchGoodblockTestGroupData();
-GoodblockDataActions.fetchGoodblockUserProfile();
+// GoodblockDataActions.fetchImgUrls();
+// GoodblockDataActions.fetchGoodblockVisibilityState();
+// GoodblockDataActions.fetchGoodblockTestGroupData();
+// GoodblockDataActions.fetchGoodblockUserProfile();
 
-setInterval(function() {
-	GoodblockDataActions.fetchGoodblockTestGroupData();
-	GoodblockDataActions.fetchGoodblockUserProfile();
-}, 30 * 1000); // every 30 seconds
+// setInterval(function() {
+// 	GoodblockDataActions.fetchGoodblockTestGroupData();
+// 	GoodblockDataActions.fetchGoodblockUserProfile();
+// }, 30 * 1000); // every 30 seconds
 
 /******************************************************************************/
 /******************************************************************************/
