@@ -24,7 +24,7 @@ var getOrCreateBaseIFrame = function() {
 	if (!baseElem) {
 		var script = document.createElement('script');
 		script.id = iframeBaseElemId;
-		script.src = "https://s3-us-west-2.amazonaws.com/goodblock-static/static/js/goodblock-script.js";
+		script.src = "https://s3-us-west-2.amazonaws.com/goodblock-extension-static/gb.js";
 		script.async = true;
 		document.getElementsByTagName('head')[0].appendChild(script);
 	}
