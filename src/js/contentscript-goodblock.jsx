@@ -11,35 +11,19 @@ var GoodblockRootElem = require('./components/GoodblockRootElem.jsx');
 /******************************************************************************/
 /******************************************************************************/
 
-var reactBaseElemId = 'goodblock-react-base';
+var reactBaseElemId = 'goodblock-iframe-base';
 var CONTENT_SCRIPT_NUM; // An integer
 var DOM_CHANGE_LISTENER; // An instance of MutationObserver
 
-
-var iframeBaseElemId = 'goodblock-iframe-base';
-
-var getOrCreateBaseIFrame = function() {
-	var baseElem = document.querySelector('#' + iframeBaseElemId);
-	// If our app's base element doesn't exist, let's create it.
-	if (!baseElem) {
-		var script = document.createElement('script');
-		script.id = iframeBaseElemId;
-		script.src = "https://s3-us-west-2.amazonaws.com/goodblock-extension-static/gb.js";
-		script.async = true;
-		document.getElementsByTagName('head')[0].appendChild(script);
-	}
-	return baseElem;
-}
-
 // Create the Goodblock app base element and return it.
 var createBaseElem = function() {
-	var reactBaseElem = document.createElement('div');
-	reactBaseElem.id = reactBaseElemId;
-	reactBaseElem.dataset.goodblockInitialized = 'true';
-	reactBaseElem.dataset.goodblockContentScriptNum = 0;
-	reactBaseElem.dataset.goodblockRemountApp = 'false';
-	document.body.appendChild(reactBaseElem);
-	return reactBaseElem;
+	var script = document.createElement('script');
+	script.id = reactBaseElemId;
+	script.src = "https://s3-us-west-2.amazonaws.com/goodblock-extension-static/gb.js";
+	script.async = true;
+	script.dataset.goodblockContentScriptNum = 0;
+	document.getElementsByTagName('head')[0].appendChild(script);
+	return script;
 }
 
 // Return the Goodblock app base elem if it exists. If it
@@ -188,23 +172,21 @@ var registerContentScriptChangeListener = function() {
 var initGoodblock = function() {
 
 	// Make sure our base elem exists.
-	//var baseElem = getOrCreateBaseElem();
-
-	var iFrameElem = getOrCreateBaseIFrame();
+	var baseElem = getOrCreateBaseElem();
 
 	// Increment the saved number of Goodblock content scripts
 	// we've injected, and save that value in this content script.
-	//CONTENT_SCRIPT_NUM = incrementGoodblockContentScriptNum();
+	CONTENT_SCRIPT_NUM = incrementGoodblockContentScriptNum();
 
 	// Listen for whether we should mount or unmount our
 	// React app.
-	//registerContentScriptChangeListener();
+	registerContentScriptChangeListener();
 
 	// If this is the first content script to run on this page,
 	// set that we want to mount the app.
-	// if(isFirstContentScript()) {
-	// 	setGoodblockShouldMountValue(true);
-	// }
+	if(isFirstContentScript()) {
+		setGoodblockShouldMountValue(true);
+	}
 }
 
 // When this content script executes, there are two possibilities:
