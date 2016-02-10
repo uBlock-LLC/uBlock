@@ -3,9 +3,22 @@
 # This script assumes a linux environment
 
 echo "*** goodblock.chromium: Creating web store package"
+
+if [ "$1" = "dev" ]; then
+  export BUILD_ENV=dev
+fi
+if [ "$1" = "testing" ]; then
+  export BUILD_ENV=testing
+fi
+# If the build environment isn't specified, assume it's production.
+if [ "$BUILD_ENV" = "" ]; then
+  export BUILD_ENV=production
+fi
+echo "*** goodblock.chromium: Set build environment to ${BUILD_ENV}"
+
 echo "*** goodblock.chromium: Copying files"
 
-DES=dist/build/goodblock.chromium
+DES=./dist/build/goodblock.chromium
 LOCAL_SETTINGS_FILENAME=goodblock-config-dev.js
 TESTING_SETTINGS_FILENAME=goodblock-config-testing.js
 rm -rf $DES
@@ -20,8 +33,21 @@ mkdir $DES/js
 # create it before copying over the rest of the JS files.
 touch $DES/js/$LOCAL_SETTINGS_FILENAME
 cp src/js/*.js $DES/js/
-echo "*** goodblock.chromium: Transforming browserify/JSX files."
+echo "*** goodblock.chromium: Transforming JSX files."
+
+# Set the Node environment.
+if [ "$BUILD_ENV" = "dev" ]; then
+  export NODE_ENV=dev
+fi
+if [ "$BUILD_ENV" = "production" ]; then
+  export NODE_ENV=production
+fi
+# echo "*** goodblock.chromium: Set NODE_ENV to ${NODE_ENV}"
+
+# Build the Goodblock content script.
+gulp --gulpfile tools/gulpfile.js scripts
 browserify -t reactify src/js/contentscript-goodblock.jsx > $DES/js/contentscript-goodblock.js
+
 echo "*** goodblock.chromium: Browserifying ublock.js."
 browserify src/js/ublock.js > $DES/js/ublock.js
 cp -R src/lib $DES/
@@ -35,24 +61,17 @@ cp platform/chromium/manifest.json $DES/
 cp LICENSE.txt $DES/
 
 # If this isn't a dev build, remove the dev config.
-if [ "$1" != dev ]; then
+if [ "$BUILD_ENV" = "dev" ]; then
     echo "*** goodblock.chromium: Wiping dev config clean..."
     rm $DES/js/$LOCAL_SETTINGS_FILENAME
     touch $DES/js/$LOCAL_SETTINGS_FILENAME
 fi
 
 # If this isn't a testing build, remove the testing config.
-if [ "$1" != testing ]; then
+if [ "$BUILD_ENV" = "testing" ]; then
     echo "*** goodblock.chromium: Wiping testing config clean..."
     rm $DES/js/$TESTING_SETTINGS_FILENAME
     touch $DES/js/$TESTING_SETTINGS_FILENAME
-fi
-
-if [ "$1" = all ]; then
-    echo "*** goodblock.chromium: Creating package..."
-    pushd $(dirname $DES/)
-    zip goodblock.chromium.zip -qr $(basename $DES/)/*
-    popd
 fi
 
 echo "*** goodblock.chromium: Package done."
