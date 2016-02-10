@@ -11,8 +11,8 @@ var environment = process.env.NODE_ENV;
 var envParams;
 if (environment === 'dev') {
     envParams = {
-        // TODO: update to dev path
-        GOODBLOCK_SCRIPT_SRC: '/example-path/example.js',
+        // TODO: HTTPS
+        GOODBLOCK_SCRIPT_SRC: 'http://192.168.99.100/static/js/goodblock-script.js',
     };
 };
 if (environment === 'production') {
