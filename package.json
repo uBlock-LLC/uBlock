@@ -3,12 +3,16 @@
   "version": "0.0.5",
   "description": "Goodblock: the good adblocker.",
   "dependencies": {
-    "react": "0.13.3",
+    "react": "0.13.3"
+  },
+  "devDependencies": {
+    "browserify": "^13.0.0",
+    "gulp": "~3.9.0",
+    "envify": "^3.4.0",
+    "reactify": "^1.1.1",
     "react-tools": "~0.13.3",
-    "reactify": "1.1.1",
     "jest-cli": "0.4.18"
   },
-  "devDependencies": {},
   "scripts": {
     "test": "jest"
   },
