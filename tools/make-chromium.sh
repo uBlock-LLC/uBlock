@@ -46,7 +46,6 @@ fi
 
 # Build the Goodblock content script.
 gulp --gulpfile tools/gulpfile.js scripts
-browserify -t reactify src/js/contentscript-goodblock.jsx > $DES/js/contentscript-goodblock.js
 
 echo "*** goodblock.chromium: Browserifying ublock.js."
 browserify src/js/ublock.js > $DES/js/ublock.js
