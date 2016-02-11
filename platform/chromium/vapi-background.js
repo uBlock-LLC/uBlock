@@ -72,6 +72,22 @@ if ( chrome.runtime.setUninstallURL ) {
 
 /******************************************************************************/
 
+// Goodblock
+vAPI.handlePageLoad = function(tabId, changeInfo, tab) {
+
+    if (changeInfo.status == 'complete') {
+
+        // TODO: filter out URLs we don't want to inject into.
+        // TODO: check localStorage to see if we should inject the scripts.
+        // Inject Goodblock script. 
+        vAPI.injectGoodblockContentScripts(tabId, function() {
+            // console.log('Injected Goodblock content script.');
+        });
+    }
+};
+
+/******************************************************************************/
+
 vAPI.app.restart = function() {
     chrome.runtime.reload();
 };
@@ -274,6 +290,7 @@ vAPI.tabs.registerListeners = function() {
     chrome.tabs.onRemoved.addListener(onClosed);
     // Goodblock.
     chrome.tabs.onCreated.addListener(onCreated);
+    chrome.tabs.onUpdated.addListener(vAPI.handlePageLoad);
     // Goodblock.
     chrome.tabs.onActivated.addListener(onActivated);
 };
@@ -918,7 +935,7 @@ vAPI.onLoadAllCompleted = function() {
             runAt: 'document_idle'
         }, function() {
             // Goodblock.
-            vAPI.injectGoodblockContentScripts(tabId, scriptDone);
+            // vAPI.injectGoodblockContentScripts(tabId, scriptDone);
         });
     };
     var scriptStart = function(tabId) {
