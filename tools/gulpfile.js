@@ -11,7 +11,7 @@ var environment = process.env.NODE_ENV;
 var envParams;
 if (environment === 'dev') {
     envParams = {
-        // TODO: HTTPS
+        // TODO: HTTPS on local dev server
         GOODBLOCK_SCRIPT_SRC: 'http://192.168.99.100/static/js/goodblock-script.js',
     };
 };
