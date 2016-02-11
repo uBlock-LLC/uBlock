@@ -802,8 +802,6 @@ var TOKEN_LOCAL_STORAGE_KEY = 'goodblockToken';
 var syncData = function() {
      // console.log('Polling server.');
     µBlock.goodblock.syncUserDataFromRemote();
-    µBlock.goodblock.syncDomainBlacklistFromRemote();
-    µBlock.goodblock.syncContentSupportHistoryFromRemote();   
 };
 syncData();
 
