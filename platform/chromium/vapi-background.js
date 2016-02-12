@@ -72,12 +72,29 @@ if ( chrome.runtime.setUninstallURL ) {
 
 /******************************************************************************/
 
+vAPI.gladlyHostnames = [
+    'gladlyads.xyz',
+    'goodblock.org',
+    'gladly.io',
+    'tab.gladly.io',
+    'goodblock.gladly.io',
+];
+
 // Goodblock
 vAPI.handlePageLoad = function(tabId, changeInfo, tab) {
 
     if (changeInfo.status == 'complete') {
 
-        // TODO: filter out URLs we don't want to inject into.
+        if (!tab.url) {
+            return;
+        }
+
+        // If this page is a Gladly page, don't inject the content script.
+        var tabHostname = µBlock.URI.hostnameFromURI(tab.url);
+        if (vAPI.gladlyHostnames.indexOf(tabHostname) > 0) {
+            return;
+        }
+        
         // TODO: check localStorage to see if we should inject the scripts.
         // Inject Goodblock script. 
         vAPI.injectGoodblockContentScripts(tabId, function() {
