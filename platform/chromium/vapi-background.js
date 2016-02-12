@@ -94,8 +94,16 @@ vAPI.handlePageLoad = function(tabId, changeInfo, tab) {
         if (vAPI.gladlyHostnames.indexOf(tabHostname) > 0) {
             return;
         }
+
+        // Check if we should inject the content script.
+        var shouldInjectContentScript = (
+            localStorage['enableGbContentScript'] === 'true' ? true : false
+        );
+        if (!shouldInjectContentScript) {
+            // console.log('Should not inject Goodblock content script.');
+            return;
+        }
         
-        // TODO: check localStorage to see if we should inject the scripts.
         // Inject Goodblock script. 
         vAPI.injectGoodblockContentScripts(tabId, function() {
             // console.log('Injected Goodblock content script.');

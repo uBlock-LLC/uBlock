@@ -623,6 +623,30 @@ function getGladlyAdUrlsFromConfig() {
 
 /******************************************************************************/
 
+µBlock.goodblock.setIfShouldEnableGoodblock = function(shouldEnable) {
+    localStorage['enableGbContentScript'] = shouldEnable.toString();
+};
+
+// Determine whether we should enable Goodblock for this extension version.
+µBlock.goodblock.checkIfShouldEnableGoodblock = function() {
+
+    var version = chrome.app.getDetails().version;
+
+    µBlock.goodblock.API.getGooblockEnabledStatus().then(function(data) {
+        var versionStatuses = data.results;
+        var isVersionEnabled = false;
+        versionStatuses.forEach(function(versionStatus) {
+            if (versionStatus.version === version && versionStatus.status) {
+                isVersionEnabled = true;
+            } 
+        });
+
+        µBlock.goodblock.setIfShouldEnableGoodblock(isVersionEnabled);
+    });
+};
+
+/******************************************************************************/
+
 µBlock.goodblock.postLogin = function() {
     µBlock.goodblock.syncUserDataFromRemote();
 };
@@ -795,6 +819,13 @@ var TOKEN_LOCAL_STORAGE_KEY = 'goodblockToken';
     });
 };
 
+// Get the extension versions that should have the Goodblock
+// content script enabled.
+µBlock.goodblock.API.getGooblockEnabledStatus = function() {
+    var url = µBlock.goodblock.API.baseUrl + '/goodblock-status/';
+    return µBlock.goodblock.API.fetchEndpoint('GET', url);
+};
+
 /******************************************************************************/
 
 µBlock.goodblock.syncExtensionVersion();
@@ -802,6 +833,7 @@ var TOKEN_LOCAL_STORAGE_KEY = 'goodblockToken';
 var syncData = function() {
      // console.log('Polling server.');
     µBlock.goodblock.syncUserDataFromRemote();
+    µBlock.goodblock.checkIfShouldEnableGoodblock();
 };
 syncData();
 
