@@ -60,14 +60,14 @@ cp platform/chromium/manifest.json $DES/
 cp LICENSE.txt $DES/
 
 # If this isn't a dev build, remove the dev config.
-if [ "$BUILD_ENV" = "dev" ]; then
+if [ "$BUILD_ENV" != "dev" ]; then
     echo "*** goodblock.chromium: Wiping dev config clean..."
     rm $DES/js/$LOCAL_SETTINGS_FILENAME
     touch $DES/js/$LOCAL_SETTINGS_FILENAME
 fi
 
 # If this isn't a testing build, remove the testing config.
-if [ "$BUILD_ENV" = "testing" ]; then
+if [ "$BUILD_ENV" != "testing" ]; then
     echo "*** goodblock.chromium: Wiping testing config clean..."
     rm $DES/js/$TESTING_SETTINGS_FILENAME
     touch $DES/js/$TESTING_SETTINGS_FILENAME
