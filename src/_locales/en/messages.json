@@ -4,7 +4,7 @@
     "description":"extension name."
   },
   "extShortDesc":{
-    "message":"Goodblock filters your ads so you only see one beautiful, charitable ad each day.",
+    "message":"Goodblock is a free chrome adblocker that lets you earn money for charity while keeping your data and privacy safe.",
     "description":"this will be in the chrome web store: must be 132 characters or less"
   },
   "dashboardName":{
