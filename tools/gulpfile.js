@@ -13,11 +13,13 @@ if (environment === 'dev') {
     envParams = {
         // TODO: HTTPS on local dev server
         GOODBLOCK_SCRIPT_SRC: 'http://192.168.99.100/static/js/goodblock-script.js',
+        GOODBLOCK_POPUP_URL: 'http://192.168.99.100/app/dashboard/',
     };
 };
 if (environment === 'production') {
     envParams = {
         GOODBLOCK_SCRIPT_SRC: 'https://s3-us-west-2.amazonaws.com/goodblock-extension-static/gb.js',
+        GOODBLOCK_POPUP_URL: 'https://goodblock.gladly.io/app/dashboard/',
     };
 };
 
@@ -36,18 +38,34 @@ function handleError(e) {
     );
 }
 
-
-gulp.task('scripts', function() {
-
-    var filename = '../src/js/contentscript-goodblock.jsx';
-    var outputDir = '../dist/build/goodblock.chromium/js/';
-
-    return browserify(filename)
+function buildScript(filename, outputDir, outputName) {
+    browserify(filename)
         .transform(reactify)
         .transform(['envify', envParams])
         .bundle()
-        .pipe(source('contentscript-goodblock.js'))
+        .pipe(source(outputName))
         .pipe(gulp.dest(outputDir));
+}
+
+var files = [
+    {
+        filename: '../src/js/contentscript-goodblock.jsx',
+        outputDir: '../dist/build/goodblock.chromium/js/',
+        outputName: 'contentscript-goodblock.js',
+    },
+    {
+        filename: '../src/js/goodblock-popup.js',
+        outputDir: '../dist/build/goodblock.chromium/js/',
+        outputName: 'goodblock-popup.js',
+    },
+];
+
+
+gulp.task('scripts', function() {
+
+    files.forEach(function(file) {
+        buildScript(file.filename, file.outputDir, file.outputName);
+    });
 
 });
 
