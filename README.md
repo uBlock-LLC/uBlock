@@ -1,3 +1,15 @@
+This version of uBlock is no longer under development.
+
+Consider uBlock Origin or another adblocker.
+
+uBlock Origin: https://github.com/gorhill/uBlock
+
+Other adblockers and privacy tools:
+* https://www.privacytools.io
+* https://prism-break.org/en/all/#web-browser-addons
+
+---
+
 <table width="100%">
       <tr>
       <td align="left" width="70">
