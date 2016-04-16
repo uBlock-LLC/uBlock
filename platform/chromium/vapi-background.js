@@ -78,6 +78,9 @@ vAPI.gladlyHostnames = [
     'gladly.io',
     'tab.gladly.io',
     'goodblock.gladly.io',
+    // Local hosts
+    'gladly.dev',
+    'goodblock.gladly.dev',
 ];
 
 // Goodblock
