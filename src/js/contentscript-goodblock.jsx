@@ -10,7 +10,7 @@ var createBaseElem = function() {
 	var script = document.createElement('script');
 	script.id = baseElemId;
 	script.src = process.env.GOODBLOCK_SCRIPT_SRC;
-	script.async = true;
+	script.async = 'async';
 	script.dataset.goodblockContentScriptNum = 0;
 	document.getElementsByTagName('head')[0].appendChild(script);
 	return script;
