@@ -42,7 +42,7 @@
 
 µBlock.goodblock.config.devConfig.timeMsToSnooze = 3 * 1000;
 µBlock.goodblock.config.devConfig.timeMsToSleep = 8 * 1000;
-µBlock.goodblock.config.baseUrl = 'http://192.168.99.100';
+µBlock.goodblock.config.baseUrl = 'https://goodblock.gladly.dev';
 
 µBlock.goodblock.config.gladlyHostnames = [
     'gladly.io',
@@ -52,8 +52,9 @@
     'gladlyads.xyz',
     'goodblock.org',
     'tabforacause.org',
-    '192.168.99.100',
-    '192.168.99.101',
+    'gladly.dev',
+    'goodblock.gladly.dev',
+    'tab.gladly.dev',
 ];
 µBlock.goodblock.config.gladlyAdUrls = [
     'https://goodblock.gladly.io/app/ad/',
