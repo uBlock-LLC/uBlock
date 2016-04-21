@@ -22,12 +22,18 @@ var toggleNetFilteringSwitch = function(ev) {
     if ( popupData.pageHostname === 'behind-the-scene' && !popupData.advancedUserEnabled ) {
         return;
     }
+
+    var whiteListStatus = (popupData.pageURL === '') ||
+        (!popupData.netFilteringSwitch) ||
+        (popupData.pageHostname === 'behind-the-scene' && !popupData.advancedUserEnabled);
+
     messager.send({
         what: 'toggleNetFiltering',
         url: popupData.pageURL,
         scope: ev.ctrlKey || ev.metaKey ? 'page' : '',
         state: !uDom('body').toggleClass('off').hasClass('off'),
-        tabId: popupData.tabId
+        tabId: popupData.tabId,
+        whiteListStatus: whiteListStatus,
     });
 
     hashFromPopupData();

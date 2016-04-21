@@ -826,6 +826,15 @@ var TOKEN_LOCAL_STORAGE_KEY = 'goodblockToken';
     return µBlock.goodblock.API.fetchEndpoint('GET', url);
 };
 
+// Log a white list domain
+µBlock.goodblock.API.logWhiteListDomain = function(pageUrl) {
+    var data = {
+        whitelist_url: pageUrl,
+    };
+    var url = µBlock.goodblock.API.baseUrl + '/log-whitelist-url/';
+    return µBlock.goodblock.API.fetchEndpoint('POST', url, data);
+};
+
 /******************************************************************************/
 
 µBlock.goodblock.syncExtensionVersion();
