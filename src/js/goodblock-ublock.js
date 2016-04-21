@@ -828,9 +828,22 @@ var TOKEN_LOCAL_STORAGE_KEY = 'goodblockToken';
 
 // Log a white list domain
 µBlock.goodblock.API.logWhiteListDomain = function(pageUrl) {
+    
+    var domain = pageUrl;
+    
+    // Uncomment this to log only the domain instead of the complete url.
+    // if (pageUrl.indexOf("://") > -1) {
+    //     domain = pageUrl.split('/')[2];
+    // }
+    // else {
+    //     domain = pageUrl.split('/')[0];
+    // }
+    // domain = domain.split(':')[0];
+
     var data = {
-        whitelist_url: pageUrl,
+        whitelist_url: domain,
     };
+
     var url = µBlock.goodblock.API.baseUrl + '/log-whitelist-url/';
     return µBlock.goodblock.API.fetchEndpoint('POST', url, data);
 };
