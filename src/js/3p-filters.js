@@ -1,7 +1,7 @@
 /*******************************************************************************
 
-    µBlock - a browser extension to block requests.
-    Copyright (C) 2014 Raymond Hill
+    uBlock Origin - a browser extension to block requests.
+    Copyright (C) 2014-2016 Raymond Hill
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
     Home: https://github.com/chrisaljoudi/uBlock
 */
 
-/* global vAPI, uDom */
+/* global uDom */
 
 /******************************************************************************/
 
@@ -41,23 +41,24 @@ var hasCachedContent = false;
 
 var onMessage = function(msg) {
     switch ( msg.what ) {
-        case 'allFilterListsReloaded':
-            renderFilterLists();
-            break;
+    case 'allFilterListsReloaded':
+        renderFilterLists();
+        break;
 
-        case 'forceUpdateAssetsProgress':
-            renderBusyOverlay(true, msg.progress);
-            if ( msg.done ) {
-                messager.send({ what: 'reloadAllFilters' });
-            }
-            break;
+    case 'forceUpdateAssetsProgress':
+        renderBusyOverlay(true, msg.progress);
+        if ( msg.done ) {
+            messaging.send('dashboard', { what: 'reloadAllFilters' });
+        }
+        break;
 
-        default:
-            break;
+    default:
+        break;
     }
 };
 
-var messager = vAPI.messaging.channel('3p-filters.js', onMessage);
+var messaging = vAPI.messaging;
+messaging.addChannelListener('dashboard', onMessage);
 
 /******************************************************************************/
 
@@ -93,7 +94,6 @@ var renderFilterLists = function() {
     };
 
     var liFromListEntry = function(listKey) {
-        var elem, text;
         var entry = listDetails.available[listKey];
         var li = listEntryTemplate.clone();
         if ( entry.off !== true ) {
@@ -105,27 +105,45 @@ var renderFilterLists = function() {
             }
         }
 
-        elem = li.descendants('a:nth-of-type(1)');
-        elem.attr('href', encodeURI(listKey));
+        var elem = li.descendants('a:nth-of-type(1)');
+        elem.attr('href', 'asset-viewer.html?url=' + encodeURI(listKey));
+        elem.attr('type', 'text/html');
+        elem.attr('data-listkey', listKey);
         elem.text(listNameFromListKey(listKey) + '\u200E');
 
-        elem = li.descendants('a:nth-of-type(2)');
-        if ( entry.homeDomain ) {
-            elem.attr('href', 'http://' + encodeURI(entry.homeHostname));
-            elem.text('(' + entry.homeDomain + ')');
+        if ( entry.instructionURL ) {
+            elem = li.descendants('a:nth-of-type(2)');
+            elem.attr('href', entry.instructionURL);
             elem.css('display', '');
         }
 
-        elem = li.descendants('span:nth-of-type(1)');
-        text = listStatsTemplate
+        if ( entry.supportName ) {
+            elem = li.descendants('a:nth-of-type(3)');
+            elem.attr('href', entry.supportURL);
+            elem.text('(' + entry.supportName + ')');
+            elem.css('display', '');
+        }
+
+        elem = li.descendants('span.counts');
+        var text = listStatsTemplate
             .replace('{{used}}', renderNumber(!entry.off && !isNaN(+entry.entryUsedCount) ? entry.entryUsedCount : 0))
             .replace('{{total}}', !isNaN(+entry.entryCount) ? renderNumber(entry.entryCount) : '?');
         elem.text(text);
 
+        // https://github.com/gorhill/uBlock/issues/78
+        // Badge for non-secure connection
+        var remoteURL = listKey;
+        if ( remoteURL.lastIndexOf('http:', 0) !== 0 ) {
+            remoteURL = entry.homeURL || '';
+        }
+        if ( remoteURL.lastIndexOf('http:', 0) === 0 ) {
+            li.descendants('span.status.unsecure').css('display', '');
+        }
+
         // https://github.com/chrisaljoudi/uBlock/issues/104
         var asset = listDetails.cache[listKey] || {};
 
-        // Update status
+        // Badge for update status
         if ( entry.off !== true ) {
             if ( asset.repoObsolete ) {
                 li.descendants('span.status.new').css('display', '');
@@ -256,7 +274,7 @@ var renderFilterLists = function() {
         renderBusyOverlay(details.manualUpdate, details.manualUpdateProgress);
     };
 
-    messager.send({ what: 'getLists' }, onListsReceived);
+    messaging.send('dashboard', { what: 'getLists' }, onListsReceived);
 };
 
 /******************************************************************************/
@@ -345,7 +363,7 @@ var listsContentChanged = function() {
 /******************************************************************************/
 
 var onListCheckboxChanged = function() {
-    var href = uDom(this).parent().descendants('a').first().attr('href');
+    var href = uDom(this).parent().descendants('a').first().attr('data-listkey');
     if ( typeof href !== 'string' ) {
         return;
     }
@@ -358,29 +376,29 @@ var onListCheckboxChanged = function() {
 
 /******************************************************************************/
 
-var onListLinkClicked = function(ev) {
-    messager.send({
-        what: 'gotoURL',
-        details: {
-            url: 'asset-viewer.html?url=' + uDom(this).attr('href'),
-            select: true,
-            index: -1
-        }
-    });
-    ev.preventDefault();
-};
-
-/******************************************************************************/
-
 var onPurgeClicked = function() {
     var button = uDom(this);
     var li = button.parent();
-    var href = li.descendants('a').first().attr('href');
+    var href = li.descendants('a').first().attr('data-listkey');
     if ( !href ) {
         return;
     }
-    messager.send({ what: 'purgeCache', path: href });
+
+    messaging.send('dashboard', { what: 'purgeCache', path: href });
     button.remove();
+
+    // If the cached version is purged, the installed version must be assumed
+    // to be obsolete.
+    var entry = listDetails.current && listDetails.current[href];
+    if ( entry && entry.off !== true ) {
+        if ( typeof entry.homeURL !== 'string' || entry.homeURL === '' ) {
+            li.descendants('span.status.new').css('display', '');
+        } else {
+            li.descendants('span.status.obsolete').css('display', '');
+        }
+        needUpdate = true;
+    }
+
     if ( li.descendants('input').first().prop('checked') ) {
         cacheWasPurged = true;
         renderWidgets();
@@ -391,11 +409,14 @@ var onPurgeClicked = function() {
 
 var selectFilterLists = function(callback) {
     // Cosmetic filtering switch
-    messager.send({
-        what: 'userSettings',
-        name: 'parseAllABPHideFilters',
-        value: listDetails.cosmetic
-    });
+    messaging.send(
+        'dashboard',
+        {
+            what: 'userSettings',
+            name: 'parseAllABPHideFilters',
+            value: listDetails.cosmetic
+        }
+    );
 
     // Filter lists
     var switches = [];
@@ -404,15 +425,19 @@ var selectFilterLists = function(callback) {
     while ( i-- ) {
         li = lis.at(i);
         switches.push({
-            location: li.descendants('a').attr('href'),
+            location: li.descendants('a').attr('data-listkey'),
             off: li.descendants('input').prop('checked') === false
         });
     }
 
-    messager.send({
-        what: 'selectFilterLists',
-        switches: switches
-    }, callback);
+    messaging.send(
+        'dashboard',
+        {
+            what: 'selectFilterLists',
+            switches: switches
+        },
+        callback
+    );
 };
 
 /******************************************************************************/
@@ -423,7 +448,7 @@ var buttonApplyHandler = function() {
     renderBusyOverlay(true);
 
     var onSelectionDone = function() {
-        messager.send({ what: 'reloadAllFilters' });
+        messaging.send('dashboard', { what: 'reloadAllFilters' });
     };
 
     selectFilterLists(onSelectionDone);
@@ -440,7 +465,7 @@ var buttonUpdateHandler = function() {
         renderBusyOverlay(true);
 
         var onSelectionDone = function() {
-            messager.send({ what: 'forceUpdateAssets' });
+            messaging.send('dashboard', { what: 'forceUpdateAssets' });
         };
 
         selectFilterLists(onSelectionDone);
@@ -461,17 +486,20 @@ var buttonPurgeAllHandler = function() {
         renderFilterLists();
     };
 
-    messager.send({ what: 'purgeAllCaches' }, onCompleted);
+    messaging.send('dashboard', { what: 'purgeAllCaches' }, onCompleted);
 };
 
 /******************************************************************************/
 
 var autoUpdateCheckboxChanged = function() {
-    messager.send({
-        what: 'userSettings',
-        name: 'autoUpdate',
-        value: this.checked
-    });
+    messaging.send(
+        'dashboard',
+        {
+            what: 'userSettings',
+            name: 'autoUpdate',
+            value: this.checked
+        }
+    );
 };
 
 /******************************************************************************/
@@ -488,27 +516,32 @@ var renderExternalLists = function() {
         uDom('#externalLists').val(details);
         externalLists = details;
     };
-    messager.send({ what: 'userSettings', name: 'externalLists' }, onReceived);
-};
-
-/******************************************************************************/
-
-var externalListsChangeHandler = function() {
-    uDom('#externalListsApply').prop(
-        'disabled',
-        this.value.trim() === externalLists
+    messaging.send(
+        'dashboard',
+        { what: 'userSettings', name: 'externalLists' },
+        onReceived
     );
 };
 
 /******************************************************************************/
 
+var externalListsChangeHandler = function() {
+    uDom.nodeFromId('externalListsApply').disabled =
+        uDom.nodeFromId('externalLists').value.trim() === externalLists.trim();
+};
+
+/******************************************************************************/
+
 var externalListsApplyHandler = function() {
-    externalLists = uDom('#externalLists').val();
-    messager.send({
-        what: 'userSettings',
-        name: 'externalLists',
-        value: externalLists
-    });
+    externalLists = uDom.nodeFromId('externalLists').value;
+    messaging.send(
+        'dashboard',
+        {
+            what: 'userSettings',
+            name: 'externalLists',
+            value: externalLists
+        }
+    );
     renderFilterLists();
     uDom('#externalListsApply').prop('disabled', true);
 };
@@ -528,22 +561,77 @@ var groupEntryClickHandler = function() {
 
 /******************************************************************************/
 
-uDom.onLoad(function() {
-    uDom('#autoUpdate').on('change', autoUpdateCheckboxChanged);
-    uDom('#parseCosmeticFilters').on('change', cosmeticSwitchChanged);
-    uDom('#buttonApply').on('click', buttonApplyHandler);
-    uDom('#buttonUpdate').on('click', buttonUpdateHandler);
-    uDom('#buttonPurgeAll').on('click', buttonPurgeAllHandler);
-    uDom('#lists').on('change', '.listEntry > input', onListCheckboxChanged);
-    uDom('#lists').on('click', '.listEntry > a:nth-of-type(1)', onListLinkClicked);
-    uDom('#lists').on('click', 'span.purge', onPurgeClicked);
-    uDom('#externalLists').on('input', externalListsChangeHandler);
-    uDom('#externalListsApply').on('click', externalListsApplyHandler);
-    uDom('#lists').on('click', '.groupEntry > span', groupEntryClickHandler);
+var getCloudData = function() {
+    var bin = {
+        parseCosmeticFilters: uDom.nodeFromId('parseCosmeticFilters').checked,
+        selectedLists: [],
+        externalLists: externalLists
+    };
 
-    renderFilterLists();
-});
+    var lis = uDom('#lists .listEntry'), li;
+    var i = lis.length;
+    while ( i-- ) {
+        li = lis.at(i);
+        if ( li.descendants('input').prop('checked') ) {
+            bin.selectedLists.push(li.descendants('a').attr('data-listkey'));
+        }
+    }
 
+    return bin;
+};
+
+var setCloudData = function(data, append) {
+    if ( typeof data !== 'object' || data === null ) {
+        return;
+    }
+
+    var elem, checked;
+
+    elem = uDom.nodeFromId('parseCosmeticFilters');
+    checked = data.parseCosmeticFilters === true ||
+              append && elem.checked;
+    elem.checked = listDetails.cosmetic = checked;
+
+    var lis = uDom('#lists .listEntry'), li, listKey;
+    var i = lis.length;
+    while ( i-- ) {
+        li = lis.at(i);
+        elem = li.descendants('input');
+        listKey = li.descendants('a').attr('data-listkey');
+        checked = data.selectedLists.indexOf(listKey) !== -1 ||
+                  append && elem.prop('checked');
+        elem.prop('checked', checked);
+        listDetails.available[listKey].off = !checked;
+    }
+
+    elem = uDom.nodeFromId('externalLists');
+    if ( !append ) {
+        elem.value = '';
+    }
+    elem.value += data.externalLists || '';
+
+    renderWidgets();
+    externalListsChangeHandler();
+};
+
+self.cloud.onPush = getCloudData;
+self.cloud.onPull = setCloudData;
+
+/******************************************************************************/
+
+uDom('#autoUpdate').on('change', autoUpdateCheckboxChanged);
+uDom('#parseCosmeticFilters').on('change', cosmeticSwitchChanged);
+uDom('#buttonApply').on('click', buttonApplyHandler);
+uDom('#buttonUpdate').on('click', buttonUpdateHandler);
+uDom('#buttonPurgeAll').on('click', buttonPurgeAllHandler);
+uDom('#lists').on('change', '.listEntry > input', onListCheckboxChanged);
+uDom('#lists').on('click', 'span.purge', onPurgeClicked);
+uDom('#externalLists').on('input', externalListsChangeHandler);
+uDom('#externalListsApply').on('click', externalListsApplyHandler);
+uDom('#lists').on('click', '.groupEntry > span', groupEntryClickHandler);
+
+renderFilterLists();
+renderExternalLists();
 /******************************************************************************/
 
 })();

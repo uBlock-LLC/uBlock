@@ -1,7 +1,7 @@
 /*******************************************************************************
 
-    µBlock - a browser extension to block requests.
-    Copyright (C) 2014 The µBlock authors
+    uBlock Origin - a browser extension to block requests.
+    Copyright (C) 2014-2016 The uBlock Origin authors
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -19,9 +19,9 @@
     Home: https://github.com/chrisaljoudi/uBlock
 */
 
-// For non background pages
+/* global HTMLDocument, XMLDocument */
 
-/* global self */
+// For non background pages
 
 /******************************************************************************/
 
@@ -30,140 +30,315 @@
 'use strict';
 
 /******************************************************************************/
+/******************************************************************************/
+
+// https://github.com/chrisaljoudi/uBlock/issues/464
+if ( document instanceof HTMLDocument === false ) {
+    // https://github.com/chrisaljoudi/uBlock/issues/1528
+    // A XMLDocument can be a valid HTML document.
+    if (
+        document instanceof XMLDocument === false ||
+        document.createElement('div') instanceof HTMLDivElement === false
+    ) {
+        return;
+    }
+}
+
+// https://github.com/gorhill/uBlock/issues/1124
+// Looks like `contentType` is on track to be standardized:
+//   https://dom.spec.whatwg.org/#concept-document-content-type
+if ( (document.contentType || '').lastIndexOf('image/', 0) === 0 ) {
+    return; 
+}
+
+/******************************************************************************/
 
 var vAPI = self.vAPI = self.vAPI || {};
 var chrome = self.chrome;
 
 // https://github.com/chrisaljoudi/uBlock/issues/456
 // Already injected?
-if ( vAPI.vapiClientInjected ) {
-    //console.debug('vapi-client.js already injected: skipping.');
+if ( vAPI.sessionId ) {
     return;
 }
 
-vAPI.vapiClientInjected = true;
-vAPI.sessionId = String.fromCharCode(Date.now() % 25 + 97) +
-    Math.random().toString(36).slice(2);
+vAPI.sessionId = String.fromCharCode(Date.now() % 26 + 97) +
+                 Math.random().toString(36).slice(2);
 vAPI.chrome = true;
 
 /******************************************************************************/
 
-if (!chrome.runtime) {
-    // Chrome 20-21
-    chrome.runtime = chrome.extension;
-}
-else if(!chrome.runtime.onMessage) {
-    // Chrome 22-25
-    chrome.runtime.onMessage = chrome.extension.onMessage;
-    chrome.runtime.sendMessage = chrome.extension.sendMessage;
-    chrome.runtime.onConnect = chrome.extension.onConnect;
-    chrome.runtime.connect = chrome.extension.connect;
-}
+vAPI.setTimeout = vAPI.setTimeout || self.setTimeout.bind(self);
 
 /******************************************************************************/
 
-// When sending messages from the extension to content scripts,
-// this calls any targeted listeners in the content scripts.
-var messagingConnector = function(response) {
-    if ( !response ) {
-        return;
-    }
+vAPI.shutdown = (function() {
+    var jobs = [];
 
-    var channels = vAPI.messaging.channels;
-    var channel, listener;
+    var add = function(job) {
+        jobs.push(job);
+    };
 
-    // Handle a message sent to all tabs.
-    if ( response.broadcast === true && !response.channelName ) {
-        for ( channel in channels ) {
-            if ( channels.hasOwnProperty(channel) === false ) {
-                continue;
-            }
-            listener = channels[channel].listener;
-            if ( typeof listener === 'function' ) {
-                listener(response.msg);
-            }
+    var exec = function() {
+        var job;
+        while ( (job = jobs.pop()) ) {
+            job();
         }
-        return;
-    }
+    };
 
-    if ( response.requestId ) {
-        listener = vAPI.messaging.listeners[response.requestId];
-        delete vAPI.messaging.listeners[response.requestId];
-        delete response.requestId;
-    }
+    return {
+        add: add,
+        exec: exec
+    };
+})();
 
-    // Get the listener by channel name.
-    if ( !listener ) {
-        channel = channels[response.channelName];
-        listener = channel && channel.listener;
-    }
-
-    if ( typeof listener === 'function' ) {
-        listener(response.msg);
-    }
-};
-
+/******************************************************************************/
 /******************************************************************************/
 
 vAPI.messaging = {
     port: null,
-    channels: {},
-    listeners: {},
-    requestId: 1,
+    portTimer: null,
+    portTimerDelay: 10000,
+    channels: Object.create(null),
+    channelCount: 0,
+    pending: Object.create(null),
+    pendingCount: 0,
+    auxProcessId: 1,
+    shuttingDown: false,
 
-    setup: function() {
-        this.port = chrome.runtime.connect({name: vAPI.sessionId});
-        this.port.onMessage.addListener(messagingConnector);
+    shutdown: function() {
+        this.shuttingDown = true;
+        this.destroyPort();
     },
 
-    close: function() {
-        if ( this.port === null ) {
-            return;
-        }
-        this.port.disconnect();
-        this.port.onMessage.removeListener(messagingConnector);
+    disconnectListener: function() {
         this.port = null;
-        this.channels = {};
-        this.listeners = {};
+        vAPI.shutdown.exec();
     },
+    disconnectListenerCallback: null,
 
-    channel: function(channelName, callback) {
-        if ( !channelName ) {
+    messageListener: function(details) {
+        if ( !details ) {
             return;
         }
 
-        this.channels[channelName] = {
-            channelName: channelName,
-            listener: typeof callback === 'function' ? callback : null,
-            send: function(message, callback) {
-                if ( vAPI.messaging.port === null ) {
-                    vAPI.messaging.setup();
-                }
+        // Sent to all channels
+        if ( details.broadcast === true && !details.channelName ) {
+            for ( var channelName in this.channels ) {
+                this.sendToChannelListeners(channelName, details.msg);
+            }
+            return;
+        }
 
-                message = {
-                    channelName: this.channelName,
-                    msg: message
-                };
+        // Response to specific message previously sent
+        if ( details.auxProcessId ) {
+            var listener = this.pending[details.auxProcessId];
+            delete this.pending[details.auxProcessId];
+            delete details.auxProcessId; // TODO: why?
+            if ( listener ) {
+                this.pendingCount -= 1;
+                listener(details.msg);
+                return;
+            }
+        }
 
-                if ( callback ) {
-                    message.requestId = vAPI.messaging.requestId++;
-                    vAPI.messaging.listeners[message.requestId] = callback;
-                }
+        // Sent to a specific channel
+        var response = this.sendToChannelListeners(details.channelName, details.msg);
 
-                vAPI.messaging.port.postMessage(message);
-            },
-            close: function() {
-                delete vAPI.messaging.channels[this.channelName];
-                if ( Object.keys(vAPI.messaging.channels).length === 0 ) {
-                    vAPI.messaging.close();
+        // Respond back if required
+        if ( details.mainProcessId === undefined ) {
+            return;
+        }
+        var port = this.connect();
+        if ( port !== null ) {
+            port.postMessage({
+                mainProcessId: details.mainProcessId,
+                msg: response
+            });
+        }
+    },
+    messageListenerCallback: null,
+
+    portPoller: function() {
+        this.portTimer = null;
+        if ( this.port !== null ) {
+            if ( this.channelCount !== 0 || this.pendingCount !== 0 ) {
+                this.portTimer = vAPI.setTimeout(this.portPollerCallback, this.portTimerDelay);
+                this.portTimerDelay = Math.min(this.portTimerDelay * 2, 60 * 60 * 1000);
+                return;
+            }
+        }
+        this.destroyPort();
+    },
+    portPollerCallback: null,
+
+    destroyPort: function() {
+        if ( this.portTimer !== null ) {
+            clearTimeout(this.portTimer);
+            this.portTimer = null;
+        }
+        var port = this.port;
+        if ( port !== null ) {
+            port.disconnect();
+            port.onMessage.removeListener(this.messageListenerCallback);
+            port.onDisconnect.removeListener(this.disconnectListenerCallback);
+            this.port = null;
+        }
+        if ( this.channelCount !== 0 ) {
+            this.channels = Object.create(null);
+            this.channelCount = 0;
+        }
+        // service pending callbacks
+        if ( this.pendingCount !== 0 ) {
+            var pending = this.pending, callback;
+            this.pending = Object.create(null);
+            this.pendingCount = 0;
+            for ( var auxId in pending ) {
+                callback = pending[auxId];
+                if ( typeof callback === 'function' ) {
+                    callback(null);
                 }
             }
-        };
+        }
+    },
 
-        return this.channels[channelName];
+    createPort: function() {
+        if ( this.shuttingDown ) {
+            return null;
+        }
+        if ( this.messageListenerCallback === null ) {
+            this.messageListenerCallback = this.messageListener.bind(this);
+            this.disconnectListenerCallback = this.disconnectListener.bind(this);
+            this.portPollerCallback = this.portPoller.bind(this);
+        }
+        try {
+            this.port = chrome.runtime.connect({name: vAPI.sessionId}) || null;
+        } catch (ex) {
+            this.port = null;
+        }
+        if ( this.port !== null ) {
+            this.port.onMessage.addListener(this.messageListenerCallback);
+            this.port.onDisconnect.addListener(this.disconnectListenerCallback);
+        }
+        this.portTimerDelay = 10000;
+        if ( this.portTimer === null ) {
+            this.portTimer = vAPI.setTimeout(this.portPollerCallback, this.portTimerDelay);
+        }
+        return this.port;
+    },
+
+    connect: function() {
+        return this.port !== null ? this.port : this.createPort();
+    },
+
+    send: function(channelName, message, callback) {
+        this.sendTo(channelName, message, undefined, undefined, callback);
+    },
+
+    sendTo: function(channelName, message, toTabId, toChannel, callback) {
+        // Too large a gap between the last request and the last response means
+        // the main process is no longer reachable: memory leaks and bad
+        // performance become a risk -- especially for long-lived, dynamic
+        // pages. Guard against this.
+        if ( this.pendingCount > 25 ) {
+            vAPI.shutdown.exec();
+        }
+        var port = this.connect();
+        if ( port === null ) {
+            if ( typeof callback === 'function' ) {
+                callback();
+            }
+            return;
+        }
+        var auxProcessId;
+        if ( callback ) {
+            auxProcessId = this.auxProcessId++;
+            this.pending[auxProcessId] = callback;
+            this.pendingCount += 1;
+        }
+        port.postMessage({
+            channelName: channelName,
+            auxProcessId: auxProcessId,
+            toTabId: toTabId,
+            toChannel: toChannel,
+            msg: message
+        });
+    },
+
+    addChannelListener: function(channelName, callback) {
+        if ( typeof callback !== 'function' ) {
+            return;
+        }
+        var listeners = this.channels[channelName];
+        if ( listeners !== undefined && listeners.indexOf(callback) !== -1 ) {
+            console.error('Duplicate listener on channel "%s"', channelName);
+            return;
+        }
+        if ( listeners === undefined ) {
+            this.channels[channelName] = [callback];
+            this.channelCount += 1;
+        } else {
+            listeners.push(callback);
+        }
+        this.connect();
+    },
+
+    removeChannelListener: function(channelName, callback) {
+        if ( typeof callback !== 'function' ) {
+            return;
+        }
+        var listeners = this.channels[channelName];
+        if ( listeners === undefined ) {
+            return;
+        }
+        var pos = this.listeners.indexOf(callback);
+        if ( pos === -1 ) {
+            console.error('Listener not found on channel "%s"', channelName);
+            return;
+        }
+        listeners.splice(pos, 1);
+        if ( listeners.length === 0 ) {
+            delete this.channels[channelName];
+            this.channelCount -= 1;
+        }
+    },
+
+    removeAllChannelListeners: function(channelName) {
+        var listeners = this.channels[channelName];
+        if ( listeners === undefined ) {
+            return;
+        }
+        delete this.channels[channelName];
+        this.channelCount -= 1;
+    },
+
+    sendToChannelListeners: function(channelName, msg) {
+        var listeners = this.channels[channelName];
+        if ( listeners === undefined ) {
+            return;
+        }
+        var response;
+        for ( var i = 0, n = listeners.length; i < n; i++ ) {
+            response = listeners[i](msg);
+            if ( response !== undefined ) {
+                break;
+            }
+        }
+        return response;
     }
 };
 
+/******************************************************************************/
+
+vAPI.shutdown.add(function() {
+    vAPI.messaging.shutdown();
+    delete window.vAPI;
+});
+
+// https://www.youtube.com/watch?v=rT5zCHn0tsg
+// https://www.youtube.com/watch?v=E-jS4e3zacI
+
+/******************************************************************************/
 /******************************************************************************/
 
 })(this);

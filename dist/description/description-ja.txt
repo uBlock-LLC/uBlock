@@ -1,9 +1,9 @@
 効率的なブロッカー：コンピュータのメモリとCPUのフットプリントはより少なく
 、別の人気のブロッカーよりも何千ものフィルタをロードし、強制的にブロックができます
 
-他ソフトとの比較は以下のとおり： https://github.com/chrisaljoudi/uBlock/wiki/uBlock-vs.-ABP:-efficiency-compared
+他ソフトとの比較： https://github.com/gorhill/uBlock/wiki/uBlock-vs.-ABP:-efficiency-compared
 
-使用法: 大きなボタンは永久にこのエクステンションを現在のサイトで有効か無効にします。 現在のサイトのみに適用されます、グローバルボタンではありません。
+使用法: ポップアップに表示される大きな電源ボタンは、現在のサイトでuBlockの有効/無効を切り替えます。 現在のサイトのみに適用されます、グローバルボタンではありません。
 
 ***
 
@@ -23,7 +23,7 @@
 - hpHosts’s Ad and tracking servers
 - MVPS HOSTS
 - Spam404
-- Etc.
+- その他たくさん
 
 もちろん、多くのフィルターを適用すれば使用メモリーは増えます。 ただ、それでも、Fanboy's Special Blocking List、Fanboy's Enhanced Tracking List、hpHost's Ad and tracking serversの三つのリストを追加で適用しても、uBlockは他の人気のブロッカーより少ないメモリー消費を実現しています。
 
@@ -39,7 +39,7 @@
 パブリックライセンス(GPLv3)のオープンソース
 ユーザーによって作られた、ユーザーのための物。
 
-貢献者 @ Github: https://github.com/chrisaljoudi/uBlock/graphs/contributors
+貢献者 @ Github: https://github.com/gorhill/uBlock/graphs/contributors
 貢献者 @ Crowdin: https://crowdin.net/project/ublock
 
 ***
@@ -47,4 +47,4 @@
 これは割と初期のバージョンですので、それを念頭にレビューをお願いします。
 
 プロジェクト変更ログ：
-https://github.com/chrisaljoudi/uBlock/releases
+https://github.com/gorhill/uBlock/releases

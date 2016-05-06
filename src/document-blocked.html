@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+<link rel="stylesheet" href="css/common.css" type="text/css">
+<style>
+body {
+    font-size: large;
+    text-align: center;
+    }
+body > div {
+    margin: 1.5em 0;
+    }
+body > div > p,
+body > div > div {
+    margin: 4px 0;
+    }
+body > div > p:first-child {
+    margin: 1.5em 0 0 0;
+    }
+a {
+    text-decoration: none;
+    }
+button {
+    cursor: pointer;
+    margin: 0 1em 0.25em 1em;
+    padding: 0.25em 0.5em;
+    font-size: inherit;
+    }
+select {
+    font: inherit;
+    padding: 2px;
+    }
+.code {
+    background-color: rgba(0, 0, 0, 0.1);
+    font-family: monospace;
+    font-size: large;
+    line-height: 1;
+    padding: 4px;
+    word-break: break-all;
+    }
+#warningSign {
+    opacity: 1;
+    pointer-events: none;
+    width: 100%;
+    }
+#warningSign > span {
+    color: #f2a500;
+    font-size: 10em;
+    }
+#theURL {
+    padding: 0;
+    }
+#theURL > * {
+    margin: 0;
+    }
+#theURL > p {
+    position: relative;
+    z-index: 10;
+    }
+#theURL > p > span {
+    background-color: transparent;
+    top: 100%;
+    box-sizing: border-box;
+    cursor: pointer;
+    opacity: 0.5;
+    padding: 0.2em;
+    position: absolute;
+    transform: translate(0, -50%);
+    }
+body[dir="ltr"] #theURL > p > span {
+    right: 0;
+    }
+body[dir="rtl"] #theURL > p > span {
+    left: 0;
+    }
+#theURL > p:hover > span {
+    opacity: 1;
+    }
+#theURL > p > span:before {
+    content: '\f010';
+    }
+#theURL.collapsed > p > span:before {
+    content: '\f00e';
+    }
+#parsed {
+    background-color: #f8f8f8;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-top: none;
+    color: gray;
+    font-size: small;
+    overflow-x: hidden;
+    padding: 4px;
+    text-align: initial;
+    text-overflow: ellipsis; 
+    }
+#theURL.collapsed > #parsed {
+    display: none;
+    }
+#parsed ul, #parsed li {
+    list-style-type: none;
+    }
+#parsed li {
+    white-space: nowrap;
+    }
+#parsed span {
+    display: inline-block;
+    }
+#parsed span:first-of-type {
+    font-weight: bold;
+    }
+#whyex {
+    font-size: smaller;
+    opacity: 0.6;
+    }
+#whyex:hover {
+    opacity: 1;
+    }
+#whyex a {
+    white-space: nowrap;
+}
+.proceedChoice {
+    text-align: left;
+    }
+</style>
+</head>
+<body>
+<div id="warningSign"><span class="fa">&#xf071;</span></div>
+<div>
+    <p data-i18n="docblockedPrompt1"></p>
+    <div id="theURL" class="collapsed">
+        <p class="code"></p>
+        <ul id="parsed"></ul>
+        </div>
+    </div>
+
+<div>
+    <p data-i18n="docblockedPrompt2"></p>
+    <p id="why" class="code"></p><!--
+ --><span id="whyex" style="display: none;"><span data-i18n="docblockedFoundIn"></span> <span></span></span>
+    </div>
+
+<div>
+    <p><button id="back" data-i18n="docblockedBack" type="button"></button>
+    <button id="bye" data-i18n="docblockedClose" type="button"></button></p>
+    </div>
+
+<div>
+    <p id="proceed"></p>
+    <p><button id="proceedTemporary" data-i18n="docblockedDisableTemporary" type="button"></button>
+    <button id="proceedPermanent" data-i18n="docblockedDisablePermanent" type="button"></button></p>
+    </div>
+
+<div style="display: none;">
+    <span id="proceedTemplate">
+        <span></span> 
+        <span class="proceedChoice">
+            <select>
+                <option class="hn" value="" selected>
+                <option class="dn" value="">
+            </select> 
+        </span>
+        <span class="proceedChoice code hn"></span>
+        <span></span>
+    </span>
+    </div>
+
+<script src="js/vapi-common.js"></script>
+<script src="js/vapi-client.js"></script>
+<script src="js/udom.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/document-blocked.js"></script>
+</body>
+</html>

@@ -1,6 +1,6 @@
 /*******************************************************************************
 
-    µBlock - a browser extension to block requests.
+    uBlock - a browser extension to block requests.
     Copyright (C) 2014-2015 Raymond Hill
 
     This program is free software: you can redistribute it and/or modify
@@ -37,6 +37,20 @@ var µb = µBlock;
 
 /******************************************************************************/
 
+vAPI.app.onShutdown = function() {
+    µb.staticFilteringReverseLookup.shutdown();
+    µb.assetUpdater.shutdown();
+    µb.staticNetFilteringEngine.reset();
+    µb.cosmeticFilteringEngine.reset();
+    µb.sessionFirewall.reset();
+    µb.permanentFirewall.reset();
+    µb.permanentFirewall.reset();
+    µb.sessionURLFiltering.reset();
+    µb.permanentURLFiltering.reset();
+};
+
+/******************************************************************************/
+
 // Final initialization steps after all needed assets are in memory.
 // - Initialize internal state with maybe already existing tabs.
 // - Schedule next update operation.
@@ -53,9 +67,18 @@ var onAllReady = function() {
     // for launch time.
     µb.assets.remoteFetchBarrier -= 1;
 
+    vAPI.cloud.start([
+        'tpFiltersPane',
+        'myFiltersPane',
+        'myRulesPane',
+        'whitelistPane'
+    ]);
+
     //quickProfiler.stop(0);
 
     vAPI.onLoadAllCompleted();
+    µb.contextMenu.update(null);
+    µb.firstInstall = false;
 };
 
 /******************************************************************************/
@@ -83,7 +106,7 @@ var onVersionReady = function(lastVersion) {
     }
     // https://github.com/gorhill/uBlock/issues/135#issuecomment-96677379
     // `about:loopconversation` is used by Firefox for its Hello service
-    if ( lastVersion.localeCompare('0.9.3.5') <= 0 ) {
+    if ( lastVersion.localeCompare('0.9.5.2') < 0 ) {
         µb.netWhitelist = µb.whitelistFromString(
             µb.stringFromWhitelist(µb.netWhitelist) +
             '\n' +
@@ -105,9 +128,13 @@ var onSelfieReady = function(selfie) {
     if ( publicSuffixList.fromSelfie(selfie.publicSuffixList) !== true ) {
         return false;
     }
-    //console.log('start.js/onSelfieReady: selfie looks good');
+    if ( selfie.redirectEngine === undefined ) {
+        return false;
+    }
+
     µb.remoteBlacklists = selfie.filterLists;
     µb.staticNetFilteringEngine.fromSelfie(selfie.staticNetFilteringEngine);
+    µb.redirectEngine.fromSelfie(selfie.redirectEngine);
     µb.cosmeticFilteringEngine.fromSelfie(selfie.cosmeticFilteringEngine);
     return true;
 };
@@ -159,17 +186,18 @@ var onUserSettingsReady = function(fetched) {
     // https://github.com/chrisaljoudi/uBlock/issues/540
     // Disabling local mirroring for the time being
     userSettings.experimentalEnabled = false;
-    µb.mirrors.toggle(false /* userSettings.experimentalEnabled */);
 
-    µb.contextMenu.toggle(userSettings.contextMenuEnabled);
+    vAPI.browserSettings.set({
+        'hyperlinkAuditing': !userSettings.hyperlinkAuditingDisabled,
+        'prefetching': !userSettings.prefetchingDisabled,
+        'webrtcIPAddress': !userSettings.webrtcIPAddressHidden
+    });
+
     µb.permanentFirewall.fromString(fetched.dynamicFilteringString);
     µb.sessionFirewall.assign(µb.permanentFirewall);
-
-    // Set a user id if none available
-    if (!userSettings.userId) {
-      userSettings.userId = createUUID();
-      µb.saveUserSettings();
-    }
+    µb.permanentURLFiltering.fromString(fetched.urlFilteringString);
+    µb.sessionURLFiltering.assign(µb.permanentURLFiltering);
+    µb.hnSwitches.fromString(fetched.hostnameSwitchesString);
 
     // Remove obsolete setting
     delete userSettings.logRequests;
@@ -191,8 +219,8 @@ var onSystemSettingsReady = function(fetched) {
     }
     if ( mustSaveSystemSettings ) {
         fetched.selfie = null;
-        µb.destroySelfie();
-        vAPI.storage.preferences.set(µb.systemSettings, µb.noopFunc);
+        µb.selfieManager.destroy();
+        vAPI.storage.set(µb.systemSettings, µb.noopFunc);
     }
 };
 
@@ -203,6 +231,9 @@ var onUserFiltersReady = function(userFilters) {
 };
 
 var onFirstFetchReady = function(fetched) {
+    // https://github.com/gorhill/uBlock/issues/747
+    µb.firstInstall = fetched.version === '0.0.0.0';
+
     // Order is important -- do not change:
     onSystemSettingsReady(fetched);
     fromFetch(µb.localSettings, fetched);
@@ -256,13 +287,15 @@ var fromFetch = function(to, fetched) {
 
 /******************************************************************************/
 
-return function() {
+var onAdminSettingsRestored = function() {
     // Forbid remote fetching of assets
     µb.assets.remoteFetchBarrier += 1;
 
     var fetchableProps = {
         'compiledMagic': '',
-        'dynamicFilteringString': '',
+        'dynamicFilteringString': 'behind-the-scene * 3p noop\nbehind-the-scene * 3p-frame noop',
+        'urlFilteringString': '',
+        'hostnameSwitchesString': '',
         'lastRestoreFile': '',
         'lastRestoreTime': 0,
         'lastBackupFile': '',
@@ -279,6 +312,13 @@ return function() {
     toFetch(µb.restoreBackupSettings, fetchableProps);
 
     vAPI.storage.preferences.get(fetchableProps, onPrefFetchReady);
+};
+
+/******************************************************************************/
+
+return function() {
+    // https://github.com/gorhill/uBlock/issues/531
+    µb.restoreAdminSettings(onAdminSettingsRestored);
 };
 
 /******************************************************************************/

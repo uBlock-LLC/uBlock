@@ -1,6 +1,6 @@
 /*******************************************************************************
 
-    µBlock - a browser extension to black/white list requests.
+    uBlock - a browser extension to block requests.
     Copyright (C) 2014  Raymond Hill
 
     This program is free software: you can redistribute it and/or modify
@@ -89,23 +89,20 @@ var isIPAddress = function(hostname) {
     if ( reIPv4VeryCoarse.test(hostname) ) {
         return true;
     }
-    return hostname.charAt(0) === '[';
+    return hostname.startsWith('[');
 };
 
 /******************************************************************************/
 
 var toBroaderHostname = function(hostname) {
-    if ( hostname === '*' ) {
-        return '';
-    }
     if ( isIPAddress(hostname) ) {
         return '*';
     }
     var pos = hostname.indexOf('.');
-    if ( pos === -1 ) {
-        return '*';
+    if ( pos !== -1 ) {
+        return hostname.slice(pos + 1);
     }
-    return hostname.slice(pos + 1);
+    return hostname !== '*' && hostname !== '' ? '*' : '';
 };
 
 Matrix.toBroaderHostname = toBroaderHostname;
@@ -206,11 +203,11 @@ Matrix.prototype.hasSameRules = function(other, srcHostname, desHostnames) {
 
     // Specific types
     ruleKey = '* *';
-    if ( thisRules[ruleKey] !== otherRules[ruleKey] ) {
+    if ( (thisRules[ruleKey] || 0) !== (otherRules[ruleKey] || 0) ) {
         return false;
     }
     ruleKey = srcHostname + ' *';
-    if ( thisRules[ruleKey] !== otherRules[ruleKey] ) {
+    if ( (thisRules[ruleKey] || 0) !== (otherRules[ruleKey] || 0) ) {
         return false;
     }
 
@@ -220,11 +217,11 @@ Matrix.prototype.hasSameRules = function(other, srcHostname, desHostnames) {
             continue;
         }
         ruleKey = '* ' + desHostname;
-        if ( thisRules[ruleKey] !== otherRules[ruleKey] ) {
+        if ( (thisRules[ruleKey] || 0) !== (otherRules[ruleKey] || 0) ) {
             return false;
         }
         ruleKey = srcHostname + ' ' + desHostname ;
-        if ( thisRules[ruleKey] !== otherRules[ruleKey] ) {
+        if ( (thisRules[ruleKey] || 0) !== (otherRules[ruleKey] || 0) ) {
             return false;
         }
     }
@@ -316,13 +313,19 @@ Matrix.prototype.clearRegisters = function() {
 /******************************************************************************/
 
 var is3rdParty = function(srcHostname, desHostname) {
-    if(desHostname === '*' || srcHostname === '*' || srcHostname === '') {
+    // If at least one is party-less, the relation can't be labelled
+    // "3rd-party"
+    if ( desHostname === '*' || srcHostname === '*' || srcHostname === '' ) {
         return false;
     }
 
-    var srcDomain = domainFromHostname(srcHostname) || srcHostname; // localhost, etc. don't have domain
+    // No domain can very well occurs, for examples:
+    // - localhost
+    // - file-scheme
+    // etc.
+    var srcDomain = domainFromHostname(srcHostname) || srcHostname;
 
-    if ( desHostname.slice(0 - srcDomain.length) !== srcDomain ) {
+    if ( desHostname.endsWith(srcDomain) === false ) {
         return true;
     }
     // Do not confuse 'example.com' with 'anotherexample.com'
@@ -343,7 +346,7 @@ Matrix.prototype.evaluateCellZ = function(srcHostname, desHostname, type) {
         this.z = s;
         v = this.rules[s + ' ' + desHostname];
         if ( v !== undefined ) {
-            v = v >> bitOffset & 3;
+            v = v >>> bitOffset & 3;
             if ( v !== 0 ) {
                 this.r = v;
                 return v;
@@ -366,6 +369,10 @@ Matrix.prototype.evaluateCellZY = function(srcHostname, desHostname, type) {
 
     // Specific-destination, any party, any type
     var d = desHostname;
+    if ( d === '' ) {
+        this.r = 0;
+        return this;
+    }
     while ( d !== '*' ) {
         this.y = d;
         if ( this.evaluateCellZ(srcHostname, d, '*') !== 0 ) { return this; }
@@ -387,7 +394,6 @@ Matrix.prototype.evaluateCellZY = function(srcHostname, desHostname, type) {
         }
         // 3rd-party, any type
         if ( this.evaluateCellZ(srcHostname, '*', '3p') !== 0 ) { return this; }
-
     } else if ( type === 'script' ) {
         // 1st party, specific type
         if ( this.evaluateCellZ(srcHostname, '*', '1p-script') !== 0 ) { return this; }
@@ -434,19 +440,18 @@ Matrix.prototype.mustAbort = function() {
 /******************************************************************************/
 
 Matrix.prototype.toFilterString = function() {
-    if ( this.type === '' ) {
+    if ( this.r === 0  || this.type === '' ) {
         return '';
     }
+    var body = this.z + ' ' + this.y + ' ' + this.type;
     if ( this.r === 1 ) {
-        return 'db:' + this.z + ' ' + this.y + ' ' + this.type + ' block';
+        return 'db:' + body + ' block';
     }
     if ( this.r === 2 ) {
-        return 'da:' + this.z + ' ' + this.y + ' ' + this.type + ' allow';
+        return 'da:' + body + ' allow';
     }
-    if ( this.r === 3 ) {
-        return 'dn:' + this.z + ' ' + this.y + ' ' + this.type + ' noop';
-    }
-    return '';
+    /* this.r === 3 */
+    return 'dn:' + body + ' noop';
 };
 
 /******************************************************************************/
@@ -523,6 +528,11 @@ Matrix.prototype.fromString = function(text, append) {
             continue;
         }
 
+        // URL net filtering rules
+        if ( line.indexOf('://') !== -1 ) {
+            continue;
+        }
+
         // Valid rule syntax:
 
         // srcHostname desHostname type state
@@ -533,6 +543,12 @@ Matrix.prototype.fromString = function(text, append) {
 
         fields = line.split(/\s+/);
         if ( fields.length !== 4 ) {
+            continue;
+        }
+
+        // Ignore special rules:
+        //   hostname-based switch rules
+        if ( fields[0].endsWith(':') ) {
             continue;
         }
 
@@ -564,51 +580,6 @@ Matrix.prototype.fromString = function(text, append) {
         }
 
         this.setCell(srcHostname, desHostname, type, action);
-    }
-};
-
-/******************************************************************************/
-
-Matrix.prototype.fromObsoleteSelfie = function(selfie) {
-    if ( selfie === '' ) {
-        return '';
-    }
-    var bin = {};
-    try {
-        bin = JSON.parse(selfie);
-    } catch(e) {
-    }
-    var filters = bin.filters;
-    var bits, val;
-    for ( var hostname in filters ) {
-        if ( filters.hasOwnProperty(hostname) === false ) {
-            continue;
-        }
-        bits = filters[hostname];
-        val = bits & 3;
-        if ( val === 1 ) {
-            this.setCell(hostname, '*', 'inline-script', 1);
-        } else if ( val === 2 ) {
-            this.setCell(hostname, '*', 'inline-script', 3);
-        }
-        val = (bits >> 2) & 3;
-        if ( val === 1 ) {
-            this.setCell(hostname, '*', '1p-script', 1);
-        } else if ( val === 2 ) {
-            this.setCell(hostname, '*', '1p-script', 3);
-        }
-        val = (bits >> 4) & 3;
-        if ( val === 1 ) {
-            this.setCell(hostname, '*', '3p-script', 1);
-        } else if ( val === 2 ) {
-            this.setCell(hostname, '*', '3p-script', 3);
-        }
-        val = (bits >> 8) & 3;
-        if ( val === 1 ) {
-            this.setCell(hostname, '*', '3p-frame', 1);
-        } else if ( val === 2 ) {
-            this.setCell(hostname, '*', '3p-frame', 3);
-        }
     }
 };
 

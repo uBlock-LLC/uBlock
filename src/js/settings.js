@@ -1,7 +1,7 @@
 /*******************************************************************************
 
-    µBlock - a browser extension to block requests.
-    Copyright (C) 2014 Raymond Hill
+    uBlock Origin - a browser extension to block requests.
+    Copyright (C) 2014-2016 Raymond Hill
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
     Home: https://github.com/chrisaljoudi/uBlock
 */
 
-/* global vAPI, uDom */
+/* global uDom */
 
 /******************************************************************************/
 
@@ -29,7 +29,7 @@
 
 /******************************************************************************/
 
-var messager = vAPI.messaging.channel('settings.js');
+var messaging = vAPI.messaging;
 
 /******************************************************************************/
 
@@ -72,11 +72,14 @@ var handleImportFilePicker = function() {
                       .replace('{{time}}', time.toLocaleString());
         var proceed = window.confirm(msg);
         if ( proceed ) {
-            messager.send({
-                what: 'restoreUserData',
-                userData: userData,
-                file: filename
-            });
+            messaging.send(
+                'dashboard',
+                {
+                    what: 'restoreUserData',
+                    userData: userData,
+                    file: filename
+                }
+            );
         }
     };
 
@@ -99,7 +102,7 @@ var startImportFilePicker = function() {
 /******************************************************************************/
 
 var exportToFile = function() {
-    messager.send({ what: 'backupUserData' }, onLocalDataReceived);
+    messaging.send('dashboard', { what: 'backupUserData' }, onLocalDataReceived);
 };
 
 /******************************************************************************/
@@ -143,18 +146,46 @@ var resetUserData = function() {
     var msg = vAPI.i18n('aboutResetDataConfirm');
     var proceed = window.confirm(msg);
     if ( proceed ) {
-        messager.send({ what: 'resetUserData' });
+        messaging.send('dashboard', { what: 'resetUserData' });
     }
 };
 
 /******************************************************************************/
 
 var changeUserSettings = function(name, value) {
-    messager.send({
-        what: 'userSettings',
-        name: name,
-        value: value
-    });
+    messaging.send(
+        'dashboard',
+        {
+            what: 'userSettings',
+            name: name,
+            value: value
+        }
+    );
+};
+
+/******************************************************************************/
+
+var onInputChanged = function(ev) {
+    var input = ev.target;
+    var name = this.getAttribute('data-setting-name');
+    var value = input.value;
+    if ( name === 'largeMediaSize' ) {
+        value = Math.min(Math.max(Math.floor(parseInt(value, 10) || 0), 0), 1000000);
+    }
+    if ( value !== input.value ) {
+        input.value = value;
+    }
+    changeUserSettings(name, value);
+};
+
+/******************************************************************************/
+
+// Workaround for:
+// https://github.com/gorhill/uBlock/issues/1448
+
+var onPreventDefault = function(ev) {
+    ev.target.focus();
+    ev.preventDefault();
 };
 
 /******************************************************************************/
@@ -162,35 +193,25 @@ var changeUserSettings = function(name, value) {
 // TODO: use data-* to declare simple settings
 
 var onUserSettingsReceived = function(details) {
-    uDom('#collapse-blocked')
-        .prop('checked', details.collapseBlocked === true)
-        .on('change', function(){
-            changeUserSettings('collapseBlocked', this.checked);
-        });
+    uDom('[data-setting-type="bool"]').forEach(function(uNode) {
+        uNode.prop('checked', details[uNode.attr('data-setting-name')] === true)
+             .on('change', function() {
+                    changeUserSettings(
+                        this.getAttribute('data-setting-name'),
+                        this.checked
+                    );
+                });
+    });
 
-    uDom('#icon-badge')
-        .prop('checked', details.showIconBadge === true)
-        .on('change', function(){
-            changeUserSettings('showIconBadge', this.checked);
-        });
+    uDom('[data-setting-name="noLargeMedia"] ~ label:first-of-type > input[type="number"]')
+        .attr('data-setting-name', 'largeMediaSize')
+        .attr('data-setting-type', 'input');
 
-    uDom('#context-menu-enabled')
-        .prop('checked', details.contextMenuEnabled === true)
-        .on('change', function(){
-            changeUserSettings('contextMenuEnabled', this.checked);
-        });
-
-    uDom('#advanced-user-enabled')
-        .prop('checked', details.advancedUserEnabled === true)
-        .on('change', function(){
-            changeUserSettings('advancedUserEnabled', this.checked);
-        });
-
-    uDom('#experimental-enabled')
-        .prop('checked', details.experimentalEnabled === true)
-        .on('change', function(){
-            changeUserSettings('experimentalEnabled', this.checked);
-        });
+    uDom('[data-setting-type="input"]').forEach(function(uNode) {
+        uNode.val(details[uNode.attr('data-setting-name')])
+             .on('change', onInputChanged)
+             .on('click', onPreventDefault);
+    });
 
     uDom('#export').on('click', exportToFile);
     uDom('#import').on('click', startImportFilePicker);
@@ -201,8 +222,8 @@ var onUserSettingsReceived = function(details) {
 /******************************************************************************/
 
 uDom.onLoad(function() {
-    messager.send({ what: 'userSettings' }, onUserSettingsReceived);
-    messager.send({ what: 'getLocalData' }, onLocalDataReceived);
+    messaging.send('dashboard', { what: 'userSettings' }, onUserSettingsReceived);
+    messaging.send('dashboard', { what: 'getLocalData' }, onLocalDataReceived);
 });
 
 /******************************************************************************/

@@ -1,6 +1,6 @@
 /*******************************************************************************
 
-    uBlock Origin - a browser extension to block requests.
+    uBlock - a browser extension to block requests.
     Copyright (C) 2015 Raymond Hill
 
     This program is free software: you can redistribute it and/or modify
@@ -31,41 +31,21 @@
 /******************************************************************************/
 /******************************************************************************/
 
-var LogEntry = function(details, result) {
-    this.init(details, result);
+var LogEntry = function(args) {
+    this.init(args);
 };
 
 /******************************************************************************/
 
-var logEntryFactory = function(details, result) {
-    var entry = logEntryJunkyard.pop();
-    if ( entry ) {
-        return entry.init(details, result);
-    }
-    return new LogEntry(details, result);
-};
-
-var logEntryJunkyard = [];
-var logEntryJunkyardMax = 100;
-
-/******************************************************************************/
-
-LogEntry.prototype.init = function(details, result) {
+LogEntry.prototype.init = function(args) {
     this.tstamp = Date.now();
-    this.url = details.requestURL;
-    this.hostname = details.requestHostname;
-    this.type = details.requestType;
-    this.result = result;
-    return this;
-};
-
-/******************************************************************************/
-
-LogEntry.prototype.dispose = function() {
-    this.url = this.hostname = this.type = this.result = '';
-    if ( logEntryJunkyard.length < logEntryJunkyardMax ) {
-        logEntryJunkyard.push(this);
-    }
+    this.tab = args[0] || '';
+    this.cat = args[1] || '';
+    this.d0 = args[2];
+    this.d1 = args[3];
+    this.d2 = args[4];
+    this.d3 = args[5];
+    this.d4 = args[6];
 };
 
 /******************************************************************************/
@@ -81,28 +61,21 @@ var LogBuffer = function() {
 
 /******************************************************************************/
 
-LogBuffer.prototype.dispose = function() {
-    var entry;
-    var i = this.buffer.length;
-    while ( i-- ) {
-        entry = this.buffer[i];
-        if ( entry instanceof LogEntry ) {
-            entry.dispose();
-        }
+LogBuffer.prototype.clearBuffer = function(beg, end) {
+    for ( var i = beg; i < end; i++ ) {
+        this.buffer[i] = null;
     }
-    this.buffer = null;
-    return null;
 };
 
 /******************************************************************************/
 
-LogBuffer.prototype.writeOne = function(details, result) {
+LogBuffer.prototype.writeOne = function(args) {
     // Reusing log entry = less memory churning
     var entry = this.buffer[this.writePtr];
     if ( entry instanceof LogEntry === false ) {
-        this.buffer[this.writePtr] = logEntryFactory(details, result);
+        this.buffer[this.writePtr] = new LogEntry(args);
     } else {
-        entry.init(details, result);
+        entry.init(args);
     }
     this.writePtr += 1;
     if ( this.writePtr === this.size ) {
@@ -111,6 +84,14 @@ LogBuffer.prototype.writeOne = function(details, result) {
     // Grow the buffer between 1.5x-2x the current size
     if ( this.writePtr === this.readPtr ) {
         var toMove = this.buffer.slice(0, this.writePtr);
+
+        // https://github.com/gorhill/uBlock/issues/391
+        // "The slice() method returns a shallow copy of a portion of an
+        // "array into a new array object."
+        // "shallow" => since we reuse entries, we need to remove the copied
+        // entries to prevent single instance of LogEntry being used in
+        // more than one slot.
+        this.clearBuffer(0, this.writePtr);
         var minSize = Math.ceil(this.size * 1.5);
         this.size += toMove.length;
         if ( this.size < minSize ) {
@@ -144,67 +125,62 @@ LogBuffer.prototype.readAll = function() {
 /******************************************************************************/
 
 // Tab id to log buffer instances
-var logBuffers = {};
+var logBuffer = null;
 
-// After 30 seconds without being read, a buffer will be considered unused, and
+// After 60 seconds without being read, a buffer will be considered unused, and
 // thus removed from memory.
-var logBufferObsoleteAfter = 30 * 1000;
+var logBufferObsoleteAfter = 60 * 1000;
 
 /******************************************************************************/
 
-var writeOne = function(tabId, details, result) {
-    if ( logBuffers.hasOwnProperty(tabId) === false ) {
-        return;
+var janitor = function() {
+    if (
+        logBuffer !== null &&
+        logBuffer.lastReadTime < (Date.now() - logBufferObsoleteAfter)
+    ) {
+        api.writeOne = writeOneNoop;
+        logBuffer = null;
     }
-    var logBuffer = logBuffers[tabId];
-    logBuffer.writeOne(details, result);
-};
-
-/******************************************************************************/
-
-var readAll = function(tabId) {
-    if ( logBuffers.hasOwnProperty(tabId) === false ) {
-        logBuffers[tabId] = new LogBuffer();
+    if ( logBuffer !== null ) {
+        vAPI.setTimeout(janitor, logBufferObsoleteAfter);
     }
-    return logBuffers[tabId].readAll();
 };
 
 /******************************************************************************/
 
-var isObserved = function(tabId) {
-    return logBuffers.hasOwnProperty(tabId);
+var writeOneNoop = function() {
+};
+
+var writeOne = function() {
+    logBuffer.writeOne(arguments);
 };
 
 /******************************************************************************/
 
-var loggerJanitor = function() {
-    var logBuffer;
-    var obsolete = Date.now() - logBufferObsoleteAfter;
-    for ( var tabId in logBuffers ) {
-        if ( logBuffers.hasOwnProperty(tabId) === false ) {
-            continue;
-        }
-        logBuffer = logBuffers[tabId];
-        if ( logBuffer.lastReadTime < obsolete ) {
-            logBuffer.dispose();
-            delete logBuffers[tabId];
-        }
+var readAll = function() {
+    if ( logBuffer === null ) {
+        api.writeOne = writeOne;
+        logBuffer = new LogBuffer();
+        vAPI.setTimeout(janitor, logBufferObsoleteAfter);
     }
-    setTimeout(loggerJanitor, loggerJanitorPeriod);
+    return logBuffer.readAll();
 };
-
-// The janitor will look for stale log buffer every 2 minutes.
-var loggerJanitorPeriod = 2 * 60 * 1000;
-
-setTimeout(loggerJanitor, loggerJanitorPeriod);
 
 /******************************************************************************/
 
-return {
-    writeOne: writeOne,
+var isEnabled = function() {
+    return logBuffer !== null;
+};
+
+/******************************************************************************/
+
+var api = {
+    writeOne: writeOneNoop,
     readAll: readAll,
-    isObserved: isObserved
+    isEnabled: isEnabled
 };
+
+return api;
 
 /******************************************************************************/
 /******************************************************************************/

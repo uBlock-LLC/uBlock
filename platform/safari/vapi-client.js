@@ -16,7 +16,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see {http://www.gnu.org/licenses/}.
 
-    Home: https://github.com/chrisaljoudi/uBlock
+    Home: https://github.com/gorhill/uBlock
 */
 /******************************************************************************/
 // For non background pages
@@ -38,6 +38,27 @@
     vAPI.safari = true;
     vAPI.sessionId = String.fromCharCode(Date.now() % 25 + 97) +
         Math.random().toString(36).slice(2);
+    /******************************************************************************/
+    vAPI.shutdown = (function() {
+        var jobs = [];
+
+        var add = function(job) {
+            jobs.push(job);
+        };
+
+        var exec = function() {
+            //console.debug('Shutting down...');
+            var job;
+            while ( job = jobs.pop() ) {
+                job();
+            }
+        };
+
+        return {
+            add: add,
+            exec: exec
+        };
+    })();
     /******************************************************************************/
     var messagingConnector = function(response) {
         if(!response) {
@@ -174,9 +195,8 @@
     }
 
     // Inform that we've navigated
-    var shouldBlockScript = false;
     if(frameId === 0) {
-        shouldBlockScript = !safari.self.tab.canLoad(beforeLoadEvent, {
+        safari.self.tab.canLoad(beforeLoadEvent, {
             url: location.href,
             type: "main_frame"
         });
@@ -226,17 +246,6 @@
     var firstMutation = function() {
         document.removeEventListener("DOMContentLoaded", firstMutation, true);
         firstMutation = false;
-        if(shouldBlockScript) {
-            var meta = document.createElement('meta');
-            meta.setAttribute("http-equiv", "content-security-policy");
-            meta.setAttribute("content", "script-src 'unsafe-eval' *");
-            if(document.documentElement.firstChild) {
-                document.documentElement.insertBefore(meta, document.documentElement.firstChild);
-            }
-            else {
-                document.documentElement.appendChild(meta);
-            }
-        }
         document.addEventListener(vAPI.sessionId, function(e) {
             if(shouldBlockDetailedRequest(e.detail)) {
                 e.detail.url = false;
@@ -259,7 +268,6 @@ xo = XMLHttpRequest.prototype.open,\
 img = Image;\
 Image = function() {\
 var x = new img();\
-try{\
 Object.defineProperty(x, 'src', {\
 get: function() {\
 return x.getAttribute('src');\
@@ -268,11 +276,10 @@ set: function(val) {\
 x.setAttribute('src', block(val, 'image') ? 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACwAAAAAAQABAAACAkQBADs=' : val);\
 }\
 });\
-}\catch(e){}\
 return x;\
 };\
 open = function(u) {\
-if(block(u, 'popup')) return {}; else return wo.apply(this, arguments);\
+return block(u, 'popup') ? null : wo.apply(this, arguments);\
 };\
 XMLHttpRequest.prototype.open = function(m, u) {\
 if(block(u, 'xmlhttprequest')) {throw 'InvalidAccessError'; return;}\

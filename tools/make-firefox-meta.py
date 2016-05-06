@@ -24,7 +24,7 @@ source_locale_dir = pj(build_dir, '_locales')
 target_locale_dir = pj(build_dir, 'locale')
 language_codes = []
 descriptions = OrderedDict({})
-title_case_strings = ['pickerContextMenuEntry']
+title_case_strings = ['pickerContextMenuEntry', 'contextMenuTemporarilyAllowLargeMediaElements']
 
 for alpha2 in sorted(os.listdir(source_locale_dir)):
     locale_path = pj(source_locale_dir, alpha2, 'messages.json')
@@ -56,13 +56,13 @@ for alpha2 in sorted(os.listdir(source_locale_dir)):
 chrome_manifest = pj(build_dir, 'chrome.manifest')
 
 with open(chrome_manifest, 'at', encoding='utf-8', newline='\n') as f:
-    f.write(u'\nlocale ublock en ./locale/en/\n')
+    f.write(u'\nlocale ublock0 en ./locale/en/\n')
 
     for alpha2 in language_codes:
         if alpha2 == 'en':
             continue
 
-        f.write(u'locale ublock ' + alpha2 + ' ./locale/' + alpha2 + '/\n')
+        f.write(u'locale ublock0 ' + alpha2 + ' ./locale/' + alpha2 + '/\n')
 
 rmtree(source_locale_dir)
 
@@ -73,7 +73,13 @@ chromium_manifest = pj(proj_dir, 'platform', 'chromium', 'manifest.json')
 with open(chromium_manifest, encoding='utf-8') as m:
     manifest = json.load(m)
 
-manifest['homepage'] = 'https://github.com/chrisaljoudi/uBlock'
+
+# https://developer.mozilla.org/en-US/Add-ons/AMO/Policy/Maintenance#How_do_I_submit_a_Beta_add-on.3F
+# "To create a beta channel [...] '(a|alpha|b|beta|pre|rc)\d*$' "
+if sys.argv[2]:
+    manifest['version'] += sys.argv[2]
+
+manifest['homepage'] = 'https://github.com/gorhill/uBlock'
 manifest['description'] = descriptions['en']
 del descriptions['en']
 manifest['localized'] = []

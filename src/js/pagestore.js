@@ -1,7 +1,7 @@
 /*******************************************************************************
 
-    µBlock - a browser extension to block requests.
-    Copyright (C) 2014 Raymond Hill
+    uBlock Origin - a browser extension to block requests.
+    Copyright (C) 2014-2016 Raymond Hill
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,10 +18,6 @@
 
     Home: https://github.com/chrisaljoudi/uBlock
 */
-
-/* jshint bitwise: false */
-/* global µBlock */
-
 /*******************************************************************************
 
 A PageRequestStore object is used to store net requests in two ways:
@@ -115,7 +111,7 @@ NetFilteringResultCache.factory = function() {
 NetFilteringResultCache.prototype.init = function() {
     this.urls = {};
     this.count = 0;
-    this.shelfLife = 60 * 1000;
+    this.shelfLife = 15 * 1000;
     this.timer = null;
     this.boundPruneAsyncCallback = this.pruneAsyncCallback.bind(this);
 };
@@ -201,7 +197,7 @@ NetFilteringResultCache.prototype.prune = function() {
 
 NetFilteringResultCache.prototype.pruneAsync = function() {
     if ( this.timer === null ) {
-        this.timer = setTimeout(this.boundPruneAsyncCallback, this.shelfLife * 2);
+        this.timer = vAPI.setTimeout(this.boundPruneAsyncCallback, this.shelfLife * 2);
     }
 };
 
@@ -213,40 +209,40 @@ NetFilteringResultCache.prototype.pruneAsyncCallback = function() {
 /******************************************************************************/
 
 NetFilteringResultCache.prototype.lookup = function(context) {
-    return this.urls[context.requestType + ' ' + context.requestURL];
+    return this.urls[context.requestType + ' ' + context.requestURL] || undefined;
 };
 
 /******************************************************************************/
 /******************************************************************************/
 
-// FrameStores are just for associating a
-// frame ID with a URL. pageHostname is really
-// frameHostname.
+// Frame stores are used solely to associate a URL with a frame id. The
+// name `pageHostname` is used because of historical reasons. A more
+// appropriate name is `frameHostname` -- something to do in a future
+// refactoring.
+
 // To mitigate memory churning
 var frameStoreJunkyard = [];
 var frameStoreJunkyardMax = 50;
 
 /******************************************************************************/
 
-var FrameStore = function(rootHostname, frameURL) {
-    this.init(rootHostname, frameURL);
+var FrameStore = function(frameURL) {
+    this.init(frameURL);
 };
 
 /******************************************************************************/
 
-FrameStore.factory = function(rootHostname, frameURL) {
+FrameStore.factory = function(frameURL) {
     var entry = frameStoreJunkyard.pop();
     if ( entry === undefined ) {
-        entry = new FrameStore(rootHostname, frameURL);
-    } else {
-        entry.init(rootHostname, frameURL);
+        return new FrameStore(frameURL);
     }
-    return entry;
+    return entry.init(frameURL);
 };
 
 /******************************************************************************/
 
-FrameStore.prototype.init = function(rootHostname, frameURL) {
+FrameStore.prototype.init = function(frameURL) {
     var µburi = µb.URI;
     this.pageURL = frameURL;
     this.pageHostname = µburi.hostnameFromURI(frameURL);
@@ -291,40 +287,65 @@ PageStore.factory = function(tabId) {
 /******************************************************************************/
 
 PageStore.prototype.init = function(tabId) {
-    var tabContext = µb.tabContextManager.lookup(tabId);
+
+    var tabContext = µb.tabContextManager.mustLookup(tabId);
     this.tabId = tabId;
 
+    // If we are navigating from-to same site, remember whether large
+    // media elements were temporarily allowed.
+    if (
+        typeof this.allowLargeMediaElementsUntil !== 'number' ||
+        tabContext.rootHostname !== this.tabHostname
+    ) {
+        this.allowLargeMediaElementsUntil = 0;
+    }
+
     this.tabHostname = tabContext.rootHostname;
+    this.title = tabContext.rawURL;
+    this.rawURL = tabContext.rawURL;
     this.hostnameToCountMap = {};
     this.contentLastModified = 0;
-    this.frames = {};
-    this.netFiltering = true;
-    this.netFilteringReadTime = 0;
+    this.frames = Object.create(null);
     this.perLoadBlockedRequestCount = 0;
     this.perLoadAllowedRequestCount = 0;
+
+    this.hiddenElementCount = ''; // Empty string means "unknown"
+    this.remoteFontCount = 0;
+    this.popupBlockedCount = 0;
+    this.largeMediaCount = 0;
+    this.largeMediaTimer = null;
     this.netFilteringCache = NetFilteringResultCache.factory();
 
     // Support `elemhide` filter option. Called at this point so the required
     // context is all setup at this point.
-    var context = this.createContextFromPage();
-    this.skipCosmeticFiltering = µb.staticNetFilteringEngine
-                                   .matchStringExactType(context, tabContext.normalURL, 'cosmetic-filtering')
-                                   .charAt(1) === 'b';
-
+    this.skipCosmeticFiltering = µb.staticNetFilteringEngine.matchStringExactType(
+        this.createContextFromPage(),
+        tabContext.normalURL,
+        'elemhide'
+    ) === false;
+    if ( this.skipCosmeticFiltering && µb.logger.isEnabled() ) {
+        // https://github.com/gorhill/uBlock/issues/370
+        // Log using `cosmetic-filtering`, not `elemhide`.
+        µb.logger.writeOne(
+            tabId,
+            'net',
+            µb.staticNetFilteringEngine.toResultString(true),
+            'elemhide',
+            tabContext.rawURL,
+            this.tabHostname,
+            this.tabHostname
+        );
+    }
     return this;
 };
 
 /******************************************************************************/
 
 PageStore.prototype.reuse = function(context) {
-    // We can't do this: when force refreshing a page, the page store data
-    // needs to be reset
-    //if ( pageURL === this.pageURL ) {
-    //    return this;
-    //}
+    // When force refreshing a page, the page store data needs to be reset.
 
     // If the hostname changes, we can't merely just update the context.
-    var tabContext = µb.tabContextManager.lookup(this.tabId);
+    var tabContext = µb.tabContextManager.mustLookup(this.tabId);
     if ( tabContext.rootHostname !== this.tabHostname ) {
         context = '';
     }
@@ -337,11 +358,15 @@ PageStore.prototype.reuse = function(context) {
     if ( context === 'tabUpdated' ) {
         // As part of https://github.com/chrisaljoudi/uBlock/issues/405
         // URL changed, force a re-evaluation of filtering switch
-        this.netFilteringReadTime = 0;
+        this.rawURL = tabContext.rawURL;
         return this;
     }
 
     // A new page is completely reloaded from scratch, reset all.
+    if ( this.largeMediaTimer !== null ) {
+        clearTimeout(this.largeMediaTimer);
+        this.largeMediaTimer = null;
+    }
     this.disposeFrameStores();
     this.netFilteringCache = this.netFilteringCache.dispose();
     this.init(this.tabId);
@@ -357,7 +382,16 @@ PageStore.prototype.dispose = function() {
     // need to release the memory taken by these, which can amount to
     // sizeable enough chunks (especially requests, through the request URL
     // used as a key).
+
+    this.tabHostname = '';
+    this.title = '';
+    this.rawURL = '';
     this.hostnameToCountMap = null;
+    this.allowLargeMediaElementsUntil = 0;
+    if ( this.largeMediaTimer !== null ) {
+        clearTimeout(this.largeMediaTimer);
+        this.largeMediaTimer = null;
+    }
     this.disposeFrameStores();
     this.netFilteringCache = this.netFilteringCache.dispose();
     if ( pageStoreJunkyard.length < pageStoreJunkyardMax ) {
@@ -371,11 +405,9 @@ PageStore.prototype.dispose = function() {
 PageStore.prototype.disposeFrameStores = function() {
     var frames = this.frames;
     for ( var k in frames ) {
-        if ( frames.hasOwnProperty(k) ) {
-            frames[k].dispose();
-        }
+        frames[k].dispose();
     }
-    this.frames = {};
+    this.frames = Object.create(null);
 };
 
 /******************************************************************************/
@@ -388,10 +420,10 @@ PageStore.prototype.getFrame = function(frameId) {
 
 PageStore.prototype.setFrame = function(frameId, frameURL) {
     var frameStore = this.frames[frameId];
-    if ( frameStore instanceof FrameStore ) {
-        frameStore.init(this.rootHostname, frameURL);
+    if ( frameStore ) {
+        frameStore.init(frameURL);
     } else {
-        this.frames[frameId] = FrameStore.factory(this.rootHostname, frameURL);
+        this.frames[frameId] = FrameStore.factory(frameURL);
     }
 };
 
@@ -417,8 +449,8 @@ PageStore.prototype.createContextFromPage = function() {
 
 PageStore.prototype.createContextFromFrameId = function(frameId) {
     var context = new µb.tabContextManager.createContext(this.tabId);
-    if ( this.frames.hasOwnProperty(frameId) ) {
-        var frameStore = this.frames[frameId];
+    var frameStore = this.frames[frameId];
+    if ( frameStore ) {
         context.pageHostname = frameStore.pageHostname;
         context.pageDomain = frameStore.pageDomain;
     } else {
@@ -438,44 +470,22 @@ PageStore.prototype.createContextFromFrameHostname = function(frameHostname) {
 /******************************************************************************/
 
 PageStore.prototype.getNetFilteringSwitch = function() {
-    var tabContext = µb.tabContextManager.lookup(this.tabId);
-    if (
-        this.netFilteringReadTime > µb.netWhitelistModifyTime &&
-        this.netFilteringReadTime > tabContext.modifyTime
-    ) {
-        return this.netFiltering;
-    }
-
-    // https://github.com/chrisaljoudi/uBlock/issues/1078
-    // Use both the raw and normalized URLs.
-    this.netFiltering = µb.getNetFilteringSwitch(tabContext.normalURL);
-    if ( this.netFiltering && tabContext.rawURL !== tabContext.normalURL ) {
-        this.netFiltering = µb.getNetFilteringSwitch(tabContext.rawURL);
-    }
-    this.netFilteringReadTime = Date.now();
-    return this.netFiltering;
+    return µb.tabContextManager.mustLookup(this.tabId).getNetFilteringSwitch();
 };
 
 /******************************************************************************/
 
 PageStore.prototype.getSpecificCosmeticFilteringSwitch = function() {
-    if ( this.getNetFilteringSwitch() === false ) {
-        return false;
-    }
-
     var tabContext = µb.tabContextManager.lookup(this.tabId);
-
-    return µb.userSettings.advancedUserEnabled === false ||
-           µb.sessionFirewall.mustAllowCellZY(tabContext.rootHostname, tabContext.rootHostname, '*') === false;
+    return tabContext !== null &&
+           µb.hnSwitches.evaluateZ('no-cosmetic-filtering', tabContext.rootHostname) !== true;
 };
 
 /******************************************************************************/
 
 PageStore.prototype.getGenericCosmeticFilteringSwitch = function() {
-    if ( this.skipCosmeticFiltering ) {
-        return false;
-    }
-    return this.getSpecificCosmeticFilteringSwitch();
+    return this.skipCosmeticFiltering !== true &&
+           this.getSpecificCosmeticFilteringSwitch();
 };
 
 /******************************************************************************/
@@ -487,10 +497,37 @@ PageStore.prototype.toggleNetFilteringSwitch = function(url, scope, state) {
 
 /******************************************************************************/
 
+PageStore.prototype.logLargeMedia = (function() {
+    var injectScript = function() {
+        this.largeMediaTimer = null;
+        µb.scriptlets.injectDeep(
+            this.tabId,
+            'load-large-media-interactive'
+        );
+        µb.contextMenu.update(this.tabId);
+    };
+    return function() {
+        this.largeMediaCount += 1;
+        if ( this.largeMediaTimer === null ) {
+            this.largeMediaTimer = vAPI.setTimeout(injectScript.bind(this), 500);
+        }
+    };
+})();
+
+PageStore.prototype.temporarilyAllowLargeMediaElements = function() {
+    this.largeMediaCount = 0;
+    µb.contextMenu.update(this.tabId);
+    this.allowLargeMediaElementsUntil = Date.now() + 86400000;
+    µb.scriptlets.injectDeep(this.tabId, 'load-large-media-all');
+};
+
+/******************************************************************************/
+
 PageStore.prototype.filterRequest = function(context) {
+    var requestType = context.requestType;
 
     if ( this.getNetFilteringSwitch() === false ) {
-        if ( collapsibleRequestTypes.indexOf(context.requestType) !== -1 ) {
+        if ( collapsibleRequestTypes.indexOf(requestType) !== -1 ) {
             this.netFilteringCache.add(context, '');
         }
         return '';
@@ -504,33 +541,43 @@ PageStore.prototype.filterRequest = function(context) {
 
     var result = '';
 
+    if ( requestType === 'font' ) {
+        if ( µb.hnSwitches.evaluateZ('no-remote-fonts', context.rootHostname) !== false ) {
+            result = µb.hnSwitches.toResultString();
+        }
+        this.remoteFontCount += 1;
+    }
+
+    if ( result === '' ) {
+        µb.sessionURLFiltering.evaluateZ(context.rootHostname, context.requestURL, requestType);
+        result = µb.sessionURLFiltering.toFilterString();
+    }
+
     // Given that:
     // - Dynamic filtering override static filtering
     // - Evaluating dynamic filtering is much faster than static filtering
     // We evaluate dynamic filtering first, and hopefully we can skip
     // evaluation of static filtering.
-    if ( µb.userSettings.advancedUserEnabled ) {
-        var df = µb.sessionFirewall.evaluateCellZY(
-            context.rootHostname,
-            context.requestHostname,
-            context.requestType
-        );
-        if ( df.mustBlockOrAllow() ) {
-            result = df.toFilterString();
+    if ( result === '' && µb.userSettings.advancedUserEnabled ) {
+        µb.sessionFirewall.evaluateCellZY( context.rootHostname, context.requestHostname, requestType);
+        if ( µb.sessionFirewall.mustBlockOrAllow() ) {
+            result = µb.sessionFirewall.toFilterString();
         }
     }
 
     // Static filtering never override dynamic filtering
-    if ( result === '' ) {
-        result = µb.staticNetFilteringEngine.matchString(context);
+    if ( result === '' || result.charAt(1) === 'n' ) {
+        if ( µb.staticNetFilteringEngine.matchString(context) !== undefined ) {
+            result = µb.staticNetFilteringEngine.toResultString(µb.logger.isEnabled());
+        }
     }
 
     //console.debug('cache MISS: PageStore.filterRequest("%s")', context.requestURL);
-    if ( collapsibleRequestTypes.indexOf(context.requestType) !== -1 ) {
+    if ( collapsibleRequestTypes.indexOf(requestType) !== -1 ) {
         this.netFilteringCache.add(context, result);
     }
 
-    // console.debug('[%s, %s] = "%s"', context.requestHostname, context.requestType, result);
+    // console.debug('[%s, %s] = "%s"', context.requestHostname, requestType, result);
 
     return result;
 };
@@ -545,27 +592,38 @@ PageStore.prototype.filterRequestNoCache = function(context) {
         return '';
     }
 
+    var requestType = context.requestType;
     var result = '';
+
+    if ( requestType === 'font' ) {
+        if ( µb.hnSwitches.evaluateZ('no-remote-fonts', context.rootHostname) !== false ) {
+            result = µb.hnSwitches.toResultString();
+        }
+        this.remoteFontCount += 1;
+    }
+
+    if ( result === '' ) {
+        µb.sessionURLFiltering.evaluateZ(context.rootHostname, context.requestURL, requestType);
+        result = µb.sessionURLFiltering.toFilterString();
+    }
 
     // Given that:
     // - Dynamic filtering override static filtering
     // - Evaluating dynamic filtering is much faster than static filtering
     // We evaluate dynamic filtering first, and hopefully we can skip
     // evaluation of static filtering.
-    if ( µb.userSettings.advancedUserEnabled ) {
-        var df = µb.sessionFirewall.evaluateCellZY(
-            context.rootHostname,
-            context.requestHostname,
-            context.requestType
-        );
-        if ( df.mustBlockOrAllow() ) {
-            result = df.toFilterString();
+    if ( result === '' && µb.userSettings.advancedUserEnabled ) {
+        µb.sessionFirewall.evaluateCellZY(context.rootHostname, context.requestHostname, requestType);
+        if ( µb.sessionFirewall.mustBlockOrAllow() ) {
+            result = µb.sessionFirewall.toFilterString();
         }
     }
 
     // Static filtering never override dynamic filtering
-    if ( result === '' ) {
-        result = µb.staticNetFilteringEngine.matchString(context);
+    if ( result === '' || result.charAt(1) === 'n' ) {
+        if ( µb.staticNetFilteringEngine.matchString(context) !== undefined ) {
+            result = µb.staticNetFilteringEngine.toResultString(µb.logger.isEnabled());
+        }
     }
 
     return result;
@@ -587,14 +645,14 @@ PageStore.prototype.logRequest = function(context, result) {
         this.contentLastModified = now;
     }
     var c = result.charAt(1);
-    if ( c === '' || c === 'a' ) {
-        this.hostnameToCountMap[requestHostname] += 0x00010000;
-        this.perLoadAllowedRequestCount++;
-        µb.localSettings.allowedRequestCount++;
-    } else /* if ( c === 'b' ) */ {
+    if ( c === 'b' ) {
         this.hostnameToCountMap[requestHostname] += 0x00000001;
         this.perLoadBlockedRequestCount++;
         µb.localSettings.blockedRequestCount++;
+    } else /* if ( c === '' || c === 'a' || c === 'n' ) */ {
+        this.hostnameToCountMap[requestHostname] += 0x00010000;
+        this.perLoadAllowedRequestCount++;
+        µb.localSettings.allowedRequestCount++;
     }
     µb.localSettingsModifyTime = now;
 };

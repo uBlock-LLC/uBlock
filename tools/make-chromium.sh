@@ -1,7 +1,8 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # This script assumes a linux environment
 
+# <<<<<<< HEAD
 echo "*** goodblock.chromium: Creating web store package"
 
 if [ "$1" = "dev" ]; then
@@ -54,11 +55,31 @@ cp -R src/_locales $DES/
 cp -R $DES/_locales/nb $DES/_locales/no
 cp src/*.html $DES/
 cp platform/chromium/*.js $DES/js/
-cp -R platform/chromium/img $DES/
-cp platform/chromium/*.html $DES/
-cp platform/chromium/manifest.json $DES/
-cp LICENSE.txt $DES/
+# =======
+# echo "*** uBlock0.chromium: Creating web store package"
+# echo "*** uBlock0.chromium: Copying files"
 
+# DES=dist/build/uBlock0.chromium
+# rm -rf $DES
+# mkdir -p $DES
+
+# ./tools/make-assets.sh $DES
+
+# cp -R src/css               $DES/
+# cp -R src/img               $DES/
+# cp -R src/js                $DES/
+# cp -R src/lib               $DES/
+# cp -R src/_locales          $DES/
+# cp -R $DES/_locales/nb      $DES/_locales/no
+# cp src/*.html               $DES/
+# cp platform/chromium/*.js   $DES/js/
+# >>>>>>> b23a0e918f8b965849f462eed7f4cb17011cc11b
+# cp -R platform/chromium/img $DES/
+# cp platform/chromium/*.html $DES/
+# cp platform/chromium/*.json $DES/
+# cp LICENSE.txt              $DES/
+
+# <<<<<<< HEAD
 # If this isn't a dev build, remove the dev config.
 if [ "$BUILD_ENV" != "dev" ]; then
     echo "*** goodblock.chromium: Wiping dev config clean..."
@@ -74,3 +95,14 @@ if [ "$BUILD_ENV" != "testing" ]; then
 fi
 
 echo "*** goodblock.chromium: Package done."
+
+# =======
+# if [ "$1" = all ]; then
+#     echo "*** uBlock0.chromium: Creating package..."
+#     pushd $(dirname $DES/) > /dev/null
+#     zip uBlock0.chromium.zip -qr $(basename $DES/)/*
+#     popd > /dev/null
+# fi
+
+# echo "*** uBlock0.chromium: Package done."
+# >>>>>>> b23a0e918f8b965849f462eed7f4cb17011cc11b

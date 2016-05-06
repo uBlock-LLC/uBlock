@@ -17,6 +17,16 @@ h3 {
 a {
     text-decoration: none;
     }
+a.info {
+    color: black;
+    opacity: 0.3;
+    }
+a.info:hover {
+    opacity: 0.9
+    }
+a.info.important {
+    color: orangered;
+    }
 button {
     padding: 7px;
     font: inherit;
@@ -45,11 +55,18 @@ div > p:first-child {
 div > p:last-child {
     margin-bottom: 0;
     }
+input[type="number"] {
+    width: 5em;
+    }
 
 .para {
     width: 40em;
     }
-button.whatisthis {
+.synopsis {
+    font-size: small;
+    opacity: 0.8;
+    }
+.whatisthis {
     margin: 0 0 0 8px;
     border: 0;
     padding: 0 0 4px 0;

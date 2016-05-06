@@ -66,15 +66,13 @@
             "all_frames": true
         },
         {
-            "matches": [
-                "https://*.adblockplus.org/*",
-                "https://*.adblockplus.me/*",
-                "https://www.fanboy.co.nz/*"
-            ],
-            "js": ["js/subscriber.js"],
-            "run_at": "document_idle"
+            "matches": ["http://*/*", "https://*/*"],
+            "js": ["js/scriptlets/subscriber.js"],
+            "run_at": "document_idle",
+            "all_frames": false
         }
     ],
+    "incognito": "split",
     "minimum_chrome_version": "22.0",
     "options_page": "dashboard.html",
     "options_ui": {
@@ -82,6 +80,7 @@
     },
     "permissions": [
         "contextMenus",
+        "privacy",
         "storage",
         "tabs",
         "alarms",
@@ -96,5 +95,7 @@
         "browsingData",
         "notifications"
     ],
-    "short_name": "Goodblock"
+    "short_name": "Goodblock",
+    "storage": {
+    "managed_schema": "managed_storage.json"
 }

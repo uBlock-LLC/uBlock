@@ -30,10 +30,12 @@
 
 'use strict';
 
-self.vAPI = self.vAPI || {};
-
+var vAPI = self.vAPI = self.vAPI || {};
 var chrome = self.chrome;
-var vAPI = self.vAPI;
+
+/******************************************************************************/
+
+vAPI.setTimeout = vAPI.setTimeout || self.setTimeout.bind(self);
 
 /******************************************************************************/
 
@@ -88,7 +90,11 @@ vAPI.closePopup = function() {
 // This storage is optional, but it is nice to have, for a more polished user
 // experience.
 
-vAPI.localStorage = window.localStorage;
+// This can throw in some contexts (like in devtool).
+try {
+    vAPI.localStorage = window.localStorage;
+} catch (ex) {
+}
 
 /******************************************************************************/
 

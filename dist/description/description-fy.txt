@@ -1,6 +1,6 @@
 In effisjnte adblocker: brûkt hast gjin prosessorkrêft en ûnthâld. Dochs kin it tûzenen filters mear lade en tapasse as oare populêre adblockers.
 
-Yllustrearre effisjinsjefergeliking: https://github.com/chrisaljoudi/uBlock/wiki/uBlock-vs.-ABP:-efficiency-compared
+Yllustrearre effisjinsjefergeliking: https://github.com/gorhill/uBlock/wiki/uBlock-vs.-ABP:-efficiency-compared
 
 Gebrûk: Mei de grutte oan-útknop yn de pop-up kin uBlock permanint yn- of útskeakele wurde foar de aktuele website. It wurdt inkeld op de aktuele website tapast. It is gjin globale oan-útknop.
 
@@ -34,11 +34,11 @@ Sûnder de standert filterlist docht dizze add-on neat. Dus as jo ea echt in byd
 
 ***
 
-Fergees.
+Frij.
 Open source mei publike lisinsje (GPLv3)
 Foar brûkers, troch brûkers.
 
-Meiwurkers @ Github: https://github.com/chrisaljoudi/uBlock/graphs/contributors
+Meiwurkers @ Github: https://github.com/gorhill/uBlock/graphs/contributors
 Meiwurkers @ Crowdin: https://crowdin.net/project/ublock
 
 ***
@@ -46,4 +46,4 @@ Meiwurkers @ Crowdin: https://crowdin.net/project/ublock
 Unthâld dat dit in hiele betide ferzje is as jo kommentaar leverje.
 
 Projektwizigingslochboek:
-https://github.com/chrisaljoudi/uBlock/releases
+https://github.com/gorhill/uBlock/releases

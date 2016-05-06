@@ -16,13 +16,14 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see {http://www.gnu.org/licenses/}.
 
-    Home: https://github.com/chrisaljoudi/uBlock
+    Home: https://github.com/gorhill/uBlock
 */
 
 'use strict';
 
 /******************************************************************************/
 
+// https://github.com/gorhill/uBlock/issues/800
 this.EXPORTED_SYMBOLS = ['contentObserver', 'LocationChangeListener'];
 
 const {interfaces: Ci, utils: Cu} = Components;
@@ -30,31 +31,67 @@ const {Services} = Cu.import('resource://gre/modules/Services.jsm', null);
 const {XPCOMUtils} = Cu.import('resource://gre/modules/XPCOMUtils.jsm', null);
 
 const hostName = Services.io.newURI(Components.stack.filename, null, null).host;
+const rpcEmitterName = hostName + ':child-process-message';
 
-// Cu.import('resource://gre/modules/devtools/Console.jsm');
+//Cu.import('resource://gre/modules/Console.jsm'); // Firefox >= 44
+//Cu.import('resource://gre/modules/devtools/Console.jsm'); // Firefox < 44
 
 /******************************************************************************/
 
 const getMessageManager = function(win) {
-    return win
+    let iface = win
         .QueryInterface(Ci.nsIInterfaceRequestor)
         .getInterface(Ci.nsIDocShell)
         .sameTypeRootTreeItem
         .QueryInterface(Ci.nsIDocShell)
-        .QueryInterface(Ci.nsIInterfaceRequestor)
-        .getInterface(Ci.nsIContentFrameMessageManager);
+        .QueryInterface(Ci.nsIInterfaceRequestor);
+
+    try {
+        return iface.getInterface(Ci.nsIContentFrameMessageManager);
+    } catch (ex) {
+        // This can throw. It appears `shouldLoad` can be called *after*  a
+        // tab has been closed. For example, a case where this happens all
+        // the time (FF38):
+        // - Open twitter.com (assuming you have an account and are logged in)
+        // - Close twitter.com
+        // There will be an exception raised when `shouldLoad` is called
+        // to process a XMLHttpRequest with URL `https://twitter.com/i/jot`
+        // fired from `https://twitter.com/`, *after*  the tab is closed.
+        // In such case, `win` is `about:blank`.
+    }
+    return null;
 };
 
 /******************************************************************************/
 
-const contentObserver = {
+const getChildProcessMessageManager = function() {
+    var svc = Services;
+    if ( !svc ) {
+        return;
+    }
+    var cpmm = svc.cpmm;
+    if ( cpmm ) {
+        return cpmm;
+    }
+    cpmm = Components.classes['@mozilla.org/childprocessmessagemanager;1'];
+    if ( cpmm ) {
+        return cpmm.getService(Ci.nsISyncMessageSender);
+    }
+};
+
+/******************************************************************************/
+
+var contentObserver = {
     classDescription: 'content-policy for ' + hostName,
-    classID: Components.ID('{e6d173c8-8dbf-4189-a6fd-189e8acffd27}'),
+    classID: Components.ID('{7afbd130-cbaf-46c2-b944-f5d24305f484}'),
     contractID: '@' + hostName + '/content-policy;1',
     ACCEPT: Ci.nsIContentPolicy.ACCEPT,
+    REJECT: Ci.nsIContentPolicy.REJECT_REQUEST,
     MAIN_FRAME: Ci.nsIContentPolicy.TYPE_DOCUMENT,
+    SUB_FRAME: Ci.nsIContentPolicy.TYPE_SUBDOCUMENT,
     contentBaseURI: 'chrome://' + hostName + '/content/js/',
     cpMessageName: hostName + ':shouldLoad',
+    popupMessageName: hostName + ':shouldLoadPopup',
     ignoredPopups: new WeakMap(),
     uniqueSandboxId: 1,
 
@@ -118,26 +155,76 @@ const contentObserver = {
             .outerWindowID;
     },
 
+    handlePopup: function(location, origin, context) {
+        let openeeContext = context.contentWindow || context;
+        if (
+            typeof openeeContext.opener !== 'object' ||
+            openeeContext.opener === null ||
+            openeeContext.opener === context ||
+            this.ignoredPopups.has(openeeContext)
+        ) {
+            return;
+        }
+        // https://github.com/gorhill/uBlock/issues/452
+        // Use location of top window, not that of a frame, as this
+        // would cause tab id lookup (necessary for popup blocking) to
+        // always fail.
+        // https://github.com/gorhill/uBlock/issues/1305
+        //   Opener could be a dead object, using it would cause a throw.
+        //   Repro case:
+        //   - Open http://delishows.to/show/chicago-med/season/1/episode/6
+        //   - Click anywhere in the background
+        let openerURL = null;
+        try {
+            let opener = openeeContext.opener.top || openeeContext.opener;
+            openerURL = opener.location && opener.location.href;
+        } catch(ex) {
+        }
+        // If no valid opener URL found, use the origin URL.
+        if ( openerURL === null ) {
+            openerURL = origin.asciiSpec;
+        }
+        let messageManager = getMessageManager(openeeContext);
+        if ( messageManager === null ) {
+            return;
+        }
+        if ( typeof messageManager.sendRpcMessage === 'function' ) {
+            // https://bugzil.la/1092216
+            messageManager.sendRpcMessage(this.popupMessageName, openerURL);
+        } else {
+            // Compatibility for older versions
+            messageManager.sendSyncMessage(this.popupMessageName, openerURL);
+        }
+    },
+
     // https://bugzil.la/612921
     shouldLoad: function(type, location, origin, context) {
+        // For whatever reason, sometimes the global scope is completely
+        // uninitialized at this point. Repro steps:
+        // - Launch FF with uBlock enabled
+        // - Disable uBlock
+        // - Enable uBlock
+        // - Services and all other global variables are undefined
+        // Hopefully will eventually understand why this happens.
+        if ( Services === undefined ) {
+            return this.ACCEPT;
+        }
+
         if ( !context ) {
             return this.ACCEPT;
+        }
+
+        if ( type === this.MAIN_FRAME ) {
+            this.handlePopup(location, origin, context);
         }
 
         if ( !location.schemeIs('http') && !location.schemeIs('https') ) {
             return this.ACCEPT;
         }
 
-        let openerURL = null;
-
         if ( type === this.MAIN_FRAME ) {
             context = context.contentWindow || context;
-
-            if ( context.opener && context.opener !== context
-                && this.ignoredPopups.has(context) === false ) {
-                openerURL = context.opener.location.href;
-            }
-        } else if ( type === 7 ) { // SUB_DOCUMENT
+        } else if ( type === this.SUB_FRAME ) {
             context = context.contentWindow;
         } else {
             context = (context.ownerDocument || context).defaultView;
@@ -151,7 +238,6 @@ const contentObserver = {
 
         let isTopLevel = context === context.top;
         let parentFrameId;
-
         if ( isTopLevel ) {
             parentFrameId = -1;
         } else if ( context.parent === context.top ) {
@@ -161,14 +247,19 @@ const contentObserver = {
         }
 
         let messageManager = getMessageManager(context);
+        if ( messageManager === null ) {
+            return this.ACCEPT;
+        }
+
         let details = {
             frameId: isTopLevel ? 0 : this.getFrameId(context),
-            openerURL: openerURL,
             parentFrameId: parentFrameId,
-            type: type,
+            rawtype: type,
+            tabId: '',
             url: location.spec
         };
 
+        //console.log('shouldLoad: type=' + type + ' url=' + location.spec);
         if ( typeof messageManager.sendRpcMessage === 'function' ) {
             // https://bugzil.la/1092216
             messageManager.sendRpcMessage(this.cpMessageName, details);
@@ -180,25 +271,66 @@ const contentObserver = {
         return this.ACCEPT;
     },
 
-    initContentScripts: function(win, sandbox) {
+    initContentScripts: function(win, create) {
         let messager = getMessageManager(win);
         let sandboxId = hostName + ':sb:' + this.uniqueSandboxId++;
+        let sandbox;
 
-        if ( sandbox ) {
+        if ( create ) {
             let sandboxName = [
                 win.location.href.slice(0, 100),
                 win.document.title.slice(0, 100)
             ].join(' | ');
 
+            // https://github.com/gorhill/uMatrix/issues/325
+            // "Pass sameZoneAs to sandbox constructor to make GCs cheaper"
             sandbox = Cu.Sandbox([win], {
+                sameZoneAs: win.top,
                 sandboxName: sandboxId + '[' + sandboxName + ']',
                 sandboxPrototype: win,
                 wantComponents: false,
                 wantXHRConstructor: false
             });
 
+            if ( getChildProcessMessageManager() ) {
+                sandbox.rpc = function(details) {
+                    var cpmm = getChildProcessMessageManager();
+                    if ( !cpmm ) { return; }
+                    var r = cpmm.sendSyncMessage(rpcEmitterName, details);
+                    if ( Array.isArray(r) ) {
+                        return r[0];
+                    }
+                };
+            } else {
+                sandbox.rpc = function() {};
+            }
+
             sandbox.injectScript = function(script) {
-                Services.scriptloader.loadSubScript(script, sandbox);
+                var svc = Services;
+                // Sandbox appears void.
+                // I've seen this happens, need to investigate why.
+                if ( svc === undefined ) {
+                    return;
+                }
+                svc.scriptloader.loadSubScript(script, sandbox);
+            };
+
+            // The goal is to have content scripts removed from web pages. This
+            // helps remove traces of uBlock from memory when disabling/removing
+            // the addon.
+            // For example, this takes care of:
+            //   https://github.com/gorhill/uBlock/commit/ea4faff383789053f423498c1f1165c403fde7c7#commitcomment-11964137
+            //   > "gets the whole selected tab flashing"
+            sandbox.outerShutdown = function() {
+                sandbox.removeMessageListener();
+                sandbox.addMessageListener =
+                sandbox.injectScript =
+                sandbox.outerShutdown =
+                sandbox.removeMessageListener =
+                sandbox.rpc =
+                sandbox.sendAsyncMessage = function(){};
+                sandbox.vAPI = {};
+                messager = null;
             };
         }
         else {
@@ -228,6 +360,9 @@ const contentObserver = {
         };
 
         sandbox.removeMessageListener = function() {
+            if ( !sandbox._messageListener_ ) {
+                return;
+            }
             try {
                 messager.removeMessageListener(
                     sandbox._sandboxId_,
@@ -259,9 +394,19 @@ const contentObserver = {
     },
 
     observe: function(doc) {
-        let win = doc.defaultView;
+        // For whatever reason, sometimes the global scope is completely
+        // uninitialized at this point. Repro steps:
+        // - Launch FF with uBlock enabled
+        // - Disable uBlock
+        // - Enable uBlock
+        // - Services and all other global variables are undefined
+        // Hopefully will eventually understand why this happens.
+        if ( Services === undefined ) {
+            return;
+        }
 
-        if ( !win ) {
+        let win = doc.defaultView || null;
+        if ( win === null ) {
             return;
         }
 
@@ -270,9 +415,20 @@ const contentObserver = {
             win.addEventListener('mousedown', this.ignorePopup, true);
         }
 
+        // https://github.com/gorhill/uBlock/issues/260
+        // https://developer.mozilla.org/en-US/docs/Web/API/Document/contentType
+        //   "Non-standard, only supported by Gecko. To be used in 
+        //   "chrome code (i.e. Extensions and XUL applications)."
+        // TODO: We may have to exclude more types, for now let's be
+        //   conservative and focus only on the one issue reported, i.e. let's
+        //   not test against 'text/html'.
+        if ( doc.contentType.startsWith('image/') ) {
+            return;
+        }
+
         let loc = win.location;
 
-        if ( loc.protocol !== 'http:' && loc.protocol !== 'https:' ) {
+        if ( loc.protocol !== 'http:' && loc.protocol !== 'https:' && loc.protocol !== 'file:' ) {
             if ( loc.protocol === 'chrome:' && loc.host === hostName ) {
                 this.initContentScripts(win);
             }
@@ -284,27 +440,24 @@ const contentObserver = {
         let lss = Services.scriptloader.loadSubScript;
         let sandbox = this.initContentScripts(win, true);
 
-        lss(this.contentBaseURI + 'vapi-client.js', sandbox);
-        lss(this.contentBaseURI + 'contentscript-start.js', sandbox);
+        try {
+            lss(this.contentBaseURI + 'vapi-client.js', sandbox);
+            lss(this.contentBaseURI + 'contentscript-start.js', sandbox);
+        } catch (ex) {
+            //console.exception(ex.msg, ex.stack);
+            return;
+        }
 
         let docReady = (e) => {
             let doc = e.target;
             doc.removeEventListener(e.type, docReady, true);
-
-            if (doc.docShell) {
-                // It is possible, in some cases (#1140) for document-element-inserted to occur *before* nsIWebProgressListener.onLocationChange, so ensure that the URL is correct before continuing
-                let messageManager = doc.docShell.getInterface(Ci.nsIContentFrameMessageManager);
-
-                messageManager.sendSyncMessage(locationChangedMessageName, {
-                    url: loc.href,
-                    noRefresh: true, // If the URL is the same, then don't refresh it so that if this occurs after onLocationChange, no the block count isn't reset
-                });
-            }
-
             lss(this.contentBaseURI + 'contentscript-end.js', sandbox);
 
-            if ( doc.querySelector('a[href^="abp:"]') ) {
-                lss(this.contentBaseURI + 'subscriber.js', sandbox);
+            if (
+                doc.querySelector('a[href^="abp:"],a[href^="https://subscribe.adblockplus.org/?"]') ||
+                loc.href === 'https://github.com/gorhill/uBlock/wiki/Filter-lists-from-around-the-web'
+            ) {
+                lss(this.contentBaseURI + 'scriptlets/subscriber.js', sandbox);
             }
         };
 
@@ -318,31 +471,30 @@ const contentObserver = {
 
 /******************************************************************************/
 
-const locationChangedMessageName = hostName + ':locationChanged';
-
-const LocationChangeListener = function(docShell) {
-    if (docShell) {
-        docShell.QueryInterface(Ci.nsIInterfaceRequestor);
-
-        this.docShell = docShell.getInterface(Ci.nsIWebProgress);
-        this.messageManager = docShell.getInterface(Ci.nsIContentFrameMessageManager);
-
-        if (this.messageManager && typeof this.messageManager.sendAsyncMessage === 'function') {
-            this.docShell.addProgressListener(this, Ci.nsIWebProgress.NOTIFY_LOCATION);
-        }
+var LocationChangeListener = function(docShell, webProgress) {
+    var mm = docShell.QueryInterface(Ci.nsIInterfaceRequestor)
+                     .getInterface(Ci.nsIContentFrameMessageManager);
+    if ( !mm || typeof mm.sendAsyncMessage !== 'function' ) {
+        return;
     }
+    this.messageManager = mm;
+    webProgress.addProgressListener(this, Ci.nsIWebProgress.NOTIFY_LOCATION);
 };
 
-LocationChangeListener.prototype.QueryInterface = XPCOMUtils.generateQI(["nsIWebProgressListener", "nsISupportsWeakReference"]);
+LocationChangeListener.prototype.messageName = hostName + ':locationChanged';
+
+LocationChangeListener.prototype.QueryInterface = XPCOMUtils.generateQI([
+    'nsIWebProgressListener',
+    'nsISupportsWeakReference'
+]);
 
 LocationChangeListener.prototype.onLocationChange = function(webProgress, request, location, flags) {
     if ( !webProgress.isTopLevel ) {
         return;
     }
-    
-    this.messageManager.sendAsyncMessage(locationChangedMessageName, {
+    this.messageManager.sendAsyncMessage(this.messageName, {
         url: location.asciiSpec,
-        flags: flags,
+        flags: flags
     });
 };
 

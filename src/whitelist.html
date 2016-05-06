@@ -5,17 +5,25 @@
 <title>uBlock — Whitelist</title>
 <link rel="stylesheet" type="text/css" href="css/common.css">
 <link rel="stylesheet" type="text/css" href="css/dashboard-common.css">
+<link rel="stylesheet" type="text/css" href="css/cloud-ui.css">
 <link rel="stylesheet" type="text/css" href="css/whitelist.css">
 </head>
 
 <body>
 
+<div id="cloudWidget" class="hide" data-cloud-entry="whitelistPane"></div>
+
 <p data-i18n="whitelistPrompt"></p>
-<p><button id="whitelistApply" type="button" disabled="true" data-i18n="whitelistApply"></button></p>
-<textarea id="whitelist" dir="auto" spellcheck="false"></textarea>
-<p><button id="importWhitelistFromFile" data-i18n="whitelistImport"></button> &emsp;
-   <button id="exportWhitelistToFile" data-i18n="whitelistExport"></button>
-   <input id="importFilePicker" type="file" accept="text/plain" class="hiddenFileInput"></p>
+<p>
+    <button id="whitelistApply" class="custom important" type="button" disabled="true" data-i18n="whitelistApply"></button>&ensp;
+    <button id="whitelistRevert" class="custom" type="button" disabled="true" data-i18n="genericRevert"></button>
+</p>
+<p><textarea id="whitelist" dir="auto" spellcheck="false"></textarea></p>
+<p>
+    <button id="importWhitelistFromFile" class="custom" data-i18n="whitelistImport"></button>&ensp;
+    <button id="exportWhitelistToFile" class="custom" data-i18n="whitelistExport"></button>
+    <input id="importFilePicker" type="file" accept="text/plain" class="hiddenFileInput">
+</p>
 
 <script src="lib/punycode.js"></script>
 <script src="js/vapi-common.js"></script>
@@ -23,6 +31,7 @@
 <script src="js/udom.js"></script>
 <script src="js/i18n.js"></script>
 <script src="js/dashboard-common.js"></script>
+<script src="js/cloud-ui.js"></script>
 <script src="js/whitelist.js"></script>
 
 </body>

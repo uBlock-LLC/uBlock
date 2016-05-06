@@ -2,12 +2,13 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>uBlock</title>
+<title>uBlock Origin</title>
 </head>
 <body>
 <script src="lib/punycode.js"></script>
 <script src="lib/publicsuffixlist.js"></script>
 <script src="lib/yamd5.js"></script>
+<script src="js/vapi-polyfill.js"></script>
 <script src="js/vapi-common.js"></script>
 <script src="js/vapi-background.js"></script>
 <script src="js/background.js"></script>
@@ -18,8 +19,10 @@
 <script src="js/utils.js"></script>
 <script src="js/uritools.js"></script>
 <script src="js/assets.js"></script>
+<script src="js/redirect-engine.js"></script>
 <script src="js/dynamic-net-filtering.js"></script>
 <script src="js/static-net-filtering.js"></script>
+<script src="js/url-net-filtering.js"></script>
 <script src="js/cosmetic-filtering.js"></script>
 <script src="js/ublock.js"></script>
 <script src="js/messaging.js"></script>
@@ -30,7 +33,8 @@
 <script src="js/tab.js"></script>
 <script src="js/traffic.js"></script>
 <script src="js/contextmenu.js"></script>
-<script src="js/mirrors.js"></script>
+<script src="js/reverselookup.js"></script>
+<script src="js/rpcreceiver.js"></script>
 <script src="js/start.js"></script>
 </body>
 </html>

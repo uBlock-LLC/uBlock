@@ -1,7 +1,7 @@
 /*******************************************************************************
 
-    µMatrix - a browser extension to block requests.
-    Copyright (C) 2014 Raymond Hill
+    uBlock Origin - a browser extension to block requests.
+    Copyright (C) 2014-2016 Raymond Hill
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
     Home: https://github.com/chrisaljoudi/uMatrix
 */
 
-/* global vAPI, uDom */
+/* global uDom */
 
 /******************************************************************************/
 
@@ -29,12 +29,30 @@
 
 /******************************************************************************/
 
-var messager = vAPI.messaging.channel('dyna-rules.js');
+var messaging = vAPI.messaging;
 
 /******************************************************************************/
 
 var renderRules = function(details) {
+    var liTemplate = uDom('#templates > ul > li');
+    var ulLeft = uDom('#diff > .left ul').empty().remove();
+    var ulRight = uDom('#diff > .right ul').empty().remove();
+    var liLeft, liRight;
     var rules, rule, i;
+
+    // Switches always displayed first -- just like in uMatrix
+    // Merge url rules and switches: they just look the same
+    rules = details.hnSwitches.split(/\n+/).sort();
+
+    for ( i = 0; i < rules.length; i++ ) {
+        rule = rules[i];
+        liLeft = liTemplate.clone().text(rule);
+        liRight = liTemplate.clone().text(rule);
+        ulLeft.append(liLeft);
+        ulRight.append(liRight);
+    }
+
+    // Firewall rules follow
     var allRules = {};
     var permanentRules = {};
     var sessionRules = {};
@@ -62,11 +80,6 @@ var renderRules = function(details) {
     }
     details.permanentRules = rules.sort().join('\n');
 
-    var liTemplate = uDom('#templates > ul > li');
-    var ulLeft = uDom('#diff > .left ul').empty();
-    var ulRight = uDom('#diff > .right ul').empty();
-    var liLeft, liRight;
-
     rules = Object.keys(allRules).sort();
     for ( i = 0; i < rules.length; i++ ) {
         rule = rules[i];
@@ -87,6 +100,8 @@ var renderRules = function(details) {
         ulRight.append(liRight);
     }
 
+    uDom('#diff > .left > .rulesContainer').append(ulLeft);
+    uDom('#diff > .right > .rulesContainer').append(ulRight);
     uDom('#diff').toggleClass('dirty', details.sessionRules !== details.permanentRules);
 };
 
@@ -107,10 +122,10 @@ function handleImportFilePicker() {
                                .replace(/\n/g, ' * noop\n');
         }
         var request = {
-            'what': 'setSessionFirewallRules',
+            'what': 'setSessionRules',
             'rules': rulesFromHTML('#diff .right li') + '\n' + result
         };
-        messager.send(request, renderRules);
+        messaging.send('dashboard', request, renderRules);
     };
     var file = this.files[0];
     if ( file === undefined || file.name === '' ) {
@@ -143,7 +158,7 @@ function exportUserRulesToFile() {
         .replace('{{datetime}}', now.toLocaleString())
         .replace(/ +/g, '_');
     vAPI.download({
-        'url': 'data:text/plain,' + encodeURIComponent(rulesFromHTML('#diff .left li')),
+        'url': 'data:text/plain,' + encodeURIComponent(rulesFromHTML('#diff .left li') + '\n'),
         'filename': filename,
         'saveAs': true
     });
@@ -163,27 +178,27 @@ var rulesFromHTML = function(selector) {
             rules.push(li.text());
         }
     }
-    return rules.join('\n');
+    return rules.join('\n').trim();
 };
 
 /******************************************************************************/
 
 var revertHandler = function() {
     var request = {
-        'what': 'setSessionFirewallRules',
+        'what': 'setSessionRules',
         'rules': rulesFromHTML('#diff .left li')
     };
-    messager.send(request, renderRules);
+    messaging.send('dashboard', request, renderRules);
 };
 
 /******************************************************************************/
 
 var commitHandler = function() {
     var request = {
-        'what': 'setPermanentFirewallRules',
+        'what': 'setPermanentRules',
         'rules': rulesFromHTML('#diff .right li')
     };
-    messager.send(request, renderRules);
+    messaging.send('dashboard', request, renderRules);
 };
 
 /******************************************************************************/
@@ -204,10 +219,10 @@ var editStopHandler = function() {
     var parent = uDom(this).ancestors('#diff');
     parent.toggleClass('edit', false);
     var request = {
-        'what': 'setSessionFirewallRules',
+        'what': 'setSessionRules',
         'rules': uDom('#diff .right textarea').val()
     };
-    messager.send(request, renderRules);
+    messaging.send('dashboard', request, renderRules);
 };
 
 /******************************************************************************/
@@ -219,21 +234,42 @@ var editCancelHandler = function() {
 
 /******************************************************************************/
 
-uDom.onLoad(function() {
-    // Handle user interaction
-    uDom('#importButton').on('click', startImportFilePicker);
-    uDom('#importFilePicker').on('change', handleImportFilePicker);
-    uDom('#exportButton').on('click', exportUserRulesToFile);
+var getCloudData = function() {
+    return rulesFromHTML('#diff .left li');
+};
 
-    uDom('#revertButton').on('click', revertHandler);
-    uDom('#commitButton').on('click', commitHandler);
-    uDom('#editEnterButton').on('click', editStartHandler);
-    uDom('#diff > .pane.right > .rulesContainer').on('dblclick', editStartHandler);
-    uDom('#editStopButton').on('click', editStopHandler);
-    uDom('#editCancelButton').on('click', editCancelHandler);
+var setCloudData = function(data, append) {
+    if ( typeof data !== 'string' ) {
+        return;
+    }
+    if ( append ) {
+        data = rulesFromHTML('#diff .right li') + '\n' + data;
+    }
+    var request = {
+        'what': 'setSessionRules',
+        'rules': data
+    };
+    messaging.send('dashboard', request, renderRules);
+};
 
-    messager.send({ what: 'getFirewallRules' }, renderRules);
-});
+self.cloud.onPush = getCloudData;
+self.cloud.onPull = setCloudData;
+
+/******************************************************************************/
+
+// Handle user interaction
+uDom('#importButton').on('click', startImportFilePicker);
+uDom('#importFilePicker').on('change', handleImportFilePicker);
+uDom('#exportButton').on('click', exportUserRulesToFile);
+
+uDom('#revertButton').on('click', revertHandler);
+uDom('#commitButton').on('click', commitHandler);
+uDom('#editEnterButton').on('click', editStartHandler);
+uDom('#diff > .pane.right > .rulesContainer').on('dblclick', editStartHandler);
+uDom('#editStopButton').on('click', editStopHandler);
+uDom('#editCancelButton').on('click', editCancelHandler);
+
+messaging.send('dashboard', { what: 'getRules' }, renderRules);
 
 /******************************************************************************/
 

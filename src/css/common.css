@@ -1,77 +1,64 @@
-/* https://developer.mozilla.org/en-US/docs/Web/CSS/::after#Tooltips */
-[data-tip] {
-    cursor: pointer;
-    position: relative;
-    }
-body [data-tip]:after {
-    background-color: #333;
-    border-radius: 3px;
-    box-sizing: border-box;
-    color: #eee;
-    content: attr(data-tip);
-    font-size: 12px;
+@font-face {
+    font-family: 'FontAwesome';
     font-weight: normal;
-    left: 0.5em;
-    line-height: 130%;
-    opacity: 0;
-    padding: 4px 6px;
+    font-style: normal;
+    src: url('fonts/fontawesome-webfont.ttf') format('truetype');
+    }
+.fa {
+    display: inline-block;
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+    vertical-align: middle;
+    }
+body {
+    background-color: white;
+    color: black;
+    font: 14px/1.3 sans-serif;
+    }
+/* I designed the button with: http://charliepark.org/bootstrap_buttons/ */
+button.custom {
+    padding: 0.6em 1em;
+    border: 1px solid transparent;
+    border-color: #ccc #ccc #bbb #bbb;
+    border-radius: 3px;
+    background-color: hsl(216, 0%, 75%);
+    background-image: linear-gradient(#f2f2f2, #dddddd);
+    background-repeat: repeat-x;
+    color: #000;
+    opacity: 0.8;
+    }
+button.custom.disabled,
+button.custom[disabled] {
+    border-color: #ddd #ddd hsl(36, 0%, 85%);
+    background-color: hsl(36, 0%, 72%);
+    background-image: linear-gradient(#f2f2f2, #dddddd);
+    color: #666;
+    opacity: 0.6;
     pointer-events: none;
-    position: absolute;
-    right: 0.5em;
-    text-align: left;
-    top: 110%;
-    visibility: hidden;
-    white-space: pre-line;
-    z-index: 20;
     }
-body [data-tip]:hover:after {
-    opacity: 0.9;
-    position: absolute;
-    transition: visibility 0s 0.3s, opacity 0.2s 0.4s;
-    -webkit-transition: visibility 0s 0.3s, opacity 0.2s 0.4s;
-    visibility: visible;
+button.custom:hover {
+    opacity: 1.0;
     }
-body[dir=rtl] [data-tip]:hover:after {
-    text-align: right;
+button.important {
+    padding: 0.6em 1em;
+    border: 1px solid transparent;
+    border-color: #ffcc7f #ffcc7f hsl(36, 100%, 73%);
+    border-radius: 3px;
+    background-color: hsl(36, 100%, 75%);
+    background-image: linear-gradient(#ffdca8, #ffcc7f);
+    background-repeat: repeat-x;
+    color: #222;
+    opacity: 0.8;
     }
-
-body [data-tip][data-tip-anchor="top"]:hover:after {
-    bottom: 140%;
-    left: initial;
-    top: auto;
-    width: 8.5em;
+button.important:hover {
+    opacity: 1.0;
     }
-body[dir=ltr] [data-tip][data-tip-anchor="top"]:hover:after {
-    right: 0;
-    }
-body[dir=rtl] [data-tip][data-tip-anchor="top"]:hover:after {
-    left: 0;
-    }
-
-body[dir=ltr] [data-tip][data-tip-anchor="left"]:hover:after {
-    right: 105%;
-    top: initial;
-    left: initial;
-    bottom: -4px;
-    }
-body[dir=rtl] [data-tip][data-tip-anchor="left"]:hover:after {
-    left: 105%;
-    top: initial;
-    right: initial;
-    bottom: -4px;
-    }
-body [data-tip][data-tip-anchor="topcenter"]:hover:after {
-    bottom: 140%;
-    left: -225%;
-    right: initial;
-    top: auto;
-    width: 8.5em;
-    }
-
 .hiddenFileInput {
+    height: 0;
     visibility: hidden;
     width: 0;
-    height: 0;
     }
 .icon {
     display: inline-block;

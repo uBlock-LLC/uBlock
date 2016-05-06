@@ -1,15 +1,15 @@
 {
   "extName":{
-    "message":"uBlock",
+    "message":"uBlock₀",
     "description":"extension name."
   },
   "extShortDesc":{
-    "message":"Äntligen en effektiv reklamblockerare! Snäll mot processor och minne.",
+    "message":"Äntligen en effektiv blockerare! Snäll mot processor och minne.",
     "description":"this will be in the chrome web store: must be 132 characters or less"
   },
   "dashboardName":{
-    "message":"uBlock — Kontrollpanel",
-    "description":"English: uBlock — Dashboard"
+    "message":"uBlock₀ — Kontrollpanel",
+    "description":"English: uBlock₀ — Dashboard"
   },
   "settingsPageName":{
     "message":"Inställningar",
@@ -32,16 +32,16 @@
     "description":"appears as tab name in dashboard"
   },
   "statsPageName":{
-    "message":"uBlock — Logg för nätverksbegäranden",
-    "description":"Title for the network request log window"
+    "message":"uBlock₀ — Logg för nätverksbegäran",
+    "description":"Title for the logger window"
   },
   "aboutPageName":{
     "message":"Om",
     "description":"appears as tab name in dashboard"
   },
   "popupPowerSwitchInfo":{
-    "message":"Klick: avaktivera\/aktivera uBlock för hela denna hemsida permanent.\n\nCtrl+klick: avaktivera uBlock endast för denna sida.",
-    "description":"English: Click: disable\/enable uBlock for this site.\n\nCtrl+click: disable uBlock only on this page."
+    "message":"Klick: avaktivera\/aktivera uBlock₀ för denna hemsida permanent.\n\nCtrl+klick: avaktivera uBlock₀ endast för denna sida.",
+    "description":"English: Click: disable\/enable uBlock₀ for this site.\n\nCtrl+click: disable uBlock₀ only on this page."
   },
   "popupBlockedRequestPrompt":{
     "message":"blockerade förfrågningar",
@@ -56,7 +56,7 @@
     "description":"Example: 15 or 13%"
   },
   "popupBlockedSinceInstallPrompt":{
-    "message":"sedan installationen",
+    "message":"sedan installation",
     "description":"English: since install"
   },
   "popupOr":{
@@ -72,16 +72,40 @@
     "description":"English: Enter element picker mode"
   },
   "popupTipLog":{
-    "message":"Gå till logg",
-    "description":"English: Go to request log"
+    "message":"Öppna loggaren",
+    "description":"Tooltip used for the logger icon in the panel"
   },
   "popupTipNoPopups":{
-    "message":"Tillåt/tillåt inte popups för den här sidan",
-    "description":"English: No popups for this site"
+    "message":"Växla blockering av popup-fönster för denna sida",
+    "description":"Tooltip for the no-popups per-site switch"
   },
-  "popupTipNoStrictBlocking":{
-    "message":"Tillåt/tillåt inte strikta blockeringar för den här sidan",
-    "description":"English: No strict blocking for this site"
+  "popupTipNoLargeMedia":{
+    "message":"Ändra blockering av stora medieelement för denna sida",
+    "description":"Tooltip for the no-large-media per-site switch"
+  },
+  "popupTipNoCosmeticFiltering":{
+    "message":"Växla kosmetiska filter för denna sida",
+    "description":"Tooltip for the no-cosmetic-filtering per-site switch"
+  },
+  "popupTipNoRemoteFonts":{
+    "message":"Växla blockering för hämtning av typsnitt på sidan",
+    "description":"Tooltip for the no-remote-fonts per-site switch"
+  },
+  "popupTipGlobalRules":{
+    "message":"Globala regler: denna kolumn avser regler som gäller alla sidor.",
+    "description":"Tooltip when hovering the top-most cell of the global-rules column."
+  },
+  "popupTipLocalRules":{
+    "message":"Lokala regler: denna kolumn avser regler som endast gäller denna sida.\nLokala regler överskrider globala regler.",
+    "description":"Tooltip when hovering the top-most cell of the local-rules column."
+  },
+  "popupTipSaveRules":{
+    "message":"Tryck för att göra ändringarna beständiga.",
+    "description":"Tooltip when hovering over the padlock in the dynamic filtering pane."
+  },
+  "popupTipRevertRules":{
+    "message":"Tryck för att ångra dina ändringar.",
+    "description":"Tooltip when hovering over the eraser in the dynamic filtering pane."
   },
   "popupAnyRulePrompt":{
     "message":"alla",
@@ -93,6 +117,10 @@
   },
   "popup3pAnyRulePrompt":{
     "message":"Tredjepart",
+    "description":""
+  },
+  "popup3pPassiveRulePrompt":{
+    "message":"Tredjeparts-css\/bilder",
     "description":""
   },
   "popupInlineScriptRulePrompt":{
@@ -131,6 +159,10 @@
     "message":"Avsluta",
     "description":"English: Quit"
   },
+  "pickerPreview":{
+    "message":"Förhandsvisa",
+    "description":"Element picker preview mode: will cause the elements matching the current filter to be removed from the page"
+  },
   "pickerNetFilters":{
     "message":"Nätfilter",
     "description":"English: Net filters"
@@ -152,20 +184,60 @@
     "description":"English: Hide placeholders of blocked elements"
   },
   "settingsIconBadgePrompt":{
-    "message":"Visa antalet blockerade förfrågningar på uBlock-ikonen",
+    "message":"Visa antalet blockerade förfrågningar på ikonen",
     "description":"English: Show the number of blocked requests on the icon"
+  },
+  "settingsTooltipsPrompt":{
+    "message":"Visa inte inforutor",
+    "description":"A checkbox in the Settings pane"
   },
   "settingsContextMenuPrompt":{
     "message":"Utnyttja kontextmenyn där så är lämpligt",
     "description":"English: Make use of context menu where appropriate"
   },
+  "settingsColorBlindPrompt":{
+    "message":"Färgblindsanpassat",
+    "description":"English: Color-blind friendly"
+  },
+  "settingsCloudStorageEnabledPrompt":{
+    "message":"Aktivera stöd för molnlagring",
+    "description":""
+  },
   "settingsAdvancedUserPrompt":{
-    "message":"Jag är en avancerad användare (<a href='https:\/\/github.com\/chrisaljoudi\/uBlock\/wiki\/Advanced-user-features'>obligatorisk läsning<\/a>)",
+    "message":"Jag är en avancerad användare (<a href='https:\/\/github.com\/gorhill\/uBlock\/wiki\/Advanced-user-features'>obligatorisk läsning<\/a>)",
     "description":"English: "
   },
-  "settingsExperimentalPrompt":{
-    "message":"Aktivera experimentella funktioner (<a href='https:\/\/github.com\/chrisaljoudi\/uBlock\/wiki\/Experimental-features'>Om<\/a>)",
-    "description":"English: Enable experimental features"
+  "settingsPrefetchingDisabledPrompt":{
+    "message":"Stäng av hämtning i förhand (för att motverka anslutningar av blockerade förfrågningar)",
+    "description":"English: "
+  },
+  "settingsHyperlinkAuditingDisabledPrompt":{
+    "message":"Stäng av hyperlänksrevidering",
+    "description":"English: "
+  },
+  "settingsWebRTCIPAddressHiddenPrompt":{
+    "message":"Förhindra WebRTC från att läcka lokala IP-adresser",
+    "description":"English: "
+  },
+  "settingPerSiteSwitchGroup":{
+    "message":"Förvalt beteende",
+    "description":""
+  },
+  "settingPerSiteSwitchGroupSynopsis":{
+    "message":"Dessa förinställda beteenden kan överskridas för varje sida",
+    "description":""
+  },
+  "settingsNoCosmeticFilteringPrompt":{
+    "message":"Stäng av kosmetisk filtrering",
+    "description":""
+  },
+  "settingsNoLargeMediaPrompt":{
+    "message":"Blockera medieelement större än {{input:number}} kB",
+    "description":""
+  },
+  "settingsNoRemoteFontsPrompt":{
+    "message":"Blockera externa typsnitt",
+    "description":""
   },
   "settingsStorageUsed":{
     "message":"Använt utrymme: {{value}} bytes",
@@ -176,36 +248,36 @@
     "description":"English: Last restore:"
   },
   "settingsLastBackupPrompt":{
-    "message":"Senast säkerhetskopierad:",
+    "message":"Senaste säkerhetskopia:",
     "description":"English: Last backup:"
   },
   "3pListsOfBlockedHostsPrompt":{
     "message":"{{netFilterCount}} nätverksfilter ＋ {{cosmeticFilterCount}} kosmetiska filter från:",
-    "description":"English: {{netFilterCount}} network filters ＋ {{cosmeticFilterCount}} cosmetic filters from:"
+    "description":"Appears at the top of the _3rd-party filters_ pane"
   },
   "3pListsOfBlockedHostsPerListStats":{
     "message":"{{used}} använda av {{total}}",
-    "description":"English: {{used}} used out of {{total}}"
+    "description":"Appears aside each filter list in the _3rd-party filters_ pane"
   },
   "3pAutoUpdatePrompt1":{
     "message":"Uppdatera filterlistor automatiskt.",
-    "description":"English: Auto-update filter lists."
+    "description":"A checkbox in the _3rd-party filters_ pane"
   },
   "3pUpdateNow":{
     "message":"Uppdatera nu",
-    "description":"English: Update now"
+    "description":"A button in the in the _3rd-party filters_ pane"
   },
   "3pPurgeAll":{
     "message":"Rensa all cache",
-    "description":"English: Purge all caches"
+    "description":"A button in the in the _3rd-party filters_ pane"
   },
   "3pParseAllABPHideFiltersPrompt1":{
     "message":"Tolka och applicera kosmetiska filter.",
     "description":"English: Parse and enforce Adblock+ element hiding filters."
   },
   "3pParseAllABPHideFiltersInfo":{
-    "message":"<p>Det här alternativet aktiverar tolkning och applicering av <a href=\"https:\/\/adblockplus.org\/en\/faq_internal#elemhide\">Adblock Plus-kompatibla &ldquo;elementdöljningsfilter&rdquo;<\/a>. Dessa filter är i huvudsak kosmetiska. De tjänar till att dölja element som anses vara till visuella besvär och som inte kan bli blockerade av den nätförfrågningsbaserade filtreringsmotorn.<\/p><p>Genom att aktivera denna funktion ökar <i>uBlocks<\/i> minnesanvändning.<\/p>",
-    "description":"English: see English messages.json"
+    "message":"<p>Det här alternativet aktiverar tolkning och applicering av <a href=\"https:\/\/adblockplus.org\/en\/faq_internal#elemhide\">Adblock Plus-kompatibla &ldquo;elementdöljningsfilter&rdquo;<\/a>. Dessa filter är i huvudsak kosmetiska. De tjänar till att dölja element som anses vara till visuella besvär och som inte kan bli blockerade av den nätförfrågningsbaserade filtreringsmotorn.<\/p><p>Genom att aktivera denna funktion ökar uBlock₀s minnesanvändning.<\/p>",
+    "description":"This option enables the parsing and enforcing of Adblock Plus-compatible 'element hiding' filters. These filters are essentially cosmetic, they serve to hide elements in a web page which are deemed to be a visual nuisance, and which can't be blocked by the net request-based filtering engine.\n\nEnabling this feature increases uBlock Origin's memory footprint."
   },
   "3pListsOfBlockedHostsHeader":{
     "message":"Listor över blockerade värdar",
@@ -244,7 +316,7 @@
     "description":"English: Custom"
   },
   "3pExternalListsHint":{
-    "message":"En adress per rad. Rader med prefixet &lsquo;!&rsquo; kommer att ignoreras. Ogiltiga adresser kommer också att ignoreras.",
+    "message":"En adress per rad. Rader med prefixet &lsquo;!&rsquo; kommer att ignoreras. Ogiltiga adresser kommer också ignoreras.",
     "description":"English: One URL per line. Lines prefixed with &lsquo;!&rsquo; will be ignored. Invalid URLs will be silently ignored."
   },
   "3pExternalListsApply":{
@@ -261,10 +333,10 @@
   },
   "3pExternalListObsolete":{
     "message":"föråldrad",
-    "description":"English: outdated"
+    "description":"a filter list is 'out of date' (possibly needs to be updated)"
   },
   "3pLastUpdate":{
-    "message":"Senast uppdaterad: {{ago}}",
+    "message":"Senaste uppdatering: {{ago}}",
     "description":"English: Last update: {{ago}}, where 'ago' will be replaced with something like '2 days ago'"
   },
   "1pFormatHint":{
@@ -312,7 +384,7 @@
     "description":"Will save manually-edited content and exit manual-edit mode"
   },
   "rulesEditDiscard":{
-    "message":"Ignorera",
+    "message":"Förkasta",
     "description":"Will discard manually-edited content and exit manual-edit mode"
   },
   "rulesImport":{
@@ -328,16 +400,16 @@
     "description":"default file name to use"
   },
   "rulesHint":{
-    "message":"Lista över dina dynamiska filterregler.",
+    "message":"Lista över din dynamiska filterregler.",
     "description":"English: List of your dynamic filtering rules."
   },
   "rulesFormatHint":{
-    "message":"Regelsyntax: <code>källa destination typ åtgärd<\/code> (<a href='https:\/\/github.com\/chrisaljoudi\/uBlock\/wiki\/Dynamic-filtering:-rule-syntax'>full dokumentation<\/a>).",
+    "message":"Regelsyntax: <code>källa destination typ åtgärd<\/code> (<a href='https:\/\/github.com\/gorhill\/uBlock\/wiki\/Dynamic-filtering:-rule-syntax'>full dokumentation<\/a>).",
     "description":"English: dynamic rule syntax and full documentation."
   },
   "whitelistPrompt":{
-    "message":"Din lista över vilka värdnamn där uBlock inaktiveras. En post per rad. Ogiltiga värdnamn kommer att ignoreras.",
-    "description":"English: Your list of host names for which uBlock will be disabled. One host name per line. Invalid host names will be silently ignored."
+    "message":"Din lista över vilka värdnamn där uBlock₀ har inaktiveras. En post per rad. Ogiltiga värdnamn kommer att ignoreras.",
+    "description":"English: Your list of host names for which uBlock₀ will be disabled. One host name per line. Invalid host names will be silently ignored."
   },
   "whitelistImport":{
     "message":"Importera och lägg till",
@@ -355,22 +427,6 @@
     "message":"Verkställ ändringar",
     "description":"English: Apply changes"
   },
-  "logNetRequestsPrompt":{
-    "message":"Aktivera loggning av nätverksförfrågningar",
-    "description":"English: Enable the logging of network requests"
-  },
-  "logNetRequestsHelp":{
-    "message":"Om du vill så kan du inspektera detaljer över blockerade förfrågningar genom att aktivera detta alternativ. Loggning av nätverksförfrågningar ökar uBlocks minnesanvändning. Eftersom att de flesta användare aldrig kommer att använda denna funktion så är den inaktiverad som standard.",
-    "description":"English: see _locales\/en\/messages.log"
-  },
-  "logBlockedRequestsHeader":{
-    "message":"Blockerade förfrågningar",
-    "description":"English: Blocked requests"
-  },
-  "logAllowedRequestsHeader":{
-    "message":"Tillåtna förfrågningar",
-    "description":"English: Allowed requests"
-  },
   "logRequestsHeaderType":{
     "message":"Typ",
     "description":"English: Type"
@@ -387,13 +443,9 @@
     "message":"Filter",
     "description":"English: Filter"
   },
-  "logBlockedRequestsEmpty":{
-    "message":"Inga blockerade förfrågningar loggade för denna sida",
-    "description":"English: No blocked requests logged for this page"
-  },
-  "logAllowedRequestsEmpty":{
-    "message":"Inga icke-blockerade förfrågningar loggade för denna sida",
-    "description":"English: No non-blocked requests logged for this page"
+  "logAll":{
+    "message":"Alla",
+    "description":"Appears in the logger's tab selector"
   },
   "logBehindTheScene":{
     "message":"Under huven",
@@ -406,6 +458,62 @@
   "logMaxEntriesTip":{
     "message":"Maximalt antal loggposter",
     "description":"Tooltip informaing that the input field is to set the maximum number of entries in the log"
+  },
+  "loggerURLFilteringContextLabel":{
+    "message":"Sammanhang:",
+    "description":"Label for the context selector"
+  },
+  "loggerURLFilteringTypeLabel":{
+    "message":"Typ:",
+    "description":"Label for the type selector"
+  },
+  "loggerURLFilteringHeader":{
+    "message":"Dynamisk adressfiltrering",
+    "description":"Small header to identify the dynamic URL filtering section"
+  },
+  "loggerStaticFilteringHeader":{
+    "message":"Statisk filtrering",
+    "description":"Small header to identify the static filtering section"
+  },
+  "loggerStaticFilteringSentence":{
+    "message":"{{action}} nätverksförfrågningar av {{type}} {{br}}vilkas URL matchar {{url}} {{br}}och som kommer {{origin}},{{br}}{{importance}} det finns ett matchande undantagsfilter.",
+    "description":"Used in the static filtering wizard"
+  },
+  "loggerStaticFilteringSentencePartBlock":{
+    "message":"Blockera",
+    "description":"Used in the static filtering wizard"
+  },
+  "loggerStaticFilteringSentencePartAllow":{
+    "message":"Tillåt",
+    "description":"Used in the static filtering wizard"
+  },
+  "loggerStaticFilteringSentencePartType":{
+    "message":"typ \"{{type}}\"",
+    "description":"Used in the static filtering wizard"
+  },
+  "loggerStaticFilteringSentencePartAnyType":{
+    "message":"alla typer",
+    "description":"Used in the static filtering wizard"
+  },
+  "loggerStaticFilteringSentencePartOrigin":{
+    "message":"från \"{{origin}}\"",
+    "description":"Used in the static filtering wizard"
+  },
+  "loggerStaticFilteringSentencePartAnyOrigin":{
+    "message":"var som helst",
+    "description":"Used in the static filtering wizard"
+  },
+  "loggerStaticFilteringSentencePartNotImportant":{
+    "message":"utom när",
+    "description":"Used in the static filtering wizard"
+  },
+  "loggerStaticFilteringSentencePartImportant":{
+    "message":"även om",
+    "description":"Used in the static filtering wizard"
+  },
+  "loggerStaticFilteringFinderSentence1":{
+    "message":"Det statiska filtret {{filter}} hittades i:",
+    "description":"Below this sentence, the filter lists in which the filter was found"
   },
   "aboutChangelog":{
     "message":"Ändringslogg",
@@ -424,11 +532,11 @@
     "description":"English: Contributors"
   },
   "aboutBackupDataButton":{
-    "message":"Backup till fil",
+    "message":"Säkerhetskopiera till fil",
     "description":"English: Backup to file"
   },
   "aboutBackupFilename":{
-    "message":"min-ublock-säkerhetskopia_{{datetime}}.txt",
+    "message":"min-ublock-backup_{{datetime}}.txt",
     "description":"English: my-ublock-backup_{{datetime}}.txt"
   },
   "aboutRestoreDataButton":{
@@ -436,19 +544,19 @@
     "description":"English: Restore from file..."
   },
   "aboutResetDataButton":{
-    "message":"Återställ standardinställningar",
+    "message":"Återställ fabriksinställningar",
     "description":"English: Reset to default settings..."
   },
   "aboutRestoreDataConfirm":{
-    "message":"Alla dina inställningar kommer att ersättas med data som säkerhetskopierades {{time}} och uBlock kommer att starta om.\n\nVill du skriva över befintliga inställningar med säkerhetskopierad data?",
+    "message":"Alla dina inställningar kommer att skrivas över med data som har säkerhetskopierats {{time}} och uBlock₀ kommer att starta om.\n\nVill du skriva över befintliga inställningar med säkerhetskopierad data?",
     "description":"Message asking user to confirm restore"
   },
   "aboutRestoreDataError":{
-    "message":"Datan gick inte att läsa eller så är den ogiltig",
+    "message":"Datan gick inte att läsa eller är ogiltig",
     "description":"Message to display when an error occurred during restore"
   },
   "aboutResetDataConfirm":{
-    "message":"Alla dina inställningar kommer att raderas och uBlock kommer att starta om.\n\nÅterställ uBlock till fabriksinställningar?",
+    "message":"Alla dina inställningar kommer att raderas, och uBlock₀ kommer att starta om.\n\nÅterställ uBlock₀ till fabriksinställningar?",
     "description":"Message asking user to confirm reset"
   },
   "errorCantConnectTo":{
@@ -456,7 +564,7 @@
     "description":"English: Network error: unable to connect to {{url}}"
   },
   "subscriberConfirm":{
-    "message":"uBlock: Lägg till följande URL till din skräddarsydda filterlista?\n\nTitel: \"{{title}}\"\nURL: {{url}}",
+    "message":"uBlock₀: Lägg till följande URL till din skräddarsydda filterlista?\n\nTitel: \"{{title}}\"\nURL: {{url}}",
     "description":"English: The message seen by the user to confirm subscription to a ABP filter list"
   },
   "elapsedOneMinuteAgo":{
@@ -484,24 +592,32 @@
     "description":"English: {{value}} days ago"
   },
   "showDashboardButton":{
-    "message":"Visa kontrollpanelen",
+    "message":"Visa kontrollpanel",
     "description":"Firefox\/Fennec-specific: Show Dashboard"
   },
   "showNetworkLogButton":{
-    "message":"Visa logg över nätverksförfrågningar",
-    "description":"Firefox\/Fennec-specific: Show Network Request Log"
+    "message":"Visa nätverksbegäranslogg",
+    "description":"Firefox\/Fennec-specific: Show Logger"
   },
   "fennecMenuItemBlockingOff":{
     "message":"av",
-    "description":"Firefox-specific: appears as 'uBlock (off)'"
+    "description":"Firefox-specific: appears as 'uBlock₀ (off)'"
   },
   "docblockedPrompt1":{
-    "message":"uBlock har förhindrat följande sida från att laddas:",
-    "description":"English: uBlock has prevented the following page from loading:"
+    "message":"uBlock Origin har förhindrat följande sida från att ladda:",
+    "description":"English: uBlock₀ has prevented the following page from loading:"
   },
   "docblockedPrompt2":{
-    "message":"på grund av följande filter",
+    "message":"P.g.a. följande filter",
     "description":"English: Because of the following filter"
+  },
+  "docblockedNoParamsPrompt":{
+    "message":"utan parametrar",
+    "description":"label to be used for the parameter-less URL: https:\/\/cloud.githubusercontent.com\/assets\/585534\/9832014\/bfb1b8f0-593b-11e5-8a27-fba472a5529a.png"
+  },
+  "docblockedFoundIn":{
+    "message":"Hittades i:",
+    "description":"English: List of filter list names follows"
   },
   "docblockedBack":{
     "message":"Gå tillbaka",
@@ -522,6 +638,42 @@
   "docblockedDisablePermanent":{
     "message":"Permanent",
     "description":"English: Permanently"
+  },
+  "cloudPush":{
+    "message":"Exportera till molnlagring",
+    "description":"tooltip"
+  },
+  "cloudPull":{
+    "message":"Importera från molnlagring",
+    "description":"tooltip"
+  },
+  "cloudPullAndMerge":{
+    "message":"Importera från molnlagring och slå ihop med nuvarande inställningar",
+    "description":"tooltip"
+  },
+  "cloudNoData":{
+    "message":"...\n...",
+    "description":""
+  },
+  "cloudDeviceNamePrompt":{
+    "message":"Enhetens namn:",
+    "description":"used as a prompt for the user to provide a custom device name"
+  },
+  "genericSubmit":{
+    "message":"Skicka",
+    "description":"for generic 'submit' buttons"
+  },
+  "genericRevert":{
+    "message":"Ångra",
+    "description":"for generic 'revert' buttons"
+  },
+  "genericBytes":{
+    "message":"byte",
+    "description":""
+  },
+  "contextMenuTemporarilyAllowLargeMediaElements":{
+    "message":"Tillåt tillfälligt stora medieelement",
+    "description":"A context menu entry, present when large media elements have been blocked on the current site"
   },
   "dummy":{
     "message":"This entry must be the last one",

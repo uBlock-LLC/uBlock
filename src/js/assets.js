@@ -1,7 +1,7 @@
 /*******************************************************************************
 
-    µBlock - a browser extension to block requests.
-    Copyright (C) 2014-2015 Raymond Hill
+    uBlock Origin - a browser extension to block requests.
+    Copyright (C) 2014-2016 Raymond Hill
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -19,7 +19,8 @@
     Home: https://github.com/chrisaljoudi/uBlock
 */
 
-/* global vAPI, µBlock */
+
+/* global YaMD5 */
 
 /*******************************************************************************
 
@@ -53,14 +54,16 @@ var oneDay = 24 * oneHour;
 /******************************************************************************/
 
 var projectRepositoryRoot = µBlock.projectServerRoot;
+var assetsRepositoryRoot = 'https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/';
 var nullFunc = function() {};
-var reIsExternalPath = /^[a-z]+:\/\//;
+var reIsExternalPath = /^(file|ftps?|https?|resource):\/\//;
 var reIsUserPath = /^assets\/user\//;
 var reIsCachePath = /^cache:\/\//;
 var lastRepoMetaTimestamp = 0;
 var lastRepoMetaIsRemote = false;
 var refreshRepoMetaPeriod = 5 * oneHour;
 var errorCantConnectTo = vAPI.i18n('errorCantConnectTo');
+var xhrTimeout = vAPI.localStorage.getItem('xhrTimeout') || 30000;
 
 var exports = {
     autoUpdate: true,
@@ -275,17 +278,60 @@ var cachedAssetsManager = (function() {
         exports.remove(/./);
     };
 
+    exports.exists = function(path) {
+        return entries !== null && entries.hasOwnProperty(path);
+    };
+
     exports.onRemovedListener = null;
+
+    getEntries(function(){});
 
     return exports;
 })();
 
 /******************************************************************************/
 
+var toRepoURL = function(path) {
+    if ( path.startsWith('assets/ublock/filter-lists.json') ) {
+        return projectRepositoryRoot + path;
+    }
+
+    if ( path.startsWith('assets/checksums.txt') ) {
+        return path.replace(
+            /^assets\/checksums.txt/,
+            assetsRepositoryRoot + 'checksums/ublock0.txt'
+        );
+    }
+
+    if ( path.startsWith('assets/thirdparties/') ) {
+        return path.replace(
+            /^assets\/thirdparties\//,
+            assetsRepositoryRoot + 'thirdparties/'
+        );
+    }
+
+    if ( path.startsWith('assets/ublock/') ) {
+        return path.replace(
+            /^assets\/ublock\//,
+            assetsRepositoryRoot + 'filters/'
+        );
+    }
+
+    // At this point, `path` is assumed to point to a resource specific to
+    // this project.
+    return projectRepositoryRoot + path;
+};
+
+/******************************************************************************/
+
 var getTextFileFromURL = function(url, onLoad, onError) {
     // console.log('µBlock.assets/getTextFileFromURL("%s"):', url);
 
-    // https://github.com/chrisaljoudi/uMatrix/issues/15
+    if ( typeof onError !== 'function' ) {
+        onError = onLoad;
+    }
+
+    // https://github.com/gorhill/uMatrix/issues/15
     var onResponseReceived = function() {
         this.onload = this.onerror = this.ontimeout = null;
         // xhr for local files gives status 0, but actually succeeds
@@ -301,7 +347,7 @@ var getTextFileFromURL = function(url, onLoad, onError) {
         // appears to be a HTML document: could happen when server serves
         // some kind of error page I suppose
         var text = this.responseText.trim();
-        if ( text.charAt(0) === '<' && text.slice(-1) === '>' ) {
+        if ( text.startsWith('<') && text.endsWith('>') ) {
             return onError.call(this);
         }
         return onLoad.call(this);
@@ -318,7 +364,7 @@ var getTextFileFromURL = function(url, onLoad, onError) {
     var xhr = new XMLHttpRequest();
     try {
         xhr.open('get', url, true);
-        xhr.timeout = 30000;
+        xhr.timeout = xhrTimeout;
         xhr.onload = onResponseReceived;
         xhr.onerror = onErrorReceived;
         xhr.ontimeout = onErrorReceived;
@@ -376,11 +422,16 @@ var getRepoMetadata = function(callback) {
     lastRepoMetaTimestamp = Date.now();
     lastRepoMetaIsRemote = exports.remoteFetchBarrier === 0;
 
+    var defaultChecksums;
     var localChecksums;
     var repoChecksums;
 
     var checksumsReceived = function() {
-        if ( localChecksums === undefined || repoChecksums === undefined ) {
+        if (
+            defaultChecksums === undefined ||
+            localChecksums === undefined ||
+            repoChecksums === undefined
+        ) {
             return;
         }
         // Remove from cache assets which no longer exist in the repo
@@ -392,8 +443,25 @@ var getRepoMetadata = function(callback) {
                 continue;
             }
             entry = entries[path];
-            // If repo checksums could not be fetched, assume no change
-            if ( repoChecksums === '' ) {
+            // https://github.com/gorhill/uBlock/issues/760
+            // If the resource does not have a cached instance, we must reset
+            // the checksum to its value at install time.
+            if (
+                stringIsNotEmpty(defaultChecksums[path]) &&
+                entry.localChecksum !== defaultChecksums[path] &&
+                cachedAssetsManager.exists(path) === false
+            ) {
+                entry.localChecksum = defaultChecksums[path];
+                checksumsChanged = true;
+            }
+            // If repo checksums could not be fetched, assume no change.
+            // https://github.com/gorhill/uBlock/issues/602
+            //   Added: if repo checksum is that of the empty string,
+            //   assume no change
+            if (
+                repoChecksums === '' ||
+                entry.repoChecksum === 'd41d8cd98f00b204e9800998ecf8427e'
+            ) {
                 entry.repoChecksum = entry.localChecksum;
             }
             if ( entry.repoChecksum !== '' || entry.localChecksum === '' ) {
@@ -426,44 +494,82 @@ var getRepoMetadata = function(callback) {
         if ( /^(?:[0-9a-f]{32}\s+\S+(?:\s+|$))+/.test(details.content) === false ) {
             return '';
         }
-        return details.content;
+        // https://github.com/gorhill/uBlock/issues/602
+        // External filter lists are not meant to appear in checksums.txt.
+        // TODO: remove this code once v1.1.0.0 is everywhere.
+        var out = [];
+        var listMap = µBlock.oldListToNewListMap;
+        var lines = details.content.split(/\s*\n\s*/);
+        var line, matches;
+        for ( var i = 0; i < lines.length; i++ ) {
+            line = lines[i];
+            matches = line.match(/^[0-9a-f]+ (.+)$/);
+            if ( matches === null || listMap.hasOwnProperty(matches[1]) ) {
+               continue;
+            }
+            out.push(line);
+        }
+        return out.join('\n');
     };
 
-    var parseChecksums = function(text, which) {
-        var entries = repoMetadata.entries;
+    var parseChecksums = function(text, eachFn) {
         var lines = text.split(/\n+/);
         var i = lines.length;
-        var fields, assetPath;
+        var fields;
         while ( i-- ) {
             fields = lines[i].trim().split(/\s+/);
             if ( fields.length !== 2 ) {
                 continue;
             }
-            assetPath = fields[1];
-            if ( entries[assetPath] === undefined ) {
-                entries[assetPath] = new AssetEntry();
-            }
-            entries[assetPath][which + 'Checksum'] = fields[0];
+            eachFn(fields[1], fields[0]);
         }
     };
 
     var onLocalChecksumsLoaded = function(details) {
-        if ( localChecksums = validateChecksums(details) ) {
-            parseChecksums(localChecksums, 'local');
+        var entries = repoMetadata.entries;
+        var processChecksum = function(path, checksum) {
+            if ( entries.hasOwnProperty(path) === false ) {
+                entries[path] = new AssetEntry();
+            }
+            entries[path].localChecksum = checksum;
+        };
+        if ( (localChecksums = validateChecksums(details)) ) {
+            parseChecksums(localChecksums, processChecksum);
         }
         checksumsReceived();
     };
 
     var onRepoChecksumsLoaded = function(details) {
-        if ( repoChecksums = validateChecksums(details) ) {
-            parseChecksums(repoChecksums, 'repo');
+        var entries = repoMetadata.entries;
+        var processChecksum = function(path, checksum) {
+            if ( entries.hasOwnProperty(path) === false ) {
+                entries[path] = new AssetEntry();
+            }
+            entries[path].repoChecksum = checksum;
+        };
+        if ( (repoChecksums = validateChecksums(details)) ) {
+            parseChecksums(repoChecksums, processChecksum);
         }
+        checksumsReceived();
+    };
+
+    // https://github.com/gorhill/uBlock/issues/760
+    // We need the checksum values at install time, because some resources
+    // may have been purged, in which case the checksum must be reset to the
+    // value at install time.
+    var onDefaultChecksumsLoaded = function() {
+        defaultChecksums = Object.create(null);
+        var processChecksum = function(path, checksum) {
+            defaultChecksums[path] = checksum;
+        };
+        parseChecksums(this.responseText || '', processChecksum);
         checksumsReceived();
     };
 
     repoMetadata = new RepoMetadata();
     repoMetadata.waiting.push(callback);
     readRepoFile('assets/checksums.txt', onRepoChecksumsLoaded);
+    getTextFileFromURL(vAPI.getURL('assets/checksums.txt'), onDefaultChecksumsLoaded);
     readLocalFile('assets/checksums.txt', onLocalChecksumsLoaded);
 };
 
@@ -549,7 +655,7 @@ var readRepoFile = function(path, callback) {
         callback(details);
     };
 
-    var repositoryURL = projectRepositoryRoot + path;
+    var repositoryURL = toRepoURL(path);
 
     var onRepoFileLoaded = function() {
         //console.log('µBlock> readRepoFile("%s") / onRepoFileLoaded()', path);
@@ -566,9 +672,9 @@ var readRepoFile = function(path, callback) {
         reportBack('', 'Error');
     };
 
-    // 'ublock=...' is to skip browser cache
+    // '_=...' is to skip browser cache
     getTextFileFromURL(
-        repositoryURL + '?ublock=' + Date.now(),
+        repositoryURL + '?_=' + Date.now(),
         onRepoFileLoaded,
         onRepoFileError
     );
@@ -625,8 +731,8 @@ var readRepoCopyAsset = function(path, callback) {
         getTextFileFromURL(vAPI.getURL(details.path), onInstallFileLoaded, onInstallFileError);
     };
 
-    var repositoryURL = projectRepositoryRoot + path;
-    var repositoryURLSkipCache = repositoryURL + '?ublock=' + Date.now();
+    var repositoryURL = toRepoURL(path);
+    var repositoryURLSkipCache = repositoryURL + '?_=' + Date.now();
 
     var onRepoFileLoaded = function() {
         if ( stringIsNotEmpty(this.responseText) === false ) {
@@ -773,7 +879,7 @@ var readRepoOnlyAsset = function(path, callback) {
         getTextFileFromURL(vAPI.getURL(path), onInstallFileLoaded, onInstallFileError);
     };
 
-    var repositoryURL = projectRepositoryRoot + path + '?ublock=' + Date.now();
+    var repositoryURL = toRepoURL(path + '?_=' + Date.now());
 
     var onRepoFileLoaded = function() {
         if ( typeof this.responseText !== 'string' ) {
@@ -1037,6 +1143,33 @@ exports.rmrf = function() {
 
 /******************************************************************************/
 
+exports.rename = function(from, to, callback) {
+    var done = function() {
+        if ( typeof callback === 'function' ) {
+            callback();
+        }
+    };
+
+    var fromLoaded = function(details) {
+        cachedAssetsManager.remove(from);
+        cachedAssetsManager.save(to, details.content, callback);
+        done();
+    };
+
+    var toLoaded = function(details) {
+        // `to` already exists: do nothing
+        if ( details.content !== '' ) {
+            return done();
+        }
+        cachedAssetsManager.load(from, fromLoaded);
+    };
+
+    // If `to` content already exists, do nothing.
+    cachedAssetsManager.load(to, toLoaded);
+};
+
+/******************************************************************************/
+
 exports.metadata = function(callback) {
     var out = {};
 
@@ -1044,13 +1177,17 @@ exports.metadata = function(callback) {
     // We need to check cache obsolescence when both cache and repo meta data
     // has been gathered.
     var checkCacheObsolescence = function() {
-        var entry;
+        var entry, homeURL;
         for ( var path in out ) {
             if ( out.hasOwnProperty(path) === false ) {
                 continue;
             }
             entry = out[path];
-            entry.cacheObsolete = stringIsNotEmpty(homeURLs[path]) &&
+            // https://github.com/gorhill/uBlock/issues/528
+            // Not having a homeURL property does not mean the filter list
+            // is not external.
+            homeURL = reIsExternalPath.test(path) ? path : homeURLs[path];
+            entry.cacheObsolete = stringIsNotEmpty(homeURL) &&
                                   cacheIsObsolete(entry.lastModified);
         }
         callback(out);
@@ -1071,6 +1208,7 @@ exports.metadata = function(callback) {
             entryOut.localChecksum = entryRepo.localChecksum;
             entryOut.repoChecksum = entryRepo.repoChecksum;
             entryOut.homeURL = homeURLs[path] || '';
+            entryOut.supportURL = entryRepo.supportURL || '';
             entryOut.repoObsolete = entryOut.localChecksum !== entryOut.repoChecksum;
         }
         checkCacheObsolescence();
@@ -1108,8 +1246,14 @@ exports.purge = function(pattern, before) {
     cachedAssetsManager.remove(pattern, before);
 };
 
+exports.purgeCacheableAsset = function(pattern, before) {
+    cachedAssetsManager.remove(pattern, before);
+    lastRepoMetaTimestamp = 0;
+};
+
 exports.purgeAll = function(callback) {
     cachedAssetsManager.removeAll(callback);
+    lastRepoMetaTimestamp = 0;
 };
 
 /******************************************************************************/
@@ -1347,7 +1491,7 @@ var scheduleUpdateDaemon = function() {
     if ( updateDaemonTimer !== null ) {
         clearTimeout(updateDaemonTimer);
     }
-    updateDaemonTimer = setTimeout(
+    updateDaemonTimer = vAPI.setTimeout(
         updateDaemon,
         exports.manualUpdate ? manualUpdateDaemonTimerPeriod : autoUpdateDaemonTimerPeriod
     );
@@ -1461,6 +1605,16 @@ exports.onCompleted = {
 exports.restart = function() {
     reset();
     updateCycleTime = Date.now() + updateCycleNextPeriod;
+};
+
+/******************************************************************************/
+
+// Call when disabling uBlock, to ensure it doesn't stick around as a detached
+// window object in Firefox.
+
+exports.shutdown = function() {
+    suspendUpdateDaemon();
+    reset();
 };
 
 /******************************************************************************/

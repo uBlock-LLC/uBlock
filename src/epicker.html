@@ -5,13 +5,13 @@
     outline: none;
 }
 html, body {
-    margin: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    font: 12px sans-serif;
     background: transparent !important;
-    color: #333;
+    color: black;
+    font: 12px sans-serif;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    width: 100%;
 }
 ul, li, div {
     display: block;
@@ -20,57 +20,64 @@ ul {
     margin: 0.25em 0 0 0;
 }
 button {
-    margin: 0 0 0 2px;
+    background-color: #ccc;
     border: 1px solid #aaa;
-    padding: 4px 6px;
+    border-radius: 3px;
     box-sizing: border-box;
     box-shadow: none;
-    border-radius: 3px;
-    color: #444;
-    background-color: #ccc;
+    color: #000;
     cursor: pointer;
+    margin: 0 0 0 2px;
+    opacity: 0.7;
+    padding: 4px 6px;
 }
-button:hover {
-    background-color: #eee;
+button:first-of-type {
+    margin-left: 0;
 }
 button:disabled {
     color: #999;
     background-color: #ccc;
 }
+button:not(:disabled):hover {
+    opacity: 1;
+}
 #create:not(:disabled) {
-    background-color: #ffdca8;
+    background-color: hsl(36, 100%, 83%);
+    border-color: hsl(36, 50%, 60%);
+}
+#preview {
+    float: left;
+}
+body.preview #preview {
+    background-color: hsl(204, 100%, 83%);
+    border-color: hsl(204, 50%, 60%);
 }
 section {
-    border: 1px solid #ccc;
+    border: 0;
     box-sizing: border-box;
     display: inline-block;
-    height: 8em;
     position: relative;
     width: 100%;
 }
-textarea {
+section > textarea {
     background-color: #fff;
-    border: 0;
+    border: 1px solid #ccc;
     box-sizing: border-box;
     font: 11px monospace;
-    height: 100%;
+    height: 6em;
     overflow: hidden;
     padding: 0;
     resize: none;
     width: 100%;
 }
-div {
-    bottom: 1px;
+section > div {
     direction: ltr;
-    opacity: 1;
+    margin: 2px 0;
+    text-align: right;
+}
+section > div > span:last-of-type {
     position: absolute;
-    right: 1px;
-}
-textarea:focus + div {
-    opacity: 0.2;
-}
-textarea:focus + div:hover {
-    opacity: 1;
+    right: 0;
 }
 ul {
     padding: 0;
@@ -78,8 +85,12 @@ ul {
     text-align: left;
     overflow: hidden;
 }
-body > ul > li {
-    padding-top: 3px;
+aside > ul {
+    max-height: 16em;
+    overflow-y: auto;
+}
+aside > ul > li:first-of-type {
+    margin-bottom: 0.5em;
 }
 ul > li > span:nth-of-type(1) {
     font-weight: bold;
@@ -89,7 +100,6 @@ ul > li > span:nth-of-type(2) {
     color: gray;
 }
 ul > li > ul {
-    background-color: #eee;
     list-style-type: none;
     margin: 0 0 0 1em;
     overflow: hidden;
@@ -102,7 +112,7 @@ ul > li > ul > li {
     direction: ltr;
 }
 ul > li > ul > li:hover {
-    background-color: rgba(255,255,255,1);
+    background-color: white;
 }
 svg {
     position: fixed;
@@ -122,20 +132,25 @@ svg > path:first-child {
 svg > path + path {
     stroke: #F00;
     stroke-width: 0.5px;
-    fill: rgba(255,31,31,0.25);
+    fill: rgba(255,63,63,0.20);
+}
+body.preview svg > path {
+    fill: rgba(0,0,0,0.10);
 }
 aside {
-    background-color: rgba(255,255,255,0.9);
+    background-color: #eee;
     bottom: 4px;
+    box-sizing: border-box;
+    visibility: hidden;
     padding: 4px;
-    display: none;
     position: fixed;
     right: 4px;
-    width: 30em;
+    width: calc(40% - 4px);
 }
 body.paused > aside {
-    opacity: 0.2;
-    display: block;
+    opacity: 0.1;
+    visibility: visible;
+    z-index: 100;
 }
 body.paused > aside:hover {
     opacity: 1;
@@ -148,7 +163,12 @@ body.paused > aside:hover {
 <aside>
 <section>
     <textarea lang="en" dir="ltr" spellcheck="false"></textarea>
-    <div><button id="create" type="button" disabled="disabled">{{create}}</button><button id="pick" type="button">{{pick}}</button><button id="quit" type="button">{{quit}}</button></div>
+    <div><!--
+    --><button id="preview" type="button">{{preview}}</button><!--
+    --><button id="create" type="button" disabled>{{create}}</button><!--
+    --><button id="pick" type="button">{{pick}}</button><!--
+    --><button id="quit" type="button">{{quit}}</button><!--
+    --></div>
 </section>
 <ul>
     <li id="netFilters">

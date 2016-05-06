@@ -16,26 +16,28 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see {http://www.gnu.org/licenses/}.
 
-    Home: https://github.com/chrisaljoudi/uBlock
+    Home: https://github.com/gorhill/uBlock
 */
 
-/* global APP_SHUTDOWN, APP_STARTUP */
+/* global ADDON_UNINSTALL, APP_SHUTDOWN */
 /* exported startup, shutdown, install, uninstall */
 
 'use strict';
 
 /******************************************************************************/
 
-// Accessing the context of the background page:
-// var win = Services.appShell.hiddenDOMWindow.document.querySelector('iframe[src*=ublock]').contentWindow;
+const {classes: Cc, interfaces: Ci} = Components;
 
-let bgProcess;
+// Accessing the context of the background page:
+// var win = Services.appShell.hiddenDOMWindow.document.querySelector('iframe[src*=ublock0]').contentWindow;
+
+let bgProcess = null;
 let version;
-const hostName = 'ublock';
+const hostName = 'ublock0';
 const restartListener = {
     get messageManager() {
-        return Components.classes['@mozilla.org/parentprocessmessagemanager;1']
-            .getService(Components.interfaces.nsIMessageListenerManager);
+        return Cc['@mozilla.org/parentprocessmessagemanager;1']
+            .getService(Ci.nsIMessageListenerManager);
     },
 
     receiveMessage: function() {
@@ -46,24 +48,32 @@ const restartListener = {
 
 /******************************************************************************/
 
-function startup(data, reason) {
+function startup(data/*, reason*/) {
     if ( data !== undefined ) {
         version = data.version;
     }
 
-    let appShell = Components.classes['@mozilla.org/appshell/appShellService;1']
-        .getService(Components.interfaces.nsIAppShellService);
+    // Already started?
+    if ( bgProcess !== null ) {
+        return;
+    }
 
-    let onReady = function(e) {
-        if ( e ) {
-            this.removeEventListener(e.type, onReady);
+    let appShell = Cc['@mozilla.org/appshell/appShellService;1']
+        .getService(Ci.nsIAppShellService);
+
+    let isReady = function() {
+        var hiddenDoc;
+
+        try {
+            hiddenDoc = appShell.hiddenDOMWindow &&
+                        appShell.hiddenDOMWindow.document;
+        } catch (ex) {
         }
 
-        let hiddenDoc = appShell.hiddenDOMWindow.document;
-
-        if ( hiddenDoc.readyState === 'loading' ) {
-            hiddenDoc.addEventListener('DOMContentLoaded', onReady);
-            return;
+        // Do not test against `loading`: it does appear `readyState` could be
+        // undefined if looked up too early.
+        if ( !hiddenDoc || hiddenDoc.readyState !== 'complete' ) {
+            return false;
         }
 
         bgProcess = hiddenDoc.documentElement.appendChild(
@@ -74,36 +84,56 @@ function startup(data, reason) {
             'chrome://' + hostName + '/content/background.html#' + version
         );
 
+        // https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIMessageListenerManager#addMessageListener%28%29
+        // "If the same listener registers twice for the same message, the
+        // "second registration is ignored."
         restartListener.messageManager.addMessageListener(
             hostName + '-restart',
             restartListener
         );
+
+        return true;
     };
 
-    if ( reason !== APP_STARTUP ) {
-        onReady();
+    if ( isReady() ) {
         return;
     }
 
-    let ww = Components.classes['@mozilla.org/embedcomp/window-watcher;1']
-        .getService(Components.interfaces.nsIWindowWatcher);
+    // https://github.com/gorhill/uBlock/issues/749
+    // Poll until the proper environment is set up -- or give up eventually.
+    // We poll frequently early on but relax poll delay as time pass.
 
-    ww.registerNotification({
-        observe: function(win, topic) {
-            if ( topic !== 'domwindowopened' ) {
-                return;
-            }
+    let tryDelay = 5;
+    let trySum = 0;
+    let tryMax = 30000;
+    let timer = Cc['@mozilla.org/timer;1']
+        .createInstance(Ci.nsITimer);
 
-            try {
-                appShell.hiddenDOMWindow;
-            } catch (ex) {
-                return;
-            }
-
-            ww.unregisterNotification(this);
-            win.addEventListener('DOMContentLoaded', onReady);
+    let checkLater = function() {
+        trySum += tryDelay;
+        if ( trySum >= tryMax ) {
+            timer = null;
+            return;
         }
-    });
+        timer.init(timerObserver, tryDelay, timer.TYPE_ONE_SHOT);
+        tryDelay *= 2;
+        if ( tryDelay > 500 ) {
+            tryDelay = 500;
+        }
+    };
+
+    var timerObserver = {
+        observe: function() {
+            timer.cancel();
+            if ( isReady() ) {
+                timer = null;
+            } else {
+                checkLater();
+            }
+        }
+    };
+
+    checkLater();
 }
 
 /******************************************************************************/
@@ -113,7 +143,10 @@ function shutdown(data, reason) {
         return;
     }
 
-    bgProcess.parentNode.removeChild(bgProcess);
+    if ( bgProcess !== null ) {
+        bgProcess.parentNode.removeChild(bgProcess);
+        bgProcess = null;
+    }
 
     if ( data === undefined ) {
         return;
@@ -128,15 +161,32 @@ function shutdown(data, reason) {
 
 /******************************************************************************/
 
-function install() {
+function install(/*aData, aReason*/) {
     // https://bugzil.la/719376
-    Components.classes['@mozilla.org/intl/stringbundle;1']
-        .getService(Components.interfaces.nsIStringBundleService)
+    Cc['@mozilla.org/intl/stringbundle;1']
+        .getService(Ci.nsIStringBundleService)
         .flushBundles();
 }
 
 /******************************************************************************/
 
-function uninstall() {}
+// https://developer.mozilla.org/en-US/Add-ons/Bootstrapped_extensions#uninstall
+//   "if you have code in uninstall it will not run, you MUST run some code
+//   "in the install function, at the least you must set arguments on the
+//   "install function so like: function install(aData, aReason) {} then
+//   "uninstall WILL WORK."
+
+function uninstall(aData, aReason) {
+    if ( aReason !== ADDON_UNINSTALL ) {
+        return;
+    }
+    // https://github.com/gorhill/uBlock/issues/84
+    // "Add cleanup task to remove local storage settings when uninstalling"
+    // To cleanup vAPI.localStorage in vapi-common.js
+    // As I get more familiar with FF API, will find out whetehr there was
+    // a better way to do this.
+    Components.utils.import('resource://gre/modules/Services.jsm', null)
+        .Services.prefs.getBranch('extensions.' + hostName + '.').deleteBranch('');
+}
 
 /******************************************************************************/

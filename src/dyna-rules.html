@@ -5,10 +5,13 @@
 <title>uBlock — Dynamic filtering rules</title>
 <link rel="stylesheet" type="text/css" href="css/common.css">
 <link rel="stylesheet" type="text/css" href="css/dashboard-common.css">
+<link rel="stylesheet" type="text/css" href="css/cloud-ui.css">
 <link rel="stylesheet" type="text/css" href="css/dyna-rules.css">
 </head>
 
 <body>
+
+<div id="cloudWidget" class="hide" data-cloud-entry="myRulesPane"></div>
 
 <p data-i18n="rulesHint"></p>
 <p data-i18n="rulesFormatHint"></p>
@@ -16,25 +19,25 @@
     <div class="pane left">
         <div class="ruleActions">
             <h2 data-i18n="rulesPermanentHeader"></h2>
-            <button type="button" id="exportButton" data-i18n="rulesExport"></button>
-            <button type="button" id="revertButton" data-i18n="rulesRevert"></button>
+            <button type="button" class="custom" id="exportButton" data-i18n="rulesExport"></button>
+            <button type="button" class="custom" id="revertButton" data-i18n="rulesRevert"></button>
         </div>
         <div class="rulesContainer">
-        <ul></ul>
+            <ul></ul>
         </div>
         </div>
     <div class="pane right">
         <div class="ruleActions">
             <h2 data-i18n="rulesTemporaryHeader"></h2>
-            <button type="button" id="commitButton" data-i18n="rulesCommit"></button>
-            <button type="button" id="editEnterButton" data-i18n="rulesEdit"></button>
-            <button type="button" id="editStopButton" data-i18n="rulesEditSave"></button>
-            <button type="button" id="editCancelButton" data-i18n="rulesEditDiscard"></button>
-            <button type="button" id="importButton" data-i18n="rulesImport"></button>
+            <button type="button" class="custom" id="commitButton" data-i18n="rulesCommit"></button>
+            <button type="button" class="custom" id="editEnterButton" data-i18n="rulesEdit"></button>
+            <button type="button" class="custom" id="editStopButton" data-i18n="rulesEditSave"></button>
+            <button type="button" class="custom" id="editCancelButton" data-i18n="rulesEditDiscard"></button>
+            <button type="button" class="custom" id="importButton" data-i18n="rulesImport"></button>
         </div>
         <div class="rulesContainer">
-        <textarea spellcheck="false"></textarea>
-        <ul></ul>
+            <textarea spellcheck="false"></textarea>
+            <ul></ul>
         </div>
     </div>
 
@@ -51,6 +54,7 @@
 <script src="js/udom.js"></script>
 <script src="js/i18n.js"></script>
 <script src="js/dashboard-common.js"></script>
+<script src="js/cloud-ui.js"></script>
 <script src="js/dyna-rules.js"></script>
 
 </body>

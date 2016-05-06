@@ -123,6 +123,7 @@ body[dir="ltr"] #commitButton:before {
 #diff textarea {
     background-color: #f8f8ff;
     border: 0;
+    color: black;
     margin: 0;
     border-top: 1px solid #ccc;
     direction: ltr;
@@ -139,10 +140,10 @@ body[dir="ltr"] #commitButton:before {
     box-sizing: border-box;
     resize: none;
     visibility: hidden;
-    white-space: pre; /* this imples nowrap; break only on \n and <br>.
+    white-space: pre; /* this implies nowrap; break only on \n and <br>.
                          nowrap doesn't consistently
-                        respect \n's (example: Safari) per the CSS spec:
-                        http://www.w3.org/wiki/CSS/Properties/white-space */
+                         respect \n's (example: Safari) per the CSS spec:
+                         http://www.w3.org/wiki/CSS/Properties/white-space */
     word-wrap: normal;
     }
 #diff textarea:focus {
