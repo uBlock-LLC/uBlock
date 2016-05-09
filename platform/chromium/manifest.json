@@ -98,4 +98,5 @@
     "short_name": "Goodblock",
     "storage": {
     "managed_schema": "managed_storage.json"
+    }
 }

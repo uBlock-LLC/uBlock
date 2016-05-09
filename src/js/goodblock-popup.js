@@ -8,7 +8,8 @@ var hostnameToSortableTokenMap = {};
 var cachedPopupHash = '';
 /******************************************************************************/
 
-var messager = vAPI.messaging.channel('popup.js');
+
+var messager = vAPI.messaging; //.channel('popup.js');
 
 /******************************************************************************/
 
@@ -27,7 +28,8 @@ var toggleNetFilteringSwitch = function(ev) {
         (!popupData.netFilteringSwitch) ||
         (popupData.pageHostname === 'behind-the-scene' && !popupData.advancedUserEnabled);
 
-    messager.send({
+    console.log('Sending msg.');
+    messager.send('popupPanel', {
         what: 'toggleNetFiltering',
         url: popupData.pageURL,
         scope: ev.ctrlKey || ev.metaKey ? 'page' : '',
@@ -204,6 +206,7 @@ var getPopupData = function(tabId) {
 var setupDashboard = function() {
 	var iframe = document.createElement('iframe');
 	iframe.id = 'dashboard';
+    console.log(process.env);
 	iframe.src = process.env.GOODBLOCK_POPUP_URL;
 	var parent = document.getElementById('dashboard-container');
 	parent.appendChild(iframe);		      

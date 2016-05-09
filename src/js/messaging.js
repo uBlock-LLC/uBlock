@@ -359,7 +359,11 @@ var popupDataFromRequest = function(request, callback) {
 /******************************************************************************/
 
 var onMessage = function(request, sender, callback) {
-    // Async
+
+    // Sync
+    var pageStore;
+    var response;
+
     switch ( request.what ) {
         case 'getPopupData':
             if ( request.tabId === vAPI.noTabId ) {
@@ -372,15 +376,6 @@ var onMessage = function(request, sender, callback) {
             });
             return;
 
-        default:
-            break;
-    }
-
-    // Sync
-    var pageStore;
-    var response;
-
-    switch ( request.what ) {
         case 'gotoPick':
             // Picker launched from popup: clear context menu args
             µb.contextMenuClientX = -1;
@@ -434,7 +429,7 @@ var onMessage = function(request, sender, callback) {
             break;
         default:
             return vAPI.messaging.UNHANDLED;
-
+    }
 };
 
 var getPopupDataLazy = function(tabId, callback) {
@@ -506,6 +501,7 @@ var onMessage = function(request, sender, callback) {
         break;
 
     case 'toggleNetFiltering':
+        console.log('Receiving msg.');
         pageStore = µb.pageStoreFromTabId(request.tabId);
         if ( pageStore ) {
             pageStore.toggleNetFilteringSwitch(request.url, request.scope, request.state);
@@ -901,37 +897,26 @@ var µb = µBlock;
 var onMessage = function(request, sender, callback) {
     // Async
     switch ( request.what ) {
-        case 'elementPickerArguments':
-            var xhr = new XMLHttpRequest();
-            xhr.open('GET', 'epicker.html', true);
-            xhr.overrideMimeType('text/html;charset=utf-8');
-            xhr.responseType = 'text';
-            xhr.onload = function() {
-                this.onload = null;
-                var i18n = {
-                    bidi_dir: document.body.getAttribute('dir'),
-                    create: vAPI.i18n('pickerCreate'),
-                    pick: vAPI.i18n('pickerPick'),
-                    quit: vAPI.i18n('pickerQuit'),
-                    netFilters: vAPI.i18n('pickerNetFilters'),
-                    cosmeticFilters: vAPI.i18n('pickerCosmeticFilters'),
-                    cosmeticFiltersHint: vAPI.i18n('pickerCosmeticFiltersHint')
-                };
-                var reStrings = /\{\{(\w+)\}\}/g;
-                var replacer = function(a0, string) {
-                    return i18n[string];
-                };
-
-                callback({
-                    frameContent: this.responseText.replace(reStrings, replacer),
-                    target: µb.epickerTarget,
-                    clientX: µb.contextMenuClientX,
-                    clientY: µb.contextMenuClientY,
-                    eprom: µb.epickerEprom
-                });
-
-                µb.contextMenuClientX = -1;
-                µb.contextMenuClientY = -1;
+    case 'elementPickerArguments':
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', 'epicker.html', true);
+        xhr.overrideMimeType('text/html;charset=utf-8');
+        xhr.responseType = 'text';
+        xhr.onload = function() {
+            this.onload = null;
+            var i18n = {
+                bidi_dir: document.body.getAttribute('dir'),
+                create: vAPI.i18n('pickerCreate'),
+                pick: vAPI.i18n('pickerPick'),
+                quit: vAPI.i18n('pickerQuit'),
+                preview: vAPI.i18n('pickerPreview'),
+                netFilters: vAPI.i18n('pickerNetFilters'),
+                cosmeticFilters: vAPI.i18n('pickerCosmeticFilters'),
+                cosmeticFiltersHint: vAPI.i18n('pickerCosmeticFiltersHint')
+            };
+            var reStrings = /\{\{(\w+)\}\}/g;
+            var replacer = function(a0, string) {
+                return i18n[string];
             };
 
             callback({
@@ -948,6 +933,7 @@ var onMessage = function(request, sender, callback) {
         };
         xhr.send();
         return;
+
     default:
         break;
     }
@@ -959,6 +945,7 @@ var onMessage = function(request, sender, callback) {
     case 'elementPickerEprom':
         µb.epickerEprom = request;
         break;
+
     default:
         return vAPI.messaging.UNHANDLED;
     }
@@ -967,8 +954,6 @@ var onMessage = function(request, sender, callback) {
 };
 
 vAPI.messaging.listen('elementPicker', onMessage);
-
-/******************************************************************************/
 
 })();
 

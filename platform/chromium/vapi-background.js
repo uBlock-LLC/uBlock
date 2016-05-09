@@ -791,7 +791,6 @@ vAPI.setIcon = function(tabId, iconStatus, badge) {
 
 /******************************************************************************/
 
-<<<<<<< HEAD
 // Goodblock.
 vAPI.getGoodblockImgUrls = function() {
     return {

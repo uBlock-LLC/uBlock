@@ -197,6 +197,7 @@ var onUserSettingsReady = function(fetched) {
     µb.sessionFirewall.assign(µb.permanentFirewall);
     µb.permanentURLFiltering.fromString(fetched.urlFilteringString);
     µb.sessionURLFiltering.assign(µb.permanentURLFiltering);
+
     µb.hnSwitches.fromString(fetched.hostnameSwitchesString);
 
     // Remove obsolete setting
