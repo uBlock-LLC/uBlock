@@ -840,11 +840,13 @@ var TOKEN_LOCAL_STORAGE_KEY = 'goodblockToken';
     // }
     // domain = domain.split(':')[0];
 
+    console.log('Logging: ' + domain);
     var data = {
         whitelist_url: domain,
     };
 
     var url = µBlock.goodblock.API.baseUrl + '/log-whitelist-url/';
+    console.log('Using : ' + url);
     return µBlock.goodblock.API.fetchEndpoint('POST', url, data);
 };
 

@@ -3,20 +3,20 @@
     uBlock Origin - a browser extension to block requests.
     Copyright (C) 2014-2016 Raymond Hill
 
-  This program is free software: you can redistribute it and/or modify
-  it under the terms of the GNU General Public License as published by
-  the Free Software Foundation, either version 3 of the License, or
-  (at your option) any later version.
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
 
-  You should have received a copy of the GNU General Public License
-  along with this program.  If not, see {http://www.gnu.org/licenses/}.
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see {http://www.gnu.org/licenses/}.
 
-  Home: https://github.com/chrisaljoudi/uBlock
+    Home: https://github.com/gorhill/uBlock
 */
 
 /******************************************************************************/
@@ -43,35 +43,22 @@ if ( typeof vAPI !== 'object' ) {
 // https://github.com/chrisaljoudi/uBlock/issues/587
 // Pointless to execute without the start script having done its job.
 if ( !vAPI.contentscriptStartInjected ) {
-  return;
+    return;
 }
 
 // https://github.com/chrisaljoudi/uBlock/issues/456
 // Already injected?
 if ( vAPI.contentscriptEndInjected ) {
-  //console.debug('contentscript-end.js > content script already injected');
-  return;
+    //console.debug('contentscript-end.js > content script already injected');
+    return;
 }
 vAPI.contentscriptEndInjected = true;
 vAPI.styles = vAPI.styles || [];
 
-var shutdownJobs = (function() {
-  var jobs = [];
-
-  return {
-    add: function(job) {
-      jobs.push(job);
-    },
-    exec: function() {
-      var job;
-      while ( job = jobs.pop() ) {
-        job();
-      }
-    }
-  };
-})();
-
 /******************************************************************************/
+/******************************************************************************/
+
+// https://github.com/chrisaljoudi/uBlock/issues/7
 
 var uBlockCollapser = (function() {
     var timer = null;
@@ -195,85 +182,8 @@ var uBlockCollapser = (function() {
         }
     };
 
-    var requests = response.result;
-    if ( requests === null || Array.isArray(requests) === false ) {
-      return;
-    }
-    var selectors = [];
-    var i = requests.length;
-    var request, entry, target, value;
-    while ( i-- ) {
-      request = requests[i];
-      if ( pendingRequests.hasOwnProperty(request.id) === false ) {
-        continue;
-      }
-      entry = pendingRequests[request.id];
-      delete pendingRequests[request.id];
-      pendingRequestCount -= 1;
-
-      // https://github.com/chrisaljoudi/uBlock/issues/869
-      if ( !request.collapse ) {
-        continue;
-      }
-
-      target = entry.target;
-
-      // https://github.com/chrisaljoudi/uBlock/issues/399
-      // Never remove elements from the DOM, just hide them
-      // target.style.setProperty('display', 'none', 'important');
-
-      // https://github.com/chrisaljoudi/uBlock/issues/1048
-      // Use attribute to construct CSS rule
-      if ( value = target.getAttribute(entry.attr) ) {
-        selectors.push(entry.tagName + '[' + entry.attr + '="' + value + '"]');
-      }
-    }
-    if ( selectors.length !== 0 ) {
-      messager.send({
-        what: 'cosmeticFiltersInjected',
-        type: 'net',
-        hostname: window.location.hostname,
-        selectors: selectors
-      });
-      var selectorStr = selectors.join(',\n'),
-        style = document.createElement('style');
-      // The linefeed before the style block is very important: do not remove!
-      style.appendChild(document.createTextNode(selectorStr + '\n{display:none !important;}'));
-      var parent = document.body || document.documentElement;
-      if ( parent ) {
-        parent.appendChild(style);
-        vAPI.styles.push(style);
-      }
-    }
-    // Renew map: I believe that even if all properties are deleted, an
-    // object will still use more memory than a brand new one.
-    if ( pendingRequestCount === 0 ) {
-      pendingRequests = {};
-    }
-  };
-
-  var send = function() {
-    timer = null;
-    messager.send({
-      what: 'filterRequests',
-      pageURL: window.location.href,
-      pageHostname: window.location.hostname,
-      requests: newRequests
-    }, onProcessed);
-    newRequests = [];
-  };
-
-  var process = function(delay) {
-    if ( newRequests.length === 0 ) {
-      return;
-    }
-    if ( delay === 0 ) {
-      clearTimeout(timer);
-      send();
-    } else if ( timer === null ) {
-      timer = setTimeout(send, delay || 20);
-    }
-  };
+    // If needed eventually, we could listen to `src` attribute changes
+    // for iframes.
 
     var add = function(target) {
         var tagName = target.localName;
@@ -384,7 +294,6 @@ var uBlockCollapser = (function() {
 /******************************************************************************/
 /******************************************************************************/
 
-
 // Cosmetic filters
 
 (function() {
@@ -396,82 +305,7 @@ var uBlockCollapser = (function() {
     //console.debug('Start cosmetic filtering');
 
     //var timer = window.performance || Date;
-    //console.debug('µBlock> contextNodes = %o', contextNodes);
-    var result = response && response.result;
-    var hideSelectors = [];
-    if ( result && result.hide.length ) {
-      // console.log('Selectors to hide: ', response.result.hide);
-      processLowGenerics(result.hide, hideSelectors);
-    }
-    if ( highGenerics ) {
-      if ( highGenerics.hideLowCount ) {
-        processHighLowGenerics(highGenerics.hideLow, hideSelectors);
-      }
-      if ( highGenerics.hideMediumCount ) {
-        processHighMediumGenerics(highGenerics.hideMedium, hideSelectors);
-      }
-      if ( highGenerics.hideHighCount ) {
-        processHighHighGenericsAsync();
-      }
-    }
-    if ( hideSelectors.length !== 0 ) {
-      addStyleTag(hideSelectors);
-    }
-    contextNodes.length = 0;
-    //console.debug('%f: uBlock: CSS injection time', timer.now() - tStart);
-  };
-
-  var retrieveHandler = firstRetrieveHandler;
-
-  // Ensure elements matching a set of selectors are visually removed
-  // from the page, by:
-  // - Modifying the style property on the elements themselves
-  // - Injecting a style tag
-
-  var addStyleTag = function(selectors) {
-    var selectorStr = selectors.join(',\n');
-    hideElements(selectorStr);
-    var style = document.createElement('style');
-    // The linefeed before the style block is very important: do no remove!
-    style.appendChild(document.createTextNode(selectorStr + '\n{display:none !important;}'));
-    var parent = document.body || document.documentElement;
-    if ( parent ) {
-      parent.appendChild(style);
-      vAPI.styles.push(style);
-    }
-    messager.send({
-      what: 'cosmeticFiltersInjected',
-      type: 'cosmetic',
-      hostname: window.location.hostname,
-      selectors: selectors
-    });
-    //console.debug('µBlock> generic cosmetic filters: injecting %d CSS rules:', selectors.length, text);
-  };
-
-  // Array Remove - By John Resig (MIT Licensed)
-  Array.prototype.remove = function(from, to) {
-    var rest = this.slice((to || from) + 1 || this.length);
-    this.length = from < 0 ? this.length + from : from;
-    return this.push.apply(this, rest);
-  };
-
-  var hideElements = function(selectors) {
-    // https://github.com/chrisaljoudi/uBlock/issues/207
-    // Do not call querySelectorAll() using invalid CSS selectors
-    if ( selectors.length === 0 ) {
-      return;
-    }
-    if ( document.body === null ) {
-      return;
-    }
-    // https://github.com/chrisaljoudi/uBlock/issues/158
-    // Using CSSStyleDeclaration.setProperty is more reliable
-    var elems = document.querySelectorAll(selectors);
-    var i = elems.length;
-    while ( i-- ) {
-      elems[i].style.setProperty('display', 'none', 'important');
-    }
-  };
+    //var tStart = timer.now();
 
     var hideElements = (function() {
         if ( document.body === null ) {
@@ -508,7 +342,7 @@ var uBlockCollapser = (function() {
                 // https://www.chromestatus.com/features/4668884095336448
                 // "Multiple shadow roots is being deprecated."
                 if ( shadow !== null ) {
-                    if ( shadow.className !== sessionId ) {	
+                    if ( shadow.className !== sessionId ) { 
                         elem.style.setProperty('display', 'none', 'important');
                     }
                     continue;
@@ -636,25 +470,8 @@ var uBlockCollapser = (function() {
             }
         }
 
-  var selectNodes = function(selector) {
-    var targetNodes = [];
-    var i = contextNodes.length;
-    var node, nodeList, j;
-    var doc = document;
-    while ( i-- ) {
-      node = contextNodes[i];
-      if ( node === doc ) {
-        return doc.querySelectorAll(selector);
-      }
-      targetNodes.push(node);
-      nodeList = node.querySelectorAll(selector);
-      j = nodeList.length;
-      while ( j-- ) {
-        targetNodes.push(nodeList[j]);
-      }
-    }
-    return targetNodes;
-  };
+        nextRetrieveHandler(response);
+    };
 
     var nextRetrieveHandler = function(response) {
         // https://github.com/gorhill/uMatrix/issues/144
@@ -758,8 +575,6 @@ var uBlockCollapser = (function() {
             }
             injectedSelectors[selector] = true;
             out.push(selector);
-            continue;
-          }
         }
     };
 
@@ -855,43 +670,14 @@ var uBlockCollapser = (function() {
                 }
             }
         }
-      }
-    }
-  };
+    };
 
-  // High-medium generics:
-  // - [href^="http"]
+    // High-high generics are *very costly* to process, so we will coalesce
+    // requests to process high-high generics into as few requests as possible.
+    // The gain is *significant* on bloated pages.
 
-  var processHighMediumGenerics = function(generics, out) {
-    var nodeList = selectNodes('a[href^="http"]');
-    var iNode = nodeList.length;
-    var node, href, pos, hash, selectors, selector, iSelector;
-    while ( iNode-- ) {
-      node = nodeList[iNode];
-      href = node.getAttribute('href');
-      if ( !href ) { continue; }
-      pos = href.indexOf('://');
-      if ( pos === -1 ) { continue; }
-      hash = href.slice(pos + 3, pos + 11);
-      selectors = generics[hash];
-      if ( selectors === undefined ) { continue; }
-      iSelector = selectors.length;
-      while ( iSelector-- ) {
-        selector = selectors[iSelector];
-        if ( injectedSelectors.hasOwnProperty(selector) === false ) {
-          injectedSelectors[selector] = true;
-          out.push(selector);
-        }
-      }
-    }
-  };
-
-  // High-high generics are *very costly* to process, so we will coalesce
-  // requests to process high-high generics into as few requests as possible.
-  // The gain is *significant* on bloated pages.
-
-  var processHighHighGenericsMisses = 8;
-  var processHighHighGenericsTimer = null;
+    var processHighHighGenericsMisses = 8;
+    var processHighHighGenericsTimer = null;
 
     var processHighHighGenerics = function() {
         processHighHighGenericsTimer = null;
@@ -911,28 +697,23 @@ var uBlockCollapser = (function() {
             return;
         }
         injectedSelectors['{{highHighGenerics}}'] = true;
-        //console.debug('high-high generic: apparently not needed...');
-      }
-      return;
-    }
-    injectedSelectors['{{highHighGenerics}}'] = true;
-    // We need to filter out possible exception cosmetic filters from
-    // high-high generics selectors.
-    var selectors = highGenerics.hideHigh.split(',\n');
-    var i = selectors.length;
-    var selector;
-    while ( i-- ) {
-      selector = selectors[i];
-      if ( injectedSelectors.hasOwnProperty(selector) ) {
-        selectors.splice(i, 1);
-      } else {
-        injectedSelectors[selector] = true;
-      }
-    }
-    if ( selectors.length !== 0 ) {
-      addStyleTag(selectors);
-    }
-  };
+        // We need to filter out possible exception cosmetic filters from
+        // high-high generics selectors.
+        var selectors = highGenerics.hideHigh.split(',\n');
+        var i = selectors.length;
+        var selector;
+        while ( i-- ) {
+            selector = selectors[i];
+            if ( injectedSelectors.hasOwnProperty(selector) ) {
+                selectors.splice(i, 1);
+            } else {
+                injectedSelectors[selector] = true;
+            }
+        }
+        if ( selectors.length !== 0 ) {
+            addStyleTag(selectors);
+        }
+    };
 
     var processHighHighGenericsAsync = function() {
         if ( processHighHighGenericsTimer !== null ) {
@@ -941,8 +722,9 @@ var uBlockCollapser = (function() {
         processHighHighGenericsTimer = vAPI.setTimeout(processHighHighGenerics, 300);
     };
 
-  // Extract all ids: these will be passed to the cosmetic filtering
-  // engine, and in return we will obtain only the relevant CSS selectors.
+    // Extract all ids: these will be passed to the cosmetic filtering
+    // engine, and in return we will obtain only the relevant CSS selectors.
+
     var idsFromNodeList = function(nodes) {
         if ( !nodes || !nodes.length ) {
             return;
@@ -965,8 +747,8 @@ var uBlockCollapser = (function() {
         }
     };
 
-  // Extract all classes: these will be passed to the cosmetic filtering
-  // engine, and in return we will obtain only the relevant CSS selectors.
+    // Extract all classes: these will be passed to the cosmetic filtering
+    // engine, and in return we will obtain only the relevant CSS selectors.
 
     // https://github.com/gorhill/uBlock/issues/672
     // http://www.w3.org/TR/2014/REC-html5-20141028/infrastructure.html#space-separated-tokens

@@ -358,79 +358,80 @@ var popupDataFromRequest = function(request, callback) {
 
 /******************************************************************************/
 
-var onMessage = function(request, sender, callback) {
+// var onMessage = function(request, sender, callback) {
 
-    // Sync
-    var pageStore;
-    var response;
+//     // Sync
+//     var pageStore;
+//     var response;
 
-    switch ( request.what ) {
-        case 'getPopupData':
-            if ( request.tabId === vAPI.noTabId ) {
-                callback(getStats(vAPI.noTabId, ''));
-                return;
-            }
-            vAPI.tabs.get(request.tabId, function(tab) {
-                // https://github.com/chrisaljoudi/uBlock/issues/1012
-                callback(getStats(getTargetTabId(tab), tab ? tab.title : ''));
-            });
-            return;
+//     switch ( request.what ) {
+//         case 'getPopupData':
+//             if ( request.tabId === vAPI.noTabId ) {
+//                 callback(getStats(vAPI.noTabId, ''));
+//                 return;
+//             }
+//             vAPI.tabs.get(request.tabId, function(tab) {
+//                 // https://github.com/chrisaljoudi/uBlock/issues/1012
+//                 callback(getStats(getTargetTabId(tab), tab ? tab.title : ''));
+//             });
+//             return;
 
-        case 'gotoPick':
-            // Picker launched from popup: clear context menu args
-            µb.contextMenuClientX = -1;
-            µb.contextMenuClientY = -1;
-            µb.elementPickerExec(request.tabId);
-            if ( request.select && vAPI.tabs.select ) {
-                vAPI.tabs.select(request.tabId);
-            }
-            break;
+//         case 'gotoPick':
+//             // Picker launched from popup: clear context menu args
+//             µb.contextMenuClientX = -1;
+//             µb.contextMenuClientY = -1;
+//             µb.elementPickerExec(request.tabId);
+//             if ( request.select && vAPI.tabs.select ) {
+//                 vAPI.tabs.select(request.tabId);
+//             }
+//             break;
 
-        case 'hasPopupContentChanged':
-            pageStore = µb.pageStoreFromTabId(request.tabId);
-            var lastModified = pageStore ? pageStore.contentLastModified : 0;
-            response = lastModified !== request.contentLastModified;
-            break;
+//         case 'hasPopupContentChanged':
+//             pageStore = µb.pageStoreFromTabId(request.tabId);
+//             var lastModified = pageStore ? pageStore.contentLastModified : 0;
+//             response = lastModified !== request.contentLastModified;
+//             break;
 
-        case 'saveFirewallRules':
-            µb.permanentFirewall.copyRules(
-                µb.sessionFirewall,
-                request.srcHostname,
-                request.desHostnames
-            );
-            µb.savePermanentFirewallRules();
-            break;
+//         case 'saveFirewallRules':
+//             µb.permanentFirewall.copyRules(
+//                 µb.sessionFirewall,
+//                 request.srcHostname,
+//                 request.desHostnames
+//             );
+//             µb.savePermanentFirewallRules();
+//             break;
 
-        case 'flushFirewallRules':
-            µb.sessionFirewall.copyRules(
-                µb.permanentFirewall,
-                request.srcHostname,
-                request.desHostnames
-            );
-            break;
+//         case 'flushFirewallRules':
+//             µb.sessionFirewall.copyRules(
+//                 µb.permanentFirewall,
+//                 request.srcHostname,
+//                 request.desHostnames
+//             );
+//             break;
 
-        case 'toggleFirewallRule':
-            µb.toggleFirewallRule(request);
-            response = getStats(request.tabId);
-            break;
+//         case 'toggleFirewallRule':
+//             µb.toggleFirewallRule(request);
+//             response = getStats(request.tabId);
+//             break;
 
-        case 'toggleNetFiltering':
-            pageStore = µb.pageStoreFromTabId(request.tabId);
-            if ( pageStore ) {
+//         case 'toggleNetFiltering':
+//             console.log('Receiving msg.');
+//             pageStore = µb.pageStoreFromTabId(request.tabId);
+//             if ( pageStore ) {
 
-                pageStore.toggleNetFilteringSwitch(request.url, request.scope, request.state);
-                µb.updateBadgeAsync(request.tabId);
+//                 pageStore.toggleNetFilteringSwitch(request.url, request.scope, request.state);
+//                 µb.updateBadgeAsync(request.tabId);
                 
-                if(!request.whiteListStatus){
-                    response = µBlock.goodblock.API.logWhiteListDomain(
-                    request.url);
-                }
-            }
-            break;
-        default:
-            return vAPI.messaging.UNHANDLED;
-    }
-};
+//                 if(!request.whiteListStatus){
+//                     response = µBlock.goodblock.API.logWhiteListDomain(
+//                     request.url);
+//                 }
+//             }
+//             break;
+//         default:
+//             return vAPI.messaging.UNHANDLED;
+//     }
+// };
 
 var getPopupDataLazy = function(tabId, callback) {
     var r = {
@@ -501,12 +502,21 @@ var onMessage = function(request, sender, callback) {
         break;
 
     case 'toggleNetFiltering':
-        console.log('Receiving msg.');
+
         pageStore = µb.pageStoreFromTabId(request.tabId);
         if ( pageStore ) {
             pageStore.toggleNetFilteringSwitch(request.url, request.scope, request.state);
             µb.updateBadgeAsync(request.tabId);
+            console.log(!request.whiteListStatus);
+            if(!request.whiteListStatus){
+                console.log('Logging whitelisting');
+                response = µBlock.goodblock.API.logWhiteListDomain(
+                request.url);
+            }
         }
+        break;
+    case 'testingCallback':
+        console.log('testingCallback');
         break;
 
     default:

@@ -50,41 +50,48 @@ gulp --gulpfile tools/gulpfile.js scripts
 
 echo "*** goodblock.chromium: Browserifying ublock.js."
 
-# cp -R src/js                $DES/
 browserify src/js/ublock.js > $DES/js/ublock.js
 cp -R src/lib $DES/
 cp -R src/_locales $DES/
 cp -R $DES/_locales/nb $DES/_locales/no
 cp src/*.html $DES/
 cp platform/chromium/*.js $DES/js/
+cp -R platform/chromium/img $DES/
+cp platform/chromium/*.html $DES/
+cp platform/chromium/*.json $DES/
+mkdir $DES/js/scriptlets/
+cp src/js/scriptlets/*.js $DES/js/scriptlets/
+cp platform/chromium/manifest.json $DES/
+cp LICENSE.txt $DES/
+
 # =======
 # echo "*** uBlock0.chromium: Creating web store package"
 # echo "*** uBlock0.chromium: Copying files"
 
-DES=dist/build/uBlock0.chromium
-rm -rf $DES
-mkdir -p $DES
+# DES=dist/build/uBlock0.chromium
+# rm -rf $DES
+# mkdir -p $DES
 
-./tools/make-assets.sh $DES
+# ./tools/make-assets.sh $DES
 
-cp -R src/css               $DES/
-cp -R src/img               $DES/
-# cp -R src/js                $DES/
-cp -R src/lib               $DES/
-cp -R src/_locales          $DES/
-# cp -R $DES/_locales/nb      $DES/_locales/no
-cp src/*.html               $DES/
-# cp platform/chromium/*.js   $DES/js/
-# >>>>>>> b23a0e918f8b965849f462eed7f4cb17011cc11b
-cp -R platform/chromium/img $DES/
-cp platform/chromium/*.html $DES/
-cp platform/chromium/*.json $DES/
-cp LICENSE.txt              $DES/
+# cp -R src/css               $DES/
+# cp -R src/img               $DES/
+# # cp -R src/js                $DES/
+# cp -R src/lib               $DES/
+# cp -R src/_locales          $DES/
+# # cp -R $DES/_locales/nb      $DES/_locales/no
+# cp src/*.html               $DES/
+# # cp platform/chromium/*.js   $DES/js/
+# # >>>>>>> b23a0e918f8b965849f462eed7f4cb17011cc11b
+# cp -R platform/chromium/img $DES/
+# cp platform/chromium/*.html $DES/
+# cp platform/chromium/*.json $DES/
+# cp LICENSE.txt              $DES/
 
 
-DES=./dist/build/goodblock.chromium
-LOCAL_SETTINGS_FILENAME=goodblock-config-dev.js
-TESTING_SETTINGS_FILENAME=goodblock-config-testing.js
+# DES=./dist/build/goodblock.chromium
+# LOCAL_SETTINGS_FILENAME=goodblock-config-dev.js
+# TESTING_SETTINGS_FILENAME=goodblock-config-testing.js
 
 # <<<<<<< HEAD
 # If this isn't a dev build, remove the dev config.
