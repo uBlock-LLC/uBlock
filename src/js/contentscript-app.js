@@ -18,11 +18,13 @@ var sendUserToken = function(token) {
     console.warn('contentscript-app.js > vAPI not found');
     return;
   }
-  var messenger = vAPI.messaging.channel('contentscript-app.js');
-  messenger.send({
-    what: 'setUserAuthToken',
-    token: token,
-  });
+  var messenger = vAPI.messaging;
+    messenger.send(
+    'contentscript-app.js',
+    {
+      what: 'setUserAuthToken',
+      token: token,
+    });
 
   // Clear the poller.
   window.clearInterval(tokenPoller);

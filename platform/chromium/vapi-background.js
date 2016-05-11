@@ -1461,7 +1461,7 @@ vAPI.onLoadAllCompleted = function() {
             runAt: 'document_idle'
         }, function() {
             // Goodblock.
-            // vAPI.injectGoodblockContentScripts(tabId, scriptDone);
+            vAPI.injectGoodblockContentScripts(tabId, scriptDone);
         });
     };
     var scriptStart = function(tabId) {
@@ -1515,6 +1515,39 @@ vAPI.onLoadAllCompleted = function() {
 
     // chrome.tabs.query({ url: 'http://*/*' }, bindToTabs);
     // chrome.tabs.query({ url: 'https://*/*' }, bindToTabs);
+
+    chrome.tabs.query({ url: '<all_urls>' }, bindToTabs);
+};
+
+/******************************************************************************/
+/******************************************************************************/
+
+// You can call this function to inject the goodblock-content script in all
+// tabs.
+
+vAPI.injectGoodblockContentScriptsInAllTabs = function() {
+   
+    var scriptDone = function() {
+        vAPI.lastError();
+    };
+  
+    var bindToTabs = function(tabs) {
+        var µb = µBlock;
+        var i = tabs.length, tab;
+        while ( i-- ) {
+            tab = tabs[i];
+
+            // Goodblock.
+            // Do not inject content scripts into Gladly
+            // whitelisted pages.
+            var hostname = µb.URI.hostnameFromURI(tab.url);
+            if (µBlock.goodblock.isGladlyHostname(hostname)) {
+                continue;
+            }
+
+            vAPI.injectGoodblockContentScripts(tab.id, scriptDone);
+        }
+    };
 
     chrome.tabs.query({ url: '<all_urls>' }, bindToTabs);
 };

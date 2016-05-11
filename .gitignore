@@ -8,3 +8,4 @@ local_settings.py
 *.haste_cache
 node_modules
 /tmp/
+uAssets

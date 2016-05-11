@@ -4,6 +4,7 @@
 /******************************************************************************/
 
 var baseElemId = 'goodblock-iframe-base';
+var goodblockIframeId = 'goodblock-iframe';
 
 // Create the Goodblock app base element and return it.
 var createBaseElem = function() {
@@ -16,10 +17,22 @@ var createBaseElem = function() {
 	return script;
 }
 
+var destroyGoodblockElements = function(scriptElement) {
+	if(scriptElement){
+		document.getElementsByTagName('head')[0].removeChild(scriptElement);
+		var gbIframe = document.querySelector('#' + goodblockIframeId);
+		if(gbIframe){
+			document.getElementsByTagName('body')[0].removeChild(gbIframe);
+		}
+	}
+}
+
 // Return the Goodblock app base elem if it exists. If it
 // does not exist, create it and return it.
 var getOrCreateBaseElem = function() {
 	var baseElem = document.querySelector('#' + baseElemId);
+	destroyGoodblockElements(baseElem);
+
 	// If our app's base element doesn't exist, let's create it.
 	if (!baseElem) {
 		baseElem = createBaseElem();

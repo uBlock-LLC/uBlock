@@ -641,7 +641,16 @@ function getGladlyAdUrlsFromConfig() {
             } 
         });
 
+        var currentContentScriptEnableStatus = (
+            localStorage['enableGbContentScript'] === 'true' ? true : false
+        );
+
         µBlock.goodblock.setIfShouldEnableGoodblock(isVersionEnabled);
+
+        if(!currentContentScriptEnableStatus && isVersionEnabled) {
+            //if going from false to true, destroy and recreate GB elems
+            vAPI.injectGoodblockContentScriptsInAllTabs();
+        }
     });
 };
 

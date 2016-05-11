@@ -64,6 +64,8 @@ cp src/js/scriptlets/*.js $DES/js/scriptlets/
 cp platform/chromium/manifest.json $DES/
 cp LICENSE.txt $DES/
 
+./tools/make-assets.sh $DES
+
 # =======
 # echo "*** uBlock0.chromium: Creating web store package"
 # echo "*** uBlock0.chromium: Copying files"

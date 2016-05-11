@@ -204,7 +204,6 @@ var renderPopup = function() {
 /******************************************************************************/
 
 var cachePopupData = function(data) {
-    console.log(data);
     popupData = {};
     scopeToSrcHostnameMap['.'] = '';
     hostnameToSortableTokenMap = {};
