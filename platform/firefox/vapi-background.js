@@ -330,9 +330,46 @@ var windowWatcher = {
         
     },
 
+    onClosed: function(win) {
+        win.removeEventListener('DOMContentLoaded', this.onReady);
+
+        var tabContainer;
+        var tabBrowser = getTabBrowser(win);
+        if ( !tabBrowser ) {
+            return;
+        }
+
+        if ( tabBrowser.deck ) {
+            // Fennec
+            tabContainer = tabBrowser.deck;
+        } else if ( tabBrowser.tabContainer ) {
+            tabContainer = tabBrowser.tabContainer;
+        }
+
+        tabContainer.removeEventListener('TabClose', tabWatcher.onTabClose);
+        tabContainer.removeEventListener('TabSelect', tabWatcher.onTabSelect);
+
+        for ( var tab of tabBrowser.tabs ) {
+            tabWatcher.onTabClose({ target: tab });
+
+            var browser = getBrowserForTab(tab);
+            if ( browser === null ) {
+                continue;
+            }
+
+            // Close extension tabs
+            var URI = browser.currentURI;
+            if ( URI.schemeIs('chrome') && URI.host === location.host ) {
+                vAPI.tabs._remove(tab, getTabBrowser(win));
+            }
+        }
+    },
+
     observe: function(win, topic) {
         if ( topic === 'domwindowopened' ) {
             win.addEventListener('DOMContentLoaded', this.onReady);
+        } else if (topic === 'domwindowclosed') {
+            this.onClosed(win);
         }
     }
 };
@@ -345,6 +382,7 @@ var tabWatcher = {
         var tabId = vAPI.tabs.getTabId(target);
         vAPI.tabs.onClosed(tabId);
         delete vAPI.toolbarButton.tabs[tabId];
+        vAPI.tabs.tabLookup.delete(tabId);
     },
 
     onTabSelect: function({target}) {
@@ -374,6 +412,39 @@ var getBrowserForTab = function(tab) {
     }
     return vAPI.fennec && tab.browser || tab.linkedBrowser || null;
 };
+
+/******************************************************************************/
+
+var getTabForBrowser = function(browser) {
+    if ( !browser ) {
+        return null;
+    }
+    var win = browser.ownerGlobal;
+    if ( !win ) {
+        return null;
+    }
+    if (vAPI.fennec) {
+        return win.BrowserApp && win.BrowserApp.getTabForBrowser(browser);
+    } else {
+        var gBrowser = win.gBrowser;
+        if (gBrowser) {
+            if (typeof gBrowser.getTabForBrowser === 'function') {
+                return gBrowser.getTabForBrowser(browser);
+            } else if (gBrowser.browsers && gBrowser.tabs) {
+                // Fallback to manual searching if the browser doesn't support getTabForBrowser
+                for (var i = 0; i < gBrowser.browsers.length; i++) {
+                    if (gBrowser.browsers[i] === browser) {
+                        return gBrowser.tabs[i];
+                    }
+                }
+            }
+        }
+    }
+
+    return null;
+};
+
+
 
 /******************************************************************************/
 
@@ -416,35 +487,7 @@ vAPI.tabs.registerListeners = function() {
         vAPI.contextMenu.remove();
 
         for ( var win of vAPI.tabs.getWindows() ) {
-            win.removeEventListener('DOMContentLoaded', windowWatcher.onReady);
-
-            var tabContainer;
-            var tabBrowser = getTabBrowser(win);
-            if ( !tabBrowser ) {
-                continue;
-            }
-
-            if ( tabBrowser.deck ) {
-                // Fennec
-                tabContainer = tabBrowser.deck;
-            } else if ( tabBrowser.tabContainer ) {
-                tabContainer = tabBrowser.tabContainer;
-            }
-
-            tabContainer.removeEventListener('TabClose', tabWatcher.onTabClose);
-            tabContainer.removeEventListener('TabSelect', tabWatcher.onTabSelect);
-
-            // Close extension tabs
-            for ( var tab of tabBrowser.tabs ) {
-                var browser = getBrowserForTab(tab);
-                if ( browser === null ) {
-                    continue;
-                }
-                var URI = browser.currentURI;
-                if ( URI.schemeIs('chrome') && URI.host === location.host ) {
-                    vAPI.tabs._remove(tab, getTabBrowser(win));
-                }
-            }
+            windowWatcher.onClosed(win);
         }
     });
 };
@@ -452,6 +495,7 @@ vAPI.tabs.registerListeners = function() {
 /******************************************************************************/
 
 vAPI.tabs.stack = new WeakMap();
+vAPI.tabs.tabLookup = new Map();
 vAPI.tabs.stackId = 1;
 
 /******************************************************************************/
@@ -460,50 +504,61 @@ vAPI.tabs.getTabId = function(target) {
     if ( !target ) {
         return vAPI.noTabId;
     }
+
+    var tab = null;
+    var browser;
+
     if ( vAPI.fennec ) {
-        if ( target.browser ) {
+        if (target.browser) {
             // target is a tab
-            target = target.browser;
+            tab = target;
+            browser = target.browser;
+        } else {
+            browser = target;
         }
     } else if ( target.linkedPanel ) {
         // target is a tab
-        target = target.linkedBrowser;
+        tab = target;
+        browser = target.linkedBrowser;
+    } else {
+        browser = target;
     }
-    if ( target.localName !== 'browser' ) {
+
+    if ( browser.localName !== 'browser' ) {
         return vAPI.noTabId;
     }
-    var tabId = this.stack.get(target);
+
+    var tabId = this.stack.get(browser);
     if ( !tabId ) {
         tabId = '' + this.stackId++;
-        this.stack.set(target, tabId);
+        this.stack.set(browser, tabId);
+
+        this.tabLookup.set(tabId, tab || browser); // If the tab is not know, record the browser instead and find the tab later
     }
     return tabId;
 };
 
 /******************************************************************************/
 
-// If tabIds is an array, then an array of tabs will be returned,
-// otherwise a single tab
+vAPI.tabs.tabFromTabId = function(tabId) {
+    var target = this.tabLookup.get(tabId);
 
-vAPI.tabs.getTabsForIds = function(tabIds) {
-    var tabs = [];
-    var singleTab = !Array.isArray(tabIds);
-    if ( singleTab ) {
-        tabIds = [tabIds];
+    if (!target) {
+        return null;
     }
-    for ( var tab of this.getAll() ) {
-        var tabId = this.stack.get(getBrowserForTab(tab));
-        if ( !tabId ) {
-            continue;
-        }
-        if ( tabIds.indexOf(tabId) !== -1 ) {
-            tabs.push(tab);
-        }
-        if ( tabs.length >= tabIds.length ) {
-            break;
-        }
+
+    // Check if this is actually a tab
+    if (vAPI.fennec && target.browser ||
+        target.linkedPanel) {
+        return target;
     }
-    return singleTab ? tabs[0] || null : tabs;
+    // This isn't a tab. No tab for this browser is yet known.
+    var tab = getTabForBrowser(target);
+    if (tab) {
+        // Found the tab now, so record it
+        this.tabLookup.set(tabId, tab);
+    }
+    return tab;
 };
 
 /******************************************************************************/
@@ -519,7 +574,7 @@ vAPI.tabs.get = function(tabId, callback) {
             tabId = this.getTabId(tab);
         }
     } else {
-        tab = this.getTabsForIds(tabId);
+        tab = this.tabFromTabId(tabId);
         if ( tab ) {
             win = getOwnerWindow(tab);
         }
@@ -639,7 +694,7 @@ vAPI.tabs.open = function(details) {
     }
 
     if ( details.tabId ) {
-        tab = this.getTabsForIds(details.tabId);
+        tab = this.tabFromTabId(details.tabId);
         if ( tab ) {
             getBrowserForTab(tab).loadURI(details.url);
             return;
@@ -678,7 +733,7 @@ vAPI.tabs.replace = function(tabId, url) {
         targetURL = vAPI.getURL(targetURL);
     }
 
-    var tab = this.getTabsForIds(tabId);
+    var tab = this.tabFromTabId(tabId);
     if ( tab ) {
         getBrowserForTab(tab).loadURI(targetURL);
     }
@@ -696,15 +751,9 @@ vAPI.tabs._remove = function(tab, tabBrowser) {
 
 /******************************************************************************/
 
-vAPI.tabs.remove = function(tabIds) {
-    if ( !Array.isArray(tabIds) ) {
-        tabIds = [tabIds];
-    }
-    var tabs = this.getTabsForIds(tabIds);
-    if ( tabs.length === 0 ) {
-        return;
-    }
-    for ( var tab of tabs ) {
+vAPI.tabs.remove = function(tabId) {
+    var tab = this.tabFromTabId(tabId);
+    if ( tab ) {
         this._remove(tab, getTabBrowser(getOwnerWindow(tab)));
     }
 };
