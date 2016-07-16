@@ -76,7 +76,8 @@ return {
         'chrome-extension-scheme',
         'chrome-scheme',
         'loopconversation.about-scheme',
-        'opera-scheme'
+        'opera-scheme',
+        'vivaldi-scheme'
     ].join('\n').trim(),
     
     userFiltersPath: "assets/user/filters.txt",
