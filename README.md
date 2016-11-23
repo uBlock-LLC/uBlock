@@ -10,9 +10,6 @@
             <a href="https://travis-ci.org/chrisaljoudi/uBlock">
                   <img src="https://travis-ci.org/chrisaljoudi/uBlock.svg?branch=master" alt="Build status">
             </a>
-            <a href="https://www.ublock.org/donate">
-                  <img src="https://chrismatic.io/oncedonate.svg" alt="Support development">
-            </a>
       </td>
       </tr>
       <tr>
@@ -109,7 +106,9 @@ uBlock is a general-purpose blocker — not an *ad blocker* specifically. uBlock
 
 uBlock blocks ads through its support of the [Adblock Plus filter syntax](https://adblockplus.org/en/filters). uBlock [extends](https://github.com/chrisaljoudi/uBlock/wiki/Filter-syntax-extensions) the syntax and is designed to work with custom rules and filters.
 
-Free and open-source. For users, by users. If uBlock is useful to you, [donations to support development are much appreciated](https://chrismatic.io/ublock/).
+Free and open-source. For users, by users.
+
+**Note:** There used to be a donation link here, soliciting donations from users. It has been removed due to ethical concerns, and the authors of uBlock express their sincerest apoligies for the unacceptable length of time for which it had been present.
 
 [Feel free to read about uBlock's development philosophy](https://chrismatic.io/ublock/philosophy) and [uBlock's manifesto](MANIFESTO.md).
 
