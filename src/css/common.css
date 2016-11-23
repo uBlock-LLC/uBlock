@@ -3,7 +3,7 @@
     cursor: pointer;
     position: relative;
     }
-body [data-tip]:after {
+body:not(.advancedUser) [data-tip]:after {
     background-color: #333;
     border-radius: 3px;
     box-sizing: border-box;
