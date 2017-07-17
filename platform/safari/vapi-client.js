@@ -151,7 +151,7 @@
     };
 
     // The following code should run only in content pages
-    if(location.protocol === "safari-extension:" || typeof safari !== "object") {
+    if(location.protocol === "safari-extension:" || typeof safari !== "object" || typeof safari.self !== "object") {
         return;
     }
 
