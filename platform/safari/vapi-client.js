@@ -248,8 +248,8 @@
 var block = function(u, t) {" +
 (legacyMode ?
 "var e = document.createEvent('CustomEvent');\
-e.initCustomEvent('" + vAPI.sessionId + "', false, false, {url: u, type: t});"
-: "var e = new CustomEvent('" + vAPI.sessionId + "', {bubbles: false, detail: {url: u, type: t}});"
+e.initCustomEvent('" + vAPI.sessionId + "', false, false, {url: String(u), type: t});"
+: "var e = new CustomEvent('" + vAPI.sessionId + "', {bubbles: false, detail: {url: String(u), type: t}});"
 ) +
 "document.documentElement.setAttribute('data-ublock-blocked', '');\
 document.dispatchEvent(e);\
