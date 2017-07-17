@@ -215,6 +215,12 @@
         "group": "regions",
         "homeURL": "https://raw.githubusercontent.com/wiltteri/wiltteri.txt/master/wiltteri.txt"
         },
+    "raw.githubusercontent.com/farrokhi/adblock-iran/master/filter.txt": {
+        "off": true,
+        "title": "IRN: AdBlock Iran",
+        "group": "regions",
+        "homeURL": "https://raw.githubusercontent.com/farrokhi/adblock-iran/master/filter.txt"
+        },
     "someonewhocares.org/hosts/hosts": {
         "off": true,
         "title": "Dan Pollock’s hosts file",
