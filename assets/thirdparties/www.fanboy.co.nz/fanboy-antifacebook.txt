@@ -1,8 +1,16 @@
 [Adblock Plus 2.0]
-! Checksum: 9bY49sHfBjGUh/M1ds+fWg
+! Checksum: JPn6VTv/Rfpfd6jZez28LQ
 ! Title: Anti-Facebook List
-! Expires: 4 days (update frequency)
-! Homepage: http://www.fanboy.co.nz
+! Updated: 10 Mar 2018
+! This list expires after 6 days
+! License: http://creativecommons.org/licenses/by/3.0/
+! Homepage: http://www.fanboy.co.nz/
+! Reporting Issues: https://github.com/ryanbr/fanboy-adblock/issues
+!
+! Legal stuff (T&C's) .
+! In no event shall Fanboy List, or the list author be liable for any indirect, direct, punitive, special, incidental, or consequential damages whatsoever.
+! By downloading or viewing, or using this list, you are accepting these terms and the license.
+!
 !
 ! Warning, will break on facebook-based comment sites and may also break on some facebook apps or games.
 !
@@ -23,6 +31,7 @@
 ||facebook.com/plugins/like.php?$third-party
 ||facebook.com/plugins/like_box.php$third-party
 ||facebook.com/plugins/likebox.php?$third-party
+||facebook.com/plugins/post.php?$third-party
 ||facebook.com/plugins/recommendations.php?$third-party
 ||facebook.com/plugins/recommendations_bar.php?$third-party
 ||facebook.com/plugins/send.php?$third-party
@@ -36,9 +45,10 @@
 ||facebook.com/widgets/like.php?$third-party
 ||facebook.com/widgets/recommendations.php?$third-party
 ||fbcdn-profile-a.akamaihd.net^$third-party,domain=~facebook.com
+||google.com/js/client:plusone.js$third-party
 ||google.com/js/plusone.js$third-party
 ||graph.facebook.com/?id=$third-party
-||graph.facebook.com^$xmlhttprequest,third-party
+||graph.facebook.com^$third-party,xmlhttprequest
 ||profile.ak.fbcdn.net^$third-party,domain=~facebook.com
 ||scontent-a.*.fbcdn.net^$third-party,domain=~facebook.com
 ||spot.im/embed/scripts/launcher.js$third-party
@@ -50,9 +60,10 @@
 !
 ! Whitelist Filters
 !
-@@/cdn-cgi/pe/bag2?*connect.facebook.net$domain=forwardprogressives.com|youngcons.com
+@@/cdn-cgi/pe/bag2?*connect.facebook.net$domain=forwardprogressives.com|onhax.net|opensubtitles.org|viralthread.com|youngcons.com
 @@||akamaihd.net/rsrc.php/$domain=facebook.com
 @@||channel.facebook.com^$domain=facebook.com
+@@||connect.facebook.com^*/AudienceNetworkPrebid.js$domain=vice.com
 @@||facebook.com/ajax/browse/$domain=facebook.com
 @@||facebook.com/ajax/bz$domain=facebook.com
 @@||facebook.com/ajax/chat/buddy_list.php$domain=facebook.com
@@ -75,9 +86,11 @@
 !
 ! Problematic sites
 !
-@@||connect.facebook.net*/all.js$domain=salon.com|damnyouautocorrect.com|southpark.cc.com|sci2.tv|pogo.com|adultswim.com|interviewmagazine.com|contv.com
+@@||connect.facebook.com^*/audiencenetworkprebid.js$script,domain=screenrant.com
+@@||connect.facebook.net^$script,domain=abc.go.com|adultswim.com|contv.com|damnyouautocorrect.com|embedly.com|fitbit.com|instagram.com|interviewmagazine.com|noovo.ca|pogo.com|reddit.com|salon.com|sci2.tv|southpark.cc.com|southpark.de|upi.com
 @@||google.com/js/plusone.js$domain=abcnews.go.com|watch.nba.com
 @@||graph.facebook.com^$xmlhttprequest,domain=theguardian.com
+@@||staticxx.facebook.com/connect/$domain=embedly.com
 !
 ! Cloudflare CDN
 !

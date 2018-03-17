@@ -44,6 +44,11 @@
         "group": "ads",
         "homeURL": "https://easylist-downloads.adblockplus.org/easylist.txt"
         },
+      "adblock-nocoin-list/nocoin.txt": {
+          "title": "Cryptocurrency (Bitcoin) Mining Protection List",
+          "group": "privacy",
+          "homeURL": "https://raw.githubusercontent.com/hoshsadiq/adblock-nocoin-list/master/nocoin.txt"
+          },
     "easylist-downloads.adblockplus.org/easylist_noelemhide.txt": {
         "off": true,
         "title": "EasyList without element hiding rules",
@@ -56,6 +61,7 @@
         "group": "regions",
         "homeURL": "https://easylist-downloads.adblockplus.org/easylistchina.txt"
         },
+
     "easylist-downloads.adblockplus.org/easylistdutch.txt": {
         "off": true,
         "title": "NLD: EasyList Dutch",

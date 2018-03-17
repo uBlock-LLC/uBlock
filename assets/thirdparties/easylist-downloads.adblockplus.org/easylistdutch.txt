@@ -1,9 +1,9 @@
 [Adblock Plus 2.0]
-! Checksum: 4lJZU/n+WX2FmD9BKzLnYg
-! Version: 201508150323
+! Checksum: TGfuHcBQewqNhHMh8yF/+Q
+! Version: 201803161322
 ! Title: EasyList Dutch
 ! Description: Dutch supplement for the Easylist filters
-! Last modified: 15 Aug 2015 03:23 UTC
+! Last modified: 16 Mar 2018 13:22 UTC
 ! Expires: 4 days (update frequency)
 ! Homepage: https://easylist.adblockplus.org/
 ! Licence: https://easylist-downloads.adblockplus.org/COPYING
@@ -134,6 +134,7 @@ _advertentieleaderboardhome.
 ||xpartners.nl^$third-party
 !--------Advertentiedomeinen--------!
 ! *** easylistdutch/block_first_party_server.txt ***
+||banner.klikklik.nl^
 ||banners.toeto.com^
 ||banners.utilo.nl^
 ||bnr.agf.nl^
@@ -277,6 +278,7 @@ _advertentieleaderboardhome.
 ||x0.nl/banners/
 ||xingo.nl/bannermanagement/
 ||xxxsmsjes.nl/banners/
+||youtube.com/embed/*?rel=0&autoplay=1&showinfo=0$subdocument,domain=kavelplatform.nl
 ||youtube.com/yva_video?adformat=$object-subrequest,domain=vtm.be
 ||zideo.nl/player/plugins/ova/ova.swf
 ||zimmo.be/api2/ticker_h.php?
@@ -405,6 +407,7 @@ _advertentieleaderboardhome.
 ||goldcash.nl/banners/
 ||gosupermodel.com^*banner
 ||gpupdate.net/if/advertsub/
+||gratisepub.nl/wp-content/plugins/scroll-triggered-boxes/
 ||gratispuzzelen.nl^*-banner-255.swf
 ||havovwo.nl/pics/gsmweb.jpg
 ||havovwo.nl/pics/openu2.swf
@@ -443,6 +446,7 @@ _advertentieleaderboardhome.
 ||jouwtomtom.nl^*/back_adblock.gif
 ||katholieknieuwsblad.nl/images/banners/onlineluisteren.gif
 ||katholieknieuwsblad.nl/images/banners^*banner
+||kavelplatform.nl/assets/uploads/banners/
 ||kennisnet.nl/templates/cms/swf/kennisnet/caroussel_v2.swf?
 ||kieskeurig.nl/rectangle?
 ||kijkshop.nl/flash/vanvoordeel.swf
@@ -629,6 +633,7 @@ _advertentieleaderboardhome.
 ||vtm.be^*/images/footer-samsung_2.jpg
 ||vvzigo.nl/images/banners/
 ||waldnet.nl/images/ac/
+||wanttoknow.nl^*Banner
 ||wassenaarders.nl/images/banners/
 ||webaapje.nl^*bannerexchange/
 ||websitegids.nl/banners/
@@ -650,6 +655,7 @@ _advertentieleaderboardhome.
 ||woningnetgroningen.nl^*/Images/banner/
 ||woningnetregioamsterdam.nl^*/Images/banner/
 ||woningnetregioutrecht.nl^*/Images/banner/
+||www.appletips.nl/wp-content/uploads/rek/
 ||xmissymedia.com/galleries/*/banners/
 ||youreon.nl/banners/
 ||z24.nl^*/ad_panel.css
@@ -673,6 +679,7 @@ _advertentieleaderboardhome.
 @@||advertentieplanet.nl/public/advertenties/
 @@||ds1.nl/c/?$domain=opproef.nl
 @@||media.rtl.nl/web/components/service/streamspots/*.mp4$object-subrequest,domain=538.nl|rtl7darts.nl
+@@||muziekspot.nl/rest/Advertentie/$xmlhttprequest,domain=muziekspot.nl
 @@||staticfinancereview.nl/advertenties/$image,domain=rente.nl
 ! Uitzonderingen voor EasyList
 @@||ad.360yield.com/adj?$script,domain=girlsgogames.nl|spel.nl|spelletjes.nl
@@ -698,7 +705,9 @@ _advertentieleaderboardhome.
 @@||doubleclick.net^*;tile=$script,domain=syndication.vmma.be|vtm.be
 @@||doubleclick.net^*adj/hbvl/homepage;tile=15;sz=160x600;$script,domain=hbvl.be
 @@||doubleclick.net^*adj/ster_cinema.nl/preroll;$script,domain=cinema.nl
-@@||g.doubleclick.net/gampad/ads?$script,domain=insidegamer.nl|marktplaats.nl
+@@||easyads.eu/api/Advertisements/$domain=marktfeed.nl
+@@||easyads.eu/api/v2/AdvertentiePlanet/me/advertisements/$domain=advertentieplanet.nl
+@@||g.doubleclick.net/gampad/ads?$script,domain=marktplaats.nl
 @@||g.doubleclick.net/gampad/ads?$xmlhttprequest,domain=radioluisteren.fm
 @@||google.com/ads/search/module/ads/*/search.js$domain=zoover.be|zoover.nl
 @@||google.com/adsense/$subdocument,domain=sedo.nl
@@ -722,7 +731,7 @@ _advertentieleaderboardhome.
 @@||openad.tf1.fr/RealMedia/ads/adstream_mjx.ads/www.eurosportplayer.nl/home/$script,domain=eurosportplayer.nl
 @@||pagead2.googlesyndication.com/pagead/show_ads.js$domain=spel.nl|spelletjes.nl|wereldklokken.nl
 @@||partner.googleadservices.com/gampad/$domain=jaggle.nl
-@@||partner.googleadservices.com/gpt/pubads_impl_$script,domain=insidegamer.nl|marktplaats.nl
+@@||partner.googleadservices.com/gpt/pubads_impl_$script,domain=marktplaats.nl
 @@||rtr.innovid.com/r1.*;cb=$xmlhttprequest,domain=radio10.nl
 @@||smartinit.webads.nl/bin/smartinit.dll?$script,domain=vi.nl
 @@||spilcdn.com^*/js/advertisement/css/sgadgirls.css$domain=girlsgogames.nl
@@ -738,12 +747,14 @@ _advertentieleaderboardhome.
 @@||ima3vpaid.appspot.com/crossdomain.xml$object-subrequest,domain=rtlxl.nl
 @@||imasdk.googleapis.com/flash/core/3.*/adsapi.swf$object-subrequest,domain=2be.be|jim.be|vitaya.be|vtm.be|vtmkzoom.be
 @@||imasdk.googleapis.com/js/sdkloader/ima3.js$domain=vtm.be
+@@||libs.medialaancdn.be/data/freewheel/*//admanager/checkup.js$domain=watch.stievie.be
 @@||pagead2.googlesyndication.com/pagead/show_ads.js$domain=alfaforum.nl
 @@||partner.googleadservices.com/gpt/pubads_impl_$script,domain=vtm.be
 @@||pubads.g.doubleclick.net/gampad/ads?$object-subrequest,domain=vtm.be
 @@||pubads.g.doubleclick.net/gampad/ads?ad_rule=1&$object-subrequest,domain=2be.be|jim.be|syndication.vmma.be|vitaya.be|vtmkzoom.be
 @@||serving-sys.com/BurstingPipe/adServer.bs?*&pl=VAST&$object-subrequest,domain=rtlxl.nl
 @@||serving-sys.com/crossdomain.xml$object-subrequest,domain=rtlxl.nl
+@@||staticfiles.rtl.nl/lib/rtl.jsapi/pubads_impl_70r.js$domain=rtlxl.nl
 !--------Uitzonderingen--------!
 ! *** easylistdutch/block_first_party_whitelist.txt ***
 @@||2cv.nl/markt/advertenties/$image,subdocument
@@ -761,6 +772,7 @@ _advertentieleaderboardhome.
 @@||zeelandnet.nl/prikbord/assets/*/advertentie.js
 @@||zeelandnet.nl/prikbord/assets/*/advertenties.js
 ! Uitzonderingen voor EasyList
+@@||2ndhandbrand.nl/css/advertisment.css
 @@||ad.nl/static/nmc/prm/frameset/overlay/imago/v2/728x90.jpg?
 @@||adhese.standaard.be/jsonp/callback/sl_test_dso_ipad_optimized_avondeditie_-interstitial/?$script
 @@||adverteer-gratis.nl/ads/$domain=adverteer-gratis.nl
@@ -768,6 +780,7 @@ _advertentieleaderboardhome.
 @@||aludex.com/themes/ad/img/
 @@||bibliotheek.be/detail/*-advertise/$subdocument,~third-party,xmlhttprequest
 @@||cinema.nl/ads/mediaplayer.jsp?$subdocument
+@@||directwonen.nl/adverts/$~third-party
 @@||doopsgezind.nl/templates/ads/$domain=doopsgezind.nl
 @@||earnieland.be/images/photolib/*_120_60.
 @@||emarketingexperts.nl/images/stories/adwords/
@@ -805,9 +818,11 @@ _advertentieleaderboardhome.
 @@||zuka.nl/images/ad_$image
 ! Anti-Adblock
 @@||alfaforum.nl/forum/images/misc/vbulletin4_logo.png#$image
-@@||alfaforum.nl^$elemhide
+@@||alfaforum.nl^$generichide
 @@||autoblog.nl/javascript/advertisement2.js
+@@||calorielijst.nl^$generichide
 @@||dumpert.nl^*/admatcher.doubleclick.net
+@@||embed.kijk.nl/video/$generichide
 @@||motor-forum.nl/motorshopper/json/advertenties/$xmlhttprequest
 @@||tijd.be/s2014/js/site/advertisement.js?
 !--------Algemene verbergregels--------!
@@ -853,6 +868,7 @@ _advertentieleaderboardhome.
 ##.gesponsordelink
 ##.justLease_ad
 ##.mp-adsense-header-top
+##.ontwerp_ads
 ##.reclame
 ##.reclameIndex
 ##.reclamekop
@@ -1005,6 +1021,7 @@ gtaforum.nl##.__xXadvertentie
 checkcams.com##.ab
 androidplanet.nl,dewereldmorgen.be,ipadclub.nl,iphoneclub.nl,metronieuws.nl,nu.nl,stemwijzer.nl,tvgids.nl,vkmag.com,z24.nl##.ad
 misslipgloss.nl##.ad3
+rijnmond.nl##.ad_label + div
 nu.nl##.adblock_border
 ncrv.nl##.add-disclaimer
 telegraaf.nl##.addiv > a[target="_new"]
@@ -1013,6 +1030,7 @@ nu.nl##.adorange
 fantv.nl,porntubexl.nl,studio040.nl,tube.nl##.ads
 openingstijden.com##.adsense
 nu.nl##.adsilver
+appletips.nl##.adt
 allradio.nl##.adv
 9292.nl,classicfm.nl,fcupdate.nl,onemorething.nl,weertdegekste.nl##.advert
 computeridee.nl##.advertentie-1korting-nl
@@ -1023,7 +1041,7 @@ synoniemen.net##.annblokslot
 waldnet.nl##.art-lin > div:first-child > a[target="_blank"]
 welingelichtekringen.nl##.artblok:nth-child(-2n+6)
 rechtennieuws.nl##.artikel_informatie > div[style="clear: both; float: left; position: relative; margin: 5px 0px 15px 0px; padding: 0px; text-align: center; width: 280px; color: #cccccc; font-size: 10px;"]
-2xklikken.nl,at5.nl,belgie.fm,camping-frankrijk.nl,ed.nl,elkspel.nl,express.be,fd.nl,hetkrantje-online.nl,insidegamer.nl,koopplein.nl,mensenlinq.nl,nederland.fm,nederlandmobiel.nl,nieuws.nl,privesexopname.nl,startbewijs.nl,studenten.nl,telegraaf.nl,toeto.com,waldnet.nl,westlanders.nu,zappsite.nl##.banner
+2xklikken.nl,at5.nl,belgie.fm,camping-frankrijk.nl,ed.nl,elkspel.nl,express.be,fd.nl,hetkrantje-online.nl,koopplein.nl,mensenlinq.nl,nederland.fm,nederlandmobiel.nl,nieuws.nl,privesexopname.nl,startbewijs.nl,studenten.nl,telegraaf.nl,toeto.com,waldnet.nl,westlanders.nu,zappsite.nl##.banner
 weeronline.nl##.banner + .specialBlockDiv
 at5.nl##.banner-300-100
 tvgids.nl##.banner-custom
@@ -1081,6 +1099,7 @@ quizlet.nl##.four > h3:first-child + p
 nl.hardware.info##.frontpage-wrapper > .fp-left li[data-position="2"]
 haarlemsdagblad.nl,leidschdagblad.nl,noordhollandsdagblad.nl##.fullSizeBanner
 rijnmond.nl##.full_banner
+zelfmaakideetjes.nl##.g
 speeleiland.nl##.game-side-banner-wrap
 dumpert.nl##.geldbakje
 rijnmond.nl##.half_banner
@@ -1095,7 +1114,7 @@ rtl.nl##.inlineRectangle
 wtf.nl##.item-banner
 psx-sense.nl##.laatstenieuws + * + .scheiding2 + * + * + .postbox
 ajaxcafe.nl##.leaderBoard
-9292ov.nl,engineeringnet.be,gay.eu,gay.nl,tvgids.nl##.leaderboard
+9292ov.nl,engineeringnet.be,gay.eu,gay.nl,musicmeter.nl,tvgids.nl##.leaderboard
 top40.nl##.left-banner
 2xklikken.nl##.linksall:first-child
 nieuws.nl##.lokaal_banner_right
@@ -1221,6 +1240,7 @@ hababam.nl##div[id^="had"]
 binaries4all.nl##div[id^="payserver"]
 weertdegekste.nl##div[id^="sidebar"] a[target="_blank"] > img
 treinreiziger.nl##div[id^="subbanner"]
+voetbalzone.nl##div[id^="uniek"]
 phphulp.nl##div[style$="background: #ff0000 url(/img/ads/bhosted.png) top left no-repeat; margin-bottom: 10px;"]
 voetbalzone.nl##div[style*="url(http://static-voetbalzone.nl/images/adfactor/"]
 voetbalzone.nl##div[style*="url(http://static-voetbalzone.nl/images/banners/bannerback.gif)"]

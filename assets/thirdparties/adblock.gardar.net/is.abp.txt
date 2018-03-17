@@ -1,10 +1,10 @@
 [Adblock Plus 2.0]
 ! [Icelandic ABP List]
 ! Adblock Plus listi fyrir íslenskar vefsíður / Adblock Plus list for icelandic websites
-! Síðast uppfærður / Last updated 3 Júlí/July 2015
+! Síðast uppfærður / Last updated 13 Mars/March 2018
 ! Listinn er í þróun, láttu vita ef þú finnur villur eða vefi sem vantar í listann / The list is under development, please let me know if you find any errors or webs missing from the list
 ! adblock@gardar.net
-! http://adblock.gardar.net
+! https://adblock.gardar.net
 .is/ads/
 .is/augl/
 .is/*/augl/
@@ -14,6 +14,8 @@
 ||pressan.is/img/banners/
 ||fotbolti.net/banners/
 ||vf.is/files/
+vf.is###banner-310x400-Right
+vf.is##.row.ad
 ||visitreykjavik.is/PortalData/1/Resources//flash/
 ||doktor.is/images/banners/aads/
 ||f4x4.is/images/banners/
@@ -66,6 +68,7 @@ bland.is##.box.classifedSmas
 bland.is##.box.isotopeItem.spaceAugl
 bland.is###footer-netgiro
 bland.is##.netgiroInsuranceSection
+bland.is###popup
 pressan.is###ctl00_RandomBanner2_divBanner
 pressan.is###skyscrapper
 pressan.is###ctl00_cphMain_Wrapper1_ctl06_divBanner
@@ -90,6 +93,7 @@ menn.is##.g.g-2
 menn.is###footer_section_1
 menn.is##.textwidget
 ||menn.is/wp-content/uploads/2014/08/njottucoke2.jpg
+||menn.is/wp-content/uploads/2015/01/cero.png
 mbl.is###slot-668
 mbl.is##.augl
 mbl.is/a/vedur/icelandair_vedur.gif
@@ -164,3 +168,22 @@ frettanetid.is##.widgetizedArea
 frettanetid.is##.widget
 frettanetid.is###wp_editor_widget-18
 sumarferdir.is##.col-item
+pressan.is###ctl00_ctl00_cphMain_cphMain_RandomBanner4_divBanner
+mbl.is##.mt-5.mb-5
+krom.is##.gardina
+krom.is##.stod_grein
+krom.is##.auglysing_h1
+krom.is###flexslider3
+krom.is##.new-auglysing_h2
+krom.is##.new-ads-slider
+krom.is##.new-ads-slider-small
+||bordar.kusk.is/
+||cdn.tix.is/tix/Ads/
+1819.is##.augl.augl-size-1018
+icelandreview.com##.ir-surprise-list
+||static.airserve.net/
+karfan.is##.ad-pos
+||vefbordar.offorsi.is/
+skessuhorn.is##.kostad-efni
+frettabladid.is##div[class^="ad"]
+austurfrett.is##.bannergroup
