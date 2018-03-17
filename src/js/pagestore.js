@@ -16,7 +16,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see {http://www.gnu.org/licenses/}.
 
-    Home: https://github.com/chrisaljoudi/uBlock
+    Home: https://github.com/uBlockAdmin/uBlock
 */
 
 /* jshint bitwise: false */
@@ -335,7 +335,7 @@ PageStore.prototype.reuse = function(context) {
     // video thumbnail would not work, because the frame hierarchy structure
     // was flushed from memory, while not really being flushed on the page.
     if ( context === 'tabUpdated' ) {
-        // As part of https://github.com/chrisaljoudi/uBlock/issues/405
+        // As part of https://github.com/uBlockAdmin/uBlock/issues/405
         // URL changed, force a re-evaluation of filtering switch
         this.netFilteringReadTime = 0;
         return this;
@@ -435,7 +435,7 @@ PageStore.prototype.getNetFilteringSwitch = function() {
         return this.netFiltering;
     }
 
-    // https://github.com/chrisaljoudi/uBlock/issues/1078
+    // https://github.com/uBlockAdmin/uBlock/issues/1078
     // Use both the raw and normalized URLs.
     this.netFiltering = µb.getNetFilteringSwitch(tabContext.normalURL);
     if ( this.netFiltering && tabContext.rawURL !== tabContext.normalURL ) {

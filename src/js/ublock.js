@@ -16,7 +16,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see {http://www.gnu.org/licenses/}.
 
-    Home: https://github.com/chrisaljoudi/uBlock
+    Home: https://github.com/uBlockAdmin/uBlock
 */
 
 /* global vAPI, µBlock */
@@ -29,7 +29,7 @@
 
 /******************************************************************************/
 
-// https://github.com/chrisaljoudi/uBlock/issues/405
+// https://github.com/uBlockAdmin/uBlock/issues/405
 // Be more flexible with whitelist syntax
 
 // Any special regexp char will be escaped
@@ -221,7 +221,7 @@ var matchWhitelistDirective = function(url, hostname, directive) {
         }
 
         // Be sure this stays fixed:
-        // https://github.com/chrisaljoudi/uBlock/issues/185
+        // https://github.com/uBlockAdmin/uBlock/issues/185
         if ( whitelist.hasOwnProperty(key) === false ) {
             whitelist[key] = [];
         }
@@ -273,7 +273,7 @@ var matchWhitelistDirective = function(url, hostname, directive) {
             break;
         case 'experimentalEnabled':
             if ( typeof this.mirrors === 'object' ) {
-                // https://github.com/chrisaljoudi/uBlock/issues/540
+                // https://github.com/uBlockAdmin/uBlock/issues/540
                 // Disabling local mirroring for the time being
                 this.mirrors.toggle(false /* value */);
             }
@@ -301,7 +301,7 @@ var matchWhitelistDirective = function(url, hostname, directive) {
         this.sessionFirewall.unsetCell(details.srcHostname, details.desHostname, details.requestType);
     }
 
-    // https://github.com/chrisaljoudi/uBlock/issues/731#issuecomment-73937469
+    // https://github.com/uBlockAdmin/uBlock/issues/731#issuecomment-73937469
     if ( details.persist ) {
         if ( details.action !== 0 ) {
             this.permanentFirewall.setCellZ(details.srcHostname, details.desHostname, details.requestType, details.action);
@@ -311,7 +311,7 @@ var matchWhitelistDirective = function(url, hostname, directive) {
         this.savePermanentFirewallRules();
     }
 
-    // https://github.com/chrisaljoudi/uBlock/issues/420
+    // https://github.com/uBlockAdmin/uBlock/issues/420
     this.cosmeticFilteringEngine.removeFromSelectorCache(details.srcHostname, 'net');
 };
 

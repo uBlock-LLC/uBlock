@@ -16,7 +16,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see {http://www.gnu.org/licenses/}.
 
-    Home: https://github.com/chrisaljoudi/uBlock
+    Home: https://github.com/uBlockAdmin/uBlock
 */
 
 /* jshint esnext: true, bitwise: false */
@@ -327,7 +327,7 @@ var windowWatcher = {
         } else {
             attachToTabBrowser(win, tabBrowser);
         }
-        
+
     },
 
     onClosed: function(win) {
@@ -1396,7 +1396,7 @@ vAPI.net.registerListeners = function() {
     var locationChangedListener = function(e) {
         var details = e.data;
         var browser = e.target;
-        
+
         if (details.noRefresh && details.url === browser.currentURI.asciiSpec) { // If the location changed message specified not to refresh, and the URL is the same, no need to do anything
             //console.debug("nsIWebProgressListener: ignoring onLocationChange: " + details.url);
             return;
@@ -1406,7 +1406,7 @@ vAPI.net.registerListeners = function() {
         if (tabId === vAPI.noTabId) {
             return; // Do not navigate for behind the scenes
         }
-        //console.debug("nsIWebProgressListener: onLocationChange: " + details.url + " (" + details.flags + ")");        
+        //console.debug("nsIWebProgressListener: onLocationChange: " + details.url + " (" + details.flags + ")");
 
         // LOCATION_CHANGE_SAME_DOCUMENT = "did not load a new document"
         if ( details.flags & Ci.nsIWebProgressListener.LOCATION_CHANGE_SAME_DOCUMENT ) {
@@ -1418,7 +1418,7 @@ vAPI.net.registerListeners = function() {
             return;
         }
 
-        // https://github.com/chrisaljoudi/uBlock/issues/105
+        // https://github.com/uBlockAdmin/uBlock/issues/105
         // Allow any kind of pages
         vAPI.tabs.onNavigation({
             frameId: 0,
@@ -1562,7 +1562,7 @@ vAPI.toolbarButton.init = function() {
         var legacyButtonId = "uBlock-legacy-button"; // NOTE: must match legacy-toolbar-button.css
         this.id = legacyButtonId;
         this.viewId = legacyButtonId + "-panel";
-                
+
         if (!sss.sheetRegistered(styleSheetUri, sss.AUTHOR_SHEET)) {
             sss.loadAndRegisterSheet(styleSheetUri, sss.AUTHOR_SHEET); // Register global so it works in all windows, including palette
         }
@@ -1570,7 +1570,7 @@ vAPI.toolbarButton.init = function() {
         var addLegacyToolbarButton = function(window) {
             var document = window.document;
             var toolbox = document.getElementById('navigator-toolbox') || document.getElementById('mail-toolbox');
-            
+
             if (toolbox) {
                 var palette = toolbox.palette;
 
@@ -1597,7 +1597,7 @@ vAPI.toolbarButton.init = function() {
                 toolbarButtonPanel.addEventListener('popupshowing', vAPI.toolbarButton.onViewShowing);
                 toolbarButtonPanel.addEventListener('popuphiding', vAPI.toolbarButton.onViewHiding);
                 toolbarButton.appendChild(toolbarButtonPanel);
-                
+
                 palette.appendChild(toolbarButton);
 
                 vAPI.toolbarButton.closePopup = function() {
@@ -1646,7 +1646,7 @@ vAPI.toolbarButton.init = function() {
                 }
             }
         }
-        
+
         vAPI.toolbarButton.attachToNewWindow = function(win) {
             addLegacyToolbarButton(win);
         }
@@ -1776,7 +1776,7 @@ vAPI.toolbarButton.init = function() {
     };
 
     CustomizableUI.createWidget(this);
-    
+
 
     cleanupTasks.push(function() {
         if ( this.CUIEvents ) {
@@ -1784,7 +1784,7 @@ vAPI.toolbarButton.init = function() {
         }
 
         CustomizableUI.destroyWidget(this.id);
-        
+
         for ( var win of vAPI.tabs.getWindows() ) {
             var panel = win.document.getElementById(this.viewId);
             panel.parentNode.removeChild(panel);
@@ -1809,7 +1809,7 @@ vAPI.toolbarButton.onPopupCloseRequested = function({target}) {
 
 vAPI.toolbarButton.onBeforeCreated = function(doc) {
     var panel = doc.createElement('panelview');
-    
+
     vAPI.toolbarButton.populatePanel(doc, panel);
 
     doc.getElementById('PanelUI-multiView').appendChild(panel);
@@ -1846,7 +1846,7 @@ vAPI.toolbarButton.populatePanel = function(doc, panel) {
         updateTimer = null;
         var body = iframe.contentDocument.body;
         panel.parentNode.style.maxWidth = 'none';
-        // https://github.com/chrisaljoudi/uBlock/issues/730
+        // https://github.com/uBlockAdmin/uBlock/issues/730
         // Voodoo programming: this recipe works
         var toPixelString = pixels => pixels.toString() + 'px';
 
@@ -1957,7 +1957,7 @@ vAPI.contextMenu.displayMenuItem = function({target}) {
     var menuitem = doc.getElementById(vAPI.contextMenu.menuItemId);
     var currentURI = gContextMenu.browser.currentURI;
 
-    // https://github.com/chrisaljoudi/uBlock/issues/105
+    // https://github.com/uBlockAdmin/uBlock/issues/105
     // TODO: Should the element picker works on any kind of pages?
     if ( !currentURI.schemeIs('http') && !currentURI.schemeIs('https') ) {
         menuitem.hidden = true;
@@ -2084,7 +2084,7 @@ vAPI.contextMenu.registerForNetMonitor = function(eventName, toolbox, panel) {
     var doc = panel.panelWin.document;
     var menuPopup = doc.getElementById("network-request-popup");
     var insertBeforeMenuItem = doc.getElementById("request-menu-context-separator");
-    
+
     if (menuPopup && insertBeforeMenuItem) {
         var menuitem = vAPI.contextMenu.createContextMenuItem(doc);
         menuitem.addEventListener('command', function() {

@@ -33,10 +33,10 @@ To help us diagnose and fix the problem, please *always, always* include the fol
 * A screenshot of **any** of uBlock's preferences that differ from the defaults
   * This includes a whitelisted website, enabled/disabled filter list, anything
   * Please do include everything different from the defaults whether or not it seems relevant to your issue
-* The version of uBlock you're having the issue with; you can find this in [uBlock's popup UI](https://github.com/chrisaljoudi/uBlock/wiki/Quick-guide:-popup-user-interface)
+* The version of uBlock you're having the issue with; you can find this in [uBlock's popup UI](https://github.com/uBlockAdmin/uBlock/wiki/Quick-guide:-popup-user-interface)
   * Example: `uBlock 0.9.0.0`
 * The browser you're using and its version
-  * Examples: `Firefox 36`, `Safari 8.0.5`, `Chrome 41.0.2272` 
+  * Examples: `Firefox 36`, `Safari 8.0.5`, `Chrome 41.0.2272`
 * The OS you're using and its version
   * Examples: `OS X 10.10`, `Windows 8.1`, `Linux Mint 17.1`
 * A list of other extensions you have installed

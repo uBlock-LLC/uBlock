@@ -86,6 +86,6 @@
     <key>Update Manifest URL</key>
     <string>https://www.ublock.org/Update.plist</string>
     <key>Website</key>
-    <string>https://chrismatic.io/</string>
+    <string>https://www.ublock.org/</string>
 </dict>
 </plist>

@@ -2,16 +2,16 @@
       <tr>
       <td align="left" width="70">
             <a href = "https://www.ublock.org/">
-            <img  src="https://raw.githubusercontent.com/chrisaljoudi/uBlock/master/doc/img/gh-header.png"
+            <img  src="https://raw.githubusercontent.com/uBlockAdmin/uBlock/master/doc/img/gh-header.png"
                   height="64">
             </a>
       </td>
       <td align="right" width="20%">
-            <a href="https://travis-ci.org/chrisaljoudi/uBlock">
-                  <img src="https://travis-ci.org/chrisaljoudi/uBlock.svg?branch=master" alt="Build status">
+            <a href="https://travis-ci.org/uBlockAdmin/uBlock">
+                  <img src="https://travis-ci.org/uBlockAdmin/uBlock.svg?branch=master" alt="Build status">
             </a>
-            <a href="https://www.ublock.org/donate">
-                  <img src="https://chrismatic.io/oncedonate.svg" alt="Support development">
+            <a href="https://donorbox.org/support-ublock-development">
+                  <img src="https://www.ublock.org/oncedonate.svg" alt="Support development">
             </a>
       </td>
       </tr>
@@ -32,17 +32,17 @@
 
 #### Installation:
 
-* **Chrome**: available on the [Chrome Web Store](https://chrome.google.com/webstore/detail/ublock/epcnnfbjfcgphgdmggkamkmgojdagdnn) or for [manual](https://github.com/chrisaljoudi/uBlock/tree/master/dist#install) installation.
+* **Chrome**: available on the [Chrome Web Store](https://chrome.google.com/webstore/detail/ublock/epcnnfbjfcgphgdmggkamkmgojdagdnn) or for [manual](https://github.com/uBlockAdmin/uBlock/tree/master/dist#install) installation.
 
 * **Safari**: available to install [from the homepage](https://www.ublock.org/).
 
-* **Firefox**: available on the [Firefox Add-ons site](https://addons.mozilla.org/en-US/firefox/addon/ublock/), or for [manual](https://github.com/chrisaljoudi/uBlock/releases) installation.
+* **Firefox**: available on the [Firefox Add-ons site](https://addons.mozilla.org/en-US/firefox/addon/ublock/), or for [manual](https://github.com/uBlockAdmin/uBlock/releases) installation.
 
  * Due to Mozilla's review process, the version of uBlock available from the Add-ons homepage is currently often outdated. This isn't in our control.
 
-* **Opera**: Opera shares Chrome's underlying engine, so you can install uBlock simply by grabbing the [latest release for Chrome](https://github.com/chrisaljoudi/uBlock/releases/latest).
+* **Opera**: Opera shares Chrome's underlying engine, so you can install uBlock simply by grabbing the [latest release for Chrome](https://github.com/uBlockAdmin/uBlock/releases/latest).
 
-uBlock has tooltips throughout its UI to help you along. But just in case you need it, [here's a quick guide for basic usage](https://github.com/chrisaljoudi/uBlock/wiki/Quick-guide:-popup-user-interface).
+uBlock has tooltips throughout its UI to help you along. But just in case you need it, [here's a quick guide for basic usage](https://github.com/uBlockAdmin/uBlock/wiki/Quick-guide:-popup-user-interface).
 
 ## Performance
 
@@ -52,33 +52,33 @@ uBlock has tooltips throughout its UI to help you along. But just in case you ne
 On average, uBlock <b>really</b> does make your browser run leaner. <sup>[1]</sup><br><br>
 
 Chrome <br>
-<img src="https://raw.githubusercontent.com/chrisaljoudi/uBlock/master/doc/benchmarks/mem-usage-overall-chart-20141224.png" /><br><br>
+<img src="https://raw.githubusercontent.com/uBlockAdmin/uBlock/master/doc/benchmarks/mem-usage-overall-chart-20141224.png" /><br><br>
 
 Safari<br>
-<img src="https://raw.githubusercontent.com/chrisaljoudi/uBlock/master/doc/benchmarks/mem-usage-overall-chart-safari-20150205.png" /><br><br>
+<img src="https://raw.githubusercontent.com/uBlockAdmin/uBlock/master/doc/benchmarks/mem-usage-overall-chart-safari-20150205.png" /><br><br>
 
 Firefox<br>
-<img src="https://raw.githubusercontent.com/chrisaljoudi/uBlock/master/doc/benchmarks/mem-usage-overall-chart-20150205.png" /><br><br>
+<img src="https://raw.githubusercontent.com/uBlockAdmin/uBlock/master/doc/benchmarks/mem-usage-overall-chart-20150205.png" /><br><br>
 
 </p>
 
-<sup>[1] An overview of the benchmark is available at <a href="https://github.com/chrisaljoudi/uBlock/wiki/Benchmarking-memory-footprint">this wiki page</a>.</sup><br>
+<sup>[1] An overview of the benchmark is available at <a href="https://github.com/uBlockAdmin/uBlock/wiki/Benchmarking-memory-footprint">this wiki page</a>.</sup><br>
 
 #### CPU
 
 <p align="center">
 uBlock is also CPU-efficient<br>
-<img src="https://raw.githubusercontent.com/chrisaljoudi/uBlock/master/doc/benchmarks/cpu-usage-overall-chart-20141226.png" /><br>
-<sup>Details of the benchmark available in <a href="https://github.com/chrisaljoudi/uBlock/blob/master/doc/benchmarks/cpu-usage-overall-20141226.ods">this LibreOffice spreadsheet</a>.</sup>
+<img src="https://raw.githubusercontent.com/uBlockAdmin/uBlock/master/doc/benchmarks/cpu-usage-overall-chart-20141226.png" /><br>
+<sup>Details of the benchmark available in <a href="https://github.com/uBlockAdmin/uBlock/blob/master/doc/benchmarks/cpu-usage-overall-20141226.ods">this LibreOffice spreadsheet</a>.</sup>
 </p>
 
 #### Blocking
 
 <p align="center">
 Being lean and efficient doesn't mean blocking less<br>
-<img src="https://raw.githubusercontent.com/chrisaljoudi/uBlock/master/doc/benchmarks/privex-201502-16.png" /><br>
-<sup>For details of benchmark, see 
-<a href="https://github.com/chrisaljoudi/uBlock/wiki/uBlock-and-others%3A-Blocking-ads%2C-trackers%2C-malwares">uBlock and others: Blocking ads, trackers, malwares</a>.
+<img src="https://raw.githubusercontent.com/uBlockAdmin/uBlock/master/doc/benchmarks/privex-201502-16.png" /><br>
+<sup>For details of benchmark, see
+<a href="https://github.com/uBlockAdmin/uBlock/wiki/uBlock-and-others%3A-Blocking-ads%2C-trackers%2C-malwares">uBlock and others: Blocking ads, trackers, malwares</a>.
 </p>
 
 **Some quick tests:**
@@ -99,7 +99,7 @@ Being lean and efficient doesn't mean blocking less<br>
 
 * Once you install uBlock, you can easily un-select any of the pre-selected filter lists if you think uBlock blocks too much. For reference, Adblock Plus installs with only _EasyList_ enabled by default.
 
-* Feel free to read [about the extension's required permissions](https://github.com/chrisaljoudi/uBlock/wiki/About-the-required-permissions).
+* Feel free to read [about the extension's required permissions](https://github.com/uBlockAdmin/uBlock/wiki/About-the-required-permissions).
 
 ## About uBlock
 
@@ -107,14 +107,14 @@ Some users might want to check out [uBlock Origin](https://github.com/gorhill/uB
 
 uBlock is a general-purpose blocker — not an *ad blocker* specifically. uBlock's main goal is to help users neutralize privacy-invading apparatus — ads being one example.
 
-uBlock blocks ads through its support of the [Adblock Plus filter syntax](https://adblockplus.org/en/filters). uBlock [extends](https://github.com/chrisaljoudi/uBlock/wiki/Filter-syntax-extensions) the syntax and is designed to work with custom rules and filters.
+uBlock blocks ads through its support of the [Adblock Plus filter syntax](https://adblockplus.org/en/filters). uBlock [extends](https://github.com/uBlockAdmin/uBlock/wiki/Filter-syntax-extensions) the syntax and is designed to work with custom rules and filters.
 
-Free and open-source. For users, by users. If uBlock is useful to you, [donations to support development are much appreciated](https://chrismatic.io/ublock/).
+Free and open-source. For users, by users. If uBlock is useful to you, [donations to support development are much appreciated](https://www.ublock.org).
 
-[Feel free to read about uBlock's development philosophy](https://chrismatic.io/ublock/philosophy) and [uBlock's manifesto](MANIFESTO.md).
+[Feel free to read about uBlock's development philosophy](https://www.ublock.org/philosophy) and [uBlock's manifesto](MANIFESTO.md).
 
 *Acknowledgment:* uBlock comes with several filter lists ready to use out-of-the-box (including but not limited to: EasyList, Peter Lowe's, several malware filter lists). We deeply appreciate the people working hard to maintain those lists which are available to use by all for free.
 
 ## License
 
-[GPLv3](https://github.com/chrisaljoudi/uBlock/blob/master/LICENSE.txt).
+[GPLv3](https://github.com/uBlockAdmin/uBlock/blob/master/LICENSE.txt).

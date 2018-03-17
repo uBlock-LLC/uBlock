@@ -16,7 +16,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see {http://www.gnu.org/licenses/}.
 
-    Home: https://github.com/chrisaljoudi/uBlock
+    Home: https://github.com/uBlockAdmin/uBlock
 */
 
 /* jshint multistr: true */
@@ -34,7 +34,7 @@
 
 /******************************************************************************/
 
-// https://github.com/chrisaljoudi/uBlock/issues/464
+// https://github.com/uBlockAdmin/uBlock/issues/464
 if ( document instanceof HTMLDocument === false ) {
     //console.debug('contentscript-start.js > not a HTLMDocument');
     return false;
@@ -46,7 +46,7 @@ if ( !vAPI ) {
     return;
 }
 
-// https://github.com/chrisaljoudi/uBlock/issues/456
+// https://github.com/uBlockAdmin/uBlock/issues/456
 // Already injected?
 if ( vAPI.contentscriptStartInjected ) {
     //console.debug('contentscript-start.js > content script already injected');
@@ -77,7 +77,7 @@ var cosmeticFilters = function(details) {
             donthideCosmeticFilters[donthide[i]] = true;
         }
     }
-    // https://github.com/chrisaljoudi/uBlock/issues/143
+    // https://github.com/uBlockAdmin/uBlock/issues/143
     if ( hide.length !== 0 ) {
         i = hide.length;
         var selector;
@@ -141,7 +141,7 @@ var filteringHandler = function(details) {
         localMessager.send({ what: 'cosmeticFiltersActivated' });
     }
 
-    // https://github.com/chrisaljoudi/uBlock/issues/587
+    // https://github.com/uBlockAdmin/uBlock/issues/587
     // If no filters were found, maybe the script was injected before uBlock's
     // process was fully initialized. When this happens, pages won't be
     // cleaned right after browser launch.
@@ -156,7 +156,7 @@ var hideElements = function(selectors) {
     if ( document.body === null ) {
         return;
     }
-    // https://github.com/chrisaljoudi/uBlock/issues/158
+    // https://github.com/uBlockAdmin/uBlock/issues/158
     // Using CSSStyleDeclaration.setProperty is more reliable
     var elems = document.querySelectorAll(selectors);
     var i = elems.length;

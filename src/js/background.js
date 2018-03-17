@@ -16,7 +16,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see {http://www.gnu.org/licenses/}.
 
-    Home: https://github.com/chrisaljoudi/uBlock
+    Home: https://github.com/uBlockAdmin/uBlock
 */
 
 /* global vAPI */
@@ -66,7 +66,7 @@ return {
         showIconBadge: true,
     },
 
-    // https://github.com/chrisaljoudi/uBlock/issues/180
+    // https://github.com/uBlockAdmin/uBlock/issues/180
     // Whitelist directives need to be loaded once the PSL is available
     netWhitelist: {},
     netWhitelistModifyTime: 0,
@@ -78,7 +78,7 @@ return {
         'loopconversation.about-scheme',
         'opera-scheme'
     ].join('\n').trim(),
-    
+
     userFiltersPath: "assets/user/filters.txt",
 
     localSettings: {
@@ -90,7 +90,7 @@ return {
 
     // read-only
     systemSettings: {
-        compiledMagic: 'eopszukpnrct',
+        compiledMagic: 'eopszukpnrcp',
         selfieMagic: 'menhiasrxfed'
     },
 
@@ -104,7 +104,7 @@ return {
     // EasyList, EasyPrivacy and many others have an 4-day update period,
     // as per list headers.
     updateAssetsEvery: 97 * oneHour,
-    projectServerRoot: 'https://raw.githubusercontent.com/chrisaljoudi/uBlock/master/',
+    projectServerRoot: 'https://raw.githubusercontent.com/uBlockAdmin/uBlock/master/',
     pslPath: 'assets/thirdparties/publicsuffix.org/list/effective_tld_names.dat',
 
     // permanent lists
@@ -153,4 +153,3 @@ return {
 })();
 
 /******************************************************************************/
-

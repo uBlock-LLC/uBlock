@@ -16,7 +16,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see {http://www.gnu.org/licenses/}.
 
-    Home: https://github.com/chrisaljoudi/uBlock
+    Home: https://github.com/uBlockAdmin/uBlock
 */
 
 /* global µBlock, vAPI */
@@ -42,7 +42,7 @@ var onBeforeRequest = function(details) {
     //console.debug('µBlock.webRequest/onBeforeRequest(): "type=%s, id=%d, parent id=%d, url=%s', details.type, details.frameId, details.parentFrameId, details.url);
 
     // Special handling for root document.
-    // https://github.com/chrisaljoudi/uBlock/issues/1001
+    // https://github.com/uBlockAdmin/uBlock/issues/1001
     // This must be executed regardless of whether the request is
     // behind-the-scene
     var requestType = details.type;
@@ -68,7 +68,7 @@ var onBeforeRequest = function(details) {
         pageStore = µb.pageStoreFromTabId(tabId);
     }
 
-    // https://github.com/chrisaljoudi/uBlock/issues/886
+    // https://github.com/uBlockAdmin/uBlock/issues/886
     // For requests of type `sub_frame`, the parent frame id must be used
     // to lookup the proper context:
     // > If the document of a (sub-)frame is loaded (type is main_frame or
@@ -78,7 +78,7 @@ var onBeforeRequest = function(details) {
     var isFrame = requestType === 'sub_frame';
     var frameId = isFrame ? details.parentFrameId : details.frameId;
 
-    // https://github.com/chrisaljoudi/uBlock/issues/114
+    // https://github.com/uBlockAdmin/uBlock/issues/114
     var requestContext = pageStore.createContextFromFrameId(frameId);
 
     // Setup context and evaluate
@@ -98,7 +98,7 @@ var onBeforeRequest = function(details) {
     if ( µb.isAllowResult(result) ) {
         //console.debug('traffic.js > onBeforeRequest(): ALLOW "%s" (%o) because "%s"', details.url, details, result);
 
-        // https://github.com/chrisaljoudi/uBlock/issues/114
+        // https://github.com/uBlockAdmin/uBlock/issues/114
         frameId = details.frameId;
         if ( frameId > 0 ) {
             if ( isFrame  ) {
@@ -114,13 +114,13 @@ var onBeforeRequest = function(details) {
     // Blocked
     //console.debug('traffic.js > onBeforeRequest(): BLOCK "%s" (%o) because "%s"', details.url, details, result);
 
-    // https://github.com/chrisaljoudi/uBlock/issues/905#issuecomment-76543649
+    // https://github.com/uBlockAdmin/uBlock/issues/905#issuecomment-76543649
     // No point updating the badge if it's not being displayed.
     if ( µb.userSettings.showIconBadge ) {
         µb.updateBadgeAsync(tabId);
     }
 
-    // https://github.com/chrisaljoudi/uBlock/issues/18
+    // https://github.com/uBlockAdmin/uBlock/issues/18
     // Do not use redirection, we need to block outright to be sure the request
     // will not be made. There can be no such guarantee with redirection.
 
@@ -304,7 +304,7 @@ var onRootFrameHeadersReceived = function(details) {
     // We will assume that whatever root document is of type
     //   'application/x-[...]' is a download operation.
     // I confirmed this also work with original issue:
-    //   https://github.com/chrisaljoudi/uBlock/issues/516
+    //   https://github.com/uBlockAdmin/uBlock/issues/516
     if ( headerValue(details.responseHeaders, 'content-type').lastIndexOf('application/x-', 0) === 0 ) {
         µb.tabContextManager.unpush(tabId, requestURL);
     } else {

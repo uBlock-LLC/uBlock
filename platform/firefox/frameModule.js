@@ -16,7 +16,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see {http://www.gnu.org/licenses/}.
 
-    Home: https://github.com/chrisaljoudi/uBlock
+    Home: https://github.com/uBlockAdmin/uBlock
 */
 
 'use strict';
@@ -339,7 +339,7 @@ LocationChangeListener.prototype.onLocationChange = function(webProgress, reques
     if ( !webProgress.isTopLevel ) {
         return;
     }
-    
+
     this.messageManager.sendAsyncMessage(locationChangedMessageName, {
         url: location.asciiSpec,
         flags: flags,

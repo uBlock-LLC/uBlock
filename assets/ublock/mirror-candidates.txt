@@ -14,7 +14,7 @@ cdn.jsdelivr.net
 cdnjs.cloudflare.com
     ^cdnjs\.cloudflare\.com\/ajax\/libs\/
 code.jquery.com
-    # https://github.com/chrisaljoudi/uBlock/issues/357
+    # https://github.com/uBlockAdmin/uBlock/issues/357
     # Avoid CSS-based themes, because relative URLs won't work from
     # within a data: URI
     ^code\.jquery\.com\/(?!.*\/themes\/.+\.css)
@@ -27,7 +27,7 @@ netdna.bootstrapcdn.com
 platform.twitter.com
     ^platform\.twitter\.com\/widgets\.js
 
-# https://github.com/chrisaljoudi/uBlock/issues/270#issuecomment-57913228
+# https://github.com/uBlockAdmin/uBlock/issues/270#issuecomment-57913228
 # Ref: http://www.asp.net/ajax/cdn
 ajax.aspnetcdn.com
     # Avoid CSS-based themes, because relative URLs won't work from
@@ -37,7 +37,7 @@ ajax.aspnetcdn.com
 # Ref: https://tech.yandex.ru/jslibs/
 yastatic.net
     ^yastatic\.net\/(?:angularjs|backbone|bootstrap|d3|dojo|ext-core|highlightjs|json2|jquery|jquery-ui|mochikit|modernizr|mootools|prototype|raphael|righjs|scriptaculous|swfobject|underscore|lodash)\/
-    
-#same as yastatic, deprecated domain but still widely used    
+
+#same as yastatic, deprecated domain but still widely used
 yandex.st
     ^yandex\.st\/(?:angularjs|backbone|bootstrap|d3|dojo|ext-core|highlightjs|json2|jquery|jquery-ui|mochikit|modernizr|mootools|prototype|raphael|righjs|scriptaculous|swfobject|underscore|lodash)\/

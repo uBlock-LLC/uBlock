@@ -16,7 +16,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see {http://www.gnu.org/licenses/}.
 
-    Home: https://github.com/chrisaljoudi/uBlock
+    Home: https://github.com/uBlockAdmin/uBlock
 */
 (function() {
 "use strict";
@@ -54,10 +54,10 @@ var onLoaded = function() {
         scopeIcons = document.getElementById("scopeIcons"),
         pane1 = panes.children[0],
         pane2 = panes.children[1];
-    
+
     body.style.width = "100%";
     panes.style.width = "100%";
-    
+
     var updateSize = function(isOpen) {
         var w = pane2.clientWidth;
         if(typeof isOpen === "undefined") {

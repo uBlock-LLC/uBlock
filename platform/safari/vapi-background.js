@@ -16,7 +16,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see {http://www.gnu.org/licenses/}.
 
-    Home: https://github.com/chrisaljoudi/uBlock
+    Home: https://github.com/uBlockAdmin/uBlock
 */
 
 /* global self, safari, SafariBrowserTab, µBlock */
@@ -31,7 +31,7 @@
     "use strict";
 
     var vAPI = self.vAPI = self.vAPI || {};
- 
+
     vAPI.isMainProcess = true;
     vAPI.safari = true;
 
@@ -96,7 +96,7 @@
     /******************************************************************************/
 
     initStorageLib(); // Initialize storage library
-    
+
     /******************************************************************************/
 
     var storageQuota = 104857600; // copied from Info.plist
@@ -113,7 +113,7 @@
             if(typeof callback !== "function") {
                 return;
             }
-            
+
             var result = {};
 
             if(keys === null) {
@@ -295,7 +295,7 @@
         },
         clear: function() {
             this._storage.clear();
-        } 
+        }
     };
 
     vAPI.storage.preferences = settingsStorage;
@@ -306,7 +306,7 @@
         };
 
         var delayed = [];
-        
+
         vAPI.storage.preferences = {
             get: function(a, b) {
                 delayed.push(settingsStorage.get.bind(settingsStorage, a, b));
@@ -1087,7 +1087,7 @@
     };
 
     /******************************************************************************/
-    
+
     function initStorageLib() {
         /*!
     localForage -- Offline Storage, Improved
