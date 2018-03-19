@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 18.1.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="90px" height="20px" viewBox="-260 387 90 20" enable-background="new -260 387 90 20" xml:space="preserve">
+<path fill="#E9007F" d="M-257,387h84c1.7,0,3,1.3,3,3v14c0,1.7-1.3,3-3,3h-84c-1.7,0-3-1.3-3-3v-14C-260,388.3-258.7,387-257,387z"
+	/>
+<path fill="#444444" d="M-233.1,387h59.3c2.1,0,3.8,1.3,3.8,3v14c0,1.7-1.7,3-3.8,3h-59.3c-2.1,0-3.8-1.3-3.8-3v-14
+	C-236.9,388.3-235.2,387-233.1,387z"/>
+<path fill="#444444" d="M-237,387h4v20h-4V387z"/>
+<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="-516.6111" y1="774.75" x2="-516.6111" y2="773.75" gradientTransform="matrix(90 0 0 -20 46280 15882)">
+	<stop  offset="0" style="stop-color:#BBBBBB;stop-opacity:0.1"/>
+	<stop  offset="1" style="stop-color:#000000;stop-opacity:0.1"/>
+</linearGradient>
+<path fill="url(#SVGID_1_)" d="M-257,387h84c1.7,0,3,1.3,3,3v14c0,1.7-1.3,3-3,3h-84c-1.7,0-3-1.3-3-3v-14
+	C-260,388.3-258.7,387-257,387z"/>
+<g>
+	<g enable-background="new    ">
+		<text transform="matrix(1 0 0 1 -218.3774 402)" fill="#010101" font-family="'Verdana'" font-size="11">donate</text>
+	</g>
+	<text transform="matrix(1 0 0 1 -218.3774 401)" fill="#FFFFFF" font-family="'Verdana'" font-size="11">donate</text>
+</g>
+<g>
+	<path fill="#FFFFFF" d="M-248.2,402.6c-0.2-0.7-0.5-1.3-0.8-1.9c-0.4-0.6-1.1-1.5-2.1-2.7c-0.8-0.9-1.2-1.5-1.4-1.7
+		c-0.3-0.4-0.5-0.8-0.6-1.1c-0.1-0.3-0.2-0.7-0.2-1c0-0.6,0.2-1.2,0.7-1.6c0.5-0.4,1-0.6,1.7-0.6c0.7,0,1.3,0.2,1.8,0.7
+		c0.4,0.3,0.7,0.8,0.9,1.5c0.2-0.6,0.5-1.1,0.9-1.5c0.5-0.5,1.1-0.7,1.8-0.7c0.7,0,1.2,0.2,1.7,0.6c0.5,0.4,0.7,0.9,0.7,1.5
+		c0,0.5-0.1,1-0.4,1.6c-0.3,0.6-0.8,1.3-1.6,2.2c-1,1.2-1.8,2.1-2.2,2.9C-247.7,401.3-248,402-248.2,402.6z"/>
+</g>
+</svg>
