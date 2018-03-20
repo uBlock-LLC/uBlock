@@ -111,8 +111,6 @@ uBlock blocks ads through its support of the [Adblock Plus filter syntax](https:
 
 Free and open-source. For users, by users. If uBlock is useful to you, [donations to support development are much appreciated](https://www.ublock.org).
 
-[Feel free to read about uBlock's development philosophy](https://www.ublock.org/philosophy) and [uBlock's manifesto](MANIFESTO.md).
-
 *Acknowledgment:* uBlock comes with several filter lists ready to use out-of-the-box (including but not limited to: EasyList, Peter Lowe's, several malware filter lists). We deeply appreciate the people working hard to maintain those lists which are available to use by all for free.
 
 ## License
