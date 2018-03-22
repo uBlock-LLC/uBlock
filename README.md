@@ -11,7 +11,7 @@
                   <img src="https://travis-ci.org/uBlockAdmin/uBlock.svg?branch=master" alt="Build status">
             </a>
             <a href="https://donorbox.org/support-ublock-development">
-                  <img src="https://raw.githubusercontent.com/uBlockAdmin/uBlock/master/doc/img/donate.svg" alt="Support development">
+                  <img src="https://raw.githubusercontent.com/uBlockAdmin/uBlock/master/doc/img/oncedonate.png" alt="Support development">
             </a>
       </td>
       </tr>
