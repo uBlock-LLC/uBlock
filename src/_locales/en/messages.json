@@ -4,7 +4,7 @@
     "description":"extension name."
   },
   "extShortDesc":{
-    "message":"A fast, potent, and lean blocker. Easy on CPU and memory.",
+    "message":"A fast, effective, and lean ad blocker. Blocks ads, trackers, and protects your privacy.",
     "description":"this will be in the chrome web store: must be 132 characters or less"
   },
   "dashboardName":{
