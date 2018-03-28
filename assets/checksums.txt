@@ -1,5 +1,5 @@
 f9b9e59f4c8b5c54a669fbe3db4f2af9 assets/ublock/filter-lists.json
-2f0a66345e2f9d7e3944efaa2856001d assets/ublock/filters.txt
+e6b93191efe180fef1f697b6d54077a8 assets/ublock/filters.txt
 9e3cbcadb778a3c1c4865303689202b1 assets/ublock/mirror-candidates.txt
 e4a06d09a5582dd923878eb0a973f65b assets/ublock/privacy.txt
 0d707b2cee4a38988662107971137d13 assets/thirdparties/abp.mozilla-hispano.org/nauscopio/filtros.txt
