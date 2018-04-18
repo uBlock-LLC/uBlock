@@ -6,9 +6,9 @@
 		<array>
 			<dict>
 				<key>CFBundleIdentifier</key>
-				<string>net.gorhill.uBlock</string>
+				<string>org.uBlockLLC.uBlock</string>
 				<key>Developer Identifier</key>
-				<string>96G4BAKDQ9</string>
+				<string>GFKM76M39L</string>
 				<key>CFBundleShortVersionString</key>
 				<string>{version}</string>
 				<key>CFBundleVersion</key>

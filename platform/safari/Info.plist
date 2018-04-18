@@ -3,13 +3,13 @@
 <plist version="1.0">
 <dict>
     <key>Author</key>
-    <string>Chris Aljoudi</string>
+    <string>The uBlock Development Team</string>
     <key>Builder Version</key>
     <string>534.57.2</string>
     <key>CFBundleDisplayName</key>
     <string>{name}</string>
     <key>CFBundleIdentifier</key>
-    <string>net.gorhill.uBlock</string>
+    <string>org.uBlockLLC.uBlock</string>
     <key>CFBundleInfoDictionaryVersion</key>
     <string>6.0</string>
     <key>CFBundleShortVersionString</key>
