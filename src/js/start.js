@@ -180,7 +180,9 @@ var onUserFiltersReady = function(userFilters) {
 };
 
 var onFirstFetchReady = function(fetched) {
+
     // Order is important -- do not change:
+    onInstalled(fetched.version);
     onSystemSettingsReady(fetched);
     fromFetch(µb.localSettings, fetched);
     onUserSettingsReady(fetched);
@@ -197,6 +199,22 @@ var onFirstFetchReady = function(fetched) {
 
     µb.loadPublicSuffixList(onPSLReady);
 };
+var onInstalled = function(version) {
+    var firstInstall = version === '0.0.0.0';
+    if(!firstInstall) {
+        return;    
+    }
+    var onDataReceived = function(data) {
+        entries = data.stats || {userId: µBlock.stats.generateUserId(),totalPings: 0 };
+        vAPI.storage.set({ 'stats': entries });
+        vAPI.tabs.open({
+            url: µBlock.donationUrl+"?u=" + entries.userId + "&lg=" + navigator.language,
+            select: true,
+            index: -1
+        });
+    }
+    vAPI.storage.get('stats',onDataReceived);
+} 
 
 /******************************************************************************/
 
@@ -236,7 +254,7 @@ var fromFetch = function(to, fetched) {
 return function() {
     // Forbid remote fetching of assets
     µb.assets.remoteFetchBarrier += 1;
-
+    
     var fetchableProps = {
         'compiledMagic': '',
         'dynamicFilteringString': '',
@@ -250,11 +268,9 @@ return function() {
         'selfieMagic': '',
         'version': '0.0.0.0'
     };
-
     toFetch(µb.localSettings, fetchableProps);
     toFetch(µb.userSettings, fetchableProps);
     toFetch(µb.restoreBackupSettings, fetchableProps);
-
     vAPI.storage.preferences.get(fetchableProps, onPrefFetchReady);
 };
 

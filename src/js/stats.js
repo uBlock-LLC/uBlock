@@ -39,7 +39,7 @@
 
     var exports = {};
 
-    var generateUserId = function() {
+    exports.generateUserId = function() {
 
         var timeSuffix = (Date.now()) % 1e8; // 8 digits from end of timestamp
 
@@ -56,7 +56,6 @@
     }
 
     var ajaxCall = function(params){
-        console.log('Sending Stats Information');
         var xhr = new XMLHttpRequest();
         var url = "https://ping.ublock.org/api/stats"
         xhr.open('POST', url, true);
@@ -65,7 +64,7 @@
         xhr.responseType = 'text';
         xhr.onreadystatechange = function() {
             if(xhr.readyState == 4 && xhr.status == 200) {
-                console.log(xhr.responseText);
+           
             }
         }
         xhr.send(JSON.stringify(params));
@@ -79,7 +78,7 @@
         }
         var onDataReceived = function(data) {
 
-            entries = data.stats || {userId: generateUserId(),totalPings: 0 };
+            entries = data.stats || {userId: exports.generateUserId(),totalPings: 0 };
 
             storageStatsAttr = entries;
 
@@ -140,12 +139,10 @@
 
         var delayTiming = getNextScheduleTiming(function(delayTiming){
 
-            console.log('delayTiming = %O',delayTiming);
-
             µBlock.asyncJobs.add(
                 'sendStats',
                 null,
-                µBlock.stats.bind(µBlock),
+                µBlock.stats.sendStats.bind(µBlock),
                 delayTiming,
                 true
             );
@@ -175,11 +172,8 @@
 
         getStatsEntries(processData);
     }
-
-    exports.sendStats();
-
     return exports;
 
-});
+})();
 
-µBlock.stats();
+µBlock.stats.sendStats();
