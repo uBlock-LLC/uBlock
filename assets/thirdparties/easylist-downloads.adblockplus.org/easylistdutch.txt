@@ -58,6 +58,7 @@ _advertentieleaderboardhome.
 ||admatcher.videostrip.com^$domain=q-music.nl|radioveronica.nl|skoften.net|sport1.nl|vi.nl
 ||admerize.be^$third-party
 ||adrcdn.com^$third-party
+||adservone.com^$third-party
 ||affiliatepartners.com^$third-party
 ||am.seoptics.nl^$third-party
 ||asp.unitedconsumers.com^$third-party
