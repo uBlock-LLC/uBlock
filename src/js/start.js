@@ -182,7 +182,7 @@ var onUserFiltersReady = function(userFilters) {
 var onFirstFetchReady = function(fetched) {
 
     // Order is important -- do not change:
-    onInstalled(fetched.version);
+    onInstalled();
     onSystemSettingsReady(fetched);
     fromFetch(µb.localSettings, fetched);
     onUserSettingsReady(fetched);
@@ -199,21 +199,30 @@ var onFirstFetchReady = function(fetched) {
 
     µb.loadPublicSuffixList(onPSLReady);
 };
-var onInstalled = function(version) {
-    var firstInstall = version === '0.0.0.0';
-    if(!firstInstall) {
-        return;    
-    }
-    var onDataReceived = function(data) {
-        entries = data.stats || {userId: µBlock.stats.generateUserId(),totalPings: 0 };
-        vAPI.storage.set({ 'stats': entries });
-        vAPI.tabs.open({
-            url: µBlock.donationUrl+"?u=" + entries.userId + "&lg=" + navigator.language,
-            select: true,
-            index: -1
-        });
-    }
-    vAPI.storage.get('stats',onDataReceived);
+
+var onInstalled = function() {
+    
+    var onVersionRead = function(store) {
+        
+        var lastVersion = store.extensionLastVersion || '0.0.0.0';
+    
+        var firstInstall = lastVersion === '0.0.0.0';
+    
+        if(!firstInstall) {
+            return;    
+        }
+        var onDataReceived = function(data) {
+            entries = data.stats || {userId: µBlock.stats.generateUserId(),totalPings: 0 };
+            vAPI.storage.set({ 'stats': entries });
+            vAPI.tabs.open({
+                url: µBlock.donationUrl+"?u=" + entries.userId + "&lg=" + navigator.language,
+                select: true,
+                index: -1
+            });
+        }
+        vAPI.storage.get('stats',onDataReceived);
+    };
+    vAPI.storage.get('extensionLastVersion', onVersionRead);
 } 
 
 /******************************************************************************/
@@ -249,10 +258,7 @@ var fromFetch = function(to, fetched) {
     }
 };
 
-/******************************************************************************/
-
-return function() {
-    // Forbid remote fetching of assets
+var onSelectedFilterListsLoaded = function() {
     µb.assets.remoteFetchBarrier += 1;
     
     var fetchableProps = {
@@ -265,6 +271,7 @@ return function() {
         'netWhitelist': '',
         'userFilters': '',
         'cached_asset_content://assets/user/filters.txt': '',
+        'selfie': null,
         'selfieMagic': '',
         'version': '0.0.0.0'
     };
@@ -274,7 +281,16 @@ return function() {
     vAPI.storage.preferences.get(fetchableProps, onPrefFetchReady);
 };
 
-/******************************************************************************/
+return function() {
+    if ( typeof µb.migrateLegacyData === 'function' ) {
+        µb.migrateLegacyData(function() {
+            onSelectedFilterListsLoaded();
+        });
+    }
+    else {
+        onSelectedFilterListsLoaded();
+    }
+};
 
 })();
 

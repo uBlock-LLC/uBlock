@@ -33,7 +33,11 @@
         µBlock.storageUsed = bytesInUse;
         callback(bytesInUse);
     };
-    vAPI.storage.getBytesInUse(null, getBytesInUseHandler);
+    if ( vAPI.storage.getBytesInUse instanceof Function ) {
+        vAPI.storage.getBytesInUse(null, getBytesInUseHandler);
+    } else {
+        callback();
+    }
 };
 
 /******************************************************************************/

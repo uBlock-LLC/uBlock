@@ -1075,17 +1075,13 @@ var backupUserData = function(callback) {
         var filename = vAPI.i18n('aboutBackupFilename')
             .replace('{{datetime}}', now.toLocaleString())
             .replace(/ +/g, '_');
-
-        vAPI.download({
-            'url': 'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(userData, null, '  ')),
-            'filename': filename
-        });
-
         µb.restoreBackupSettings.lastBackupFile = filename;
         µb.restoreBackupSettings.lastBackupTime = Date.now();
         vAPI.storage.preferences.set(µb.restoreBackupSettings);
-
-        getLocalData(callback);
+        
+        getLocalData(function(localData) {
+            callback({ localData: localData, userData: userData });
+        });
     };
 
     var onUserFiltersReady = function(details) {
@@ -1100,7 +1096,7 @@ var backupUserData = function(callback) {
 
 var restoreUserData = function(request) {
     var userData = request.userData;
-    var countdown = 7;
+    var countdown = 6;
     var onCountdown = function() {
         countdown -= 1;
         if ( countdown === 0 ) {

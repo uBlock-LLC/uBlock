@@ -38,6 +38,16 @@ var manifest = chrome.runtime.getManifest();
 
 vAPI.chrome = true;
 
+vAPI.webextFlavor = '';
+if (
+    self.browser instanceof Object &&
+    typeof self.browser.runtime.getBrowserInfo === 'function'
+) {
+    self.browser.runtime.getBrowserInfo().then(function(info) {
+        vAPI.webextFlavor = info.vendor + '-' + info.name + '-' + info.version;
+    });
+}
+
 var noopFunc = function(){};
 
 /******************************************************************************/
@@ -219,7 +229,9 @@ vAPI.tabs.registerListeners = function() {
         onClosedClient(tabId);
     };
 
-    chrome.webNavigation.onCreatedNavigationTarget.addListener(onCreatedNavigationTarget);
+    if ( chrome.webNavigation.onCreatedNavigationTarget instanceof Object ) {
+        chrome.webNavigation.onCreatedNavigationTarget.addListener(onCreatedNavigationTarget);
+    }
     chrome.webNavigation.onBeforeNavigate.addListener(onBeforeNavigate);
     chrome.webNavigation.onCommitted.addListener(onCommitted);
     chrome.tabs.onUpdated.addListener(onUpdated);
@@ -334,6 +346,11 @@ vAPI.tabs.open = function(details) {
     };
 
     if ( !details.select ) {
+        wrapper();
+        return;
+    }
+    
+    if ( /^Mozilla-Firefox-5[2-5]\./.test(vAPI.webextFlavor) ) {
         wrapper();
         return;
     }

@@ -1,0 +1,70 @@
+{
+    "manifest_version": 2,
+
+    "name": "uBlock",
+    "version": "0.9.5.5",
+
+    "applications": {
+        "gecko": {
+            "id": "{2b10c1c8-a11f-4bad-fe9c-1c11e82cac42}",
+            "strict_min_version": "52.0a1"
+        }
+    },
+
+    "default_locale": "en",
+    "description": "__MSG_extShortDesc__",
+    "icons": {
+        "16": "img/icon_16.png",
+        "128": "img/icon_128.png"
+    },
+
+    "browser_action": {
+        "default_icon": "img/browsericons/icon19-off.png",
+        "default_title": "uBlock",
+        "default_popup": "popup.html"
+    },
+
+    "author": "The uBlock Development Team",
+    "background": {
+        "page": "background.html"
+    },
+    "content_scripts": [
+        {
+            "matches": ["http://*/*", "https://*/*"],
+            "js": ["js/vapi-client.js", "js/contentscript-start.js"],
+            "run_at": "document_start",
+            "all_frames": true
+        },
+        {
+            "matches": ["http://*/*", "https://*/*"],
+            "js": ["js/contentscript-end.js"],
+            "run_at": "document_end",
+            "all_frames": true
+        },
+        {
+            "matches": [
+                "https://*.adblockplus.org/*",
+                "https://*.adblockplus.me/*",
+                "https://www.fanboy.co.nz/*"
+            ],
+            "js": ["js/subscriber.js"],
+            "run_at": "document_idle"
+        }
+    ],
+    "minimum_chrome_version": "22.0",
+    "options_ui": {
+        "page": "options_ui.html"
+    },
+    "permissions": [
+        "contextMenus",
+        "storage",
+        "tabs",
+        "unlimitedStorage",
+        "webNavigation",
+        "webRequest",
+        "webRequestBlocking",
+        "http://*/*",
+        "https://*/*"
+    ],
+    "short_name": "uBlock"
+}

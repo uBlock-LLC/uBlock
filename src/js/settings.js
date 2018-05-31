@@ -99,14 +99,32 @@ var startImportFilePicker = function() {
 /******************************************************************************/
 
 var exportToFile = function() {
-    messager.send({ what: 'backupUserData' }, onLocalDataReceived);
+    //messager.send({ what: 'backupUserData' }, onLocalDataReceived);
+    messager.send({ what: 'backupUserData' }, function(response) {
+        if (
+            response instanceof Object === false ||
+            response.userData instanceof Object === false
+        ) {
+            return;
+        }
+        vAPI.download({
+            'url': 'data:text/plain;charset=utf-8,' +
+                   encodeURIComponent(JSON.stringify(response.userData, null, '  ')),
+            'filename': response.localData.lastBackupFile
+        });
+        onLocalDataReceived(response.localData);
+    });
 };
 
 /******************************************************************************/
 
 var onLocalDataReceived = function(details) {
     uDom('#localData > ul > li:nth-of-type(1)').text(
-        vAPI.i18n('settingsStorageUsed').replace('{{value}}', details.storageUsed.toLocaleString())
+        vAPI.i18n('settingsStorageUsed')
+        .replace(
+            '{{value}}',
+            typeof details.storageUsed === 'number' ? details.storageUsed.toLocaleString() : '?'
+        )
     );
 
     var elem, dt;
