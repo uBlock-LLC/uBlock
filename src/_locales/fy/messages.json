@@ -163,6 +163,10 @@
     "message":"Ik bin in betûfte brûker (<a href='https:\/\/github.com\/uBlockAdmin\/uBlock\/wiki\/Advanced-Mode'>Lês dit earst<\/a>)",
     "description":"English: "
   },
+  "settingsAllowUserStats":{
+    "message":"Allow uBlock to collect anonymous ping and usage data.",
+    "description":"English: Allow uBlock to collect anonymous ping and usage data."
+  },
   "settingsExperimentalPrompt":{
     "message":"Eksperimentele funksjes ynskeakelje (<a href='https:\/\/github.com\/uBlockAdmin\/uBlock\/wiki\/Experimental-features'>Oer<\/a>)",
     "description":"English: Enable experimental features"

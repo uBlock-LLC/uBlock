@@ -163,6 +163,10 @@
     "message":"Haladó felhasználó vagyok (<a href='https:\/\/github.com\/uBlockAdmin\/uBlock\/wiki\/Advanced-Mode'>További tudnivalók<\/a>)",
     "description":"English: "
   },
+  "settingsAllowUserStats":{
+    "message":"Allow uBlock to collect anonymous ping and usage data.",
+    "description":"English: Allow uBlock to collect anonymous ping and usage data."
+  },
   "settingsExperimentalPrompt":{
     "message":"Kísérleti funkciók engedélyezése (<a href='https:\/\/github.com\/uBlockAdmin\/uBlock\/wiki\/Experimental-features'>Információk<\/a>)",
     "description":"English: Enable experimental features"

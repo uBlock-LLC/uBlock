@@ -163,6 +163,10 @@
     "message":"Olen edistynyt käyttäjä (<a href='https:\/\/github.com\/uBlockAdmin\/uBlock\/wiki\/Advanced-Mode'>Lue tämä<\/a>)",
     "description":"English: "
   },
+  "settingsAllowUserStats":{
+    "message":"Allow uBlock to collect anonymous ping and usage data.",
+    "description":"English: Allow uBlock to collect anonymous ping and usage data."
+  },
   "settingsExperimentalPrompt":{
     "message":"Salli kokeilulliset toiminnot (<a href='https:\/\/github.com\/uBlockAdmin\/uBlock\/wiki\/Experimental-features'>Tietoa<\/a>)",
     "description":"English: Enable experimental features"

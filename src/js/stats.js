@@ -88,7 +88,10 @@
     }
 
     exports.sendStats = function() {
-
+        
+        if (!µb.userSettings.allowUserStats) {
+            return;
+        }
         var processData = function(details) {
 
             details.totalPings = details.totalPings + 1;

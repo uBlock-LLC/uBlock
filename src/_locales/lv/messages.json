@@ -163,6 +163,10 @@
     "message":"Es esmu pieredzējis lietotājs (<a href='https:\/\/github.com\/uBlockAdmin\/uBlock\/wiki\/Advanced-Mode'>Vēlams izlasīt<\/a>)",
     "description":"English: "
   },
+  "settingsAllowUserStats":{
+    "message":"Allow uBlock to collect anonymous ping and usage data.",
+    "description":"English: Allow uBlock to collect anonymous ping and usage data."
+  },
   "settingsExperimentalPrompt":{
     "message":"Iespējot eksperimentālas iespējas (<a href='https:\/\/github.com\/uBlockAdmin\/uBlock\/wiki\/Experimental-features'>Sīkāk šeit<\/a>)",
     "description":"English: Enable experimental features"

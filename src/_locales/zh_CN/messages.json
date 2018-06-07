@@ -163,6 +163,10 @@
     "message":"我是高级用户（<a href='https:\/\/github.com\/uBlockAdmin\/uBlock\/wiki\/Advanced-Mode'>必读<\/a>）",
     "description":"English: "
   },
+  "settingsAllowUserStats":{
+    "message":"Allow uBlock to collect anonymous ping and usage data.",
+    "description":"English: Allow uBlock to collect anonymous ping and usage data."
+  },
   "settingsExperimentalPrompt":{
     "message":"启用实验功能（<a href='https:\/\/github.com\/uBlockAdmin\/uBlock\/wiki\/Experimental-features'>关于<\/a>）",
     "description":"English: Enable experimental features"

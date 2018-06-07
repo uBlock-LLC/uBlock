@@ -64,6 +64,7 @@ return {
         parseAllABPHideFilters: true,
         requestLogMaxEntries: 1000,
         showIconBadge: true,
+        allowUserStats:true
     },
 
     // https://github.com/uBlockAdmin/uBlock/issues/180

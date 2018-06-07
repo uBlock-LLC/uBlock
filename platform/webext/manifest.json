@@ -2,7 +2,7 @@
     "manifest_version": 2,
 
     "name": "uBlock",
-    "version": "0.9.5.5",
+    "version": "0.9.5.6",
 
     "applications": {
         "gecko": {

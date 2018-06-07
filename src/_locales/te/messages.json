@@ -163,6 +163,10 @@
     "message":"నేనొక నిపుణత కలిగిన వినియోగదారున్ని(<a href='https:\/\/github.com\/uBlockAdmin\/uBlock\/wiki\/Advanced-Mode'>అయితే ఇదే తప్పనిసరిగా చదవాలి<\/a>)",
     "description":"English: "
   },
+  "settingsAllowUserStats":{
+    "message":"Allow uBlock to collect anonymous ping and usage data.",
+    "description":"English: Allow uBlock to collect anonymous ping and usage data."
+  },
   "settingsExperimentalPrompt":{
     "message":"ప్రయోగాత్మక సామర్థ్యాల వాడుకను అనుమతించుము(<a href='https:\/\/github.com\/uBlockAdmin\/uBlock\/wiki\/Experimental-features'>మరిన్ని వివరాలు<\/a>)",
     "description":"English: Enable experimental features"

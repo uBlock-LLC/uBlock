@@ -163,6 +163,10 @@
     "message":"Είμαι προχωρημένος χρήστης (<a href='https:\/\/github.com\/uBlockAdmin\/uBlock\/wiki\/Advanced-Mode'>Aπαραίτητη ανάγνωση<\/a>)",
     "description":"English: "
   },
+  "settingsAllowUserStats":{
+    "message":"Allow uBlock to collect anonymous ping and usage data.",
+    "description":"English: Allow uBlock to collect anonymous ping and usage data."
+  },
   "settingsExperimentalPrompt":{
     "message":"Ενεργοποιήση πειραματικών χαρακτηριστικών (<a href='https:\/\/github.com\/uBlockAdmin\/uBlock\/wiki\/Experimental-features'>Πληροφορίες<\/a>)",
     "description":"English: Enable experimental features"

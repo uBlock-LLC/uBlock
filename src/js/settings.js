@@ -203,7 +203,11 @@ var onUserSettingsReceived = function(details) {
         .on('change', function(){
             changeUserSettings('advancedUserEnabled', this.checked);
         });
-
+    uDom('#allow-user-stats')
+        .prop('checked', details.allowUserStats === true)
+        .on('change', function(){
+            changeUserSettings('allowUserStats', this.checked);
+        });    
     uDom('#experimental-enabled')
         .prop('checked', details.experimentalEnabled === true)
         .on('change', function(){

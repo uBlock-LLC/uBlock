@@ -163,6 +163,10 @@
     "message":"Tôi là một người dùng có kinh nghiệm (<a href='https:\/\/github.com\/uBlockAdmin\/uBlock\/wiki\/Advanced-Mode'>Yêu cầu đọc qua<\/a>)",
     "description":"English: "
   },
+  "settingsAllowUserStats":{
+    "message":"Allow uBlock to collect anonymous ping and usage data.",
+    "description":"English: Allow uBlock to collect anonymous ping and usage data."
+  },
   "settingsExperimentalPrompt":{
     "message":"Kích hoạt các tính năng thử nghiệm (<a href='https:\/\/github.com\/uBlockAdmin\/uBlock\/wiki\/Experimental-features'>Thông tin<\/a>)",
     "description":"English: Enable experimental features"

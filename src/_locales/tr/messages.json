@@ -163,6 +163,10 @@
     "message":"Deneyimli kullanıcıyım.",
     "description":"English: "
   },
+  "settingsAllowUserStats":{
+    "message":"Allow uBlock to collect anonymous ping and usage data.",
+    "description":"English: Allow uBlock to collect anonymous ping and usage data."
+  },
   "settingsExperimentalPrompt":{
     "message":"Deneysel özellikleri etkinleştir (<a href='https:\/\/github.com\/uBlockAdmin\/uBlock\/wiki\/Experimental-features'>Hakkında<\/a>)",
     "description":"English: Enable experimental features"
