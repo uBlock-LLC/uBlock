@@ -1,6 +1,6 @@
 En effektiv blocker: let på hukommelse og CPU forbrug,. Kan indlæse og anvende tusindvis af flere filtre end andre populære blockere derude.
 
-Illustreret oversigt over effektiviteten: https://github.com/uBlockAdmin/uBlock/wiki/uBlock-vs.-ABP :-Efficiency-compared
+Illustreret oversigt over effektiviteten: https://github.com/uBlockAdmin/uBlock/wiki/uBlock-vs.-ABP:-efficiency-compared
 
 Anvendelse: Den Store power knap i pop-up-vinduet kan permanent deaktivere/aktivere uBlock på det aktuelle websted. Dette gælder kun for det aktuelle websted, det er ikke en global afbryderknap.
 
