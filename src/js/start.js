@@ -258,7 +258,7 @@ var fromFetch = function(to, fetched) {
     }
 };
 
-var onSelectedFilterListsLoaded = function() {
+return function() {
     µb.assets.remoteFetchBarrier += 1;
     
     var fetchableProps = {
@@ -279,17 +279,6 @@ var onSelectedFilterListsLoaded = function() {
     toFetch(µb.userSettings, fetchableProps);
     toFetch(µb.restoreBackupSettings, fetchableProps);
     vAPI.storage.preferences.get(fetchableProps, onPrefFetchReady);
-};
-
-return function() {
-    if ( typeof µb.migrateLegacyData === 'function' ) {
-        µb.migrateLegacyData(function() {
-            onSelectedFilterListsLoaded();
-        });
-    }
-    else {
-        onSelectedFilterListsLoaded();
-    }
 };
 
 })();
