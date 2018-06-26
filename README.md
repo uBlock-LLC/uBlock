@@ -34,11 +34,11 @@
 
 * **Chrome**: available on the [Chrome Web Store](https://chrome.google.com/webstore/detail/ublock/epcnnfbjfcgphgdmggkamkmgojdagdnn) or for [manual](https://github.com/uBlockAdmin/uBlock/tree/master/dist#install) installation.
 
-* **Safari**: available to install [from the homepage](https://www.ublock.org/).
+* **Safari**: available to install [from the homepage](https://www.ublock.org/safari/).
+
+* **MacOS App**: available for install [from the homepage](https://www.ublock.org/macOS/) or from the [App Store](https://itunes.apple.com/us/app/ublock/id1385985095?ls=1&mt=8)".
 
 * **Firefox**: available on the [Firefox Add-ons site](https://addons.mozilla.org/en-US/firefox/addon/ublock/), or for [manual](https://github.com/uBlockAdmin/uBlock/releases) installation.
-
- * Due to Mozilla's review process, the version of uBlock available from the Add-ons homepage is currently often outdated. This isn't in our control.
 
 * **Opera**: Opera shares Chrome's underlying engine, so you can install uBlock simply by grabbing the [latest release for Chrome](https://github.com/uBlockAdmin/uBlock/releases/latest).
 
@@ -91,7 +91,7 @@ Being lean and efficient doesn't mean blocking less<br>
 
 ## Tips
 
-* **To benefit from uBlock's higher efficiency,** it's advised that you don't use other inefficient blockers at the same time (such as AdBlock or Adblock Plus). uBlock will do [as well or better](#blocking) than most popular ad blockers.
+* **To benefit from uBlock's higher efficiency,** it's advised that you don't use other blockers at the same time (such as AdBlock or Adblock Plus). uBlock will do [as well or better](#blocking) than most popular ad blockers.
 
 * It's important to note that blocking ads [is *not* theft](https://twitter.com/LeaVerou/status/518154828166725632). Don't fall for this creepy idea. The _ultimate_ logical consequence of `blocking = theft` is the criminalisation of the inalienable right to privacy.
 
@@ -105,11 +105,9 @@ Being lean and efficient doesn't mean blocking less<br>
 
 Some users might want to check out [uBlock Origin](https://github.com/gorhill/uBlock): a noteworthy personal fork of uBlock from @gorhill with a slightly different featureset.
 
-uBlock is a general-purpose blocker — not an *ad blocker* specifically. uBlock's main goal is to help users neutralize privacy-invading apparatus — ads being one example.
+uBlock is a general-purpose content blocker, which means it can be used to block ads as well as other forms of content on webpages. uBlock can also be used to help users neutralize privacy-invading trackers. uBlock blocks ads through its support of the [Adblock Plus filter syntax](https://adblockplus.org/en/filters). uBlock [extends](https://github.com/uBlockAdmin/uBlock/wiki/Filter-syntax-extensions) the syntax and is designed to work with custom rules and filters. If uBlock is useful to you, [donations to support development are much appreciated](https://www.ublock.org/donate/).
 
-uBlock blocks ads through its support of the [Adblock Plus filter syntax](https://adblockplus.org/en/filters). uBlock [extends](https://github.com/uBlockAdmin/uBlock/wiki/Filter-syntax-extensions) the syntax and is designed to work with custom rules and filters.
-
-Free and open-source. For users, by users. If uBlock is useful to you, [donations to support development are much appreciated](https://www.ublock.org).
+** Please note [recent news](https://www.ublock.org/announcement/) about the status of the uBlock project as of June 22, 2018.**
 
 *Acknowledgment:* uBlock comes with several filter lists ready to use out-of-the-box (including but not limited to: EasyList, Peter Lowe's, several malware filter lists). We deeply appreciate the people working hard to maintain those lists which are available to use by all for free.
 
