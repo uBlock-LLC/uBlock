@@ -36,7 +36,7 @@
 
 * **Safari**: available to install [from the homepage](https://www.ublock.org/safari/).
 
-* **MacOS App**: available for install [from the homepage](https://www.ublock.org/macOS/) or from the [App Store](https://itunes.apple.com/us/app/ublock/id1385985095?ls=1&mt=8)".
+* **MacOS App**: available for install [from the homepage](https://www.ublock.org/macOS/) or from the [App Store](https://itunes.apple.com/us/app/ublock/id1385985095?ls=1&mt=8).
 
 * **Firefox**: available on the [Firefox Add-ons site](https://addons.mozilla.org/en-US/firefox/addon/ublock/), or for [manual](https://github.com/uBlockAdmin/uBlock/releases) installation.
 
