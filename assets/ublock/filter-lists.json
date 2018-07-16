@@ -179,11 +179,11 @@
         "group": "regions",
         "homeURL": "https://raw.githubusercontent.com/AdBlockPlusIsrael/EasyListHebrew/master/EasyListHebrew.txt"
         },
-    "raw.githubusercontent.com/adblockpolska/Adblock_PL_List/master/adblock_polska.txt": {
+    "easylist-downloads.adblockplus.org/easylistpolish.txt": {
         "off": true,
-        "title": "POL: Adblock Polska",
+        "title": "POL: EasyList Polish",
         "group": "regions",
-        "homeURL": "https://raw.githubusercontent.com/adblockpolska/Adblock_PL_List/master/adblock_polska.txt"
+        "homeURL": "https://easylist-downloads.adblockplus.org/easylistpolish.txt"
         },
     "raw.githubusercontent.com/cjx82630/cjxlist/master/cjxlist.txt": {
         "off": true,
