@@ -25,7 +25,7 @@
 
 /******************************************************************************/
 
-(function() {
+(() => {
 
 'use strict';
 
@@ -42,7 +42,7 @@ self.vAPI = self.vAPI || {};
 
 // http://www.w3.org/International/questions/qa-scripts#directions
 
-var setScriptDirection = function(language) {
+var setScriptDirection = (language) => {
     document.body.setAttribute(
         'dir',
         ['ar', 'he', 'fa', 'ps', 'ur'].indexOf(language) !== -1 ? 'rtl' : 'ltr'
@@ -51,7 +51,7 @@ var setScriptDirection = function(language) {
 
 /******************************************************************************/
 
-vAPI.download = function(details) {
+vAPI.download = (details) => {
     if ( !details.url ) {
         return;
     }
@@ -64,11 +64,11 @@ vAPI.download = function(details) {
 
 /******************************************************************************/
 
-vAPI.insertHTML = (function() {
+vAPI.insertHTML = (() => {
     const parser = Components.classes['@mozilla.org/parserutils;1']
         .getService(Components.interfaces.nsIParserUtils);
 
-    return function(node, html) {
+    return (node, html) => {
         while ( node.firstChild ) {
             node.removeChild(node.firstChild);
         }
@@ -85,18 +85,18 @@ vAPI.insertHTML = (function() {
 
 /******************************************************************************/
 
-vAPI.getURL = function(path) {
+vAPI.getURL = (path) => {
     return 'chrome://' + location.host + '/content/' + path.replace(/^\/+/, '');
 };
 
 /******************************************************************************/
 
-vAPI.i18n = (function() {
+vAPI.i18n = (() => {
     var stringBundle = Services.strings.createBundle(
         'chrome://' + location.host + '/locale/messages.properties'
     );
 
-    return function(s) {
+    return (s) => {
         try {
             return stringBundle.GetStringFromName(s);
         } catch (ex) {
@@ -109,7 +109,7 @@ setScriptDirection(navigator.language);
 
 /******************************************************************************/
 
-vAPI.closePopup = function() {
+vAPI.closePopup = () => {
     sendAsyncMessage(location.host + ':closePopup');
 };
 
@@ -124,7 +124,7 @@ vAPI.localStorage = {
     PB: Services.prefs.getBranch(branchName),
     str: Components.classes['@mozilla.org/supports-string;1']
         .createInstance(Components.interfaces.nsISupportsString),
-    getItem: function(key) {
+    getItem: (key) => {
         try {
             return this.PB.getComplexValue(
                 key,
@@ -134,7 +134,7 @@ vAPI.localStorage = {
             return null;
         }
     },
-    setItem: function(key, value) {
+    setItem: (key, value) => {
         this.str.data = value;
         this.PB.setComplexValue(
             key,
@@ -142,23 +142,23 @@ vAPI.localStorage = {
             this.str
         );
     },
-    getBool: function(key) {
+    getBool: (key) => {
         try {
             return this.PB.getBoolPref(key);
         } catch (ex) {
             return null;
         }
     },
-    setBool: function(key, value) {
+    setBool: (key, value) => {
         this.PB.setBoolPref(key, value);
     },
-    setDefaultBool: function(key, defaultValue) {
+    setDefaultBool: (key, defaultValue) => {
         Services.prefs.getDefaultBranch(branchName).setBoolPref(key, defaultValue);
     },
-    removeItem: function(key) {
+    removeItem: (key) => {
         this.PB.clearUserPref(key);
     },
-    clear: function() {
+    clear: () => {
         this.PB.deleteBranch('');
     }
 };

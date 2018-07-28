@@ -34,7 +34,7 @@ let {contentObserver, LocationChangeListener} = Components.utils.import(
     null
 );
 
-let injectContentScripts = function(win) {
+let injectContentScripts = (win) => {
     if ( !win || !win.document ) {
         return;
     }
@@ -49,7 +49,7 @@ let injectContentScripts = function(win) {
     }
 };
 
-let onLoadCompleted = function() {
+let onLoadCompleted = () => {
     removeMessageListener('ublock-load-completed', onLoadCompleted);
     injectContentScripts(content);
 };

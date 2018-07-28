@@ -25,7 +25,7 @@
 
 /******************************************************************************/
 
-(function(self) {
+((self) => {
 
 'use strict';
 
@@ -38,7 +38,7 @@ vAPI.sessionId = String.fromCharCode(Date.now() % 25 + 97) +
 
 /******************************************************************************/
 
-var messagingConnector = function(response) {
+var messagingConnector = (response) => {
     if ( !response ) {
         return;
     }
@@ -82,15 +82,15 @@ vAPI.messaging = {
     listeners: {},
     requestId: 1,
 
-    setup: function() {
-        this.connector = function(msg) {
+    setup: () => {
+        this.connector = (msg) => {
             messagingConnector(JSON.parse(msg));
         };
 
         addMessageListener(this.connector);
 
         this.channels['vAPI'] = {};
-        this.channels['vAPI'].listener = function(msg) {
+        this.channels['vAPI'].listener = (msg) => {
             if ( msg.cmd === 'injectScript' ) {
                 var details = msg.details;
 
@@ -103,7 +103,7 @@ vAPI.messaging = {
         };
     },
 
-    close: function() {
+    close: () => {
         if ( !this.connector ) {
             return;
         }
@@ -114,7 +114,7 @@ vAPI.messaging = {
         this.listeners = {};
     },
 
-    channel: function(channelName, callback) {
+    channel: (channelName, callback) => {
         if ( !channelName ) {
             return;
         }
@@ -122,7 +122,7 @@ vAPI.messaging = {
         this.channels[channelName] = {
             channelName: channelName,
             listener: typeof callback === 'function' ? callback : null,
-            send: function(message, callback) {
+            send: (message, callback) => {
                 if ( !vAPI.messaging.connector ) {
                     vAPI.messaging.setup();
                 }
@@ -139,7 +139,7 @@ vAPI.messaging = {
 
                 sendAsyncMessage('ublock:background', message);
             },
-            close: function() {
+            close: () => {
                 delete vAPI.messaging.channels[this.channelName];
             }
         };
@@ -147,7 +147,7 @@ vAPI.messaging = {
         return this.channels[channelName];
     },
 
-    toggleListener: function({type, persisted}) {
+    toggleListener: ({type, persisted}) => {
         if ( !vAPI.messaging.connector ) {
             return;
         }

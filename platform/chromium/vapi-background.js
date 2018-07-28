@@ -25,7 +25,7 @@
 
 /******************************************************************************/
 
-(function() {
+(() => {
 
 'use strict';
 
@@ -48,7 +48,7 @@ if (
     });
 }
 
-var noopFunc = function(){};
+var noopFunc = () => {};
 
 /******************************************************************************/
 
@@ -72,7 +72,7 @@ if ( !chrome.runtime ) {
 
 /******************************************************************************/
 
-vAPI.app.restart = function() {
+vAPI.app.restart = () => {
     chrome.runtime.reload();
 };
 
@@ -91,7 +91,7 @@ vAPI.tabs = {};
 
 /******************************************************************************/
 
-vAPI.isBehindTheSceneTabId = function(tabId) {
+vAPI.isBehindTheSceneTabId = (tabId) => {
     return tabId.toString() === '-1';
 };
 
@@ -102,7 +102,7 @@ vAPI.noTabId = '-1';
 // https://github.com/gorhill/uBlock/issues/101
 // chrome API expects tab id to be a number, not a string.
 
-var toChromiumTabId = function(tabId) {
+var toChromiumTabId = (tabId) => {
     if ( typeof tabId === 'string' ) {
         tabId = parseInt(tabId, 10);
     }
@@ -114,7 +114,7 @@ var toChromiumTabId = function(tabId) {
 
 /******************************************************************************/
 
-vAPI.tabs.registerListeners = function() {
+vAPI.tabs.registerListeners = () => {
     var onNavigationClient = this.onNavigation || noopFunc;
     var onPopupClient = this.onPopup || noopFunc;
     var onUpdatedClient = this.onUpdated || noopFunc;
@@ -136,21 +136,21 @@ vAPI.tabs.registerListeners = function() {
         this.selfDestructionTimer = null;
     };
 
-    PopupCandidate.prototype.selfDestruct = function() {
+    PopupCandidate.prototype.selfDestruct = () => {
         if ( this.selfDestructionTimer !== null ) {
             clearTimeout(this.selfDestructionTimer);
         }
         delete popupCandidates[this.targetTabId];
     };
 
-    PopupCandidate.prototype.launchSelfDestruction = function() {
+    PopupCandidate.prototype.launchSelfDestruction = () => {
         if ( this.selfDestructionTimer !== null ) {
             clearTimeout(this.selfDestructionTimer);
         }
         this.selfDestructionTimer = setTimeout(this.selfDestruct.bind(this), 10000);
     };
 
-    var popupCandidateCreate = function(details) {
+    var popupCandidateCreate = (details) => {
         var popup = popupCandidates[details.tabId];
         // This really should not happen...
         if ( popup !== undefined ) {
@@ -159,7 +159,7 @@ vAPI.tabs.registerListeners = function() {
         return popupCandidates[details.tabId] = new PopupCandidate(details);
     };
 
-    var popupCandidateTest = function(details) {
+    var popupCandidateTest = (details) => {
         var popup = popupCandidates[details.tabId];
         if ( popup === undefined ) {
             return;
@@ -172,7 +172,7 @@ vAPI.tabs.registerListeners = function() {
         return true;
     };
 
-    var popupCandidateDestroy = function(details) {
+    var popupCandidateDestroy = (details) => {
         var popup = popupCandidates[details.tabId];
         if ( popup instanceof PopupCandidate ) {
             popup.launchSelfDestruction();
@@ -187,7 +187,7 @@ vAPI.tabs.registerListeners = function() {
     //          http://raymondhill.net/ublock/popup.html
     var reGoodForWebRequestAPI = /^https?:\/\//;
 
-    var onCreatedNavigationTarget = function(details) {
+    var onCreatedNavigationTarget = (details) => {
         //console.debug('onCreatedNavigationTarget: popup candidate tab id %d = "%s"', details.tabId, details.url);
         if ( reGoodForWebRequestAPI.test(details.url) === false ) {
             details.frameId = 0;
@@ -197,7 +197,7 @@ vAPI.tabs.registerListeners = function() {
         popupCandidateTest(details);
     };
 
-    var onBeforeNavigate = function(details) {
+    var onBeforeNavigate = (details) => {
         if ( details.frameId !== 0 ) {
             return;
         }
@@ -212,7 +212,7 @@ vAPI.tabs.registerListeners = function() {
         onUpdatedClient(tabId, changeInfo, tab);
     };
 
-    var onCommitted = function(details) {
+    var onCommitted = (details) => {
         if ( details.frameId !== 0 ) {
             return;
         }
@@ -240,8 +240,8 @@ vAPI.tabs.registerListeners = function() {
 
 /******************************************************************************/
 
-vAPI.tabs.get = function(tabId, callback) {
-    var onTabReady = function(tab) {
+vAPI.tabs.get = (tabId, callback) => {
+    var onTabReady = (tab) =>{
         // https://code.google.com/p/chromium/issues/detail?id=410868#c8
         if ( chrome.runtime.lastError ) {
             /* noop */
@@ -260,7 +260,7 @@ vAPI.tabs.get = function(tabId, callback) {
         return;
     }
 
-    var onTabReceived = function(tabs) {
+    var onTabReceived = (tabs) => {
         // https://code.google.com/p/chromium/issues/detail?id=410868#c8
         if ( chrome.runtime.lastError ) {
             /* noop */
@@ -279,7 +279,7 @@ vAPI.tabs.get = function(tabId, callback) {
 //   active: false, // opens the tab in background - true and undefined: foreground
 //   select: true // if a tab is already opened with that url, then select it instead of opening a new one
 
-vAPI.tabs.open = function(details) {
+vAPI.tabs.open = (details) => {
     var targetURL = details.url;
     if ( typeof targetURL !== 'string' || targetURL === '' ) {
         return null;
@@ -290,12 +290,12 @@ vAPI.tabs.open = function(details) {
     }
 
     // dealing with Chrome's asynchronous API
-    var wrapper = function() {
+    var wrapper = () => {
         if ( details.active === undefined ) {
             details.active = true;
         }
 
-        var subWrapper = function() {
+        var subWrapper = () => {
             var _details = {
                 url: targetURL,
                 active: !!details.active
@@ -303,7 +303,7 @@ vAPI.tabs.open = function(details) {
 
             // Opening a tab from incognito window won't focus the window
             // in which the tab was opened
-            var focusWindow = function(tab) {
+            var focusWindow = (tab) => {
                 if ( tab.active ) {
                     chrome.windows.update(tab.windowId, { focused: true });
                 }
@@ -319,7 +319,7 @@ vAPI.tabs.open = function(details) {
             }
 
             // update doesn't accept index, must use move
-            chrome.tabs.update(toChromiumTabId(details.tabId), _details, function(tab) {
+            chrome.tabs.update(toChromiumTabId(details.tabId), _details, (tab) => {
                 // if the tab doesn't exist
                 if ( vAPI.lastError() ) {
                     chrome.tabs.create(_details, focusWindow);
@@ -334,7 +334,7 @@ vAPI.tabs.open = function(details) {
             return;
         }
 
-        vAPI.tabs.get(null, function(tab) {
+        vAPI.tabs.get(null, (tab) => {
             if ( tab ) {
                 details.index = tab.index + 1;
             } else {
@@ -349,16 +349,16 @@ vAPI.tabs.open = function(details) {
         wrapper();
         return;
     }
-    
+
     if ( /^Mozilla-Firefox-5[2-5]\./.test(vAPI.webextFlavor) ) {
         wrapper();
         return;
     }
 
-    chrome.tabs.query({ url: targetURL }, function(tabs) {
+    chrome.tabs.query({ url: targetURL }, (tabs) => {
         var tab = tabs[0];
         if ( tab ) {
-            chrome.tabs.update(tab.id, { active: true }, function(tab) {
+            chrome.tabs.update(tab.id, { active: true }, (tab) => {
                 chrome.windows.update(tab.windowId, { focused: true });
             });
         } else {
@@ -371,7 +371,7 @@ vAPI.tabs.open = function(details) {
 
 // Replace the URL of a tab. Noop if the tab does not exist.
 
-vAPI.tabs.replace = function(tabId, url) {
+vAPI.tabs.replace = (tabId, url) => {
     tabId = toChromiumTabId(tabId);
     if ( tabId === 0 ) {
         return;
@@ -384,7 +384,7 @@ vAPI.tabs.replace = function(tabId, url) {
         targetURL = vAPI.getURL(targetURL);
     }
 
-    chrome.tabs.update(tabId, { url: targetURL }, function() {
+    chrome.tabs.update(tabId, { url: targetURL }, () => {
         // https://code.google.com/p/chromium/issues/detail?id=410868#c8
         if ( chrome.runtime.lastError ) {
             /* noop */
@@ -394,13 +394,13 @@ vAPI.tabs.replace = function(tabId, url) {
 
 /******************************************************************************/
 
-vAPI.tabs.remove = function(tabId) {
+vAPI.tabs.remove = (tabId) => {
     tabId = toChromiumTabId(tabId);
     if ( tabId === 0 ) {
         return;
     }
 
-    var onTabRemoved = function() {
+    var onTabRemoved = () => {
         // https://code.google.com/p/chromium/issues/detail?id=410868#c8
         if ( chrome.runtime.lastError ) {
             /* noop */
@@ -412,13 +412,13 @@ vAPI.tabs.remove = function(tabId) {
 
 /******************************************************************************/
 
-vAPI.tabs.reload = function(tabId /*, flags*/) {
+vAPI.tabs.reload = (tabId /*, flags*/) => {
     tabId = toChromiumTabId(tabId);
     if ( tabId === 0 ) {
         return;
     }
 
-    var onReloaded = function() {
+    var onReloaded = () => {
         // https://code.google.com/p/chromium/issues/detail?id=410868#c8
         if ( chrome.runtime.lastError ) {
             /* noop */
@@ -430,8 +430,8 @@ vAPI.tabs.reload = function(tabId /*, flags*/) {
 
 /******************************************************************************/
 
-vAPI.tabs.injectScript = function(tabId, details, callback) {
-    var onScriptExecuted = function() {
+vAPI.tabs.injectScript = (tabId, details, callback) => {
+    var onScriptExecuted = () => {
         // https://code.google.com/p/chromium/issues/detail?id=410868#c8
         if ( chrome.runtime.lastError ) {
             /* noop */
@@ -449,7 +449,7 @@ vAPI.tabs.injectScript = function(tabId, details, callback) {
 
 /******************************************************************************/
 
-var IconState = function(badge, img) {
+var IconState = (badge, img) => {
     this.badge = badge;
         // ^ a number -- the badge 'value'
     this.img = img;
@@ -473,13 +473,13 @@ var ICON_PATHS = {
 // Since we may be called asynchronously, the tab id may not exist
 // anymore, so this ensures it does still exist.
 
-vAPI.setIcon = function(tabId, iconStatus, badge) {
+vAPI.setIcon = (tabId, iconStatus, badge) => {
     tabId = toChromiumTabId(tabId);
     if ( tabId === 0 ) {
         return;
     }
 
-    var onIconReady = function() {
+    var onIconReady = () => {
         if ( vAPI.lastError() ) {
             return;
         }
@@ -518,13 +518,13 @@ vAPI.messaging = {
 
 /******************************************************************************/
 
-vAPI.messaging.listen = function(listenerName, callback) {
+vAPI.messaging.listen = (listenerName, callback) => {
     this.listeners[listenerName] = callback;
 };
 
 /******************************************************************************/
 
-vAPI.messaging.onPortMessage = function(request, port) {
+vAPI.messaging.onPortMessage = (request, port) => {
     var callback = vAPI.messaging.NOOPFUNC;
     if ( request.requestId !== undefined ) {
         callback = CallbackWrapper.factory(port, request).callback;
@@ -556,7 +556,7 @@ vAPI.messaging.onPortMessage = function(request, port) {
 
 /******************************************************************************/
 
-vAPI.messaging.onPortDisconnect = function(port) {
+vAPI.messaging.onPortDisconnect = (port) => {
     port.onDisconnect.removeListener(vAPI.messaging.onPortDisconnect);
     port.onMessage.removeListener(vAPI.messaging.onPortMessage);
     delete vAPI.messaging.ports[port.name];
@@ -564,7 +564,7 @@ vAPI.messaging.onPortDisconnect = function(port) {
 
 /******************************************************************************/
 
-vAPI.messaging.onPortConnect = function(port) {
+vAPI.messaging.onPortConnect = (port) => {
     port.onDisconnect.addListener(vAPI.messaging.onPortDisconnect);
     port.onMessage.addListener(vAPI.messaging.onPortMessage);
     vAPI.messaging.ports[port.name] = port;
@@ -572,14 +572,14 @@ vAPI.messaging.onPortConnect = function(port) {
 
 /******************************************************************************/
 
-vAPI.messaging.setup = function(defaultHandler) {
+vAPI.messaging.setup = (defaultHandler) => {
     // Already setup?
     if ( this.defaultHandler !== null ) {
         return;
     }
 
     if ( typeof defaultHandler !== 'function' ) {
-        defaultHandler = function(){ return vAPI.messaging.UNHANDLED; };
+        defaultHandler = () =>{ return vAPI.messaging.UNHANDLED; };
     }
     this.defaultHandler = defaultHandler;
 
@@ -588,7 +588,7 @@ vAPI.messaging.setup = function(defaultHandler) {
 
 /******************************************************************************/
 
-vAPI.messaging.broadcast = function(message) {
+vAPI.messaging.broadcast = (message) => {
     var messageWrapper = {
         broadcast: true,
         msg: message
@@ -621,7 +621,7 @@ vAPI.messaging.broadcast = function(message) {
 //
 // http://jsperf.com/closure-no-closure/2
 
-var CallbackWrapper = function(port, request) {
+var CallbackWrapper = (port, request) => {
     // No need to bind every single time
     this.callback = this.proxy.bind(this);
     this.messaging = vAPI.messaging;
@@ -630,7 +630,7 @@ var CallbackWrapper = function(port, request) {
 
 CallbackWrapper.junkyard = [];
 
-CallbackWrapper.factory = function(port, request) {
+CallbackWrapper.factory = (port, request) => {
     var wrapper = CallbackWrapper.junkyard.pop();
     if ( wrapper ) {
         wrapper.init(port, request);
@@ -639,12 +639,12 @@ CallbackWrapper.factory = function(port, request) {
     return new CallbackWrapper(port, request);
 };
 
-CallbackWrapper.prototype.init = function(port, request) {
+CallbackWrapper.prototype.init = (port, request) => {
     this.port = port;
     this.request = request;
 };
 
-CallbackWrapper.prototype.proxy = function(response) {
+CallbackWrapper.prototype.proxy = (response) => {
     // https://github.com/uBlockAdmin/uBlock/issues/383
     if ( this.messaging.ports.hasOwnProperty(this.port.name) ) {
         this.port.postMessage({
@@ -664,11 +664,11 @@ vAPI.net = {};
 
 /******************************************************************************/
 
-vAPI.net.registerListeners = function() {
+vAPI.net.registerListeners = () => {
     var µb = µBlock;
     var µburi = µb.URI;
 
-    var normalizeRequestDetails = function(details) {
+    var normalizeRequestDetails = (details) => {
         µburi.set(details.url);
 
         details.tabId = details.tabId.toString();
@@ -706,7 +706,7 @@ vAPI.net.registerListeners = function() {
     };
 
     var onBeforeRequestClient = this.onBeforeRequest.callback;
-    var onBeforeRequest = function(details) {
+    var onBeforeRequest = (details) => {
         normalizeRequestDetails(details);
         return onBeforeRequestClient(details);
     };
@@ -726,7 +726,7 @@ vAPI.net.registerListeners = function() {
     );
 
     var onHeadersReceivedClient = this.onHeadersReceived.callback;
-    var onHeadersReceived = function(details) {
+    var onHeadersReceived = (details) => {
         normalizeRequestDetails(details);
         return onHeadersReceivedClient(details);
     };
@@ -743,13 +743,13 @@ vAPI.net.registerListeners = function() {
 /******************************************************************************/
 
 vAPI.contextMenu = {
-    create: function(details, callback) {
+    create: (details, callback) => {
         this.menuId = details.id;
         this.callback = callback;
         chrome.contextMenus.create(details);
         chrome.contextMenus.onClicked.addListener(this.callback);
     },
-    remove: function() {
+    remove: () => {
         chrome.contextMenus.onClicked.removeListener(this.callback);
         chrome.contextMenus.remove(this.menuId);
     }
@@ -757,7 +757,7 @@ vAPI.contextMenu = {
 
 /******************************************************************************/
 
-vAPI.lastError = function() {
+vAPI.lastError = () => {
     return chrome.runtime.lastError;
 };
 
@@ -768,14 +768,14 @@ vAPI.lastError = function() {
 // in already opened web pages, to remove whatever nuisance could make it to
 // the web pages before uBlock was ready.
 
-vAPI.onLoadAllCompleted = function() {
+vAPI.onLoadAllCompleted = () => {
     // http://code.google.com/p/chromium/issues/detail?id=410868#c11
     // Need to be sure to access `vAPI.lastError()` to prevent
     // spurious warnings in the console.
-    var scriptDone = function() {
+    var scriptDone = () => {
         vAPI.lastError();
     };
-    var scriptEnd = function(tabId) {
+    var scriptEnd = (tabId) => {
         if ( vAPI.lastError() ) {
             return;
         }
@@ -785,19 +785,19 @@ vAPI.onLoadAllCompleted = function() {
             runAt: 'document_idle'
         }, scriptDone);
     };
-    var scriptStart = function(tabId) {
+    var scriptStart = (tabId) => {
         vAPI.tabs.injectScript(tabId, {
             file: 'js/vapi-client.js',
             allFrames: true,
             runAt: 'document_start'
-        }, function(){ });
+        }, () =>{ });
         vAPI.tabs.injectScript(tabId, {
             file: 'js/contentscript-start.js',
             allFrames: true,
             runAt: 'document_start'
-        }, function(){ scriptEnd(tabId); });
+        }, () =>{ scriptEnd(tabId); });
     };
-    var bindToTabs = function(tabs) {
+    var bindToTabs = (tabs) => {
         var µb = µBlock;
         var i = tabs.length, tab;
         while ( i-- ) {
@@ -817,7 +817,7 @@ vAPI.onLoadAllCompleted = function() {
         // Nope; looks like older than v23
         chrome.browserAction._setIcon = chrome.browserAction.setIcon;
         // Shim
-        chrome.browserAction.setIcon = function(x, callback) {
+        chrome.browserAction.setIcon = (x, callback) => {
             this._setIcon({path: x.path[19], tabId: x.tabId}, callback);
         };
         // maybe this time... I'll win
@@ -830,11 +830,11 @@ vAPI.onLoadAllCompleted = function() {
 
 /******************************************************************************/
 
-vAPI.punycodeHostname = function(hostname) {
+vAPI.punycodeHostname = (hostname) => {
     return hostname;
 };
 
-vAPI.punycodeURL = function(url) {
+vAPI.punycodeURL = (url) => {
     return url;
 };
 
