@@ -23,13 +23,13 @@
 
 /******************************************************************************/
 
-(function() {
+(() => {
 
 'use strict';
 
 /******************************************************************************/
 
-var resizeFrame = function() {
+var resizeFrame = () => {
     var navRect = document.getElementById('dashboard-nav').getBoundingClientRect();
     var viewRect = document.documentElement.getBoundingClientRect();
     document.getElementById('iframe').style.setProperty('height', (viewRect.bottom - navRect.bottom) + 'px');
@@ -37,7 +37,7 @@ var resizeFrame = function() {
 
 /******************************************************************************/
 
-var loadDashboardPanel = function(tab, q) {
+var loadDashboardPanel = (tab, q) => {
     var tabButton = uDom('[href="#' + tab + '"]');
     if ( !tabButton ) {
         return;
@@ -50,14 +50,14 @@ var loadDashboardPanel = function(tab, q) {
 
 /******************************************************************************/
 
-var onTabClickHandler = function(e) {
+var onTabClickHandler = (e) => {
     loadDashboardPanel(this.hash.slice(1));
     e.preventDefault();
 };
 
 /******************************************************************************/
 
-uDom.onLoad(function() {
+uDom.onLoad(() => {
     window.addEventListener('resize', resizeFrame);
     resizeFrame();
 

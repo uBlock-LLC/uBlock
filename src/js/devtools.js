@@ -24,7 +24,7 @@
 
 /******************************************************************************/
 
-(function() {
+(() => {
 
 'use strict';
 
@@ -34,9 +34,9 @@ var messager = vAPI.messaging.channel('devtools.js');
 
 /******************************************************************************/
 
-var renderPageSelector = function(targetTabId) {
+var renderPageSelector = (targetTabId) => {
     var selectedTabId = targetTabId || uDom('#pageSelector').val();
-    var onDataReceived = function(pageTitles) {
+    var onDataReceived = (pageTitles) => {
         if ( pageTitles.hasOwnProperty(selectedTabId) === false ) {
             selectedTabId = pageTitles[0];
         }
@@ -63,13 +63,13 @@ var renderPageSelector = function(targetTabId) {
 
 /******************************************************************************/
 
-var pageSelectorChanged = function() {
+var pageSelectorChanged = () => {
     selectPage();
 };
 
 /******************************************************************************/
 
-var selectPage = function() {
+var selectPage = () => {
     var tabId = uDom('#pageSelector').val() || '';
     var inspector = uDom('#content');
     var currentSrc = inspector.attr('src');
@@ -94,7 +94,7 @@ var selectPage = function() {
 
 /******************************************************************************/
 
-var togglePopup = function() {
+var togglePopup = () => {
     var tabId = uDom('#pageSelector').val() || '';
     var body = uDom('body');
     body.toggleClass('popupEnabled');
@@ -106,7 +106,7 @@ var togglePopup = function() {
 
 /******************************************************************************/
 
-var resizePopup = function() {
+var resizePopup = () => {
     var popup = document.getElementById('popup');
     popup.style.width = popup.contentWindow.document.body.clientWidth + 'px';
     popup.style.height = popup.contentWindow.document.body.clientHeight + 'px';
@@ -114,7 +114,7 @@ var resizePopup = function() {
 
 /******************************************************************************/
 
-var onPopupLoaded = function() {
+var onPopupLoaded = () => {
     setTimeout(resizePopup, 0);
 
     if ( popupObserver !== null ) {
@@ -151,7 +151,7 @@ var popupObserver = null;
 
 /******************************************************************************/
 
-uDom.onLoad(function() {
+uDom.onLoad(() => {
     var tabId;
 
     // Extract the tab id of the page we need to pull the log
@@ -166,10 +166,9 @@ uDom.onLoad(function() {
     renderPageSelector(tabId);
 
     uDom('#pageSelector').on('change', pageSelectorChanged);
-    uDom('#refresh').on('click', function() { renderPageSelector(); } );
+    uDom('#refresh').on('click', () => { renderPageSelector(); } );
 });
 
 /******************************************************************************/
 
 })();
-

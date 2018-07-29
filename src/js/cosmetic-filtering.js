@@ -24,7 +24,7 @@
 
 /******************************************************************************/
 
-µBlock.cosmeticFilteringEngine = (function(){
+µBlock.cosmeticFilteringEngine = (() =>{
 
 'use strict';
 
@@ -84,11 +84,11 @@ var histogram = function(label, buckets) {
 //   #A9AdsMiddleBoxTop
 //   .AD-POST
 
-var FilterPlain = function(s) {
+var FilterPlain = (s) => {
     this.s = s;
 };
 
-FilterPlain.prototype.retrieve = function(s, out) {
+FilterPlain.prototype.retrieve = (s, out) => {
     if ( s === this.s ) {
         out.push(this.s);
     }
@@ -96,11 +96,11 @@ FilterPlain.prototype.retrieve = function(s, out) {
 
 FilterPlain.prototype.fid = '#';
 
-FilterPlain.prototype.toSelfie = function() {
+FilterPlain.prototype.toSelfie = () => {
     return this.s;
 };
 
-FilterPlain.fromSelfie = function(s) {
+FilterPlain.fromSelfie = (s) => {
     return new FilterPlain(s);
 };
 
@@ -112,11 +112,11 @@ FilterPlain.fromSelfie = function(s) {
 //   #adframe:not(frameset)
 //   .l-container > #fishtank
 
-var FilterPlainMore = function(s) {
+var FilterPlainMore = (s) => {
     this.s = s;
 };
 
-FilterPlainMore.prototype.retrieve = function(s, out) {
+FilterPlainMore.prototype.retrieve = (s, out) => {
     if ( s === this.s.slice(0, s.length) ) {
         out.push(this.s);
     }
@@ -124,17 +124,17 @@ FilterPlainMore.prototype.retrieve = function(s, out) {
 
 FilterPlainMore.prototype.fid = '#+';
 
-FilterPlainMore.prototype.toSelfie = function() {
+FilterPlainMore.prototype.toSelfie = () => {
     return this.s;
 };
 
-FilterPlainMore.fromSelfie = function(s) {
+FilterPlainMore.fromSelfie = (s) => {
     return new FilterPlainMore(s);
 };
 
 /******************************************************************************/
 
-var FilterBucket = function(a, b) {
+var FilterBucket = (a, b) => {
     this.f = null;
     this.filters = [];
     if ( a !== undefined ) {
@@ -145,11 +145,11 @@ var FilterBucket = function(a, b) {
     }
 };
 
-FilterBucket.prototype.add = function(a) {
+FilterBucket.prototype.add = (a) => {
     this.filters.push(a);
 };
 
-FilterBucket.prototype.retrieve = function(s, out) {
+FilterBucket.prototype.retrieve = (s, out) => {
     var i = this.filters.length;
     while ( i-- ) {
         this.filters[i].retrieve(s, out);
@@ -158,11 +158,11 @@ FilterBucket.prototype.retrieve = function(s, out) {
 
 FilterBucket.prototype.fid = '[]';
 
-FilterBucket.prototype.toSelfie = function() {
+FilterBucket.prototype.toSelfie = () => {
     return this.filters.length.toString();
 };
 
-FilterBucket.fromSelfie = function() {
+FilterBucket.fromSelfie = () => {
     return new FilterBucket();
 };
 
@@ -178,12 +178,12 @@ FilterBucket.fromSelfie = function() {
 //   japantimes.co.jp##table[align="right"][width="250"]
 //   mobilephonetalk.com##[align="center"] > b > a[href^="http://tinyurl.com/"]
 
-var FilterHostname = function(s, hostname) {
+var FilterHostname = (s, hostname) => {
     this.s = s;
     this.hostname = hostname;
 };
 
-FilterHostname.prototype.retrieve = function(hostname, out) {
+FilterHostname.prototype.retrieve = (hostname, out) => {
     if ( hostname.slice(-this.hostname.length) === this.hostname ) {
         out.push(this.s);
     }
@@ -191,11 +191,11 @@ FilterHostname.prototype.retrieve = function(hostname, out) {
 
 FilterHostname.prototype.fid = 'h';
 
-FilterHostname.prototype.toSelfie = function() {
+FilterHostname.prototype.toSelfie = () => {
     return encode(this.s) + '\t' + this.hostname;
 };
 
-FilterHostname.fromSelfie = function(s) {
+FilterHostname.fromSelfie = (s) => {
     var pos = s.indexOf('\t');
     return new FilterHostname(decode(s.slice(0, pos)), s.slice(pos + 1));
 };
@@ -206,12 +206,12 @@ FilterHostname.fromSelfie = function(s) {
 // Examples:
 //   google.*###cnt #center_col > #res > #topstuff > .ts
 
-var FilterEntity = function(s, entity) {
+const FilterEntity = (s, entity) => {
     this.s = s;
     this.entity = entity;
 };
 
-FilterEntity.prototype.retrieve = function(entity, out) {
+FilterEntity.prototype.retrieve = (entity, out) => {
     if ( entity.slice(-this.entity.length) === this.entity ) {
         out.push(this.s);
     }
@@ -219,11 +219,11 @@ FilterEntity.prototype.retrieve = function(entity, out) {
 
 FilterEntity.prototype.fid = 'e';
 
-FilterEntity.prototype.toSelfie = function() {
+FilterEntity.prototype.toSelfie = () => {
     return encode(this.s) + '\t' + this.entity;
 };
 
-FilterEntity.fromSelfie = function(s) {
+FilterEntity.fromSelfie = (s) => {
     var pos = s.indexOf('\t');
     return new FilterEntity(decode(s.slice(0, pos)), s.slice(pos + 1));
 };
@@ -231,7 +231,7 @@ FilterEntity.fromSelfie = function(s) {
 /******************************************************************************/
 /******************************************************************************/
 
-var FilterParser = function() {
+var FilterParser = () => {
     this.prefix = '';
     this.suffix = '';
     this.unhide = 0;
@@ -243,7 +243,7 @@ var FilterParser = function() {
 
 /******************************************************************************/
 
-FilterParser.prototype.reset = function() {
+FilterParser.prototype.reset = () => {
     this.prefix = '';
     this.suffix = '';
     this.unhide = 0;
@@ -255,7 +255,7 @@ FilterParser.prototype.reset = function() {
 
 /******************************************************************************/
 
-FilterParser.prototype.parse = function(s) {
+FilterParser.prototype.parse = (s) => {
     // important!
     this.reset();
 
@@ -295,7 +295,7 @@ FilterParser.prototype.parse = function(s) {
 /******************************************************************************/
 /******************************************************************************/
 
-var SelectorCacheEntry = function() {
+var SelectorCacheEntry = () => {
     this.reset();
 };
 
@@ -303,7 +303,7 @@ var SelectorCacheEntry = function() {
 
 SelectorCacheEntry.junkyard = [];
 
-SelectorCacheEntry.factory = function() {
+SelectorCacheEntry.factory = () => {
     var entry = SelectorCacheEntry.junkyard.pop();
     if ( entry ) {
         return entry.reset();
@@ -318,7 +318,7 @@ SelectorCacheEntry.prototype.netHighWaterMark = 30;
 
 /******************************************************************************/
 
-SelectorCacheEntry.prototype.reset = function() {
+SelectorCacheEntry.prototype.reset = () => {
     this.cosmetic = {};
     this.net = {};
     this.netCount = 0;
@@ -328,7 +328,7 @@ SelectorCacheEntry.prototype.reset = function() {
 
 /******************************************************************************/
 
-SelectorCacheEntry.prototype.dispose = function() {
+SelectorCacheEntry.prototype.dispose = () => {
     this.cosmetic = this.net = null;
     if ( SelectorCacheEntry.junkyard.length < 25 ) {
         SelectorCacheEntry.junkyard.push(this);
@@ -337,7 +337,7 @@ SelectorCacheEntry.prototype.dispose = function() {
 
 /******************************************************************************/
 
-SelectorCacheEntry.prototype.addCosmetic = function(selectors) {
+SelectorCacheEntry.prototype.addCosmetic = (selectors) => {
     var dict = this.cosmetic;
     var i = selectors.length || 0;
     while ( i-- ) {
@@ -347,7 +347,7 @@ SelectorCacheEntry.prototype.addCosmetic = function(selectors) {
 
 /******************************************************************************/
 
-SelectorCacheEntry.prototype.addNet = function(selectors) {
+SelectorCacheEntry.prototype.addNet = (selectors) => {
     if ( typeof selectors === 'string' ) {
         this.addNetOne(selectors, Date.now());
     } else {
@@ -360,7 +360,7 @@ SelectorCacheEntry.prototype.addNet = function(selectors) {
         return;
     }
     var dict = this.net;
-    var keys = Object.keys(dict).sort(function(a, b) {
+    var keys = Object.keys(dict).sort((a, b) => {
         return dict[b] - dict[a];
     }).slice(this.netLowWaterMark);
     var i = keys.length;
@@ -371,7 +371,7 @@ SelectorCacheEntry.prototype.addNet = function(selectors) {
 
 /******************************************************************************/
 
-SelectorCacheEntry.prototype.addNetOne = function(selector, now) {
+SelectorCacheEntry.prototype.addNetOne = (selector, now) => {
     var dict = this.net;
     if ( dict[selector] === undefined ) {
         this.netCount += 1;
@@ -381,7 +381,7 @@ SelectorCacheEntry.prototype.addNetOne = function(selector, now) {
 
 /******************************************************************************/
 
-SelectorCacheEntry.prototype.addNetMany = function(selectors, now) {
+SelectorCacheEntry.prototype.addNetMany = (selectors, now) => {
     var dict = this.net;
     var i = selectors.length || 0;
     var selector;
@@ -396,7 +396,7 @@ SelectorCacheEntry.prototype.addNetMany = function(selectors, now) {
 
 /******************************************************************************/
 
-SelectorCacheEntry.prototype.add = function(selectors, type) {
+SelectorCacheEntry.prototype.add = (selectors, type) => {
     this.lastAccessTime = Date.now();
     if ( type === 'cosmetic' ) {
         this.addCosmetic(selectors);
@@ -408,7 +408,7 @@ SelectorCacheEntry.prototype.add = function(selectors, type) {
 /******************************************************************************/
 
 // https://github.com/uBlockAdmin/uBlock/issues/420
-SelectorCacheEntry.prototype.remove = function(type) {
+SelectorCacheEntry.prototype.remove = (type) => {
     this.lastAccessTime = Date.now();
     if ( type === undefined || type === 'cosmetic' ) {
         this.cosmetic = {};
@@ -421,7 +421,7 @@ SelectorCacheEntry.prototype.remove = function(type) {
 
 /******************************************************************************/
 
-SelectorCacheEntry.prototype.retrieve = function(type, out) {
+SelectorCacheEntry.prototype.retrieve = (type, out) => {
     this.lastAccessTime = Date.now();
     var dict = type === 'cosmetic' ? this.cosmetic : this.net;
     for ( var selector in dict ) {
@@ -446,7 +446,7 @@ SelectorCacheEntry.prototype.retrieve = function(type, out) {
 // +-- filter type (0=hide 1=unhide)
 //
 
-var makeHash = function(unhide, token, mask) {
+var makeHash = (unhide, token, mask) => {
     // Ref: Given a URL, returns a unique 4-character long hash string
     // Based on: FNV32a
     // http://www.isthe.com/chongo/tech/comp/fnv/index.html#FNV-reference-source
@@ -504,7 +504,7 @@ var makeHash = function(unhide, token, mask) {
 // Generic filters can only be enforced once the main document is loaded.
 // Specific filers can be enforced before the main document is loaded.
 
-var FilterContainer = function() {
+var FilterContainer = () => {
     this.domainHashMask = (1 << 10) - 1; // 10 bits
     this.genericHashMask = (1 << 15) - 1; // 15 bits
     this.type0NoDomainHash = 'type0NoDomain';
@@ -523,7 +523,7 @@ var FilterContainer = function() {
 
 // Reset all, thus reducing to a minimum memory footprint of the context.
 
-FilterContainer.prototype.reset = function() {
+FilterContainer.prototype.reset = () => {
     this.parser.reset();
     this.µburi = µb.URI;
     this.frozen = false;
@@ -570,7 +570,7 @@ FilterContainer.prototype.div = document.createElement('div');
 // http://caniuse.com/#feat=matchesselector
 
 if ( typeof FilterContainer.prototype.div.matches === 'function' ) {
-    FilterContainer.prototype.isValidSelector = function(s) {
+    FilterContainer.prototype.isValidSelector = (s) => {
         try {
             this.div.matches(s);
         } catch (e) {
@@ -580,14 +580,14 @@ if ( typeof FilterContainer.prototype.div.matches === 'function' ) {
         return true;
     };
 } else {
-    FilterContainer.prototype.isValidSelector = function() {
+    FilterContainer.prototype.isValidSelector = () => {
         return true;
     };
 }
 
 /******************************************************************************/
 
-FilterContainer.prototype.compile = function(s, out) {
+FilterContainer.prototype.compile = (s, out) => {
     var parsed = this.parser.parse(s);
     if ( parsed.cosmetic === false ) {
         return false;
@@ -637,7 +637,7 @@ FilterContainer.prototype.compile = function(s, out) {
 
 /******************************************************************************/
 
-FilterContainer.prototype.compileGenericSelector = function(parsed, out) {
+FilterContainer.prototype.compileGenericSelector = (parsed, out) => {
     var selector = parsed.suffix;
 
     // https://github.com/uBlockAdmin/uBlock/issues/497
@@ -714,7 +714,7 @@ FilterContainer.prototype.reHighMedium = /^\[href\^="https?:\/\/([^"]{8})[^"]*"\
 
 /******************************************************************************/
 
-FilterContainer.prototype.compileHostnameSelector = function(hostname, parsed, out) {
+FilterContainer.prototype.compileHostnameSelector = (hostname, parsed, out) => {
     // https://github.com/uBlockAdmin/uBlock/issues/145
     var unhide = parsed.unhide;
     if ( hostname.charAt(0) === '~' ) {
@@ -748,7 +748,7 @@ FilterContainer.prototype.compileHostnameSelector = function(hostname, parsed, o
 
 /******************************************************************************/
 
-FilterContainer.prototype.compileEntitySelector = function(hostname, parsed, out) {
+FilterContainer.prototype.compileEntitySelector = (hostname, parsed, out) => {
     var entity = hostname.slice(0, -2);
     out.push(
         'c\v' +
@@ -760,7 +760,7 @@ FilterContainer.prototype.compileEntitySelector = function(hostname, parsed, out
 
 /******************************************************************************/
 
-FilterContainer.prototype.fromCompiledContent = function(text, lineBeg, skip) {
+FilterContainer.prototype.fromCompiledContent = (text, lineBeg, skip) => {
     if ( skip ) {
         return this.skipCompiledContent(text, lineBeg);
     }
@@ -865,7 +865,7 @@ FilterContainer.prototype.fromCompiledContent = function(text, lineBeg, skip) {
 
 /******************************************************************************/
 
-FilterContainer.prototype.skipCompiledContent = function(text, lineBeg) {
+FilterContainer.prototype.skipCompiledContent = (text, lineBeg) => {
     var lineEnd;
     var textEnd = text.length;
 
@@ -884,7 +884,7 @@ FilterContainer.prototype.skipCompiledContent = function(text, lineBeg) {
 
 /******************************************************************************/
 
-FilterContainer.prototype.freeze = function() {
+FilterContainer.prototype.freeze = () => {
     this.duplicateBuster = {};
 
     if ( this.highHighGenericHide !== '' ) {
@@ -899,8 +899,8 @@ FilterContainer.prototype.freeze = function() {
 
 /******************************************************************************/
 
-FilterContainer.prototype.toSelfie = function() {
-    var selfieFromDict = function(dict) {
+FilterContainer.prototype.toSelfie = () => {
+    var selfieFromDict = (dict) => {
         var selfie = [];
         var bucket, ff, n, i, f;
         for ( var k in dict ) {
@@ -943,7 +943,7 @@ FilterContainer.prototype.toSelfie = function() {
 
 /******************************************************************************/
 
-FilterContainer.prototype.fromSelfie = function(selfie) {
+FilterContainer.prototype.fromSelfie = (selfie) => {
     var factories = {
         '[]': FilterBucket,
          '#': FilterPlain,
@@ -952,7 +952,7 @@ FilterContainer.prototype.fromSelfie = function(selfie) {
          'e': FilterEntity
     };
 
-    var dictFromSelfie = function(selfie) {
+    var dictFromSelfie = (selfie) => {
         var dict = {};
         var dictKey;
         var bucket = null;
@@ -1003,7 +1003,7 @@ FilterContainer.prototype.fromSelfie = function(selfie) {
 
 /******************************************************************************/
 
-FilterContainer.prototype.triggerSelectorCachePruner = function() {
+FilterContainer.prototype.triggerSelectorCachePruner = () => {
     if ( this.selectorCacheTimer !== null ) {
         return;
     }
@@ -1020,7 +1020,7 @@ FilterContainer.prototype.triggerSelectorCachePruner = function() {
 
 /******************************************************************************/
 
-FilterContainer.prototype.addToSelectorCache = function(details) {
+FilterContainer.prototype.addToSelectorCache = (details) => {
     var hostname = details.hostname;
     if ( typeof hostname !== 'string' || hostname === '' ) {
         return;
@@ -1040,7 +1040,7 @@ FilterContainer.prototype.addToSelectorCache = function(details) {
 
 /******************************************************************************/
 
-FilterContainer.prototype.removeFromSelectorCache = function(targetHostname, type) {
+FilterContainer.prototype.removeFromSelectorCache = (targetHostname, type) => {
     for ( var hostname in this.selectorCache ) {
         if ( this.selectorCache.hasOwnProperty(hostname) === false ) {
             continue;
@@ -1060,7 +1060,7 @@ FilterContainer.prototype.removeFromSelectorCache = function(targetHostname, typ
 
 /******************************************************************************/
 
-FilterContainer.prototype.retrieveFromSelectorCache = function(hostname, type, out) {
+FilterContainer.prototype.retrieveFromSelectorCache = (hostname, type, out) => {
     var entry = this.selectorCache[hostname];
     if ( entry === undefined ) {
         return;
@@ -1070,7 +1070,7 @@ FilterContainer.prototype.retrieveFromSelectorCache = function(hostname, type, o
 
 /******************************************************************************/
 
-FilterContainer.prototype.pruneSelectorCacheAsync = function() {
+FilterContainer.prototype.pruneSelectorCacheAsync = () => {
     this.selectorCacheTimer = null;
     if ( this.selectorCacheCount <= this.selectorCacheCountMin ) {
         return;
@@ -1081,7 +1081,7 @@ FilterContainer.prototype.pruneSelectorCacheAsync = function() {
     // We can't avoid sorting because we have to keep a minimum number of
     //   entries, and these entries should always be the most-recently-used.
     var hostnames = Object.keys(cache)
-        .sort(function(a, b) { return cache[b].lastAccessTime - cache[a].lastAccessTime; })
+        .sort((a, b) => { return cache[b].lastAccessTime - cache[a].lastAccessTime; })
         .slice(this.selectorCacheCountMin);
     var obsolete = Date.now() - this.selectorCacheAgeMax;
     var hostname, entry;
@@ -1102,7 +1102,7 @@ FilterContainer.prototype.pruneSelectorCacheAsync = function() {
 
 /******************************************************************************/
 
-FilterContainer.prototype.retrieveGenericSelectors = function(request) {
+FilterContainer.prototype.retrieveGenericSelectors = (request) => {
     if ( this.acceptedCount === 0 ) {
         return;
     }
@@ -1159,7 +1159,7 @@ FilterContainer.prototype.retrieveGenericSelectors = function(request) {
 
 /******************************************************************************/
 
-FilterContainer.prototype.retrieveDomainSelectors = function(request) {
+FilterContainer.prototype.retrieveDomainSelectors = (request) => {
     if ( !request.locationURL ) {
         return;
     }
@@ -1229,7 +1229,7 @@ FilterContainer.prototype.retrieveDomainSelectors = function(request) {
 
 /******************************************************************************/
 
-FilterContainer.prototype.getFilterCount = function() {
+FilterContainer.prototype.getFilterCount = () => {
     return this.acceptedCount - this.duplicateCount;
 };
 

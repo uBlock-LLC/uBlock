@@ -28,7 +28,7 @@
 
 /******************************************************************************/
 
-(function() {
+(() => {
 
 'use strict';
 
@@ -65,7 +65,7 @@ var localMessager = vAPI.messaging.channel('contentscript-start.js');
 // Domain-based ABP cosmetic filters.
 // These can be inserted before the DOM is loaded.
 
-var cosmeticFilters = function(details) {
+var cosmeticFilters = (details) => {
     var donthideCosmeticFilters = {};
     var hideCosmeticFilters = {};
     var donthide = details.cosmeticDonthide;
@@ -107,7 +107,7 @@ var cosmeticFilters = function(details) {
     vAPI.hideCosmeticFilters = hideCosmeticFilters;
 };
 
-var netFilters = function(details) {
+var netFilters = (details) =>{
     var parent = document.head || document.documentElement;
     if ( !parent ) {
         return;
@@ -122,7 +122,7 @@ var netFilters = function(details) {
     //console.debug('document.querySelectorAll("%s") = %o', text, document.querySelectorAll(text));
 };
 
-var filteringHandler = function(details) {
+var filteringHandler = (details) => {
     var styleTagCount = vAPI.styles.length;
 
     vAPI.skipCosmeticFiltering = !details || details.skipCosmeticFiltering;
@@ -152,7 +152,7 @@ var filteringHandler = function(details) {
     localMessager.close();
 };
 
-var hideElements = function(selectors) {
+var hideElements = (selectors) => {
     if ( document.body === null ) {
         return;
     }

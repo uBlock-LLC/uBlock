@@ -31,7 +31,7 @@
 
 // A single instance of PublicSuffixList is enough.
 
-;(function(root) {
+;((root) => {
 
 'use strict';
 
@@ -63,7 +63,7 @@ var onChangedListeners = [];
 //
 // `hostname` must be a valid ascii-based hostname.
 
-function getDomain(hostname) {
+const getDomain = (hostname) => {
     // A hostname starting with a dot is not a valid hostname.
     if ( !hostname || hostname.charAt(0) === '.' ) {
         return '';
@@ -86,7 +86,7 @@ function getDomain(hostname) {
 //
 // `hostname` must be a valid ascii-based string which respect hostname naming.
 
-function getPublicSuffix(hostname) {
+const getPublicSuffix = (hostname) => {
     if ( !hostname ) {
         return '';
     }
@@ -116,7 +116,7 @@ function getPublicSuffix(hostname) {
 
 // Look up a specific hostname.
 
-function search(store, hostname) {
+const search = (store, hostname) => {
     // Extract TLD
     var pos = hostname.lastIndexOf('.');
     var tld, remainder;
@@ -167,7 +167,7 @@ function search(store, hostname) {
 // Public Suffix List contains unicode characters.
 // Suggestion: use <https://github.com/bestiejs/punycode.js> it's quite good.
 
-function parse(text, toAscii) {
+const parse = (text, toAscii) => {
     exceptions = {};
     rules = {};
 
@@ -246,7 +246,7 @@ function parse(text, toAscii) {
 // Cristallize the storage of suffixes using optimal internal representation
 // for future look up.
 
-function crystallize(store) {
+const crystallize = (store) => {
     var suffixes, suffix, i, l;
 
     for ( var tld in store ) {
@@ -293,7 +293,7 @@ function crystallize(store) {
 
 /******************************************************************************/
 
-function toSelfie() {
+const toSelfie = () => {
     return {
         magic: selfieMagic,
         rules: rules,
@@ -301,7 +301,7 @@ function toSelfie() {
     };
 }
 
-function fromSelfie(selfie) {
+const fromSelfie = (selfie) => {
     if ( typeof selfie !== 'object' || typeof selfie.magic !== 'string' || selfie.magic !== selfieMagic ) {
         return false;
     }
@@ -313,7 +313,7 @@ function fromSelfie(selfie) {
 
 /******************************************************************************/
 
-var addListener = function(listeners, callback) {
+let addListener = (listeners, callback) => {
     if ( typeof callback !== 'function' ) {
         return;
     }
@@ -338,10 +338,10 @@ var callListeners = function(listeners) {
 /******************************************************************************/
 
 var onChanged = {
-    addListener: function(callback) {
+    addListener: (callback) => {
         addListener(onChangedListeners, callback);
     },
-    removeListener: function(callback) {
+    removeListener: (callback) => {
         removeListener(onChangedListeners, callback);
     }
 };
@@ -365,4 +365,3 @@ root.publicSuffixList = {
 /******************************************************************************/
 
 })(this);
-

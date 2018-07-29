@@ -24,7 +24,7 @@
 
 /******************************************************************************/
 
-var µBlock = (function() {
+const µBlock = (() => {
 
 'use strict';
 
@@ -137,7 +137,7 @@ return {
     storageQuota: vAPI.storage.QUOTA_BYTES,
     storageUsed: 0,
 
-    noopFunc: function(){},
+    noopFunc: () =>{},
 
     apiErrorCount: 0,
     contextMenuClientX: -1,

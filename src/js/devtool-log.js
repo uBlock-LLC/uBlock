@@ -25,7 +25,7 @@
 
 /******************************************************************************/
 
-(function() {
+(() => {
 
 'use strict';
 
@@ -52,7 +52,7 @@ var prettyRequestTypes = {
 
 /******************************************************************************/
 
-var escapeHTML = function(s) {
+const escapeHTML = (s) => {
     return s.replace(reEscapeLeftBracket, '&lt;')
             .replace(reEscapeRightBracket, '&gt;');
 };
@@ -62,7 +62,7 @@ var reEscapeRightBracket = />/g;
 
 /******************************************************************************/
 
-var renderURL = function(url, filter) {
+const renderURL = (url, filter) => {
     if ( filter.charAt(0) !== 's' ) {
         return escapeHTML(url);
     }
@@ -106,7 +106,7 @@ var renderURL = function(url, filter) {
 
 /******************************************************************************/
 
-var createRow = function() {
+var createRow = () => {
     var tr = row4Junkyard.pop();
     if ( tr ) {
         tr.className = '';
@@ -122,7 +122,7 @@ var createRow = function() {
 
 /******************************************************************************/
 
-var createGap = function(url) {
+const createGap = (url) => {
     var tr = row1Junkyard.pop();
     if ( !tr ) {
         tr = doc.createElement('tr');
@@ -136,11 +136,11 @@ var createGap = function(url) {
 
 /******************************************************************************/
 
-var renderLogEntry = function(entry) {
+const renderLogEntry = (entry) => {
     var tr = createRow();
 
     // If the request is that of a root frame, insert a gap in the table
-    // in order to visually separate entries for different documents. 
+    // in order to visually separate entries for different documents.
     if ( entry.type === 'main_frame' ) {
         createGap(entry.url);
         tr.classList.add('maindoc');
@@ -178,7 +178,7 @@ var renderLogEntry = function(entry) {
 
 /******************************************************************************/
 
-var renderLogBuffer = function(buffer) {
+let renderLogBuffer = (buffer) => {
     if ( buffer.length === 0 ) {
         return;
     }
@@ -220,7 +220,7 @@ var renderLogBuffer = function(buffer) {
 
 /******************************************************************************/
 
-var truncateLog = function(size) {
+var truncateLog = (size) => {
     if ( size === 0 ) {
         size = 25000;
     }
@@ -241,7 +241,7 @@ var truncateLog = function(size) {
 
 /******************************************************************************/
 
-var onBufferRead = function(buffer) {
+var onBufferRead = (buffer) => {
     if ( Array.isArray(buffer) ) {
         renderLogBuffer(buffer);
     }
@@ -254,13 +254,13 @@ var onBufferRead = function(buffer) {
 // automatically. If called after init time, this will be messy, and this would
 // require a bit more code to ensure no multi time out events.
 
-var readLogBuffer = function() {
+var readLogBuffer = () => {
     messager.send({ what: 'readLogBuffer', tabId: inspectedTabId }, onBufferRead);
 };
 
 /******************************************************************************/
 
-var clearBuffer = function() {
+var clearBuffer = () => {
     var tr;
     while ( tbody.firstChild !== null ) {
         tr = tbody.lastElementChild;
@@ -277,13 +277,13 @@ var clearBuffer = function() {
 
 /******************************************************************************/
 
-var reloadTab = function() {
+var reloadTab = () => {
     messager.send({ what: 'reloadTab', tabId: inspectedTabId });
 };
 
 /******************************************************************************/
 
-var applyFilterToRow = function(row) {
+var applyFilterToRow = (row) => {
     var re = reFilter;
     if ( re === null || re.test(row.textContent) === filterTargetTestResult ) {
         row.classList.remove('hidden');
@@ -294,7 +294,7 @@ var applyFilterToRow = function(row) {
 
 /******************************************************************************/
 
-var applyFilter = function() {
+var applyFilter = () => {
     if ( reFilter === null ) {
         unapplyFilter();
         return;
@@ -317,7 +317,7 @@ var applyFilter = function() {
 
 /******************************************************************************/
 
-var unapplyFilter = function() {
+var unapplyFilter = () => {
     var row = document.querySelector('#content tr');
     if ( row === null ) {
         return;
@@ -330,13 +330,13 @@ var unapplyFilter = function() {
 
 /******************************************************************************/
 
-var onFilterButton = function() {
+var onFilterButton = () => {
     uDom('body').toggleClass('filterOff');
 };
 
 /******************************************************************************/
 
-var onFilterChanged = function() {
+var onFilterChanged = () => {
     var filterExpression = uDom('#filterExpression');
     var filterRaw = filterExpression.val().trim();
 
@@ -380,16 +380,16 @@ var onFilterChanged = function() {
 
 /******************************************************************************/
 
-var onFilterChangedAsync = (function() {
+var onFilterChangedAsync = (() => {
     var timer = null;
 
-    var commit = function() {
+    var commit = () => {
         timer = null;
         onFilterChanged();
         applyFilter();
     };
 
-    var changed = function() {
+    var changed = () => {
         if ( timer !== null ) {
             clearTimeout(timer);
         }
@@ -401,7 +401,7 @@ var onFilterChangedAsync = (function() {
 
 /******************************************************************************/
 
-var onMaxEntriesChanged = function() {
+var onMaxEntriesChanged = () => {
     var raw = uDom(this).val();
     try {
         maxEntries = parseInt(raw, 10);
@@ -423,14 +423,14 @@ var onMaxEntriesChanged = function() {
 
 /******************************************************************************/
 
-uDom.onLoad(function() {
+uDom.onLoad(() => {
     // Extract the tab id of the page we need to pull the log
     var matches = window.location.search.match(/[\?&]tabId=([^&]+)/);
     if ( matches && matches.length === 2 ) {
         inspectedTabId = matches[1];
     }
 
-    var onSettingsReady = function(settings) {
+    const onSettingsReady = (settings) => {
         maxEntries = settings.requestLogMaxEntries || 0;
         uDom('#maxEntries').val(maxEntries || '');
     };

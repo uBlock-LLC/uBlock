@@ -23,7 +23,7 @@
 
 /******************************************************************************/
 
-(function() {
+(() => {
 
 'use strict';
 
@@ -39,7 +39,7 @@ var hasCachedContent = false;
 
 /******************************************************************************/
 
-var onMessage = function(msg) {
+let onMessage = (msg) => {
     switch ( msg.what ) {
         case 'allFilterListsReloaded':
             renderFilterLists();
@@ -61,15 +61,13 @@ var messager = vAPI.messaging.channel('3p-filters.js', onMessage);
 
 /******************************************************************************/
 
-var renderNumber = function(value) {
-    return value.toLocaleString();
-};
+let renderNumber = (value) => return value.toLocaleString();
 
 /******************************************************************************/
 
 // TODO: get rid of background page dependencies
 
-var renderFilterLists = function() {
+let renderFilterLists = () => {
     var listGroupTemplate = uDom('#templates .groupEntry');
     var listEntryTemplate = uDom('#templates .listEntry');
     var listStatsTemplate = vAPI.i18n('3pListsOfBlockedHostsPerListStats');
@@ -80,7 +78,7 @@ var renderFilterLists = function() {
     uDom('#templates').append(uDom('#externalListsDiv'));
 
     // Assemble a pretty blacklist name if possible
-    var listNameFromListKey = function(listKey) {
+    var listNameFromListKey = (listKey) => {
         if ( listKey === listDetails.userFiltersPath ) {
             return userListName;
         }
@@ -92,7 +90,7 @@ var renderFilterLists = function() {
         return listTitle;
     };
 
-    var liFromListEntry = function(listKey) {
+    var liFromListEntry = (listKey) => {
         var elem, text;
         var entry = listDetails.available[listKey];
         var li = listEntryTemplate.clone();
@@ -149,7 +147,7 @@ var renderFilterLists = function() {
         return li;
     };
 
-    var listEntryCountFromGroup = function(listKeys) {
+    let listEntryCountFromGroup = (listKeys) => {
         if ( Array.isArray(listKeys) === false ) {
             return '';
         }
@@ -163,7 +161,7 @@ var renderFilterLists = function() {
         return count === 0 ? '' : '(' + count.toLocaleString() + ')';
     };
 
-    var liFromListGroup = function(groupKey, listKeys) {
+    var liFromListGroup = (groupKey, listKeys) => {
         var liGroup = listGroupTemplate.clone();
         if(groupKey === 'custom') {
             liGroup.append(uDom('#externalListsDiv'));
@@ -177,7 +175,7 @@ var renderFilterLists = function() {
         if ( !listKeys ) {
             return liGroup;
         }
-        listKeys.sort(function(a, b) {
+        listKeys.sort((a, b) => {
             return (listDetails.available[a].title || '').localeCompare(listDetails.available[b].title || '');
         });
         for ( var i = 0; i < listKeys.length; i++ ) {
@@ -188,7 +186,7 @@ var renderFilterLists = function() {
 
     // https://www.youtube.com/watch?v=unCVi4hYRlY#t=30m18s
 
-    var groupsFromLists = function(lists) {
+    let groupsFromLists = (lists) => {
         var groups = {};
         var listKeys = Object.keys(lists);
         var i = listKeys.length;
@@ -205,7 +203,7 @@ var renderFilterLists = function() {
         return groups;
     };
 
-    var onListsReceived = function(details) {
+    let onListsReceived = (details) => {
         // Before all, set context vars
         listDetails = details;
         cosmeticSwitch = details.cosmetic;
@@ -263,7 +261,7 @@ var renderFilterLists = function() {
 
 // Progress must be normalized to [0, 1], or can be undefined.
 
-var renderBusyOverlay = function(state, progress) {
+let renderBusyOverlay = (state, progress) => {
     progress = progress || {};
     var showProgress = typeof progress.value === 'number';
     if ( showProgress ) {
@@ -284,7 +282,7 @@ var renderBusyOverlay = function(state, progress) {
 
 // This is to give a visual hint that the selection of blacklists has changed.
 
-var renderWidgets = function() {
+let renderWidgets = () => {
     uDom('#buttonApply').toggleClass('disabled', !listsSelectionChanged());
     uDom('#buttonUpdate').toggleClass('disabled', !listsContentChanged());
     uDom('#buttonPurgeAll').toggleClass('disabled', !hasCachedContent);
@@ -294,7 +292,7 @@ var renderWidgets = function() {
 
 // Return whether selection of lists changed.
 
-var listsSelectionChanged = function() {
+let listsSelectionChanged = () => {
     if ( listDetails.cosmetic !== cosmeticSwitch ) {
         return true;
     }
@@ -306,7 +304,7 @@ var listsSelectionChanged = function() {
     var availableLists = listDetails.available;
     var currentLists = listDetails.current;
     var location, availableOff, currentOff;
-    
+
     // This check existing entries
     for ( location in availableLists ) {
         if ( availableLists.hasOwnProperty(location) === false ) {
@@ -338,13 +336,11 @@ var listsSelectionChanged = function() {
 
 // Return whether content need update.
 
-var listsContentChanged = function() {
-    return needUpdate;
-};
+const listsContentChanged = () => return needUpdate;
 
 /******************************************************************************/
 
-var onListCheckboxChanged = function() {
+const onListCheckboxChanged = () => {
     var href = uDom(this).parent().descendants('a').first().attr('href');
     if ( typeof href !== 'string' ) {
         return;
@@ -358,7 +354,7 @@ var onListCheckboxChanged = function() {
 
 /******************************************************************************/
 
-var onListLinkClicked = function(ev) {
+const onListLinkClicked = (ev) => {
     messager.send({
         what: 'gotoURL',
         details: {
@@ -372,7 +368,7 @@ var onListLinkClicked = function(ev) {
 
 /******************************************************************************/
 
-var onPurgeClicked = function() {
+const onPurgeClicked = () => {
     var button = uDom(this);
     var li = button.parent();
     var href = li.descendants('a').first().attr('href');
@@ -389,7 +385,7 @@ var onPurgeClicked = function() {
 
 /******************************************************************************/
 
-var selectFilterLists = function(callback) {
+const selectFilterLists = (callback) => {
     // Cosmetic filtering switch
     messager.send({
         what: 'userSettings',
@@ -417,12 +413,12 @@ var selectFilterLists = function(callback) {
 
 /******************************************************************************/
 
-var buttonApplyHandler = function() {
+const buttonApplyHandler = () => {
     uDom('#buttonApply').removeClass('enabled');
 
     renderBusyOverlay(true);
 
-    var onSelectionDone = function() {
+    const onSelectionDone = () => {
         messager.send({ what: 'reloadAllFilters' });
     };
 
@@ -433,13 +429,13 @@ var buttonApplyHandler = function() {
 
 /******************************************************************************/
 
-var buttonUpdateHandler = function() {
+const buttonUpdateHandler = () => {
     uDom('#buttonUpdate').removeClass('enabled');
 
     if ( needUpdate ) {
         renderBusyOverlay(true);
 
-        var onSelectionDone = function() {
+        let onSelectionDone = () => {
             messager.send({ what: 'forceUpdateAssets' });
         };
 
@@ -451,12 +447,12 @@ var buttonUpdateHandler = function() {
 
 /******************************************************************************/
 
-var buttonPurgeAllHandler = function() {
+const buttonPurgeAllHandler = () => {
     uDom('#buttonPurgeAll').removeClass('enabled');
 
     renderBusyOverlay(true);
 
-    var onCompleted = function() {
+    var onCompleted = () => {
         cacheWasPurged = true;
         renderFilterLists();
     };
@@ -466,7 +462,7 @@ var buttonPurgeAllHandler = function() {
 
 /******************************************************************************/
 
-var autoUpdateCheckboxChanged = function() {
+const autoUpdateCheckboxChanged = () => {
     messager.send({
         what: 'userSettings',
         name: 'autoUpdate',
@@ -476,15 +472,15 @@ var autoUpdateCheckboxChanged = function() {
 
 /******************************************************************************/
 
-var cosmeticSwitchChanged = function() {
+const cosmeticSwitchChanged = () => {
     listDetails.cosmetic = this.checked;
     renderWidgets();
 };
 
 /******************************************************************************/
 
-var renderExternalLists = function() {
-    var onReceived = function(details) {
+const renderExternalLists = ()=> {
+    let onReceived = (details) => {
         uDom('#externalLists').val(details);
         externalLists = details;
     };
@@ -493,7 +489,7 @@ var renderExternalLists = function() {
 
 /******************************************************************************/
 
-var externalListsChangeHandler = function() {
+const externalListsChangeHandler = () => {
     uDom('#externalListsApply').prop(
         'disabled',
         this.value.trim() === externalLists
@@ -502,7 +498,7 @@ var externalListsChangeHandler = function() {
 
 /******************************************************************************/
 
-var externalListsApplyHandler = function() {
+const externalListsApplyHandler = () => {
     externalLists = uDom('#externalLists').val();
     messager.send({
         what: 'userSettings',
@@ -515,7 +511,7 @@ var externalListsApplyHandler = function() {
 
 /******************************************************************************/
 
-var groupEntryClickHandler = function() {
+const groupEntryClickHandler = () => {
     var li = uDom(this).ancestors('.groupEntry');
     li.toggleClass('collapsed');
     var key = 'collapseGroup' + li.nthOfType();
@@ -528,7 +524,7 @@ var groupEntryClickHandler = function() {
 
 /******************************************************************************/
 
-uDom.onLoad(function() {
+uDom.onLoad(() => {
     uDom('#autoUpdate').on('change', autoUpdateCheckboxChanged);
     uDom('#parseCosmeticFilters').on('change', cosmeticSwitchChanged);
     uDom('#buttonApply').on('click', buttonApplyHandler);
@@ -547,4 +543,3 @@ uDom.onLoad(function() {
 /******************************************************************************/
 
 })();
-

@@ -24,11 +24,11 @@
 
 /******************************************************************************/
 
-uDom.onLoad(function() {
+uDom.onLoad(() => {
     // Open links in the proper window
     uDom('a').attr('target', '_blank');
     uDom('a[href*="dashboard.html"]').attr('target', '_parent');
-    uDom('.whatisthis').on('click', function() {
+    uDom('.whatisthis').on('click', () => {
         uDom(this)
             .parent()
             .descendants('.whatisthis-expandable')
