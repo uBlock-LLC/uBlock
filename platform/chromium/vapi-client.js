@@ -25,7 +25,7 @@
 
 /******************************************************************************/
 
-(function(self) {
+((self) => {
 
 'use strict';
 
@@ -62,7 +62,7 @@ else if(!chrome.runtime.onMessage) {
 
 /******************************************************************************/
 
-var messagingConnector = function(response) {
+var messagingConnector = (response) => {
     if ( !response ) {
         return;
     }
@@ -107,12 +107,12 @@ vAPI.messaging = {
     listeners: {},
     requestId: 1,
 
-    setup: function() {
+    setup: () => {
         this.port = chrome.runtime.connect({name: vAPI.sessionId});
         this.port.onMessage.addListener(messagingConnector);
     },
 
-    close: function() {
+    close: () => {
         if ( this.port === null ) {
             return;
         }
@@ -123,7 +123,7 @@ vAPI.messaging = {
         this.listeners = {};
     },
 
-    channel: function(channelName, callback) {
+    channel: (channelName, callback) => {
         if ( !channelName ) {
             return;
         }
@@ -131,7 +131,7 @@ vAPI.messaging = {
         this.channels[channelName] = {
             channelName: channelName,
             listener: typeof callback === 'function' ? callback : null,
-            send: function(message, callback) {
+            send: (message, callback) => {
                 if ( vAPI.messaging.port === null ) {
                     vAPI.messaging.setup();
                 }
@@ -148,7 +148,7 @@ vAPI.messaging = {
 
                 vAPI.messaging.port.postMessage(message);
             },
-            close: function() {
+            close: () => {
                 delete vAPI.messaging.channels[this.channelName];
                 if ( Object.keys(vAPI.messaging.channels).length === 0 ) {
                     vAPI.messaging.close();

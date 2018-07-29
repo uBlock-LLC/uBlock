@@ -23,7 +23,7 @@
 
 /******************************************************************************/
 
-(function(){
+(() =>{
 
 'use strict';
 
@@ -329,7 +329,7 @@ var matchWhitelistDirective = function(url, hostname, directive) {
 
 /******************************************************************************/
 
-µBlock.logCosmeticFilters = (function() {
+µBlock.logCosmeticFilters = (() => {
     var tabIdToTimerMap = {};
 
     var injectNow = function(tabId) {

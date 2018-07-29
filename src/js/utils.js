@@ -26,7 +26,7 @@
 
 // This will inserted as a module in the µBlock object.
 
-µBlock.utils = (function() {
+µBlock.utils = (() => {
 
 /******************************************************************************/
 
@@ -34,7 +34,7 @@ var exports = {};
 
 /******************************************************************************/
 
-exports.formatCount = function(count) {
+exports.formatCount = (count) => {
     if ( typeof count !== 'number' ) {
         return '';
     }

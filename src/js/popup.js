@@ -23,7 +23,7 @@
 
 /******************************************************************************/
 
-(function() {
+(() => {
 
 'use strict';
 
@@ -99,7 +99,7 @@ var messager = vAPI.messaging.channel('popup.js');
 
 /******************************************************************************/
 
-var cachePopupData = function(data) {
+var cachePopupData = (data) => {
     popupData = {};
     scopeToSrcHostnameMap['.'] = '';
     hostnameToSortableTokenMap = {};
@@ -130,7 +130,7 @@ var cachePopupData = function(data) {
 
 /******************************************************************************/
 
-var hashFromPopupData = function(reset) {
+var hashFromPopupData = (reset) => {
     // It makes no sense to offer to refresh the behind-the-scene scope
     if ( popupData.pageHostname === 'behind-the-scene' ) {
         uDom('body').toggleClass('dirty', false);
@@ -160,13 +160,13 @@ var hashFromPopupData = function(reset) {
 
 /******************************************************************************/
 
-var formatNumber = function(count) {
+var formatNumber = (count) => {
     return typeof count === 'number' ? count.toLocaleString() : '';
 };
 
 /******************************************************************************/
 
-var rulekeyCompare = function(a, b) {
+var rulekeyCompare = (a, b) => {
     var ha = a.slice(2, a.indexOf(' ', 2));
     if ( !reIP.test(ha) ) {
         ha = hostnameToSortableTokenMap[ha] || '';
@@ -180,7 +180,7 @@ var rulekeyCompare = function(a, b) {
 
 /******************************************************************************/
 
-var addFirewallRow = function(des) {
+var addFirewallRow = (des) => {
     var row = rowsToRecycle.pop();
     if ( row.length === 0 ) {
         row = uDom('#templates > div:nth-of-type(1)').clone();
@@ -205,7 +205,7 @@ var addFirewallRow = function(des) {
 
 /******************************************************************************/
 
-var updateFirewallCell = function(scope, des, type, rule) {
+var updateFirewallCell = (scope, des, type, rule) => {
     var selector = '#firewallContainer span[data-src="' + scope + '"][data-des="' + des + '"][data-type="' + type + '"]';
     var cell = uDom(selector);
 
@@ -281,7 +281,7 @@ var updateFirewallCell = function(scope, des, type, rule) {
 
 /******************************************************************************/
 
-var updateAllFirewallCells = function() {
+var updateAllFirewallCells = () => {
     var rules = popupData.firewallRules;
     for ( var key in rules ) {
         if ( rules.hasOwnProperty(key) === false ) {
@@ -303,7 +303,7 @@ var updateAllFirewallCells = function() {
 
 /******************************************************************************/
 
-var buildAllFirewallRows = function() {
+var buildAllFirewallRows = () => {
     // Do this before removing the rows
     if ( dfHotspots === null ) {
         dfHotspots = uDom('#actionSelector').on('click', 'span', setFirewallRuleHandler);
@@ -332,7 +332,7 @@ var buildAllFirewallRows = function() {
 
 /******************************************************************************/
 
-var renderPrivacyExposure = function() {
+var renderPrivacyExposure = () => {
     allDomains = {};
     allDomainCount = touchedDomainCount = 0;
     allHostnameRows = [];
@@ -382,7 +382,7 @@ var renderPrivacyExposure = function() {
 
 /******************************************************************************/
 
-var positionDfPaneFloaters = function() {
+var positionDfPaneFloaters = () => {
     // The padlock must be manually positioned:
     // - Its horizontal position depends on whether there is a vertical
     //   scrollbar.
@@ -400,7 +400,7 @@ var positionDfPaneFloaters = function() {
 
 // Assume everything has to be done incrementally.
 
-var renderPopup = function() {
+var renderPopup = () => {
     if ( popupData.tabTitle ) {
         document.title = popupData.appName + ' - ' + popupData.tabTitle;
     }
@@ -469,7 +469,7 @@ var renderPopup = function() {
 
 /******************************************************************************/
 
-var toggleNetFilteringSwitch = function(ev) {
+var toggleNetFilteringSwitch = (ev) => {
     if ( !popupData || !popupData.pageURL ) {
         return;
     }
@@ -489,7 +489,7 @@ var toggleNetFilteringSwitch = function(ev) {
 
 /******************************************************************************/
 
-var gotoPick = function() {
+var gotoPick = () => {
     messager.send({
         what: 'gotoPick',
         tabId: popupData.tabId,
@@ -501,7 +501,7 @@ var gotoPick = function() {
 
 /******************************************************************************/
 
-var gotoURL = function(ev) {
+var gotoURL = (ev) => {
     if ( this.hasAttribute('href') === false) {
         return;
     }
@@ -522,7 +522,7 @@ var gotoURL = function(ev) {
 
 /******************************************************************************/
 
-var toggleFirewallPane = function() {
+var toggleFirewallPane = () => {
     if ( popupData.advancedUserEnabled === false ) {
         return;
     }
@@ -550,24 +550,24 @@ var toggleFirewallPane = function() {
 
 /******************************************************************************/
 
-var mouseenterCellHandler = function() {
+var mouseenterCellHandler = () => {
     if ( uDom(this).hasClass('ownRule') === false ) {
         dfHotspots.appendTo(this);
     }
 };
 
-var mouseleaveCellHandler = function() {
+var mouseleaveCellHandler = () => {
     dfHotspots.detach();
 };
 
 /******************************************************************************/
 
-var setFirewallRule = function(src, des, type, action, persist) {
+var setFirewallRule = (src, des, type, action, persist) => {
     // This can happen on pages where uBlock does not work
     if ( typeof popupData.pageHostname !== 'string' || popupData.pageHostname === '' ) {
         return;
     }
-    var onFirewallRuleChanged = function(response) {
+    var onFirewallRuleChanged = (response) => {
         cachePopupData(response);
         updateAllFirewallCells();
         hashFromPopupData();
@@ -586,7 +586,7 @@ var setFirewallRule = function(src, des, type, action, persist) {
 
 /******************************************************************************/
 
-var unsetFirewallRuleHandler = function(ev) {
+var unsetFirewallRuleHandler = (ev) => {
     var cell = uDom(this);
     setFirewallRule(
         cell.attr('data-src') === '/' ? '*' : popupData.pageHostname,
@@ -600,7 +600,7 @@ var unsetFirewallRuleHandler = function(ev) {
 
 /******************************************************************************/
 
-var setFirewallRuleHandler = function(ev) {
+var setFirewallRuleHandler = (ev) => {
     var hotspot = uDom(this);
     var cell = hotspot.ancestors('[data-src]');
     if ( cell.length === 0 ) {
@@ -627,7 +627,7 @@ var setFirewallRuleHandler = function(ev) {
 
 /******************************************************************************/
 
-var reloadTab = function() {
+var reloadTab = () => {
     messager.send({ what: 'reloadTab', tabId: popupData.tabId, select: true });
 
     // Polling will take care of refreshing the popup content
@@ -643,7 +643,7 @@ var reloadTab = function() {
 
 /******************************************************************************/
 
-var toggleMinimize = function() {
+var toggleMinimize = () => {
     var elem = uDom('#firewallContainer');
     elem.toggleClass('minimized');
     popupData.firewallPaneMinimized = elem.hasClass('minimized');
@@ -656,7 +656,7 @@ var toggleMinimize = function() {
 
 /******************************************************************************/
 
-var saveFirewallRules = function() {
+var saveFirewallRules = () => {
     messager.send({
         what: 'saveFirewallRules',
         srcHostname: popupData.pageHostname,
@@ -667,7 +667,7 @@ var saveFirewallRules = function() {
 
 /******************************************************************************/
 
-var flushFirewallRules = function() {
+var flushFirewallRules = () => {
     messager.send({
         what: 'flushFirewallRules',
         srcHostname: popupData.pageHostname,
@@ -696,10 +696,10 @@ var flushFirewallRules = function() {
 // on demand rather than forcing the main process to assume a client may need
 // it and thus having to push it all the time unconditionally.
 
-var pollForContentChange = (function() {
+var pollForContentChange = (() => {
     var pollTimer = null;
 
-    var pollCallback = function() {
+    var pollCallback = () => {
         pollTimer = null;
         messager.send(
             {
@@ -711,7 +711,7 @@ var pollForContentChange = (function() {
         );
     };
 
-    var queryCallback = function(response) {
+    var queryCallback = (response) => {
         if ( response ) {
             getPopupData(popupData.tabId);
             return;
@@ -719,7 +719,7 @@ var pollForContentChange = (function() {
         poll();
     };
 
-    var poll = function() {
+    var poll = () => {
         if ( pollTimer !== null ) {
             return;
         }
@@ -731,8 +731,8 @@ var pollForContentChange = (function() {
 
 /******************************************************************************/
 
-var getPopupData = function(tabId) {
-    var onDataReceived = function(response) {
+var getPopupData = (tabId) => {
+    var onDataReceived = (response) => {
         cachePopupData(response);
         renderPopup();
         hashFromPopupData(true);
@@ -745,7 +745,7 @@ var getPopupData = function(tabId) {
 
 // Make menu only when popup html is fully loaded
 
-uDom.onLoad(function () {
+uDom.onLoad(() => {
     var tabId = null; //If there's no tab ID specified in the query string, it will default to current tab.
 
     // Extract the tab id of the page this popup is for

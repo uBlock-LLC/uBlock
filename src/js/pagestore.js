@@ -34,7 +34,7 @@ To create a log of net requests
 /******************************************************************************/
 /******************************************************************************/
 
-µBlock.PageStore = (function() {
+µBlock.PageStore = (() => {
 
 'use strict';
 
@@ -51,13 +51,13 @@ var netFilteringResultCacheEntryJunkyardMax = 200;
 
 /******************************************************************************/
 
-var NetFilteringResultCacheEntry = function(result, type) {
+var NetFilteringResultCacheEntry = (result, type) => {
     this.init(result, type);
 };
 
 /******************************************************************************/
 
-NetFilteringResultCacheEntry.prototype.init = function(result, type) {
+NetFilteringResultCacheEntry.prototype.init = (result, type) => {
     this.result = result;
     this.type = type;
     this.time = Date.now();
@@ -65,7 +65,7 @@ NetFilteringResultCacheEntry.prototype.init = function(result, type) {
 
 /******************************************************************************/
 
-NetFilteringResultCacheEntry.prototype.dispose = function() {
+NetFilteringResultCacheEntry.prototype.dispose = () => {
     this.result = '';
     this.type = '';
     if ( netFilteringResultCacheEntryJunkyard.length < netFilteringResultCacheEntryJunkyardMax ) {
@@ -75,7 +75,7 @@ NetFilteringResultCacheEntry.prototype.dispose = function() {
 
 /******************************************************************************/
 
-NetFilteringResultCacheEntry.factory = function(result, type) {
+NetFilteringResultCacheEntry.factory = (result, type) => {
     var entry = netFilteringResultCacheEntryJunkyard.pop();
     if ( entry === undefined ) {
         entry = new NetFilteringResultCacheEntry(result, type);
@@ -94,13 +94,13 @@ var netFilteringCacheJunkyardMax = 10;
 
 /******************************************************************************/
 
-var NetFilteringResultCache = function() {
+var NetFilteringResultCache = () => {
     this.init();
 };
 
 /******************************************************************************/
 
-NetFilteringResultCache.factory = function() {
+NetFilteringResultCache.factory = () => {
     var entry = netFilteringCacheJunkyard.pop();
     if ( entry === undefined ) {
         entry = new NetFilteringResultCache();
@@ -112,7 +112,7 @@ NetFilteringResultCache.factory = function() {
 
 /******************************************************************************/
 
-NetFilteringResultCache.prototype.init = function() {
+NetFilteringResultCache.prototype.init = () => {
     this.urls = {};
     this.count = 0;
     this.shelfLife = 60 * 1000;
@@ -122,7 +122,7 @@ NetFilteringResultCache.prototype.init = function() {
 
 /******************************************************************************/
 
-NetFilteringResultCache.prototype.dispose = function() {
+NetFilteringResultCache.prototype.dispose = () => {
     this.empty();
     this.boundPruneAsyncCallback = null;
     if ( netFilteringCacheJunkyard.length < netFilteringCacheJunkyardMax ) {
@@ -133,7 +133,7 @@ NetFilteringResultCache.prototype.dispose = function() {
 
 /******************************************************************************/
 
-NetFilteringResultCache.prototype.add = function(context, result) {
+NetFilteringResultCache.prototype.add = (context, result) => {
     var url = context.requestURL;
     var type = context.requestType;
     var entry = this.urls[url];
@@ -152,7 +152,7 @@ NetFilteringResultCache.prototype.add = function(context, result) {
 
 /******************************************************************************/
 
-NetFilteringResultCache.prototype.empty = function() {
+NetFilteringResultCache.prototype.empty = () => {
     for ( var key in this.urls ) {
         if ( this.urls.hasOwnProperty(key) === false ) {
             continue;
@@ -169,13 +169,13 @@ NetFilteringResultCache.prototype.empty = function() {
 
 /******************************************************************************/
 
-NetFilteringResultCache.prototype.compareEntries = function(a, b) {
+NetFilteringResultCache.prototype.compareEntries = (a, b) => {
     return this.urls[b].time - this.urls[a].time;
 };
 
 /******************************************************************************/
 
-NetFilteringResultCache.prototype.prune = function() {
+NetFilteringResultCache.prototype.prune = () => {
     var keys = Object.keys(this.urls).sort(this.compareEntries.bind(this));
     var obsolete = Date.now() - this.shelfLife;
     var key, entry;
@@ -199,20 +199,20 @@ NetFilteringResultCache.prototype.prune = function() {
 
 /******************************************************************************/
 
-NetFilteringResultCache.prototype.pruneAsync = function() {
+NetFilteringResultCache.prototype.pruneAsync = () => {
     if ( this.timer === null ) {
         this.timer = setTimeout(this.boundPruneAsyncCallback, this.shelfLife * 2);
     }
 };
 
-NetFilteringResultCache.prototype.pruneAsyncCallback = function() {
+NetFilteringResultCache.prototype.pruneAsyncCallback = () => {
     this.timer = null;
     this.prune();
 };
 
 /******************************************************************************/
 
-NetFilteringResultCache.prototype.lookup = function(context) {
+NetFilteringResultCache.prototype.lookup = (context) => {
     return this.urls[context.requestType + ' ' + context.requestURL];
 };
 
@@ -228,13 +228,13 @@ var frameStoreJunkyardMax = 50;
 
 /******************************************************************************/
 
-var FrameStore = function(rootHostname, frameURL) {
+var FrameStore = (rootHostname, frameURL) => {
     this.init(rootHostname, frameURL);
 };
 
 /******************************************************************************/
 
-FrameStore.factory = function(rootHostname, frameURL) {
+FrameStore.factory = (rootHostname, frameURL) => {
     var entry = frameStoreJunkyard.pop();
     if ( entry === undefined ) {
         entry = new FrameStore(rootHostname, frameURL);
@@ -246,7 +246,7 @@ FrameStore.factory = function(rootHostname, frameURL) {
 
 /******************************************************************************/
 
-FrameStore.prototype.init = function(rootHostname, frameURL) {
+FrameStore.prototype.init = (rootHostname, frameURL) => {
     var µburi = µb.URI;
     this.pageURL = frameURL;
     this.pageHostname = µburi.hostnameFromURI(frameURL);
@@ -256,7 +256,7 @@ FrameStore.prototype.init = function(rootHostname, frameURL) {
 
 /******************************************************************************/
 
-FrameStore.prototype.dispose = function() {
+FrameStore.prototype.dispose = () => {
     this.pageHostname = this.pageDomain = '';
     if ( frameStoreJunkyard.length < frameStoreJunkyardMax ) {
         frameStoreJunkyard.push(this);
@@ -272,13 +272,13 @@ var pageStoreJunkyardMax = 10;
 
 /******************************************************************************/
 
-var PageStore = function(tabId) {
+var PageStore = (tabId) => {
     this.init(tabId);
 };
 
 /******************************************************************************/
 
-PageStore.factory = function(tabId) {
+PageStore.factory = (tabId) => {
     var entry = pageStoreJunkyard.pop();
     if ( entry === undefined ) {
         entry = new PageStore(tabId);
@@ -290,7 +290,7 @@ PageStore.factory = function(tabId) {
 
 /******************************************************************************/
 
-PageStore.prototype.init = function(tabId) {
+PageStore.prototype.init = (tabId) => {
     var tabContext = µb.tabContextManager.lookup(tabId);
     this.tabId = tabId;
 
@@ -316,7 +316,7 @@ PageStore.prototype.init = function(tabId) {
 
 /******************************************************************************/
 
-PageStore.prototype.reuse = function(context) {
+PageStore.prototype.reuse = (context) => {
     // We can't do this: when force refreshing a page, the page store data
     // needs to be reset
     //if ( pageURL === this.pageURL ) {
@@ -352,7 +352,7 @@ PageStore.prototype.reuse = function(context) {
 
 /******************************************************************************/
 
-PageStore.prototype.dispose = function() {
+PageStore.prototype.dispose = () => {
     // rhill 2013-11-07: Even though at init time these are reset, I still
     // need to release the memory taken by these, which can amount to
     // sizeable enough chunks (especially requests, through the request URL
@@ -368,7 +368,7 @@ PageStore.prototype.dispose = function() {
 
 /******************************************************************************/
 
-PageStore.prototype.disposeFrameStores = function() {
+PageStore.prototype.disposeFrameStores = () => {
     var frames = this.frames;
     for ( var k in frames ) {
         if ( frames.hasOwnProperty(k) ) {
@@ -380,13 +380,13 @@ PageStore.prototype.disposeFrameStores = function() {
 
 /******************************************************************************/
 
-PageStore.prototype.getFrame = function(frameId) {
+PageStore.prototype.getFrame = (frameId) => {
     return this.frames[frameId] || null;
 };
 
 /******************************************************************************/
 
-PageStore.prototype.setFrame = function(frameId, frameURL) {
+PageStore.prototype.setFrame = (frameId, frameURL) => {
     var frameStore = this.frames[frameId];
     if ( frameStore instanceof FrameStore ) {
         frameStore.init(this.rootHostname, frameURL);
@@ -397,14 +397,14 @@ PageStore.prototype.setFrame = function(frameId, frameURL) {
 
 /******************************************************************************/
 
-PageStore.prototype.createContextFromPage = function() {
+PageStore.prototype.createContextFromPage = () => {
     var context = new µb.tabContextManager.createContext(this.tabId);
     context.pageHostname = context.rootHostname;
     context.pageDomain = context.rootDomain;
     return context;
 };
 
-PageStore.prototype.createContextFromFrameId = function(frameId) {
+PageStore.prototype.createContextFromFrameId = (frameId) => {
     var context = new µb.tabContextManager.createContext(this.tabId);
     if ( this.frames.hasOwnProperty(frameId) ) {
         var frameStore = this.frames[frameId];
@@ -417,7 +417,7 @@ PageStore.prototype.createContextFromFrameId = function(frameId) {
     return context;
 };
 
-PageStore.prototype.createContextFromFrameHostname = function(frameHostname) {
+PageStore.prototype.createContextFromFrameHostname = (frameHostname) => {
     var context = new µb.tabContextManager.createContext(this.tabId);
     context.pageHostname = frameHostname;
     context.pageDomain = µb.URI.domainFromHostname(frameHostname) || frameHostname;
@@ -426,7 +426,7 @@ PageStore.prototype.createContextFromFrameHostname = function(frameHostname) {
 
 /******************************************************************************/
 
-PageStore.prototype.getNetFilteringSwitch = function() {
+PageStore.prototype.getNetFilteringSwitch = () => {
     var tabContext = µb.tabContextManager.lookup(this.tabId);
     if (
         this.netFilteringReadTime > µb.netWhitelistModifyTime &&
@@ -447,7 +447,7 @@ PageStore.prototype.getNetFilteringSwitch = function() {
 
 /******************************************************************************/
 
-PageStore.prototype.getSpecificCosmeticFilteringSwitch = function() {
+PageStore.prototype.getSpecificCosmeticFilteringSwitch = () => {
     if ( this.getNetFilteringSwitch() === false ) {
         return false;
     }
@@ -460,7 +460,7 @@ PageStore.prototype.getSpecificCosmeticFilteringSwitch = function() {
 
 /******************************************************************************/
 
-PageStore.prototype.getGenericCosmeticFilteringSwitch = function() {
+PageStore.prototype.getGenericCosmeticFilteringSwitch = () => {
     if ( this.skipCosmeticFiltering ) {
         return false;
     }
@@ -469,14 +469,14 @@ PageStore.prototype.getGenericCosmeticFilteringSwitch = function() {
 
 /******************************************************************************/
 
-PageStore.prototype.toggleNetFilteringSwitch = function(url, scope, state) {
+PageStore.prototype.toggleNetFilteringSwitch = (url, scope, state) => {
     µb.toggleNetFilteringSwitch(url, scope, state);
     this.netFilteringCache.empty();
 };
 
 /******************************************************************************/
 
-PageStore.prototype.filterRequest = function(context) {
+PageStore.prototype.filterRequest = (context) => {
 
     if ( this.getNetFilteringSwitch() === false ) {
         if ( collapsibleRequestTypes.indexOf(context.requestType) !== -1 ) {
@@ -529,7 +529,7 @@ var collapsibleRequestTypes = 'image sub_frame object';
 
 /******************************************************************************/
 
-PageStore.prototype.filterRequestNoCache = function(context) {
+PageStore.prototype.filterRequestNoCache = (context) => {
     if ( this.getNetFilteringSwitch() === false ) {
         return '';
     }
@@ -562,7 +562,7 @@ PageStore.prototype.filterRequestNoCache = function(context) {
 
 /******************************************************************************/
 
-PageStore.prototype.logRequest = function(context, result) {
+PageStore.prototype.logRequest = (context, result) => {
     var requestHostname = context.requestHostname;
     // rhill 20150206:
     // be prepared to handle invalid requestHostname, I've seen this

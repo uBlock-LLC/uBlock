@@ -31,7 +31,7 @@ Naming convention from https://en.wikipedia.org/wiki/URI_scheme#Examples
 
 /******************************************************************************/
 
-µBlock.URI = (function() {
+µBlock.URI = (() => {
 
 'use strict';
 
@@ -79,7 +79,7 @@ var reIPAddressNaive         = /^\d+\.\d+\.\d+\.\d+$|^\[[\da-zA-Z:]+\]$/;
 
 /******************************************************************************/
 
-var reset = function(o) {
+var reset = (o) => {
     o.scheme = '';
     o.hostname = '';
     o._ipv4 = undefined;
@@ -91,7 +91,7 @@ var reset = function(o) {
     return o;
 };
 
-var resetAuthority = function(o) {
+var resetAuthority = (o) => {
     o.hostname = '';
     o._ipv4 = undefined;
     o._ipv6 = undefined;
@@ -141,7 +141,7 @@ URI.normalizeBits = (URI.schemeBit | URI.hostnameBit | URI.pathBit | URI.queryBi
 //       / \ /                        \
 //       urn:example:animal:ferret:nose
 
-URI.set = function(uri) {
+URI.set = (uri) => {
     if ( uri === undefined ) {
         return reset(URI);
     }
@@ -198,7 +198,7 @@ URI.set = function(uri) {
 //       / \ /                        \
 //       urn:example:animal:ferret:nose
 
-URI.assemble = function(bits) {
+URI.assemble = (bits) => {
     if ( bits === undefined ) {
         bits = this.allBits;
     }
@@ -226,7 +226,7 @@ URI.assemble = function(bits) {
 
 /******************************************************************************/
 
-URI.schemeFromURI = function(uri) {
+URI.schemeFromURI = (uri) => {
     var matches = reSchemeFromURI.exec(uri);
     if ( !matches ) {
         return '';
@@ -236,7 +236,7 @@ URI.schemeFromURI = function(uri) {
 
 /******************************************************************************/
 
-URI.authorityFromURI = function(uri) {
+URI.authorityFromURI = (uri) => {
     var matches = reAuthorityFromURI.exec(uri);
     if ( !matches ) {
         return '';
@@ -248,7 +248,7 @@ URI.authorityFromURI = function(uri) {
 
 // The most used function, so it better be fast.
 
-URI.hostnameFromURI = function(uri) {
+URI.hostnameFromURI = (uri) => {
     var matches = reCommonHostnameFromURL.exec(uri);
     if ( matches ) {
         return matches[1];
@@ -279,7 +279,7 @@ URI.hostnameFromURI = function(uri) {
 
 /******************************************************************************/
 
-URI.domainFromHostname = function(hostname) {
+URI.domainFromHostname = (hostname) => {
     // Try to skip looking up the PSL database
     if ( domainCache.hasOwnProperty(hostname) ) {
         var entry = domainCache[hostname];
@@ -293,7 +293,7 @@ URI.domainFromHostname = function(hostname) {
     return domainCacheAdd(hostname, hostname);
 };
 
-URI.domain = function() {
+URI.domain = () => {
     return this.domainFromHostname(this.hostname);
 };
 
@@ -308,24 +308,24 @@ var psl = publicSuffixList;
 // specific set of hostnames within a narrow time span -- in other words, I
 // believe probability of cache hit are high in uBlock.
 
-var DomainCacheEntry = function(domain) {
+var DomainCacheEntry = (domain) => {
     this.init(domain);
 };
 
-DomainCacheEntry.prototype.init = function(domain) {
+DomainCacheEntry.prototype.init = (domain) => {
     this.domain = domain;
     this.tstamp = Date.now();
     return this;
 };
 
-DomainCacheEntry.prototype.dispose = function() {
+DomainCacheEntry.prototype.dispose = () => {
     this.domain = '';
     if ( domainCacheEntryJunkyard.length < 25 ) {
         domainCacheEntryJunkyard.push(this);
     }
 };
 
-var domainCacheEntryFactory = function(domain) {
+var domainCacheEntryFactory = (domain) => {
     var entry = domainCacheEntryJunkyard.pop();
     if ( entry ) {
         return entry.init(domain);
@@ -335,7 +335,7 @@ var domainCacheEntryFactory = function(domain) {
 
 var domainCacheEntryJunkyard = [];
 
-var domainCacheAdd = function(hostname, domain) {
+var domainCacheAdd = (hostname, domain) => {
     if ( domainCache.hasOwnProperty(hostname) ) {
         domainCache[hostname].tstamp = Date.now();
     } else {
@@ -348,11 +348,11 @@ var domainCacheAdd = function(hostname, domain) {
     return domain;
 };
 
-var domainCacheEntrySort = function(a, b) {
+var domainCacheEntrySort = (a, b) => {
     return b.tstamp - a.tstamp;
 };
 
-var domainCachePrune = function() {
+var domainCachePrune = () => {
     var hostnames = Object.keys(domainCache)
                           .sort(domainCacheEntrySort)
                           .slice(domainCacheCountLowWaterMark);
@@ -366,7 +366,7 @@ var domainCachePrune = function() {
     }
 };
 
-var domainCacheReset = function() {
+var domainCacheReset = () => {
     domainCache = {};
     domainCacheCount = 0;
 };
@@ -380,7 +380,7 @@ psl.onChanged.addListener(domainCacheReset);
 
 /******************************************************************************/
 
-URI.domainFromURI = function(uri) {
+URI.domainFromURI = (uri) => {
     if ( !uri ) {
         return '';
     }
@@ -391,7 +391,7 @@ URI.domainFromURI = function(uri) {
 
 // Normalize the way µBlock expects it
 
-URI.normalizedURI = function() {
+URI.normalizedURI = () => {
     // Will be removed:
     // - port
     // - user id/password
@@ -401,7 +401,7 @@ URI.normalizedURI = function() {
 
 /******************************************************************************/
 
-URI.rootURL = function() {
+URI.rootURL = () => {
     if ( !this.hostname ) {
         return '';
     }
@@ -410,7 +410,7 @@ URI.rootURL = function() {
 
 /******************************************************************************/
 
-URI.isValidHostname = function(hostname) {
+URI.isValidHostname = (hostname) => {
     var r;
     try {
         r = reValidHostname.test(hostname);
@@ -425,7 +425,7 @@ URI.isValidHostname = function(hostname) {
 
 // Return the parent domain. For IP address, there is no parent domain.
 
-URI.parentHostnameFromHostname = function(hostname) {
+URI.parentHostnameFromHostname = (hostname) => {
     // `locahost` => ``
     // `example.org` => `example.org`
     // `www.example.org` => `example.org`
@@ -449,7 +449,7 @@ URI.parentHostnameFromHostname = function(hostname) {
 // Return all possible parent hostnames which can be derived from `hostname`,
 // ordered from direct parent up to domain inclusively.
 
-URI.parentHostnamesFromHostname = function(hostname) {
+URI.parentHostnamesFromHostname = (hostname) => {
     // TODO: I should create an object which is optimized to receive
     // the list of hostnames by making it reusable (junkyard etc.) and which
     // has its own element counter property in order to avoid memory
@@ -479,7 +479,7 @@ URI.parentHostnamesFromHostname = function(hostname) {
 // Return all possible hostnames which can be derived from `hostname`,
 // ordered from self up to domain inclusively.
 
-URI.allHostnamesFromHostname = function(hostname) {
+URI.allHostnamesFromHostname = (hostname) => {
     var nodes = this.parentHostnamesFromHostname(hostname);
     nodes.unshift(hostname);
     return nodes;
@@ -487,7 +487,7 @@ URI.allHostnamesFromHostname = function(hostname) {
 
 /******************************************************************************/
 
-URI.toString = function() {
+URI.toString = () => {
     return this.assemble();
 };
 

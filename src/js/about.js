@@ -23,7 +23,7 @@
 
 /******************************************************************************/
 
-uDom.onLoad(function() {
+uDom.onLoad(() => {
 
 'use strict';
 
@@ -33,7 +33,7 @@ var messager = vAPI.messaging.channel('about.js');
 
 /******************************************************************************/
 
-var onAppDataReady = function(appData) {
+let onAppDataReady = (appData) => {
     uDom('#aboutNameVer').html(appData.name + ' v' + appData.version);
 };
 

@@ -35,7 +35,7 @@ const hostName = Services.io.newURI(Components.stack.filename, null, null).host;
 
 /******************************************************************************/
 
-const getMessageManager = function(win) {
+const getMessageManager = (win) => {
     return win
         .QueryInterface(Ci.nsIInterfaceRequestor)
         .getInterface(Ci.nsIDocShell)
@@ -74,7 +74,7 @@ const contentObserver = {
             Ci.nsISupportsWeakReference
     ]),
 
-    createInstance: function(outer, iid) {
+    createInstance: (outer, iid) => {
         if ( outer ) {
             throw Components.results.NS_ERROR_NO_AGGREGATION;
         }
@@ -82,7 +82,7 @@ const contentObserver = {
         return this.QueryInterface(iid);
     },
 
-    register: function() {
+    register: () => {
         Services.obs.addObserver(this, 'document-element-inserted', true);
 
         this.componentRegistrar.registerFactory(
@@ -100,7 +100,7 @@ const contentObserver = {
         );
     },
 
-    unregister: function() {
+    unregister: () => {
         Services.obs.removeObserver(this, 'document-element-inserted');
 
         this.componentRegistrar.unregisterFactory(this.classID, this);
@@ -111,7 +111,7 @@ const contentObserver = {
         );
     },
 
-    getFrameId: function(win) {
+    getFrameId: (win) => {
         return win
             .QueryInterface(Ci.nsIInterfaceRequestor)
             .getInterface(Ci.nsIDOMWindowUtils)
@@ -119,7 +119,7 @@ const contentObserver = {
     },
 
     // https://bugzil.la/612921
-    shouldLoad: function(type, location, origin, context) {
+    shouldLoad: (type, location, origin, context) => {
         if ( !context ) {
             return this.ACCEPT;
         }
@@ -180,7 +180,7 @@ const contentObserver = {
         return this.ACCEPT;
     },
 
-    initContentScripts: function(win, sandbox) {
+    initContentScripts: (win, sandbox) => {
         let messager = getMessageManager(win);
         let sandboxId = hostName + ':sb:' + this.uniqueSandboxId++;
 
@@ -227,7 +227,7 @@ const contentObserver = {
             );
         };
 
-        sandbox.removeMessageListener = function() {
+        sandbox.removeMessageListener = () => {
             try {
                 messager.removeMessageListener(
                     sandbox._sandboxId_,
@@ -247,7 +247,7 @@ const contentObserver = {
         return sandbox;
     },
 
-    ignorePopup: function(e) {
+    ignorePopup: (e) => {
         if ( e.isTrusted === false ) {
             return;
         }
@@ -258,7 +258,7 @@ const contentObserver = {
         this.removeEventListener('mousedown', contObs.ignorePopup, true);
     },
 
-    observe: function(doc) {
+    observe: (doc) => {
         let win = doc.defaultView;
 
         if ( !win ) {
@@ -335,7 +335,7 @@ const LocationChangeListener = function(docShell) {
 
 LocationChangeListener.prototype.QueryInterface = XPCOMUtils.generateQI(["nsIWebProgressListener", "nsISupportsWeakReference"]);
 
-LocationChangeListener.prototype.onLocationChange = function(webProgress, request, location, flags) {
+LocationChangeListener.prototype.onLocationChange = (webProgress, request, location, flags) => {
     if ( !webProgress.isTopLevel ) {
         return;
     }

@@ -30,13 +30,13 @@
 // the code here does *only* what I need, and nothing more, and with a lot
 // of assumption on passed parameters, etc. I grow it on a per-need-basis only.
 
-var uDom = (function() {
+var uDom = (() => {
 
 'use strict';
 
 /******************************************************************************/
 
-var DOMList = function() {
+var DOMList = () => {
     this.nodes = [];
 };
 
@@ -46,7 +46,7 @@ Object.defineProperty(
     DOMList.prototype,
     'length',
     {
-        get: function() {
+        get: () => {
             return this.nodes.length;
         }
     }
@@ -54,7 +54,7 @@ Object.defineProperty(
 
 /******************************************************************************/
 
-var DOMListFactory = function(selector, context) {
+var DOMListFactory = (selector, context) => {
     var r = new DOMList();
     if ( typeof selector === 'string' ) {
         selector = selector.trim();
@@ -79,13 +79,13 @@ var DOMListFactory = function(selector, context) {
 
 /******************************************************************************/
 
-DOMListFactory.onLoad = function(callback) {
+DOMListFactory.onLoad = (callback) => {
     window.addEventListener('load', callback);
 };
 
 /******************************************************************************/
 
-var addNodeToList = function(list, node) {
+var addNodeToList = (list, node) => {
     if ( node ) {
         list.nodes.push(node);
     }
@@ -94,7 +94,7 @@ var addNodeToList = function(list, node) {
 
 /******************************************************************************/
 
-var addNodeListToList = function(list, nodelist) {
+var addNodeListToList = (list, nodelist) => {
     if ( nodelist ) {
         var n = nodelist.length;
         for ( var i = 0; i < n; i++ ) {
@@ -106,14 +106,14 @@ var addNodeListToList = function(list, nodelist) {
 
 /******************************************************************************/
 
-var addListToList = function(list, other) {
+var addListToList = (list, other) => {
     list.nodes = list.nodes.concat(other.nodes);
     return list;
 };
 
 /******************************************************************************/
 
-var addSelectorToList = function(list, selector, context) {
+var addSelectorToList = (list, selector, context) => {
     var p = context || document;
     var r = p.querySelectorAll(selector);
     var n = r.length;
@@ -132,7 +132,7 @@ var pTagOfChildTag = {
 
 // TODO: documentFragment
 
-var addHTMLToList = function(list, html) {
+var addHTMLToList = (list, html) => {
     var matches = html.match(/^<([a-z]+)/);
     if ( !matches || matches.length !== 2 ) {
         return this;
@@ -152,13 +152,13 @@ var addHTMLToList = function(list, html) {
 
 /******************************************************************************/
 
-var isChildOf = function(child, parent) {
+var isChildOf = (child, parent) => {
     return child !== null && parent !== null && child.parentNode === parent;
 };
 
 /******************************************************************************/
 
-var isDescendantOf = function(descendant, ancestor) {
+var isDescendantOf = (descendant, ancestor) => {
     while ( descendant.parentNode !== null ) {
         if ( descendant.parentNode === ancestor ) {
             return true;
@@ -170,7 +170,7 @@ var isDescendantOf = function(descendant, ancestor) {
 
 /******************************************************************************/
 
-var nodeInNodeList = function(node, nodeList) {
+var nodeInNodeList = (node, nodeList) => {
     var i = nodeList.length;
     while ( i-- ) {
         if ( nodeList[i] === node ) {
@@ -182,7 +182,7 @@ var nodeInNodeList = function(node, nodeList) {
 
 /******************************************************************************/
 
-var doesMatchSelector = function(node, selector) {
+var doesMatchSelector = (node, selector) => {
     if ( !node ) {
         return false;
     }
@@ -210,29 +210,29 @@ var doesMatchSelector = function(node, selector) {
 
 /******************************************************************************/
 
-DOMList.prototype.nodeAt = function(i) {
+DOMList.prototype.nodeAt = (i) => {
     return this.nodes[i];
 };
 
-DOMList.prototype.at = function(i) {
+DOMList.prototype.at = (i) => {
     return addNodeToList(new DOMList(), this.nodes[i]);
 };
 
 /******************************************************************************/
 
-DOMList.prototype.toArray = function() {
+DOMList.prototype.toArray = () => {
     return this.nodes.slice();
 };
 
 /******************************************************************************/
 
-DOMList.prototype.pop = function() {
+DOMList.prototype.pop = () => {
     return addNodeToList(new DOMList(), this.nodes.pop());
 };
 
 /******************************************************************************/
 
-DOMList.prototype.forEach = function(fn) {
+DOMList.prototype.forEach = (fn) => {
     var n = this.nodes.length;
     for ( var i = 0; i < n; i++ ) {
         fn(this.at(i), i);
@@ -242,7 +242,7 @@ DOMList.prototype.forEach = function(fn) {
 
 /******************************************************************************/
 
-DOMList.prototype.subset = function(i, l) {
+DOMList.prototype.subset = (i, l) => {
     var r = new DOMList();
     var n = l !== undefined ? l : this.nodes.length;
     var j = Math.min(i + n, this.nodes.length);
@@ -254,13 +254,13 @@ DOMList.prototype.subset = function(i, l) {
 
 /******************************************************************************/
 
-DOMList.prototype.first = function() {
+DOMList.prototype.first = () => {
     return this.subset(0, 1);
 };
 
 /******************************************************************************/
 
-DOMList.prototype.next = function(selector) {
+DOMList.prototype.next = (selector) => {
     var r = new DOMList();
     var n = this.nodes.length;
     var node;
@@ -283,7 +283,7 @@ DOMList.prototype.next = function(selector) {
 
 /******************************************************************************/
 
-DOMList.prototype.parent = function() {
+DOMList.prototype.parent = () => {
     var r = new DOMList();
     if ( this.nodes.length ) {
         addNodeToList(r, this.nodes[0].parentNode);
@@ -293,17 +293,17 @@ DOMList.prototype.parent = function() {
 
 /******************************************************************************/
 
-DOMList.prototype.filter = function(filter) {
+DOMList.prototype.filter = (filter) => {
     var r = new DOMList();
     var filterFunc;
     if ( typeof filter === 'string' ) {
-        filterFunc = function() {
+        filterFunc = () => {
             return doesMatchSelector(this, filter);
         };
     } else if ( typeof filter === 'function' ) {
         filterFunc = filter;
     } else {
-        filterFunc = function(){
+        filterFunc = () =>{
             return true;
         };
     }
@@ -322,7 +322,7 @@ DOMList.prototype.filter = function(filter) {
 
 // TODO: Avoid possible duplicates
 
-DOMList.prototype.ancestors = function(selector) {
+DOMList.prototype.ancestors = (selector) => {
     var r = new DOMList();
     var n = this.nodes.length;
     var node;
@@ -340,7 +340,7 @@ DOMList.prototype.ancestors = function(selector) {
 
 /******************************************************************************/
 
-DOMList.prototype.descendants = function(selector) {
+DOMList.prototype.descendants = (selector) => {
     var r = new DOMList();
     var n = this.nodes.length;
     var nl;
@@ -353,7 +353,7 @@ DOMList.prototype.descendants = function(selector) {
 
 /******************************************************************************/
 
-DOMList.prototype.contents = function() {
+DOMList.prototype.contents = () => {
     var r = new DOMList();
     var cnodes, cn, ci;
     var n = this.nodes.length;
@@ -369,7 +369,7 @@ DOMList.prototype.contents = function() {
 
 /******************************************************************************/
 
-DOMList.prototype.remove = function() {
+DOMList.prototype.remove = () => {
     var cn, p;
     var i = this.nodes.length;
     while ( i-- ) {
@@ -385,7 +385,7 @@ DOMList.prototype.detach = DOMList.prototype.remove;
 
 /******************************************************************************/
 
-DOMList.prototype.empty = function() {
+DOMList.prototype.empty = () => {
     var node;
     var i = this.nodes.length;
     while ( i-- ) {
@@ -399,7 +399,7 @@ DOMList.prototype.empty = function() {
 
 /******************************************************************************/
 
-DOMList.prototype.append = function(selector, context) {
+DOMList.prototype.append = (selector, context) => {
     var p = this.nodes[0];
     if ( p ) {
         var c = DOMListFactory(selector, context);
@@ -413,7 +413,7 @@ DOMList.prototype.append = function(selector, context) {
 
 /******************************************************************************/
 
-DOMList.prototype.prepend = function(selector, context) {
+DOMList.prototype.prepend = (selector, context) => {
     var p = this.nodes[0];
     if ( p ) {
         var c = DOMListFactory(selector, context);
@@ -427,7 +427,7 @@ DOMList.prototype.prepend = function(selector, context) {
 
 /******************************************************************************/
 
-DOMList.prototype.appendTo = function(selector, context) {
+DOMList.prototype.appendTo = (selector, context) => {
     var p = selector instanceof DOMListFactory ? selector : DOMListFactory(selector, context);
     var n = p.length;
     for ( var i = 0; i < n; i++ ) {
@@ -438,7 +438,7 @@ DOMList.prototype.appendTo = function(selector, context) {
 
 /******************************************************************************/
 
-DOMList.prototype.insertAfter = function(selector, context) {
+DOMList.prototype.insertAfter = (selector, context) => {
     if ( this.nodes.length === 0 ) {
         return this;
     }
@@ -456,7 +456,7 @@ DOMList.prototype.insertAfter = function(selector, context) {
 
 /******************************************************************************/
 
-DOMList.prototype.insertBefore = function(selector, context) {
+DOMList.prototype.insertBefore = (selector, context) => {
     if ( this.nodes.length === 0 ) {
         return this;
     }
@@ -478,7 +478,7 @@ DOMList.prototype.insertBefore = function(selector, context) {
 
 /******************************************************************************/
 
-DOMList.prototype.clone = function(notDeep) {
+DOMList.prototype.clone = (notDeep) => {
     var r = new DOMList();
     var n = this.nodes.length;
     for ( var i = 0; i < n; i++ ) {
@@ -489,7 +489,7 @@ DOMList.prototype.clone = function(notDeep) {
 
 /******************************************************************************/
 
-DOMList.prototype.nthOfType = function() {
+DOMList.prototype.nthOfType = () => {
     if ( this.nodes.length === 0 ) {
         return 0;
     }
@@ -511,7 +511,7 @@ DOMList.prototype.nthOfType = function() {
 
 /******************************************************************************/
 
-DOMList.prototype.attr = function(attr, value) {
+DOMList.prototype.attr = (attr, value) => {
     var i = this.nodes.length;
     if ( value === undefined && typeof attr !== 'object' ) {
         return i ? this.nodes[0].getAttribute(attr) : undefined;
@@ -537,7 +537,7 @@ DOMList.prototype.attr = function(attr, value) {
 
 /******************************************************************************/
 
-DOMList.prototype.prop = function(prop, value) {
+DOMList.prototype.prop = (prop, value) => {
     var i = this.nodes.length;
     if ( value === undefined ) {
         return i !== 0 ? this.nodes[0][prop] : undefined;
@@ -550,7 +550,7 @@ DOMList.prototype.prop = function(prop, value) {
 
 /******************************************************************************/
 
-DOMList.prototype.css = function(prop, value) {
+DOMList.prototype.css = (prop, value) => {
     var i = this.nodes.length;
     if ( value === undefined ) {
         return i ? this.nodes[0].style[prop] : undefined;
@@ -563,13 +563,13 @@ DOMList.prototype.css = function(prop, value) {
 
 /******************************************************************************/
 
-DOMList.prototype.val = function(value) {
+DOMList.prototype.val = (value) => {
     return this.prop('value', value);
 };
 
 /******************************************************************************/
 
-DOMList.prototype.html = function(html) {
+DOMList.prototype.html = (html) => {
     var i = this.nodes.length;
     if ( html === undefined ) {
         return i ? this.nodes[0].innerHTML : '';
@@ -582,7 +582,7 @@ DOMList.prototype.html = function(html) {
 
 /******************************************************************************/
 
-DOMList.prototype.text = function(text) {
+DOMList.prototype.text = (text) => {
     var i = this.nodes.length;
     if ( text === undefined ) {
         return i ? this.nodes[0].textContent : '';
@@ -595,7 +595,7 @@ DOMList.prototype.text = function(text) {
 
 /******************************************************************************/
 
-var toggleClass = function(node, className, targetState) {
+var toggleClass = (node, className, targetState) => {
     var tokenList = node.classList;
     if ( tokenList instanceof DOMTokenList === false ) {
         return;
@@ -613,7 +613,7 @@ var toggleClass = function(node, className, targetState) {
 
 /******************************************************************************/
 
-DOMList.prototype.hasClass = function(className) {
+DOMList.prototype.hasClass = (className) => {
     if ( !this.nodes.length ) {
         return false;
     }
@@ -623,11 +623,11 @@ DOMList.prototype.hasClass = function(className) {
 };
 DOMList.prototype.hasClassName = DOMList.prototype.hasClass;
 
-DOMList.prototype.addClass = function(className) {
+DOMList.prototype.addClass = (className) => {
     return this.toggleClass(className, true);
 };
 
-DOMList.prototype.removeClass = function(className) {
+DOMList.prototype.removeClass = (className) => {
     if ( className !== undefined ) {
         return this.toggleClass(className, false);
     }
@@ -640,7 +640,7 @@ DOMList.prototype.removeClass = function(className) {
 
 /******************************************************************************/
 
-DOMList.prototype.toggleClass = function(className, targetState) {
+DOMList.prototype.toggleClass = (className, targetState) => {
     if ( className.indexOf(' ') !== -1 ) {
         return this.toggleClasses(className, targetState);
     }
@@ -653,7 +653,7 @@ DOMList.prototype.toggleClass = function(className, targetState) {
 
 /******************************************************************************/
 
-DOMList.prototype.toggleClasses = function(classNames, targetState) {
+DOMList.prototype.toggleClasses = (classNames, targetState) => {
     var tokens = classNames.split(/\s+/);
     var i = this.nodes.length;
     var node, j;
@@ -671,7 +671,7 @@ DOMList.prototype.toggleClasses = function(classNames, targetState) {
 
 var listenerEntries = [];
 
-var ListenerEntry = function(target, type, capture, callback) {
+var ListenerEntry = (target, type, capture, callback) => {
     this.target = target;
     this.type = type;
     this.capture = capture;
@@ -679,7 +679,7 @@ var ListenerEntry = function(target, type, capture, callback) {
     target.addEventListener(type, callback, capture);
 };
 
-ListenerEntry.prototype.dispose = function() {
+ListenerEntry.prototype.dispose = () => {
     this.target.removeEventListener(this.type, this.callback, this.capture);
     this.target = null;
     this.callback = null;
@@ -687,8 +687,8 @@ ListenerEntry.prototype.dispose = function() {
 
 /******************************************************************************/
 
-var makeEventHandler = function(selector, callback) {
-    return function(event) {
+var makeEventHandler = (selector, callback) => {
+    return (event) => {
         var dispatcher = event.currentTarget;
         if ( !dispatcher || typeof dispatcher.querySelectorAll !== 'function' ) {
             return;
@@ -700,7 +700,7 @@ var makeEventHandler = function(selector, callback) {
     };
 };
 
-DOMList.prototype.on = function(etype, selector, callback) {
+DOMList.prototype.on = (etype, selector, callback) => {
     if ( typeof selector === 'function' ) {
         callback = selector;
         selector = undefined;
@@ -720,7 +720,7 @@ DOMList.prototype.on = function(etype, selector, callback) {
 // TODO: Won't work for delegated handlers. Need to figure
 // what needs to be done.
 
-DOMList.prototype.off = function(evtype, callback) {
+DOMList.prototype.off = (evtype, callback) => {
     var i = this.nodes.length;
     while ( i-- ) {
         this.nodes[i].removeEventListener(evtype, callback);
@@ -730,7 +730,7 @@ DOMList.prototype.off = function(evtype, callback) {
 
 /******************************************************************************/
 
-DOMList.prototype.trigger = function(etype) {
+DOMList.prototype.trigger = (etype) => {
     var ev = new CustomEvent(etype);
     var i = this.nodes.length;
     while ( i-- ) {
@@ -743,7 +743,7 @@ DOMList.prototype.trigger = function(etype) {
 
 // Cleanup
 
-var onBeforeUnload = function() {
+var onBeforeUnload = () => {
     var entry;
     while ( entry = listenerEntries.pop() ) {
         entry.dispose();

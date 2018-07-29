@@ -24,7 +24,7 @@
 
 /******************************************************************************/
 
-µBlock.Firewall = (function() {
+µBlock.Firewall = (() => {
 
 'use strict';
 
@@ -34,7 +34,7 @@ var magicId = 'chmdgxwtetgu';
 
 /******************************************************************************/
 
-var Matrix = function() {
+var Matrix = () => {
     this.reset();
 };
 
@@ -82,7 +82,7 @@ var reBadHostname = /[^0-9a-z_.\[\]:-]/;
 // 4.3: "MUST be represented in lowercase"
 // Also: http://en.wikipedia.org/wiki/IPv6_address#Literal_IPv6_addresses_in_network_resource_identifiers
 
-var isIPAddress = function(hostname) {
+var isIPAddress = (hostname) => {
     if ( reHostnameVeryCoarse.test(hostname) ) {
         return false;
     }
@@ -94,7 +94,7 @@ var isIPAddress = function(hostname) {
 
 /******************************************************************************/
 
-var toBroaderHostname = function(hostname) {
+var toBroaderHostname = (hostname) => {
     if ( hostname === '*' ) {
         return '';
     }
@@ -112,7 +112,7 @@ Matrix.toBroaderHostname = toBroaderHostname;
 
 /******************************************************************************/
 
-Matrix.prototype.reset = function() {
+Matrix.prototype.reset = () => {
     this.r = 0;
     this.type = '';
     this.y = '';
@@ -122,7 +122,7 @@ Matrix.prototype.reset = function() {
 
 /******************************************************************************/
 
-Matrix.prototype.assign = function(other) {
+Matrix.prototype.assign = (other) => {
     var thisRules = this.rules;
     var otherRules = other.rules;
     var k;
@@ -148,7 +148,7 @@ Matrix.prototype.assign = function(other) {
 
 /******************************************************************************/
 
-Matrix.prototype.copyRules = function(other, srcHostname, desHostnames) {
+Matrix.prototype.copyRules = (other, srcHostname, desHostnames) => {
     var thisRules = this.rules;
     var otherRules = other.rules;
     var ruleKey, ruleValue;
@@ -199,7 +199,7 @@ Matrix.prototype.copyRules = function(other, srcHostname, desHostnames) {
 // - *    to *
 // - from to *
 
-Matrix.prototype.hasSameRules = function(other, srcHostname, desHostnames) {
+Matrix.prototype.hasSameRules = (other, srcHostname, desHostnames) => {
     var thisRules = this.rules;
     var otherRules = other.rules;
     var ruleKey;
@@ -234,7 +234,7 @@ Matrix.prototype.hasSameRules = function(other, srcHostname, desHostnames) {
 
 /******************************************************************************/
 
-Matrix.prototype.setCell = function(srcHostname, desHostname, type, state) {
+Matrix.prototype.setCell = (srcHostname, desHostname, type, state) => {
     var bitOffset = typeBitOffsets[type];
     var k = srcHostname + ' ' + desHostname;
     var oldBitmap = this.rules[k];
@@ -255,7 +255,7 @@ Matrix.prototype.setCell = function(srcHostname, desHostname, type, state) {
 
 /******************************************************************************/
 
-Matrix.prototype.unsetCell = function(srcHostname, desHostname, type) {
+Matrix.prototype.unsetCell = (srcHostname, desHostname, type) => {
     this.evaluateCellZY(srcHostname, desHostname, type);
     if ( this.r === 0 ) {
         return false;
@@ -266,7 +266,7 @@ Matrix.prototype.unsetCell = function(srcHostname, desHostname, type) {
 
 /******************************************************************************/
 
-Matrix.prototype.setCellZ = function(srcHostname, desHostname, type, action) {
+Matrix.prototype.setCellZ = (srcHostname, desHostname, type, action) => {
     this.evaluateCellZY(srcHostname, desHostname, type);
     if ( this.r === action ) {
         return false;
@@ -282,7 +282,7 @@ Matrix.prototype.setCellZ = function(srcHostname, desHostname, type, action) {
 
 /******************************************************************************/
 
-Matrix.prototype.blockCell = function(srcHostname, desHostname, type) {
+Matrix.prototype.blockCell = (srcHostname, desHostname, type) => {
     return this.setCellZ(srcHostname, desHostname, type, 1);
 };
 
@@ -290,13 +290,13 @@ Matrix.prototype.blockCell = function(srcHostname, desHostname, type) {
 
 /******************************************************************************/
 
-Matrix.prototype.allowCell = function(srcHostname, desHostname, type) {
+Matrix.prototype.allowCell = (srcHostname, desHostname, type) => {
     return this.setCellZ(srcHostname, desHostname, type, 2);
 };
 
 /******************************************************************************/
 
-Matrix.prototype.evaluateCell = function(srcHostname, desHostname, type) {
+Matrix.prototype.evaluateCell = (srcHostname, desHostname, type) => {
     var key = srcHostname + ' ' + desHostname;
     var bitmap = this.rules[key];
     if ( bitmap === undefined ) {
@@ -307,7 +307,7 @@ Matrix.prototype.evaluateCell = function(srcHostname, desHostname, type) {
 
 /******************************************************************************/
 
-Matrix.prototype.clearRegisters = function() {
+Matrix.prototype.clearRegisters = () => {
     this.r = 0;
     this.type = this.y = this.z = '';
     return this;
@@ -315,7 +315,7 @@ Matrix.prototype.clearRegisters = function() {
 
 /******************************************************************************/
 
-var is3rdParty = function(srcHostname, desHostname) {
+var is3rdParty = (srcHostname, desHostname) => {
     if(desHostname === '*' || srcHostname === '*' || srcHostname === '') {
         return false;
     }
@@ -334,7 +334,7 @@ var domainFromHostname = µBlock.URI.domainFromHostname;
 
 /******************************************************************************/
 
-Matrix.prototype.evaluateCellZ = function(srcHostname, desHostname, type) {
+Matrix.prototype.evaluateCellZ = (srcHostname, desHostname, type) => {
     this.type = type;
     var bitOffset = typeBitOffsets[type];
     var s = srcHostname;
@@ -361,7 +361,7 @@ Matrix.prototype.evaluateCellZ = function(srcHostname, desHostname, type) {
 
 /******************************************************************************/
 
-Matrix.prototype.evaluateCellZY = function(srcHostname, desHostname, type) {
+Matrix.prototype.evaluateCellZY = (srcHostname, desHostname, type) => {
     // Precedence: from most specific to least specific
 
     // Specific-destination, any party, any type
@@ -409,31 +409,31 @@ Matrix.prototype.evaluateCellZY = function(srcHostname, desHostname, type) {
 
 /******************************************************************************/
 
-Matrix.prototype.mustAllowCellZY = function(srcHostname, desHostname, type) {
+Matrix.prototype.mustAllowCellZY = (srcHostname, desHostname, type) => {
     return this.evaluateCellZY(srcHostname, desHostname, type).r === 2;
 };
 
 /******************************************************************************/
 
-Matrix.prototype.mustBlockOrAllow = function() {
+Matrix.prototype.mustBlockOrAllow = () => {
     return this.r === 1 || this.r === 2;
 };
 
 /******************************************************************************/
 
-Matrix.prototype.mustBlock = function() {
+Matrix.prototype.mustBlock = () => {
     return this.r === 1;
 };
 
 /******************************************************************************/
 
-Matrix.prototype.mustAbort = function() {
+Matrix.prototype.mustAbort = () => {
     return this.r === 3;
 };
 
 /******************************************************************************/
 
-Matrix.prototype.toFilterString = function() {
+Matrix.prototype.toFilterString = () => {
     if ( this.type === '' ) {
         return '';
     }
@@ -451,19 +451,19 @@ Matrix.prototype.toFilterString = function() {
 
 /******************************************************************************/
 
-Matrix.prototype.srcHostnameFromRule = function(rule) {
+Matrix.prototype.srcHostnameFromRule = (rule) => {
     return rule.slice(0, rule.indexOf(' '));
 };
 
 /******************************************************************************/
 
-Matrix.prototype.desHostnameFromRule = function(rule) {
+Matrix.prototype.desHostnameFromRule = (rule) => {
     return rule.slice(rule.indexOf(' ') + 1);
 };
 
 /******************************************************************************/
 
-Matrix.prototype.toString = function() {
+Matrix.prototype.toString = () => {
     var out = [];
     var rule, type, val;
     var srcHostname, desHostname;
@@ -494,7 +494,7 @@ Matrix.prototype.toString = function() {
 
 /******************************************************************************/
 
-Matrix.prototype.fromString = function(text, append) {
+Matrix.prototype.fromString = (text, append) => {
     var textEnd = text.length;
     var lineBeg = 0, lineEnd;
     var line, pos, fields;
@@ -569,7 +569,7 @@ Matrix.prototype.fromString = function(text, append) {
 
 /******************************************************************************/
 
-Matrix.prototype.fromObsoleteSelfie = function(selfie) {
+Matrix.prototype.fromObsoleteSelfie = (selfie) => {
     if ( selfie === '' ) {
         return '';
     }
@@ -614,7 +614,7 @@ Matrix.prototype.fromObsoleteSelfie = function(selfie) {
 
 /******************************************************************************/
 
-Matrix.prototype.toSelfie = function() {
+Matrix.prototype.toSelfie = () => {
     return {
         magicId: magicId,
         rules: this.rules
@@ -623,7 +623,7 @@ Matrix.prototype.toSelfie = function() {
 
 /******************************************************************************/
 
-Matrix.prototype.fromSelfie = function(selfie) {
+Matrix.prototype.fromSelfie = (selfie) => {
     this.rules = selfie.rules;
 };
 

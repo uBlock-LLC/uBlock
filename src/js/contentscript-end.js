@@ -25,7 +25,7 @@
 
 // Injected into content pages
 
-(function() {
+(() => {
 
 'use strict';
 
@@ -60,14 +60,14 @@ vAPI.styles = vAPI.styles || [];
 /******************************************************************************/
 /******************************************************************************/
 
-var shutdownJobs = (function() {
+var shutdownJobs = (() => {
     var jobs = [];
 
     return {
         add: function(job) {
             jobs.push(job);
         },
-        exec: function() {
+        exec: () => {
             //console.debug('Shutting down...');
             var job;
             while ( job = jobs.pop() ) {
@@ -83,7 +83,7 @@ var shutdownJobs = (function() {
 var messager = vAPI.messaging.channel('contentscript-end.js');
 
 // https://github.com/gorhill/uMatrix/issues/144
-shutdownJobs.add(function() {
+shutdownJobs.add(() => {
     messager.close();
 });
 
@@ -93,7 +93,7 @@ shutdownJobs.add(function() {
 // Be sure that specific cosmetic filters are still applied.
 // Executed once, then flushed from memory.
 
-(function() {
+(() => {
     // Were there specific cosmetic filters?
     if ( vAPI.specificHideStyle instanceof HTMLStyleElement === false ) {
         return;
@@ -115,7 +115,7 @@ shutdownJobs.add(function() {
 
 // https://github.com/uBlockAdmin/uBlock/issues/7
 
-var uBlockCollapser = (function() {
+var uBlockCollapser = (() => {
     var timer = null;
     var requestId = 1;
     var newRequests = [];
@@ -210,7 +210,7 @@ var uBlockCollapser = (function() {
         }
     };
 
-    var send = function() {
+    var send = () => {
         timer = null;
         messager.send({
             what: 'filterRequests',
@@ -311,7 +311,7 @@ var uBlockCollapser = (function() {
 
 // Cosmetic filters
 
-(function() {
+(() => {
     if ( vAPI.skipCosmeticFiltering ) {
         // console.debug('Abort cosmetic filtering');
         return;
@@ -325,9 +325,9 @@ var uBlockCollapser = (function() {
     var lowGenericSelectors = [];
     var highGenerics = null;
     var contextNodes = [document];
-    var nullArray = { push: function(){} };
+    var nullArray = { push: () =>{} };
 
-    var retrieveGenericSelectors = function() {
+    const retrieveGenericSelectors = () => {
         if ( lowGenericSelectors.length !== 0 || highGenerics === null ) {
             //console.log('µBlock> ABP cosmetic filters: retrieving CSS rules using %d selectors', lowGenericSelectors.length);
             messager.send({
@@ -576,7 +576,7 @@ var uBlockCollapser = (function() {
     var processHighHighGenericsMisses = 8;
     var processHighHighGenericsTimer = null;
 
-    var processHighHighGenerics = function() {
+    const processHighHighGenerics = () => {
         processHighHighGenericsTimer = null;
         if ( highGenerics.hideHigh === '' ) {
             return;
@@ -615,7 +615,7 @@ var uBlockCollapser = (function() {
         }
     };
 
-    var processHighHighGenericsAsync = function() {
+    const processHighHighGenericsAsync = () => {
         if ( processHighHighGenericsTimer !== null ) {
             clearTimeout(processHighHighGenericsTimer);
         }
@@ -709,7 +709,7 @@ var uBlockCollapser = (function() {
     var addedNodeListsTimer = null;
     var collapser = uBlockCollapser;
 
-    var treeMutationObservedHandler = function() {
+    let treeMutationObservedHandler = () => {
         var nodeList, iNode, node;
         while ( nodeList = addedNodeLists.pop() ) {
             iNode = nodeList.length;
@@ -761,7 +761,7 @@ var uBlockCollapser = (function() {
     });
 
     // https://github.com/gorhill/uMatrix/issues/144
-    shutdownJobs.add(function() {
+    shutdownJobs.add(() => {
         treeObserver.disconnect();
         if ( addedNodeListsTimer !== null ) {
             clearTimeout(addedNodeListsTimer);
@@ -779,8 +779,8 @@ var uBlockCollapser = (function() {
 // - Elements dynamically added to the page
 // - Elements which resource URL changes
 
-(function() {
-    var onResourceFailed = function(ev) {
+(() => {
+    var onResourceFailed = (ev) => {
         //console.debug('onResourceFailed(%o)', ev);
         uBlockCollapser.add(ev.target);
         uBlockCollapser.process();
@@ -788,7 +788,7 @@ var uBlockCollapser = (function() {
     document.addEventListener('error', onResourceFailed, true);
 
     // https://github.com/gorhill/uMatrix/issues/144
-    shutdownJobs.add(function() {
+    shutdownJobs.add(() => {
         document.removeEventListener('error', onResourceFailed, true);
     });
 })();
@@ -800,7 +800,7 @@ var uBlockCollapser = (function() {
 
 // Executed only once
 
-(function() {
+(() => {
     var collapser = uBlockCollapser;
     var elems, i, elem;
 
@@ -828,7 +828,7 @@ var uBlockCollapser = (function() {
 
 // Ref.: https://developer.mozilla.org/en-US/docs/Web/Events/contextmenu
 
-(function() {
+(() => {
     if ( window !== window.top ) {
         return;
     }
@@ -843,7 +843,7 @@ var uBlockCollapser = (function() {
     window.addEventListener('contextmenu', onContextMenu, true);
 
     // https://github.com/gorhill/uMatrix/issues/144
-    shutdownJobs.add(function() {
+    shutdownJobs.add(() => {
         document.removeEventListener('contextmenu', onContextMenu, true);
     });
 })();

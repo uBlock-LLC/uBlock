@@ -24,15 +24,15 @@
 
 /******************************************************************************/
 
-(function() {
+(() => {
 
 /******************************************************************************/
 
-var messager = vAPI.messaging.channel('asset-viewer.js');
+let messager = vAPI.messaging.channel('asset-viewer.js');
 
 /******************************************************************************/
 
-var onAssetContentReceived = function(details) {
+const onAssetContentReceived = (details) => {
     uDom('#content').text(details && (details.content || ''));
 };
 

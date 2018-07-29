@@ -26,7 +26,7 @@
 /******************************************************************************/
 /******************************************************************************/
 
-(function() {
+(() => {
 
 'use strict';
 
@@ -39,7 +39,7 @@ var vAPI = self.vAPI;
 
 // http://www.w3.org/International/questions/qa-scripts#directions
 
-var setScriptDirection = function(language) {
+var setScriptDirection = (language) => {
     document.body.setAttribute(
         'dir',
         ['ar', 'he', 'fa', 'ps', 'ur'].indexOf(language) !== -1 ? 'rtl' : 'ltr'
@@ -48,7 +48,7 @@ var setScriptDirection = function(language) {
 
 /******************************************************************************/
 
-vAPI.download = function(details) {
+vAPI.download = (details) => {
     if ( !details.url ) {
         return;
     }
@@ -61,7 +61,7 @@ vAPI.download = function(details) {
 
 /******************************************************************************/
 
-vAPI.insertHTML = function(node, html) {
+vAPI.insertHTML = (node, html) => {
     node.innerHTML = html;
 };
 
@@ -77,7 +77,7 @@ setScriptDirection(vAPI.i18n('@@ui_locale'));
 
 /******************************************************************************/
 
-vAPI.closePopup = function() {
+vAPI.closePopup = () => {
     window.open('','_self').close();
 };
 

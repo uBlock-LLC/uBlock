@@ -23,7 +23,7 @@
 
 /******************************************************************************/
 
-(function() {
+(() => {
 
 'use strict';
 
@@ -85,7 +85,7 @@ localMessager.send({
     what: 'logCosmeticFilteringData',
     pageURL: window.location.href,
     matchedSelectors: matchedSelectors
-}, function() {
+}, () => {
     localMessager.close();
 });
 

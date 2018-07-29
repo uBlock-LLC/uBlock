@@ -28,7 +28,7 @@
 
 /******************************************************************************/
 
-(function() {
+(() => {
 
 'use strict';
 
@@ -62,7 +62,7 @@ var messager = vAPI.messaging.channel('subscriber.js');
 
 /******************************************************************************/
 
-var onAbpLinkClicked = function(ev) {
+var onAbpLinkClicked = (ev) => {
     if ( ev.button !== 0 ) {
         return;
     }
@@ -89,18 +89,18 @@ var onAbpLinkClicked = function(ev) {
     ev.stopPropagation();
     ev.preventDefault();
 
-    var onListsSelectionDone = function() {
+    var onListsSelectionDone = () => {
         messager.send({ what: 'reloadAllFilters' });
     };
 
-    var onExternalListsSaved = function() {
+    var onExternalListsSaved = () => {
         messager.send({
             what: 'selectFilterLists',
             switches: [ { location: location, off: false } ]
         }, onListsSelectionDone);
     };
 
-    var onSubscriberDataReady = function(details) {
+    var onSubscriberDataReady = (details) => {
         var confirmStr = details.confirmStr
                             .replace('{{url}}', location)
                             .replace('{{title}}', title);

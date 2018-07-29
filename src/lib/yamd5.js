@@ -63,7 +63,7 @@ THE SOFTWARE.
 
 /* jshint bitwise: false */
 
-(function(root) {
+((root) => {
 
     'use strict';
 
@@ -77,8 +77,8 @@ THE SOFTWARE.
 
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Operator_Precedence
 
-    var md5cycle = function(x, k) {
-        var a = x[0],
+    const md5cycle = (x, k) => {
+        let a = x[0],
             b = x[1],
             c = x[2],
             d = x[3];
@@ -221,14 +221,14 @@ THE SOFTWARE.
         x[3] = d + x[3] | 0;
     };
 
-    var hexChars = '0123456789abcdef';
-    var hexOut = [];
+    let hexChars = '0123456789abcdef';
+    let hexOut = [];
 
-    var hex = function(x) {
-        var hc = hexChars;
-        var ho = hexOut;
-        var n, offset, j;
-        for (var i = 0; i < 4; i++) {
+    const hex = (x) => {
+        let hc = hexChars;
+        let ho = hexOut;
+        let n, offset, j;
+        for (let i = 0; i < 4; i++) {
             offset = i * 8;
             n = x[i];
             for ( j = 0; j < 8; j += 2 ) {
@@ -241,7 +241,7 @@ THE SOFTWARE.
         return ho.join('');
     };
 
-    var MD5 = function() {
+    const MD5 = () => {
         this._dataLength = 0;
         this._state = new Int32Array(4);
         this._buffer = new ArrayBuffer(68);
@@ -251,17 +251,17 @@ THE SOFTWARE.
         this.start();
     };
 
-    var stateIdentity = new Int32Array([1732584193, -271733879, -1732584194, 271733878]);
-    var buffer32Identity = new Int32Array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+    let stateIdentity = new Int32Array([1732584193, -271733879, -1732584194, 271733878]);
+    let buffer32Identity = new Int32Array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
 
     // Char to code point to to array conversion:
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/charCodeAt#Example.3A_Fixing_charCodeAt_to_handle_non-Basic-Multilingual-Plane_characters_if_their_presence_earlier_in_the_string_is_unknown
-    MD5.prototype.appendStr = function(str) {
-        var buf8 = this._buffer8;
-        var buf32 = this._buffer32;
-        var bufLen = this._bufferLength;
-        var code;
-        for ( var i = 0; i < str.length; i++ ) {
+    MD5.prototype.appendStr = (str) => {
+        let buf8 = this._buffer8;
+        let buf32 = this._buffer32;
+        let bufLen = this._bufferLength;
+        let code;
+        for ( let i = 0; i < str.length; i++ ) {
             code = str.charCodeAt(i);
             if ( code < 128 ) {
                 buf8[bufLen++] = code;
@@ -293,11 +293,11 @@ THE SOFTWARE.
         return this;
     };
 
-    MD5.prototype.appendAsciiStr = function(str) {
-        var buf8 = this._buffer8;
-        var buf32 = this._buffer32;
-        var bufLen = this._bufferLength;
-        var i, j = 0;
+    MD5.prototype.appendAsciiStr = (str) => {
+        let buf8 = this._buffer8;
+        let buf32 = this._buffer32;
+        let bufLen = this._bufferLength;
+        let i, j = 0;
         for (;;) {
             i = Math.min(str.length-j, 64-bufLen);
             while ( i-- ) {
@@ -314,11 +314,11 @@ THE SOFTWARE.
         return this;
     };
 
-    MD5.prototype.appendByteArray = function(input) {
-        var buf8 = this._buffer8;
-        var buf32 = this._buffer32;
-        var bufLen = this._bufferLength;
-        var i, j = 0;
+    MD5.prototype.appendByteArray = (input) => {
+        let buf8 = this._buffer8;
+        let buf32 = this._buffer32;
+        let bufLen = this._bufferLength;
+        let i, j = 0;
         for (;;) {
             i = Math.min(input.length-j, 64-bufLen);
             while ( i-- ) {
@@ -335,21 +335,21 @@ THE SOFTWARE.
         return this;
     };
 
-    MD5.prototype.start = function() {
+    MD5.prototype.start = () => {
         this._dataLength = 0;
         this._bufferLength = 0;
         this._state.set(stateIdentity);
         return this;
     };
 
-    MD5.prototype.end = function(raw) {
-        var bufLen = this._bufferLength;
+    MD5.prototype.end = (raw) => {
+        let bufLen = this._bufferLength;
         this._dataLength += bufLen;
-        var buf8 = this._buffer8;
+        let buf8 = this._buffer8;
         buf8[bufLen] = 0x80;
         buf8[bufLen+1] =  buf8[bufLen+2] =  buf8[bufLen+3] = 0;
-        var buf32 = this._buffer32;
-        var i = (bufLen >> 2) + 1;
+        let buf32 = this._buffer32;
+        let i = (bufLen >> 2) + 1;
         buf32.set(buffer32Identity.subarray(i), i);
         if (bufLen > 55) {
             md5cycle(this._state, buf32);
@@ -357,13 +357,13 @@ THE SOFTWARE.
         }
         // Do the final computation based on the tail and length
         // Beware that the final length may not fit in 32 bits so we take care of that
-        var dataBitsLen = this._dataLength * 8;
+        let dataBitsLen = this._dataLength * 8;
         if ( dataBitsLen <= 0xFFFFFFFF ) {
             buf32[14] = dataBitsLen;
         } else {
-            var matches = dataBitsLen.toString(16).match(/(.*?)(.{0,8})$/);
-            var lo = parseInt(matches[2], 16);
-            var hi = parseInt(matches[1], 16) || 0;
+            let matches = dataBitsLen.toString(16).match(/(.*?)(.{0,8})$/);
+            let lo = parseInt(matches[2], 16);
+            let hi = parseInt(matches[1], 16) || 0;
             buf32[14] = lo;
             buf32[15] = hi;
         }
@@ -373,16 +373,16 @@ THE SOFTWARE.
     };
 
     // This permanent instance is to use for one-call hashing
-    var onePassHasher = new MD5();
+    let onePassHasher = new MD5();
 
-    MD5.hashStr = function(str, raw) {
+    MD5.hashStr = (str, raw) => {
         return onePassHasher
             .start()
             .appendStr(str)
             .end(raw);
     };
 
-    MD5.hashAsciiStr = function(str, raw) {
+    MD5.hashAsciiStr = (str, raw) => {
         return onePassHasher
             .start()
             .appendAsciiStr(str)

@@ -23,7 +23,7 @@
 
 /******************************************************************************/
 
-(function() {
+(() => {
 
 'use strict';
 
@@ -33,7 +33,7 @@ var messager = vAPI.messaging.channel('dyna-rules.js');
 
 /******************************************************************************/
 
-var renderRules = function(details) {
+var renderRules = (details) => {
     var rules, rule, i;
     var allRules = {};
     var permanentRules = {};
@@ -92,8 +92,8 @@ var renderRules = function(details) {
 
 /******************************************************************************/
 
-function handleImportFilePicker() {
-    var fileReaderOnLoadHandler = function() {
+const handleImportFilePicker = () =>  {
+    var fileReaderOnLoadHandler = () => {
         if ( typeof this.result !== 'string' || this.result === '' ) {
             return;
         }
@@ -126,7 +126,7 @@ function handleImportFilePicker() {
 
 /******************************************************************************/
 
-var startImportFilePicker = function() {
+var startImportFilePicker = () => {
     var input = document.getElementById('importFilePicker');
     // Reset to empty string, this will ensure an change event is properly
     // triggered if the user pick a file, even if it is the same as the last
@@ -137,7 +137,7 @@ var startImportFilePicker = function() {
 
 /******************************************************************************/
 
-function exportUserRulesToFile() {
+const exportUserRulesToFile = () => {
     var now = new Date();
     var filename = vAPI.i18n('rulesDefaultFileName')
         .replace('{{datetime}}', now.toLocaleString())
@@ -151,7 +151,7 @@ function exportUserRulesToFile() {
 
 /******************************************************************************/
 
-var rulesFromHTML = function(selector) {
+var rulesFromHTML = (selector) => {
     var rules = [];
     var lis = uDom(selector);
     var li;
@@ -168,7 +168,7 @@ var rulesFromHTML = function(selector) {
 
 /******************************************************************************/
 
-var revertHandler = function() {
+var revertHandler = () => {
     var request = {
         'what': 'setSessionFirewallRules',
         'rules': rulesFromHTML('#diff .left li')
@@ -178,7 +178,7 @@ var revertHandler = function() {
 
 /******************************************************************************/
 
-var commitHandler = function() {
+var commitHandler = () => {
     var request = {
         'what': 'setPermanentFirewallRules',
         'rules': rulesFromHTML('#diff .right li')
@@ -188,7 +188,7 @@ var commitHandler = function() {
 
 /******************************************************************************/
 
-var editStartHandler = function() {
+var editStartHandler = () => {
     var parent = uDom(this).ancestors('#diff');
     // If we're already editing, don't reset
     if ( parent.hasClassName('edit') ) {
@@ -200,7 +200,7 @@ var editStartHandler = function() {
 
 /******************************************************************************/
 
-var editStopHandler = function() {
+var editStopHandler = () => {
     var parent = uDom(this).ancestors('#diff');
     parent.toggleClass('edit', false);
     var request = {
@@ -212,14 +212,14 @@ var editStopHandler = function() {
 
 /******************************************************************************/
 
-var editCancelHandler = function() {
+var editCancelHandler = () => {
     var parent = uDom(this).ancestors('#diff');
     parent.toggleClass('edit', false);
 };
 
 /******************************************************************************/
 
-uDom.onLoad(function() {
+uDom.onLoad(() => {
     // Handle user interaction
     uDom('#importButton').on('click', startImportFilePicker);
     uDom('#importFilePicker').on('change', handleImportFilePicker);
@@ -238,4 +238,3 @@ uDom.onLoad(function() {
 /******************************************************************************/
 
 })();
-

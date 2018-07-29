@@ -24,7 +24,7 @@
 /******************************************************************************/
 /******************************************************************************/
 
-(function() {
+(() => {
 
 'use strict';
 
@@ -45,7 +45,7 @@ var µb = µBlock;
 /******************************************************************************/
 /******************************************************************************/
 
-µb.normalizePageURL = function(tabId, pageURL) {
+µb.normalizePageURL = (tabId, pageURL) => {
     if ( vAPI.isBehindTheSceneTabId(tabId) ) {
         return 'http://behind-the-scene/';
     }
@@ -119,7 +119,7 @@ master switch and dynamic filtering rules can be evaluated now properly even
 in the absence of a PageStore object, this was not the case before.
 
 Also, the TabContext object will try its best to find a good candidate root
-document URL for when none exists. This takes care of 
+document URL for when none exists. This takes care of
 <https://github.com/uBlockAdmin/uBlock/issues/1001>.
 
 The TabContext manager is self-contained, and it takes care to properly
@@ -127,7 +127,7 @@ housekeep itself.
 
 */
 
-µb.tabContextManager = (function() {
+µb.tabContextManager = (() => {
     var tabContexts = Object.create(null);
 
     // https://github.com/uBlockAdmin/uBlock/issues/1001
@@ -138,7 +138,7 @@ housekeep itself.
 
     var gcPeriod = 10 * 60 * 1000;
 
-    var TabContext = function(tabId) {
+    var TabContext = (tabId) => {
         this.tabId = tabId.toString();
         this.stack = [];
         this.rawURL =
@@ -152,7 +152,7 @@ housekeep itself.
         tabContexts[tabId] = this;
     };
 
-    TabContext.prototype.destroy = function() {
+    TabContext.prototype.destroy = () => {
         if ( vAPI.isBehindTheSceneTabId(this.tabId) ) {
             return;
         }
@@ -163,7 +163,7 @@ housekeep itself.
         delete tabContexts[this.tabId];
     };
 
-    TabContext.prototype.onTab = function(tab) {
+    TabContext.prototype.onTab = (tab) => {
         if ( tab ) {
             this.timer = setTimeout(this.onTimerCallback, gcPeriod);
         } else {
@@ -171,7 +171,7 @@ housekeep itself.
         }
     };
 
-    TabContext.prototype.onTimer = function() {
+    TabContext.prototype.onTimer = () => {
         this.timer = null;
         if ( vAPI.isBehindTheSceneTabId(this.tabId) ) {
             return;
@@ -182,7 +182,7 @@ housekeep itself.
     // This takes care of orphanized tab contexts. Can't be started for all
     // contexts, as the behind-the-scene context is permanent -- so we do not
     // want to slush it.
-    TabContext.prototype.autodestroy = function() {
+    TabContext.prototype.autodestroy = () => {
         if ( vAPI.isBehindTheSceneTabId(this.tabId) ) {
             return;
         }
@@ -193,7 +193,7 @@ housekeep itself.
 
     // Update just force all properties to be updated to match the most current
     // root URL.
-    TabContext.prototype.update = function() {
+    TabContext.prototype.update = () => {
         if ( this.stack.length === 0 ) {
             this.rawURL = this.normalURL = this.rootHostname = this.rootDomain = '';
         } else {
@@ -205,7 +205,7 @@ housekeep itself.
     };
 
     // Called whenever a candidate root URL is spotted for the tab.
-    TabContext.prototype.push = function(url) {
+    TabContext.prototype.push = (url) => {
         if ( vAPI.isBehindTheSceneTabId(this.tabId) ) {
             return;
         }
@@ -219,7 +219,7 @@ housekeep itself.
 
     // Called when a former push is a false positive:
     //   https://github.com/uBlockAdmin/uBlock/issues/516
-    TabContext.prototype.unpush = function(url) {
+    TabContext.prototype.unpush = (url) => {
         if ( vAPI.isBehindTheSceneTabId(this.tabId) ) {
             return;
         }
@@ -246,7 +246,7 @@ housekeep itself.
     // This tells that the url is definitely the one to be associated with the
     // tab, there is no longer any ambiguity about which root URL is really
     // sitting in which tab.
-    TabContext.prototype.commit = function(url) {
+    TabContext.prototype.commit = (url) => {
         if ( vAPI.isBehindTheSceneTabId(this.tabId) ) {
             return;
         }
@@ -256,7 +256,7 @@ housekeep itself.
 
     // These are to be used for the API of the tab context manager.
 
-    var push = function(tabId, url) {
+    var push = (tabId, url) => {
         var entry = tabContexts[tabId];
         if ( entry === undefined ) {
             entry = new TabContext(tabId);
@@ -270,7 +270,7 @@ housekeep itself.
 
     // Find a tab context for a specific tab. If none is found, attempt to
     // fix this. When all fail, the behind-the-scene context is returned.
-    var lookup = function(tabId, url) {
+    var lookup = (tabId, url) => {
         var entry;
         if ( url !== undefined ) {
             entry = push(tabId, url);
@@ -304,7 +304,7 @@ housekeep itself.
         return tabContexts[vAPI.noTabId];
     };
 
-    var commit = function(tabId, url) {
+    var commit = (tabId, url) => {
         var entry = tabContexts[tabId];
         if ( entry === undefined ) {
             entry = push(tabId, url);
@@ -314,26 +314,26 @@ housekeep itself.
         return entry;
     };
 
-    var unpush = function(tabId, url) {
+    var unpush = (tabId, url) => {
         var entry = tabContexts[tabId];
         if ( entry !== undefined ) {
             entry.unpush(url);
         }
     };
 
-    var destroy = function(tabId) {
+    var destroy = (tabId) => {
         var entry = tabContexts[tabId];
         if ( entry !== undefined ) {
             entry.destroy();
         }
     };
 
-    var exists = function(tabId) {
+    var exists = (tabId) => {
         return tabContexts[tabId] !== undefined;
     };
 
     // Behind-the-scene tab context
-    (function() {
+    (() => {
         var entry = new TabContext(vAPI.noTabId);
         entry.stack.push('');
         entry.rawURL = '';
@@ -343,18 +343,18 @@ housekeep itself.
     })();
 
     // Context object, typically to be used to feed filtering engines.
-    var Context = function(tabId) {
+    var Context = (tabId) => {
         var tabContext = lookup(tabId);
         this.rootHostname = tabContext.rootHostname;
         this.rootDomain = tabContext.rootDomain;
-        this.pageHostname = 
+        this.pageHostname =
         this.pageDomain =
         this.requestURL =
         this.requestHostname =
         this.requestDomain = '';
     };
 
-    var createContext = function(tabId) {
+    var createContext = (tabId) => {
         return new Context(tabId);
     };
 
@@ -374,7 +374,7 @@ housekeep itself.
 // When the DOM content of root frame is loaded, this means the tab
 // content has changed.
 
-vAPI.tabs.onNavigation = function(details) {
+vAPI.tabs.onNavigation = (details) => {
     if ( details.frameId !== 0 ) {
         return;
     }
@@ -400,7 +400,7 @@ vAPI.tabs.onNavigation = function(details) {
 // stays the same (for instance, Google Maps). Without this listener,
 // the extension icon won't be properly refreshed.
 
-vAPI.tabs.onUpdated = function(tabId, changeInfo, tab) {
+vAPI.tabs.onUpdated = (tabId, changeInfo, tab) => {
     if ( !tab.url || tab.url === '' ) {
         return;
     }
@@ -413,7 +413,7 @@ vAPI.tabs.onUpdated = function(tabId, changeInfo, tab) {
 
 /******************************************************************************/
 
-vAPI.tabs.onClosed = function(tabId) {
+vAPI.tabs.onClosed = (tabId) => {
     if ( tabId < 0 ) {
         return;
     }
@@ -424,7 +424,7 @@ vAPI.tabs.onClosed = function(tabId) {
 
 // https://github.com/uBlockAdmin/uBlock/issues/297
 
-vAPI.tabs.onPopup = function(details) {
+vAPI.tabs.onPopup = (details) => {
     // console.debug('vAPI.tabs.onPopup: details = %o', details);
 
     var tabContext = µb.tabContextManager.lookup(details.openerTabId);
@@ -466,7 +466,7 @@ vAPI.tabs.onPopup = function(details) {
     }
 
     // https://github.com/uBlockAdmin/uBlock/issues/91
-    var pageStore = µb.pageStoreFromTabId(details.openerTabId); 
+    var pageStore = µb.pageStoreFromTabId(details.openerTabId);
     if ( pageStore ) {
         pageStore.logRequest(context, result);
     }
@@ -498,9 +498,9 @@ vAPI.tabs.registerListeners();
 
 // Create an entry for the tab if it doesn't exist.
 
-µb.bindTabToPageStats = function(tabId, context) {
+µb.bindTabToPageStats = (tabId, context) => {
     this.updateBadgeAsync(tabId);
-    
+
     if ( µb.tabContextManager.exists(tabId) === false ) {
         this.unbindTabFromPageStats(tabId);
         return null;
@@ -530,7 +530,7 @@ vAPI.tabs.registerListeners();
 
 /******************************************************************************/
 
-µb.unbindTabFromPageStats = function(tabId) {
+µb.unbindTabFromPageStats = (tabId) => {
     //console.debug('µBlock> unbindTabFromPageStats(%d)', tabId);
     var pageStore = this.pageStores[tabId];
     if ( pageStore !== undefined ) {
@@ -539,7 +539,7 @@ vAPI.tabs.registerListeners();
     }
 };
 
-µb.pageStoreFromTabId = function(tabId) {
+µb.pageStoreFromTabId = (tabId) => {
     return this.pageStores[tabId] || null;
 };
 
@@ -559,11 +559,11 @@ var pageStoreJanitorPeriod = 15 * 60 * 1000;
 var pageStoreJanitorSampleAt = 0;
 var pageStoreJanitorSampleSize = 10;
 
-var pageStoreJanitor = function() {
+var pageStoreJanitor = () => {
     var vapiTabs = vAPI.tabs;
     var tabIds = Object.keys(µb.pageStores).sort();
-    var checkTab = function(tabId) {
-        vapiTabs.get(tabId, function(tab) {
+    var checkTab = (tabId) => {
+        vapiTabs.get(tabId, (tab) => {
             if ( !tab ) {
                 //console.error('tab.js> pageStoreJanitor(): stale page store found:', µb.pageUrlFromTabId(tabId));
                 µb.unbindTabFromPageStats(tabId);

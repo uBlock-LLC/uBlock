@@ -26,15 +26,15 @@
 
 // Async job queue module
 
-µBlock.asyncJobs = (function() {
+µBlock.asyncJobs = (() => {
 
 /******************************************************************************/
 
-var processJobs = function() {
+const processJobs = () => {
     asyncJobManager.process();
 };
 
-var AsyncJobEntry = function(name) {
+let AsyncJobEntry = (name) => {
     this.name = name;
     this.data = null;
     this.callback = null;
@@ -42,7 +42,7 @@ var AsyncJobEntry = function(name) {
     this.period = 0;
 };
 
-AsyncJobEntry.prototype.destroy = function() {
+AsyncJobEntry.prototype.destroy = () => {
     this.name = '';
     this.data = null;
     this.callback = null;
@@ -50,7 +50,7 @@ AsyncJobEntry.prototype.destroy = function() {
 
 /******************************************************************************/
 
-var AsyncJobManager = function() {
+let AsyncJobManager = () => {
     this.timeResolution = 200;
     this.jobs = {};
     this.jobCount = 0;
@@ -61,7 +61,7 @@ var AsyncJobManager = function() {
 
 /******************************************************************************/
 
-AsyncJobManager.prototype.restartTimer = function() {
+AsyncJobManager.prototype.restartTimer = () => {
     // TODO: Another way to do this is to extract the keys, sort the keys
     // in chronological order, than pick the first entry to get the next
     // time at which we want a time event to fire. Completely unsure the
@@ -94,7 +94,7 @@ AsyncJobManager.prototype.restartTimer = function() {
 
 /******************************************************************************/
 
-AsyncJobManager.prototype.add = function(name, data, callback, delay, recurrent) {
+AsyncJobManager.prototype.add = (name, data, callback, delay, recurrent) => {
     var job = this.jobs[name];
     if ( !job ) {
         job = this.jobJunkyard.pop();
@@ -115,7 +115,7 @@ AsyncJobManager.prototype.add = function(name, data, callback, delay, recurrent)
 
 /******************************************************************************/
 
-AsyncJobManager.prototype.remove = function(jobName) {
+AsyncJobManager.prototype.remove = (jobName) => {
     if ( this.jobs.hasOwnProperty(jobName) === false ) {
         return;
     }
@@ -129,7 +129,7 @@ AsyncJobManager.prototype.remove = function(jobName) {
 
 /******************************************************************************/
 
-AsyncJobManager.prototype.process = function() {
+AsyncJobManager.prototype.process = () => {
     this.timerId = null;
     this.timerWhen = Number.MAX_VALUE;
     var now = Date.now();
@@ -171,11 +171,11 @@ return asyncJobManager;
 
 // Update visual of extension icon.
 
-µBlock.updateBadgeAsync = (function() {
+µBlock.updateBadgeAsync = (() => {
     var µb = µBlock;
     var tabIdToTimer = {};
 
-    var updateBadge = function(tabId) {
+    let updateBadge = (tabId) => {
         delete tabIdToTimer[tabId];
 
         var pageStore = µb.pageStoreFromTabId(tabId);
@@ -191,7 +191,7 @@ return asyncJobManager;
         vAPI.setIcon(tabId, netFiltering ? 'on' : 'off', badge);
     };
 
-    return function(tabId) {
+    return (tabId) => {
         if ( vAPI.isBehindTheSceneTabId(tabId) ) {
             return;
         }

@@ -23,7 +23,7 @@
 
 /******************************************************************************/
 
-var quickProfiler = (function() {
+var quickProfiler = (() => {
     'use strict';
 
     var timer = window.performance || Date;
@@ -35,19 +35,19 @@ var quickProfiler = (function() {
     var tstart = 0;
     var lastlog = timer.now();
     var prompt = '';
-    var reset = function() {
+    var reset = () => {
         time = 0;
         count = 0;
         tstart = 0;
     };
-    var avg = function() {
+    var avg = () => {
         return count > 0 ? time / count : 0;
     };
-    var start = function(s) {
+    var start = (s) => {
         prompt = s || '';
         tstart = timer.now();
     };
-    var stop = function(period) {
+    var stop = (period) => {
         if ( period === undefined ) {
             period = 10000;
         }

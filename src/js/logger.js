@@ -24,20 +24,20 @@
 /******************************************************************************/
 /******************************************************************************/
 
-µBlock.logger = (function() {
+µBlock.logger = (() => {
 
 'use strict';
 
 /******************************************************************************/
 /******************************************************************************/
 
-var LogEntry = function(details, result) {
+var LogEntry = (details, result) => {
     this.init(details, result);
 };
 
 /******************************************************************************/
 
-var logEntryFactory = function(details, result) {
+var logEntryFactory = (details, result) => {
     var entry = logEntryJunkyard.pop();
     if ( entry ) {
         return entry.init(details, result);
@@ -50,7 +50,7 @@ var logEntryJunkyardMax = 100;
 
 /******************************************************************************/
 
-LogEntry.prototype.init = function(details, result) {
+LogEntry.prototype.init = (details, result) => {
     this.tstamp = Date.now();
     this.url = details.requestURL;
     this.hostname = details.requestHostname;
@@ -61,7 +61,7 @@ LogEntry.prototype.init = function(details, result) {
 
 /******************************************************************************/
 
-LogEntry.prototype.dispose = function() {
+LogEntry.prototype.dispose = () => {
     this.url = this.hostname = this.type = this.result = '';
     if ( logEntryJunkyard.length < logEntryJunkyardMax ) {
         logEntryJunkyard.push(this);
@@ -71,7 +71,7 @@ LogEntry.prototype.dispose = function() {
 /******************************************************************************/
 /******************************************************************************/
 
-var LogBuffer = function() {
+var LogBuffer = () => {
     this.lastReadTime = 0;
     this.size = 50;
     this.buffer = new Array(this.size);
@@ -81,7 +81,7 @@ var LogBuffer = function() {
 
 /******************************************************************************/
 
-LogBuffer.prototype.dispose = function() {
+LogBuffer.prototype.dispose = () => {
     var entry;
     var i = this.buffer.length;
     while ( i-- ) {
@@ -96,7 +96,7 @@ LogBuffer.prototype.dispose = function() {
 
 /******************************************************************************/
 
-LogBuffer.prototype.writeOne = function(details, result) {
+LogBuffer.prototype.writeOne = (details, result) => {
     // Reusing log entry = less memory churning
     var entry = this.buffer[this.writePtr];
     if ( entry instanceof LogEntry === false ) {
@@ -126,7 +126,7 @@ LogBuffer.prototype.writeOne = function(details, result) {
 
 /******************************************************************************/
 
-LogBuffer.prototype.readAll = function() {
+LogBuffer.prototype.readAll = () => {
     var out;
     if ( this.readPtr < this.writePtr ) {
         out = this.buffer.slice(this.readPtr, this.writePtr);
@@ -152,7 +152,7 @@ var logBufferObsoleteAfter = 30 * 1000;
 
 /******************************************************************************/
 
-var writeOne = function(tabId, details, result) {
+var writeOne = (tabId, details, result) => {
     if ( logBuffers.hasOwnProperty(tabId) === false ) {
         return;
     }
@@ -162,7 +162,7 @@ var writeOne = function(tabId, details, result) {
 
 /******************************************************************************/
 
-var readAll = function(tabId) {
+var readAll = (tabId) => {
     if ( logBuffers.hasOwnProperty(tabId) === false ) {
         logBuffers[tabId] = new LogBuffer();
     }
@@ -171,13 +171,13 @@ var readAll = function(tabId) {
 
 /******************************************************************************/
 
-var isObserved = function(tabId) {
+var isObserved = (tabId) => {
     return logBuffers.hasOwnProperty(tabId);
 };
 
 /******************************************************************************/
 
-var loggerJanitor = function() {
+var loggerJanitor = () => {
     var logBuffer;
     var obsolete = Date.now() - logBufferObsoleteAfter;
     for ( var tabId in logBuffers ) {

@@ -1,5 +1,5 @@
 /*! https://mths.be/punycode v1.3.2 by @mathias */
-;(function(root) {
+;((root) => {
 
 	/** Detect free variables */
 	var freeExports = typeof exports == 'object' && exports &&
@@ -63,10 +63,7 @@
 	 * @param {String} type The error type.
 	 * @returns {Error} Throws a `RangeError` with the applicable error message.
 	 */
-	function error(type) {
-		throw RangeError(errors[type]);
-	}
-
+	const error = (type) => throw RangeError(errors[type]);
 	/**
 	 * A generic `Array#map` utility function.
 	 * @private
@@ -75,7 +72,7 @@
 	 * item.
 	 * @returns {Array} A new array of values returned by the callback function.
 	 */
-	function map(array, fn) {
+	const map = (array, fn) => {
 		var length = array.length;
 		var result = [];
 		while (length--) {
@@ -94,7 +91,7 @@
 	 * @returns {Array} A new string of characters returned by the callback
 	 * function.
 	 */
-	function mapDomain(string, fn) {
+	const mapDomain = (string, fn) => {
 		var parts = string.split('@');
 		var result = '';
 		if (parts.length > 1) {
@@ -123,7 +120,7 @@
 	 * @param {String} string The Unicode input string (UCS-2).
 	 * @returns {Array} The new array of code points.
 	 */
-	function ucs2decode(string) {
+	const ucs2decode = (string) => {
 		var output = [],
 		    counter = 0,
 		    length = string.length,
@@ -157,8 +154,8 @@
 	 * @param {Array} codePoints The array of numeric code points.
 	 * @returns {String} The new Unicode string (UCS-2).
 	 */
-	function ucs2encode(array) {
-		return map(array, function(value) {
+	const ucs2encode = (array) => {
+		return map(array, (value) => {
 			var output = '';
 			if (value > 0xFFFF) {
 				value -= 0x10000;
@@ -179,7 +176,7 @@
 	 * representing integers) in the range `0` to `base - 1`, or `base` if
 	 * the code point does not represent a value.
 	 */
-	function basicToDigit(codePoint) {
+	const basicToDigit = (codePoint) => {
 		if (codePoint - 48 < 10) {
 			return codePoint - 22;
 		}
@@ -203,7 +200,7 @@
 	 * used; else, the lowercase form is used. The behavior is undefined
 	 * if `flag` is non-zero and `digit` has no uppercase form.
 	 */
-	function digitToBasic(digit, flag) {
+	const digitToBasic(digit, flag) => {
 		//  0..25 map to ASCII a..z or A..Z
 		// 26..35 map to ASCII 0..9
 		return digit + 22 + 75 * (digit < 26) - ((flag != 0) << 5);
@@ -512,7 +509,7 @@
 		typeof define.amd == 'object' &&
 		define.amd
 	) {
-		define('punycode', function() {
+		define('punycode', () => {
 			return punycode;
 		});
 	} else if (freeExports && freeModule) {

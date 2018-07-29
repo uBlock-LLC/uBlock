@@ -26,7 +26,7 @@
 
 // New namespace
 
-µBlock.contextMenu = (function() {
+µBlock.contextMenu = (() => {
 
 /******************************************************************************/
 
@@ -35,7 +35,7 @@ var enabled = false;
 
 /******************************************************************************/
 
-var onContextMenuClicked = function(details, tab) {
+var onContextMenuClicked = (details, tab) => {
     if ( details.menuItemId !== 'blockElement' ) {
         return;
     }
@@ -51,7 +51,7 @@ var onContextMenuClicked = function(details, tab) {
 
 /******************************************************************************/
 
-var toggleMenu = function(on) {
+var toggleMenu = (on) => {
     // This needs to be local scope: we can't reuse it for more than one
     // menu creation call.
     var menuCreateDetails = {
