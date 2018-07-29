@@ -1,4 +1,4 @@
-/*******************************************************************************
+(ev) =>/*******************************************************************************
 
     µBlock - a browser extension to block requests.
     Copyright (C) 2014 Raymond Hill
@@ -25,7 +25,7 @@
 /******************************************************************************/
 
 /*! http://mths.be/cssescape v0.2.1 by @mathias | MIT license */
-;(function(root) {
+;((root) => {
 
     'use strict';
 
@@ -35,7 +35,7 @@
 
     var CSS = root.CSS;
 
-    var InvalidCharacterError = function(message) {
+    var InvalidCharacterError = (message) => {
         this.message = message;
     };
     InvalidCharacterError.prototype = new Error();
@@ -43,7 +43,7 @@
 
     if (!CSS.escape) {
         // http://dev.w3.org/csswg/cssom/#serialize-an-identifier
-        CSS.escape = function(value) {
+        CSS.escape = (value) => {
             var string = String(value);
             var length = string.length;
             var index = -1;
@@ -114,7 +114,7 @@
 /******************************************************************************/
 /******************************************************************************/
 
-(function() {
+(() => {
 
 'use strict';
 
@@ -164,7 +164,7 @@ try {
 
 /******************************************************************************/
 
-var safeQuerySelectorAll = function(node, selector) {
+var safeQuerySelectorAll = (node, selector) => {
     if ( node !== null ) {
         try {
             return node.querySelectorAll(selector);
@@ -176,7 +176,7 @@ var safeQuerySelectorAll = function(node, selector) {
 
 /******************************************************************************/
 
-var highlightElements = function(elems, force) {
+var highlightElements = (elems, force) => {
     // To make mouse move handler more efficient
     if ( !force && elems.length === targetElements.length ) {
         if ( elems.length === 0 || elems[0] === targetElements[0] ) {
@@ -227,7 +227,7 @@ var highlightElements = function(elems, force) {
 
 /******************************************************************************/
 
-var removeElements = function(elems) {
+var removeElements = (elems) => {
     var i = elems.length, elem;
     while ( i-- ) {
         elem = elems[i];
@@ -239,11 +239,11 @@ var removeElements = function(elems) {
 
 /******************************************************************************/
 
-var netFilterFromUnion = (function() {
+var netFilterFromUnion = (() => {
     var reTokenizer = /[^0-9a-z%*]+|[0-9a-z%]+|\*/gi;
     var a = document.createElement('a');
 
-    return function(to, out) {
+    return (to, out) => {
         a.href= to;
         to = a.pathname + a.search;
         var from = lastNetFilterUnion;
@@ -311,7 +311,7 @@ var netFilterFromUnion = (function() {
 
 // Extract the best possible net filter, i.e. as specific as possible.
 
-var netFilterFromElement = function(elem, out) {
+var netFilterFromElement = (elem, out) => {
     if ( elem === null ) {
         return;
     }
@@ -330,7 +330,7 @@ var netFilterFromElement = function(elem, out) {
     netFilterFromUrl(src, out);
 }
 
-var netFilterFromUrl = function(url, out) {
+var netFilterFromUrl = (url, out) => {
     // Remove fragment
     var pos = url.indexOf('#');
     if ( pos !== -1 ) {
@@ -363,7 +363,7 @@ var netFilterSources = {
 
 // Extract the best possible cosmetic filter, i.e. as specific as possible.
 
-var cosmeticFilterFromElement = function(elem, out) {
+var cosmeticFilterFromElement = (elem, out) => {
     if ( elem === null ) {
         return;
     }
@@ -459,7 +459,7 @@ var cosmeticFilterFromElement = function(elem, out) {
 
 /******************************************************************************/
 
-var filtersFromElement = function(elem) {
+var filtersFromElement = (elem) => {
     netFilterCandidates.length = 0;
     cosmeticFilterCandidates.length = 0;
     while ( elem && elem !== document.body ) {
@@ -477,7 +477,7 @@ var filtersFromElement = function(elem) {
 
 /******************************************************************************/
 
-var filtersFromUrl = function(url) {
+var filtersFromUrl = (url) => {
     netFilterCandidates.length = 0;
     cosmeticFilterCandidates.length = 0;
     netFilterFromUrl(url, netFilterCandidates);
@@ -485,7 +485,7 @@ var filtersFromUrl = function(url) {
 
 /******************************************************************************/
 
-var elementsFromFilter = function(filter) {
+var elementsFromFilter = (filter) => {
     var out = [];
 
     filter = filter.trim();
@@ -561,7 +561,7 @@ var elementsFromFilter = function(filter) {
 
 /******************************************************************************/
 
-var userFilterFromCandidate = function() {
+var userFilterFromCandidate = () => {
     var v = taCandidate.value;
 
     var elems = elementsFromFilter(v);
@@ -585,7 +585,7 @@ var userFilterFromCandidate = function() {
 
 /******************************************************************************/
 
-var onCandidateChanged = function() {
+var onCandidateChanged = () => {
     var elems = elementsFromFilter(taCandidate.value);
     dialog.querySelector('#create').disabled = elems.length === 0;
     highlightElements(elems);
@@ -593,7 +593,7 @@ var onCandidateChanged = function() {
 
 /******************************************************************************/
 
-var candidateFromFilterChoice = function(filterChoice) {
+var candidateFromFilterChoice = (filterChoice) => {
     var slot = filterChoice.slot;
     var filters = filterChoice.filters;
     var filter = filters[slot];
@@ -622,7 +622,7 @@ var candidateFromFilterChoice = function(filterChoice) {
 
 /******************************************************************************/
 
-var filterChoiceFromEvent = function(ev) {
+var filterChoiceFromEvent = (ev) => {
     var li = ev.target;
     var isNetFilter = li.textContent.slice(0, 2) !== '##';
     var r = {
@@ -640,7 +640,7 @@ var filterChoiceFromEvent = function(ev) {
 
 /******************************************************************************/
 
-var onDialogClicked = function(ev) {
+var onDialogClicked = (ev) => {
     if ( ev.target === null ) {
         /* do nothing */
     }
@@ -677,7 +677,7 @@ var onDialogClicked = function(ev) {
 
 /******************************************************************************/
 
-var removeAllChildren = function(parent) {
+var removeAllChildren = (parent) => {
     while ( parent.firstChild ) {
         parent.removeChild(parent.firstChild);
     }
@@ -688,13 +688,13 @@ var removeAllChildren = function(parent) {
 // TODO: for convenience I could provide a small set of net filters instead
 // of just a single one. Truncating the right-most part of the path etc.
 
-var showDialog = function(options) {
+var showDialog = (options) => {
     pausePicker();
 
     options = options || {};
 
     // Create lists of candidate filters
-    var populate = function(src, des) {
+    var populate = (src, des) => {
         var root = dialog.querySelector(des);
         var ul = root.querySelector('ul');
         removeAllChildren(ul);
@@ -737,7 +737,7 @@ var showDialog = function(options) {
 
 /******************************************************************************/
 
-var elementFromPoint = function(x, y) {
+var elementFromPoint = (x, y) => {
     pickerRoot.style.pointerEvents = 'none';
     var elem = document.elementFromPoint(x, y);
     if ( elem === document.body || elem === document.documentElement ) {
@@ -749,14 +749,14 @@ var elementFromPoint = function(x, y) {
 
 /******************************************************************************/
 
-var onSvgHovered = function(ev) {
+var onSvgHovered = (ev) => {
     var elem = elementFromPoint(ev.clientX, ev.clientY);
     highlightElements(elem ? [elem] : []);
 };
 
 /******************************************************************************/
 
-var onSvgClicked = function(ev) {
+var onSvgClicked = (ev) => {
     // https://github.com/uBlockAdmin/uBlock/issues/810#issuecomment-74600694
     // Unpause picker if user click outside dialog
     if ( dialog.parentNode.classList.contains('paused') ) {
@@ -774,14 +774,14 @@ var onSvgClicked = function(ev) {
 
 /******************************************************************************/
 
-var svgListening = function(on) {
+var svgListening = (on) => {
     var action = (on ? 'add' : 'remove') + 'EventListener';
     svgRoot[action]('mousemove', onSvgHovered);
 };
 
 /******************************************************************************/
 
-var onKeyPressed = function(ev) {
+var onKeyPressed = (ev) => {
     if ( ev.which === 27 ) {
         ev.stopPropagation();
         ev.preventDefault();
@@ -795,20 +795,20 @@ var onKeyPressed = function(ev) {
 // May need to dynamically adjust the height of the overlay + new position
 // of highlighted elements.
 
-var onScrolled = function() {
+var onScrolled = () => {
     highlightElements(targetElements, true);
 };
 
 /******************************************************************************/
 
-var pausePicker = function() {
+var pausePicker = () => {
     dialog.parentNode.classList.add('paused');
     svgListening(false);
 };
 
 /******************************************************************************/
 
-var unpausePicker = function() {
+var unpausePicker = () => {
     dialog.parentNode.classList.remove('paused');
     svgListening(true);
 };
@@ -818,7 +818,7 @@ var unpausePicker = function() {
 // Let's have the element picker code flushed from memory when no longer
 // in use: to ensure this, release all local references.
 
-var stopPicker = function() {
+var stopPicker = () => {
     targetElements = [];
 
     if ( pickerRoot === null ) {
@@ -844,7 +844,7 @@ var stopPicker = function() {
 
 /******************************************************************************/
 
-var startPicker = function(details) {
+var startPicker = (details) => {
     pickerRoot.onload = stopPicker;
 
     var frameDoc = pickerRoot.contentDocument;
@@ -932,7 +932,7 @@ pickerRoot.style.cssText = [
     ''
 ].join('!important; ');
 
-pickerRoot.onload = function() {
+pickerRoot.onload = () => {
     localMessager.send({ what: 'elementPickerArguments' }, startPicker);
 };
 

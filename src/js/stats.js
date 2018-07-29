@@ -1,5 +1,5 @@
 
-µBlock.stats = (function () {
+µBlock.stats = (() => {
 
     var µb = µBlock;
 
@@ -18,7 +18,7 @@
     var browser = (matches || [])[1] || "Unknown";
 
     var browserFlavor;
-    
+
     if (window.opr)
         browserFlavor = "O"; // Opera
     else if (window.safari)
@@ -39,7 +39,7 @@
 
     var exports = {};
 
-    exports.generateUserId = function() {
+    exports.generateUserId = () => {
 
         var timeSuffix = (Date.now()) % 1e8; // 8 digits from end of timestamp
 
@@ -55,28 +55,28 @@
         return result.join('') + timeSuffix;
     }
 
-    var ajaxCall = function(params){
+    var ajaxCall = (params) => {
         var xhr = new XMLHttpRequest();
         var url = "https://ping.ublock.org/api/stats"
         xhr.open('POST', url, true);
         xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
         xhr.overrideMimeType('text/html;charset=utf-8');
         xhr.responseType = 'text';
-        xhr.onreadystatechange = function() {
+        xhr.onreadystatechange = () => {
             if(xhr.readyState == 4 && xhr.status == 200) {
-           
+
             }
         }
         xhr.send(JSON.stringify(params));
     }
 
-    var getStatsEntries = function(callback) {
+    var getStatsEntries = (callback) => {
 
         if(storageStatsAttr.userId != null) {
             callback(storageStatsAttr);
             return;
         }
-        var onDataReceived = function(data) {
+        var onDataReceived = (data) => {
 
             entries = data.stats || {userId: exports.generateUserId(),totalPings: 0 };
 
@@ -87,12 +87,12 @@
         vAPI.storage.get('stats',onDataReceived);
     }
 
-    exports.sendStats = function() {
-        
+    exports.sendStats = () => {
+
         if (!µb.userSettings.allowUserStats) {
             return;
         }
-        var processData = function(details) {
+        var processData = (details) => {
 
             details.totalPings = details.totalPings + 1;
 
@@ -124,7 +124,7 @@
 
             if(browser == "Chrome") {
                 if (chrome.management && chrome.management.getSelf) {
-                    chrome.management.getSelf(function(info) {
+                    chrome.management.getSelf((info) => {
                         statsData["it"] = info.installType.charAt(0);
                         ajaxCall(statsData);
                     });
@@ -138,9 +138,9 @@
         getStatsEntries(processData);
     }
 
-    var scheduleStatsEvent = function() {
+    var scheduleStatsEvent = () => {
 
-        var delayTiming = getNextScheduleTiming(function(delayTiming){
+        var delayTiming = getNextScheduleTiming((delayTiming) =>{
 
             µBlock.asyncJobs.add(
                 'sendStats',
@@ -151,9 +151,9 @@
             );
         });
     }
-    var getNextScheduleTiming = function(callback) {
+    var getNextScheduleTiming = (callback) => {
 
-        var processData = function(details) {
+        var processData = (details) => {
 
             var totalPings = details.totalPings;
 

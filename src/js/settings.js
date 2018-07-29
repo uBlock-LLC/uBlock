@@ -23,7 +23,7 @@
 
 /******************************************************************************/
 
-(function() {
+(() => {
 
 'use strict';
 
@@ -33,7 +33,7 @@ var messager = vAPI.messaging.channel('settings.js');
 
 /******************************************************************************/
 
-var handleImportFilePicker = function() {
+var handleImportFilePicker = () => {
     var file = this.files[0];
     if ( file === undefined || file.name === '' ) {
         return;
@@ -43,7 +43,7 @@ var handleImportFilePicker = function() {
     }
     var filename = file.name;
 
-    var fileReaderOnLoadHandler = function() {
+    var fileReaderOnLoadHandler = () => {
         var userData;
         try {
             userData = JSON.parse(this.result);
@@ -87,7 +87,7 @@ var handleImportFilePicker = function() {
 
 /******************************************************************************/
 
-var startImportFilePicker = function() {
+var startImportFilePicker = () => {
     var input = document.getElementById('restoreFilePicker');
     // Reset to empty string, this will ensure an change event is properly
     // triggered if the user pick a file, even if it is the same as the last
@@ -98,9 +98,9 @@ var startImportFilePicker = function() {
 
 /******************************************************************************/
 
-var exportToFile = function() {
+var exportToFile = () => {
     //messager.send({ what: 'backupUserData' }, onLocalDataReceived);
-    messager.send({ what: 'backupUserData' }, function(response) {
+    messager.send({ what: 'backupUserData' }, (response) => {
         if (
             response instanceof Object === false ||
             response.userData instanceof Object === false
@@ -118,7 +118,7 @@ var exportToFile = function() {
 
 /******************************************************************************/
 
-var onLocalDataReceived = function(details) {
+var onLocalDataReceived = (details) => {
     uDom('#localData > ul > li:nth-of-type(1)').text(
         vAPI.i18n('settingsStorageUsed')
         .replace(
@@ -157,7 +157,7 @@ var onLocalDataReceived = function(details) {
 
 /******************************************************************************/
 
-var resetUserData = function() {
+var resetUserData = () => {
     var msg = vAPI.i18n('aboutResetDataConfirm');
     var proceed = window.confirm(msg);
     if ( proceed ) {
@@ -167,7 +167,7 @@ var resetUserData = function() {
 
 /******************************************************************************/
 
-var changeUserSettings = function(name, value) {
+var changeUserSettings = (name, value) => {
     messager.send({
         what: 'userSettings',
         name: name,
@@ -179,38 +179,38 @@ var changeUserSettings = function(name, value) {
 
 // TODO: use data-* to declare simple settings
 
-var onUserSettingsReceived = function(details) {
+var onUserSettingsReceived = (details) => {
     uDom('#collapse-blocked')
         .prop('checked', details.collapseBlocked === true)
-        .on('change', function(){
+        .on('change', () =>{
             changeUserSettings('collapseBlocked', this.checked);
         });
 
     uDom('#icon-badge')
         .prop('checked', details.showIconBadge === true)
-        .on('change', function(){
+        .on('change', () =>{
             changeUserSettings('showIconBadge', this.checked);
         });
 
     uDom('#context-menu-enabled')
         .prop('checked', details.contextMenuEnabled === true)
-        .on('change', function(){
+        .on('change', () =>{
             changeUserSettings('contextMenuEnabled', this.checked);
         });
 
     uDom('#advanced-user-enabled')
         .prop('checked', details.advancedUserEnabled === true)
-        .on('change', function(){
+        .on('change', () =>{
             changeUserSettings('advancedUserEnabled', this.checked);
         });
     uDom('#allow-user-stats')
         .prop('checked', details.allowUserStats === true)
-        .on('change', function(){
+        .on('change', () =>{
             changeUserSettings('allowUserStats', this.checked);
-        });    
+        });
     uDom('#experimental-enabled')
         .prop('checked', details.experimentalEnabled === true)
-        .on('change', function(){
+        .on('change', () =>{
             changeUserSettings('experimentalEnabled', this.checked);
         });
 
@@ -222,7 +222,7 @@ var onUserSettingsReceived = function(details) {
 
 /******************************************************************************/
 
-uDom.onLoad(function() {
+uDom.onLoad(() => {
     messager.send({ what: 'userSettings' }, onUserSettingsReceived);
     messager.send({ what: 'getLocalData' }, onLocalDataReceived);
 });

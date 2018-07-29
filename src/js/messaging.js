@@ -26,13 +26,13 @@
 
 // Default handler
 
-(function() {
+(() => {
 
 'use strict';
 
 /******************************************************************************/
 
-var onMessage = function(request, sender, callback) {
+var onMessage = (request, sender, callback) => {
     var µb = µBlock;
 
     // Async
@@ -127,7 +127,7 @@ vAPI.messaging.setup(onMessage);
 
 // popup.js
 
-(function() {
+(() => {
 
 'use strict';
 
@@ -137,7 +137,7 @@ var µb = µBlock;
 
 /******************************************************************************/
 
-var getHostnameDict = function(hostnameToCountMap) {
+var getHostnameDict = (hostnameToCountMap) => {
     var r = {}, de;
     var domainFromHostname = µb.URI.domainFromHostname;
     var domain, counts, blockCount, allowCount;
@@ -182,7 +182,7 @@ var getHostnameDict = function(hostnameToCountMap) {
 
 /******************************************************************************/
 
-var getFirewallRules = function(srcHostname, desHostnames) {
+var getFirewallRules = (srcHostname, desHostnames) => {
     var r = {};
     var dFiltering = µb.sessionFirewall;
     r['/ * *'] = dFiltering.evaluateCellZY('*', '*', '*').toFilterString();
@@ -215,7 +215,7 @@ var getFirewallRules = function(srcHostname, desHostnames) {
 
 /******************************************************************************/
 
-var getStats = function(tabId, tabTitle) {
+var getStats = (tabId, tabTitle) => {
     var tabContext = µb.tabContextManager.lookup(tabId);
     var r = {
         advancedUserEnabled: µb.userSettings.advancedUserEnabled,
@@ -265,7 +265,7 @@ var canRequestLog = true;
 
 /******************************************************************************/
 
-var getTargetTabId = function(tab) {
+var getTargetTabId = (tab) => {
     canRequestLog = true;
 
     if ( !tab ) {
@@ -294,7 +294,7 @@ var getTargetTabId = function(tab) {
 
 /******************************************************************************/
 
-var onMessage = function(request, sender, callback) {
+var onMessage = (request, sender, callback) => {
     // Async
     switch ( request.what ) {
         case 'getPopupData':
@@ -302,7 +302,7 @@ var onMessage = function(request, sender, callback) {
                 callback(getStats(vAPI.noTabId, ''));
                 return;
             }
-            vAPI.tabs.get(request.tabId, function(tab) {
+            vAPI.tabs.get(request.tabId, (tab) => {
                 // https://github.com/uBlockAdmin/uBlock/issues/1012
                 callback(getStats(getTargetTabId(tab), tab ? tab.title : ''));
             });
@@ -381,7 +381,7 @@ vAPI.messaging.listen('popup.js', onMessage);
 
 // contentscript-start.js
 
-(function() {
+(() => {
 
 'use strict';
 
@@ -391,7 +391,7 @@ var µb = µBlock;
 
 /******************************************************************************/
 
-var onMessage = function(request, sender, callback) {
+var onMessage = (request, sender, callback) => {
     // Async
     switch ( request.what ) {
         default:
@@ -431,7 +431,7 @@ vAPI.messaging.listen('contentscript-start.js', onMessage);
 
 // contentscript-end.js
 
-(function() {
+(() => {
 
 'use strict';
 
@@ -452,7 +452,7 @@ var tagNameToRequestTypeMap = {
 
 // Evaluate many requests
 
-var filterRequests = function(pageStore, details) {
+var filterRequests = (pageStore, details) => {
     var requests = details.requests;
     if ( !pageStore || !pageStore.getNetFilteringSwitch() ) {
         return requests;
@@ -484,7 +484,7 @@ var filterRequests = function(pageStore, details) {
 
 /******************************************************************************/
 
-var onMessage = function(request, sender, callback) {
+var onMessage = (request, sender, callback) => {
     // Async
     switch ( request.what ) {
         default:
@@ -539,7 +539,7 @@ vAPI.messaging.listen('contentscript-end.js', onMessage);
 
 // cosmetic-*.js
 
-(function() {
+(() => {
 
 'use strict';
 
@@ -549,7 +549,7 @@ var µb = µBlock;
 
 /******************************************************************************/
 
-var logCosmeticFilters = function(tabId, details) {
+var logCosmeticFilters = (tabId, details) => {
     if ( µb.logger.isObserved(tabId) === false ) {
         return;
     }
@@ -571,7 +571,7 @@ var logCosmeticFilters = function(tabId, details) {
 
 /******************************************************************************/
 
-var onMessage = function(request, sender, callback) {
+var onMessage = (request, sender, callback) => {
     // Async
     switch ( request.what ) {
         default:
@@ -606,7 +606,7 @@ vAPI.messaging.listen('cosmetic-*.js', onMessage);
 
 // element-picker.js
 
-(function() {
+(() => {
 
 'use strict';
 
@@ -616,7 +616,7 @@ var µb = µBlock;
 
 /******************************************************************************/
 
-var onMessage = function(request, sender, callback) {
+var onMessage = (request, sender, callback) => {
     // Async
     switch ( request.what ) {
         case 'elementPickerArguments':
@@ -624,7 +624,7 @@ var onMessage = function(request, sender, callback) {
             xhr.open('GET', 'epicker.html', true);
             xhr.overrideMimeType('text/html;charset=utf-8');
             xhr.responseType = 'text';
-            xhr.onload = function() {
+            xhr.onload = () => {
                 this.onload = null;
                 var i18n = {
                     bidi_dir: document.body.getAttribute('dir'),
@@ -636,7 +636,7 @@ var onMessage = function(request, sender, callback) {
                     cosmeticFiltersHint: vAPI.i18n('pickerCosmeticFiltersHint')
                 };
                 var reStrings = /\{\{(\w+)\}\}/g;
-                var replacer = function(a0, string) {
+                var replacer = (a0, string) => {
                     return i18n[string];
                 };
 
@@ -688,7 +688,7 @@ vAPI.messaging.listen('element-picker.js', onMessage);
 
 // 3p-filters.js
 
-(function() {
+(() => {
 
 'use strict';
 
@@ -698,7 +698,7 @@ var µb = µBlock;
 
 /******************************************************************************/
 
-var prepEntries = function(entries) {
+var prepEntries = (entries) => {
     var µburi = µb.URI;
     var entry;
     for ( var k in entries ) {
@@ -715,7 +715,7 @@ var prepEntries = function(entries) {
 
 /******************************************************************************/
 
-var getLists = function(callback) {
+var getLists = (callback) => {
     var r = {
         autoUpdate: µb.userSettings.autoUpdate,
         available: null,
@@ -727,14 +727,14 @@ var getLists = function(callback) {
         netFilterCount: µb.staticNetFilteringEngine.getFilterCount(),
         userFiltersPath: µb.userFiltersPath
     };
-    var onMetadataReady = function(entries) {
+    var onMetadataReady = (entries) => {
         r.cache = entries;
         r.manualUpdate = µb.assetUpdater.manualUpdate;
         r.manualUpdateProgress = µb.assetUpdater.manualUpdateProgress;
         prepEntries(r.cache);
         callback(r);
     };
-    var onLists = function(lists) {
+    var onLists = (lists) => {
         r.available = lists;
         prepEntries(r.available);
         µb.assets.metadata(onMetadataReady);
@@ -744,7 +744,7 @@ var getLists = function(callback) {
 
 /******************************************************************************/
 
-var onMessage = function(request, sender, callback) {
+var onMessage = (request, sender, callback) => {
     // Async
     switch ( request.what ) {
         case 'getLists':
@@ -783,7 +783,7 @@ vAPI.messaging.listen('3p-filters.js', onMessage);
 
 // 1p-filters.js
 
-(function() {
+(() => {
 
 'use strict';
 
@@ -793,7 +793,7 @@ var µb = µBlock;
 
 /******************************************************************************/
 
-var onMessage = function(request, sender, callback) {
+var onMessage = (request, sender, callback) => {
     // Async
     switch ( request.what ) {
         case 'readUserFilters':
@@ -828,7 +828,7 @@ vAPI.messaging.listen('1p-filters.js', onMessage);
 
 // dyna-rules.js
 
-(function() {
+(() => {
 
 'use strict';
 
@@ -838,7 +838,7 @@ var µb = µBlock;
 
 /******************************************************************************/
 
-var getFirewallRules = function() {
+var getFirewallRules = () => {
     return {
         permanentRules: µb.permanentFirewall.toString(),
         sessionRules: µb.sessionFirewall.toString()
@@ -847,7 +847,7 @@ var getFirewallRules = function() {
 
 /******************************************************************************/
 
-var onMessage = function(request, sender, callback) {
+var onMessage = (request, sender, callback) => {
     // Async
     switch ( request.what ) {
         default:
@@ -894,7 +894,7 @@ vAPI.messaging.listen('dyna-rules.js', onMessage);
 
 // whitelist.js
 
-(function() {
+(() => {
 
 'use strict';
 
@@ -904,7 +904,7 @@ var µb = µBlock;
 
 /******************************************************************************/
 
-var onMessage = function(request, sender, callback) {
+var onMessage = (request, sender, callback) => {
     // Async
     switch ( request.what ) {
         default:
@@ -944,7 +944,7 @@ vAPI.messaging.listen('whitelist.js', onMessage);
 
 // devtools.js
 
-(function() {
+(() => {
 
 'use strict';
 
@@ -954,7 +954,7 @@ var µb = µBlock;
 
 /******************************************************************************/
 
-var getPageDetails = function(callback) {
+var getPageDetails = (callback) => {
     var out = {};
     var tabIds = Object.keys(µb.pageStores);
 
@@ -972,7 +972,7 @@ var getPageDetails = function(callback) {
     }
 
     var countdown = tabIds.length;
-    var doCountdown = function() {
+    var doCountdown = () => {
         countdown -= 1;
         if ( countdown === 0 ) {
             callback(out);
@@ -982,7 +982,7 @@ var getPageDetails = function(callback) {
     // Let's not populate the page selector with reference to self
     var devtoolsURL = vAPI.getURL('devtools.html');
 
-    var onTabDetails = function(tab) {
+    var onTabDetails = (tab) => {
         if ( tab && tab.url.lastIndexOf(devtoolsURL, 0) !== 0 ) {
             out[tab.id] = tab.title;
         }
@@ -997,7 +997,7 @@ var getPageDetails = function(callback) {
 
 /******************************************************************************/
 
-var onMessage = function(request, sender, callback) {
+var onMessage = (request, sender, callback) => {
     // Async
     switch ( request.what ) {
         case 'getPageDetails':
@@ -1030,7 +1030,7 @@ vAPI.messaging.listen('devtools.js', onMessage);
 
 // settings.js
 
-(function() {
+(() => {
 
 'use strict';
 
@@ -1040,8 +1040,8 @@ var µb = µBlock;
 
 /******************************************************************************/
 
-var getLocalData = function(callback) {
-    var onStorageInfoReady = function(bytesInUse) {
+var getLocalData = (callback) => {
+    var onStorageInfoReady = (bytesInUse) => {
         var o = µb.restoreBackupSettings;
         callback({
             storageUsed: bytesInUse,
@@ -1057,7 +1057,7 @@ var getLocalData = function(callback) {
 
 /******************************************************************************/
 
-var backupUserData = function(callback) {
+var backupUserData = (callback) => {
     var userData = {
         timeStamp: Date.now(),
         version: vAPI.app.version,
@@ -1068,7 +1068,7 @@ var backupUserData = function(callback) {
         userFilters: ''
     };
 
-    var onSelectedListsReady = function(filterLists) {
+    var onSelectedListsReady = (filterLists) => {
         userData.filterLists = filterLists;
 
         var now = new Date();
@@ -1078,13 +1078,13 @@ var backupUserData = function(callback) {
         µb.restoreBackupSettings.lastBackupFile = filename;
         µb.restoreBackupSettings.lastBackupTime = Date.now();
         vAPI.storage.preferences.set(µb.restoreBackupSettings);
-        
-        getLocalData(function(localData) {
+
+        getLocalData((localData) => {
             callback({ localData: localData, userData: userData });
         });
     };
 
-    var onUserFiltersReady = function(details) {
+    var onUserFiltersReady = (details) => {
         userData.userFilters = details.content;
         µb.extractSelectedFilterLists(onSelectedListsReady);
     };
@@ -1094,17 +1094,17 @@ var backupUserData = function(callback) {
 
 /******************************************************************************/
 
-var restoreUserData = function(request) {
+var restoreUserData = (request) => {
     var userData = request.userData;
     var countdown = 6;
-    var onCountdown = function() {
+    var onCountdown = () => {
         countdown -= 1;
         if ( countdown === 0 ) {
             vAPI.app.restart();
         }
     };
 
-    var onAllRemoved = function() {
+    var onAllRemoved = () => {
         // Be sure to adjust `countdown` if adding/removing anything below
         µb.keyvalSetOnePref('version', userData.version);
         µBlock.saveLocalSettings(true);
@@ -1137,7 +1137,7 @@ var restoreUserData = function(request) {
 
 /******************************************************************************/
 
-var resetUserData = function() {
+var resetUserData = () => {
     vAPI.storage.clear();
 
     // Keep global counts, people can become quite attached to numbers
@@ -1148,7 +1148,7 @@ var resetUserData = function() {
 
 /******************************************************************************/
 
-var onMessage = function(request, sender, callback) {
+var onMessage = (request, sender, callback) => {
     // Async
     switch ( request.what ) {
         case 'backupUserData':
@@ -1191,7 +1191,7 @@ vAPI.messaging.listen('settings.js', onMessage);
 
 // devtool-log.js
 
-(function() {
+(() => {
 
 'use strict';
 
@@ -1201,7 +1201,7 @@ var µb = µBlock;
 
 /******************************************************************************/
 
-var onMessage = function(request, sender, callback) {
+var onMessage = (request, sender, callback) => {
     // Async
     switch ( request.what ) {
         default:
@@ -1236,13 +1236,13 @@ vAPI.messaging.listen('devtool-log.js', onMessage);
 
 // subscriber.js
 
-(function() {
+(() => {
 
 'use strict';
 
 /******************************************************************************/
 
-var onMessage = function(request, sender, callback) {
+var onMessage = (request, sender, callback) => {
     // Async
     switch ( request.what ) {
         default:
@@ -1278,13 +1278,13 @@ vAPI.messaging.listen('subscriber.js', onMessage);
 
 // document-blocked.js
 
-(function() {
+(() => {
 
 'use strict';
 
 /******************************************************************************/
 
-var onMessage = function(request, sender, callback) {
+var onMessage = (request, sender, callback) => {
     // Async
     switch ( request.what ) {
         default:

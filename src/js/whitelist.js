@@ -23,7 +23,7 @@
 
 /******************************************************************************/
 
-(function() {
+(() => {
 
 'use strict';
 
@@ -40,7 +40,7 @@ var reUnwantedChars = /[\x00-\x09\x0b\x0c\x0e-\x1f!"$'()<>{}|\\^\[\]`~]/;
 
 /******************************************************************************/
 
-var whitelistChanged = function() {
+var whitelistChanged = () => {
     var s = uDom('#whitelist').val().trim();
     var bad = reUnwantedChars.test(s);
     uDom('#whitelistApply').prop(
@@ -52,8 +52,8 @@ var whitelistChanged = function() {
 
 /******************************************************************************/
 
-var renderWhitelist = function() {
-    var onRead = function(whitelist) {
+var renderWhitelist = () => {
+    var onRead = (whitelist) => {
         cachedWhitelist = whitelist;
         uDom('#whitelist').val(cachedWhitelist);
     };
@@ -63,8 +63,8 @@ var renderWhitelist = function() {
 
 /******************************************************************************/
 
-var handleImportFilePicker = function() {
-    var fileReaderOnLoadHandler = function() {
+var handleImportFilePicker = () => {
+    var fileReaderOnLoadHandler = () => {
         var textarea = uDom('#whitelist');
         textarea.val([textarea.val(), this.result].join('\n').trim());
         whitelistChanged();
@@ -83,7 +83,7 @@ var handleImportFilePicker = function() {
 
 /******************************************************************************/
 
-var startImportFilePicker = function() {
+var startImportFilePicker = () => {
     var input = document.getElementById('importFilePicker');
     // Reset to empty string, this will ensure an change event is properly
     // triggered if the user pick a file, even if it is the same as the last
@@ -94,7 +94,7 @@ var startImportFilePicker = function() {
 
 /******************************************************************************/
 
-var exportWhitelistToFile = function() {
+var exportWhitelistToFile = () => {
     var val = uDom('#whitelist').val().trim();
     if ( val === '' ) {
         return;
@@ -111,7 +111,7 @@ var exportWhitelistToFile = function() {
 
 /******************************************************************************/
 
-var whitelistApplyHandler = function() {
+var whitelistApplyHandler = () => {
     cachedWhitelist = uDom('#whitelist').val().trim();
     var request = {
         what: 'setWhitelist',
@@ -122,7 +122,7 @@ var whitelistApplyHandler = function() {
 
 /******************************************************************************/
 
-uDom.onLoad(function() {
+uDom.onLoad(() => {
     uDom('#importWhitelistFromFile').on('click', startImportFilePicker);
     uDom('#importFilePicker').on('change', handleImportFilePicker);
     uDom('#exportWhitelistToFile').on('click', exportWhitelistToFile);

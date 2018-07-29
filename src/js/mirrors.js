@@ -26,7 +26,7 @@
 
 // Low-level asset files manager
 
-µBlock.mirrors = (function() {
+µBlock.mirrors = (() => {
 
 'use strict';
 
@@ -49,7 +49,7 @@ var exports = {
 
 /******************************************************************************/
 
-var nullFunc = function() {};
+var nullFunc = () => {};
 
 // TODO: need to come up with something better. Key shoud be domain. More
 // control over what significant part(s) of a URL is to be used as key.
@@ -78,19 +78,19 @@ var loaded = false;
 // re-persist the whole thing.
 // So, ContentEntry persisted once, MetadataEntry persisted often.
 
-var MetadataEntry = function(hash) {
+var MetadataEntry = (hash) => {
     this.accessTime = Date.now();
     this.hash = hash;
 };
 
-var ContentEntry = function(dataURL) {
+var ContentEntry = (dataURL) => {
     this.createTime = Date.now();
     this.dataURL = dataURL;
 };
 
 /******************************************************************************/
 
-var getTextFileFromURL = function(url, onLoad, onError) {
+var getTextFileFromURL = (url, onLoad, onError) => {
     if ( typeof onLoad !== 'function' ) {
         onLoad = nullFunc;
     }
@@ -116,7 +116,7 @@ var getTextFileFromURL = function(url, onLoad, onError) {
 // more efficient conversion. Hopefully I will get time to confirm with
 // benchmarks in the future.
 
-var btoaMap = (function(){
+var btoaMap = (() =>{
     var out = new Uint8Array(64);
     var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
     var i = chars.length;
@@ -126,7 +126,7 @@ var btoaMap = (function(){
     return out;
 })();
 
-var btoaSafe = function(input) {
+var btoaSafe = (input) => {
     var output = [];
     var bamap = btoaMap;
     var n = Math.floor(input.length / 3) * 3;
@@ -169,7 +169,7 @@ var btoaSafe = function(input) {
 
 // Extract a `key` from a URL.
 
-var toUrlKey = function(url) {
+var toUrlKey = (url) => {
     if ( url.slice(0, 4) !== 'http' ) {
         return '';
     }
@@ -215,7 +215,7 @@ var toUrlKey = function(url) {
 //    encoding to null.
 // 6. If encoding is null, then set encoding to utf-8.
 
-var extractMimeType = function(ctin) {
+var extractMimeType = (ctin) => {
     var pos = ctin.indexOf(';');
     var type = pos === -1 ? ctin.trim() : ctin.slice(0, pos).trim();
     var charset = pos === -1 ? '' : ctin.slice(pos + 1).trim();
@@ -231,21 +231,21 @@ var extractMimeType = function(ctin) {
 
 /******************************************************************************/
 
-var metadataExists = function(urlKey) {
+var metadataExists = (urlKey) => {
     return typeof urlKey === 'string' &&
             metadata.urlKeyToHashMap.hasOwnProperty(urlKey);
 };
 
 /******************************************************************************/
 
-var contentExists = function(hash) {
+var contentExists = (hash) => {
     return typeof hash === 'string' &&
             hashToContentMap.hasOwnProperty(hash);
 };
 
 /******************************************************************************/
 
-var storageKeyFromHash = function(hash) {
+var storageKeyFromHash = (hash) => {
     return 'mirrors_item_' + hash;
 };
 
@@ -258,7 +258,7 @@ var storageKeyFromHash = function(hash) {
 //   - Which URL keys reference them
 // This will allow us to flush from memory the ones least recently used first.
 
-var pruneToSize = function(toSize) {
+var pruneToSize = (toSize) => {
     if ( exports.bytesInUse < toSize ) {
         return;
     }
@@ -285,7 +285,7 @@ var pruneToSize = function(toSize) {
         prEntry.accessTime = Math.max(prEntry.accessTime, mdEntry.accessTime);
     }
     // Least recent at the end of array
-    var compare = function(a, b) {
+    var compare = (a, b) => {
         return pruneMap[b].accessTime - pruneMap[a].accessTime;
     };
     var hashes = Object.keys(pruneMap).sort(compare);
@@ -314,14 +314,14 @@ var pruneToSize = function(toSize) {
 
 /******************************************************************************/
 
-var updateMetadata = function() {
+var updateMetadata = () => {
     metadataPersistTimer = null;
     vAPI.storage.set({ 'mirrors_metadata': metadata });
 };
 
 /******************************************************************************/
 
-var updateMetadataNow = function() {
+var updateMetadataNow = () => {
     if ( metadataPersistTimer !== null ) {
         clearTimeout(metadataPersistTimer);
     }
@@ -330,7 +330,7 @@ var updateMetadataNow = function() {
 
 /******************************************************************************/
 
-var updateMetadataAsync = function() {
+var updateMetadataAsync = () => {
     if ( metadataPersistTimer === null ) {
         metadataPersistTimer = setTimeout(updateMetadata, 60 * 1000);
     }
@@ -338,20 +338,20 @@ var updateMetadataAsync = function() {
 
 /******************************************************************************/
 
-var addMetadata = function(urlKey, hash) {
+var addMetadata = (urlKey, hash) => {
     metadata.urlKeyToHashMap[urlKey] = new MetadataEntry(hash);
     updateMetadataNow();
 };
 
 /******************************************************************************/
 
-var removeMetadata = function(urlKey) {
+var removeMetadata = (urlKey) => {
     delete metadata.urlKeyToHashMap[urlKey];
 };
 
 /******************************************************************************/
 
-var addContent = function(hash, dataURL) {
+var addContent = (hash, dataURL) => {
     if ( contentExists(hash) ) {
         return;
     }
@@ -367,13 +367,13 @@ var addContent = function(hash, dataURL) {
 
 /******************************************************************************/
 
-var removeContent = function(what) {
+var removeContent = (what) => {
     vAPI.storage.remove(what);
 };
 
 /******************************************************************************/
 
-var cacheAsset = function(url) {
+var cacheAsset = (url) => {
     var urlKey = toUrlKey(url);
     if ( metadataExists(urlKey) ) {
         return;
@@ -384,7 +384,7 @@ var cacheAsset = function(url) {
     }
     urlKeyPendingMap[urlKey] = true;
 
-    var onRemoteAssetLoaded = function() {
+    var onRemoteAssetLoaded = () => {
         delete urlKeyPendingMap[urlKey];
         this.onload = this.onerror = null;
         if ( this.status !== 200 ) {
@@ -416,7 +416,7 @@ var cacheAsset = function(url) {
         }
     };
 
-    var onRemoteAssetError = function() {
+    var onRemoteAssetError = () => {
         delete urlKeyPendingMap[urlKey];
         this.onload = this.onerror = null;
     };
@@ -430,7 +430,7 @@ var cacheAsset = function(url) {
 
 /******************************************************************************/
 
-var toURL = function(url, type, cache) {
+var toURL = (url, type, cache) => {
     // Unsupported types
     if ( type === 'font' ) {
         return '';
@@ -462,7 +462,7 @@ var toURL = function(url, type, cache) {
 
 /******************************************************************************/
 
-var parseMirrorCandidates = function(rawText) {
+var parseMirrorCandidates = (rawText) => {
     var rawTextEnd = rawText.length;
     var lineBeg = 0, lineEnd;
     var line;
@@ -497,21 +497,21 @@ var parseMirrorCandidates = function(rawText) {
 
 /******************************************************************************/
 
-var load = function() {
+var load = () => {
     if ( loaded ) {
         return;
     }
     loaded = true;
 
-    var onMirrorCandidatesReady = function(details) {
+    var onMirrorCandidatesReady = (details) => {
         if ( details.content !== '' ) {
             parseMirrorCandidates(details.content);
         }
     };
 
-    var loadContent = function(urlKey, hash) {
+    var loadContent = (urlKey, hash) => {
         var binKey = storageKeyFromHash(hash);
-        var onContentReady = function(bin) {
+        var onContentReady = (bin) => {
             if ( vAPI.lastError() || bin.hasOwnProperty(binKey) === false ) {
                 //console.debug('mirrors.load(): failed to load content "%s"', binKey);
                 removeMetadata(urlKey);
@@ -525,7 +525,7 @@ var load = function() {
         vAPI.storage.get(binKey, onContentReady);
     };
 
-    var onMetadataReady = function(bin) {
+    var onMetadataReady = (bin) => {
         //console.debug('mirrors.load(): loaded metadata');
         var u2hmap = metadata.urlKeyToHashMap = bin.mirrors_metadata.urlKeyToHashMap;
         var mustReset = bin.mirrors_metadata.magicId !== magicId;
@@ -555,7 +555,7 @@ var load = function() {
 
 /******************************************************************************/
 
-var unload = function() {
+var unload = () => {
     pruneToSize(0);
     metadata.urlKeyToHashMap = {};
     hashToContentMap = {};
@@ -567,7 +567,7 @@ var unload = function() {
 
 /******************************************************************************/
 
-exports.toggle = function(on) {
+exports.toggle = (on) => {
     if ( on && loaded !== true ) {
         load();
     } else if ( on !== true && loaded ) {

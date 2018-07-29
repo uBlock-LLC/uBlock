@@ -1,4 +1,4 @@
-/*******************************************************************************
+() =>/*******************************************************************************
 
     µBlock - a browser extension to block requests.
     Copyright (C) 2014 Raymond Hill
@@ -26,7 +26,7 @@
 // This file should always be included at the end of the `body` tag, so as
 // to ensure all i18n targets are already loaded.
 
-(function() {
+(() => {
 
 'use strict';
 
@@ -34,22 +34,22 @@
 
 // Helper to deal with the i18n'ing of HTML files.
 
-uDom('[data-i18n]').forEach(function(elem) {
+uDom('[data-i18n]').forEach((elem) => {
     elem.html(vAPI.i18n(elem.attr('data-i18n')));
 });
 
-uDom('[title]').forEach(function(elem) {
+uDom('[title]').forEach((elem) => {
     var title = vAPI.i18n(elem.attr('title'));
     if ( title ) {
         elem.attr('title', title);
     }
 });
 
-uDom('[placeholder]').forEach(function(elem) {
+uDom('[placeholder]').forEach((elem) => {
     elem.attr('placeholder', vAPI.i18n(elem.attr('placeholder')));
 });
 
-uDom('[data-i18n-tip]').forEach(function(elem) {
+uDom('[data-i18n-tip]').forEach((elem) => {
     elem.attr(
         'data-tip',
         vAPI.i18n(elem.attr('data-i18n-tip')).replace(/<br>/g, '\n').replace(/\n{3,}/g, '\n\n')
@@ -58,7 +58,7 @@ uDom('[data-i18n-tip]').forEach(function(elem) {
 
 /******************************************************************************/
 
-vAPI.i18n.renderElapsedTimeToString = function(tstamp) {
+vAPI.i18n.renderElapsedTimeToString = (tstamp) => {
     var value = (Date.now() - tstamp) / 60000;
     if ( value < 2 ) {
         return vAPI.i18n('elapsedOneMinuteAgo');

@@ -25,11 +25,11 @@
 
 /******************************************************************************/
 
-µBlock.getBytesInUse = function(callback) {
+µBlock.getBytesInUse = (callback) => {
     if ( typeof callback !== 'function' ) {
         callback = this.noopFunc;
     }
-    var getBytesInUseHandler = function(bytesInUse) {
+    var getBytesInUseHandler = (bytesInUse) => {
         µBlock.storageUsed = bytesInUse;
         callback(bytesInUse);
     };
@@ -42,7 +42,7 @@
 
 /******************************************************************************/
 
-µBlock.keyvalSetOnePref = function(key, val, callback) {
+µBlock.keyvalSetOnePref = (key, val, callback) => {
     var bin = {};
     bin[key] = val;
     vAPI.storage.preferences.set(bin, callback || this.noopFunc);
@@ -50,7 +50,7 @@
 
 /******************************************************************************/
 
-µBlock.saveLocalSettings = function(force) {
+µBlock.saveLocalSettings = (force) => {
     if ( force ) {
         this.localSettingsModifyTime = Date.now();
     }
@@ -75,19 +75,19 @@
 
 /******************************************************************************/
 
-µBlock.saveUserSettings = function() {
+µBlock.saveUserSettings = () => {
     vAPI.storage.preferences.set(this.userSettings);
 };
 
 /******************************************************************************/
 
-µBlock.savePermanentFirewallRules = function() {
+µBlock.savePermanentFirewallRules = () => {
     this.keyvalSetOnePref('dynamicFilteringString', this.permanentFirewall.toString());
 };
 
 /******************************************************************************/
 
-µBlock.saveWhitelist = function() {
+µBlock.saveWhitelist = () => {
     var bin = {
         'netWhitelist': this.stringFromWhitelist(this.netWhitelist)
     };
@@ -100,10 +100,10 @@
 // This will remove all unused filter list entries from
 // µBlock.remoteBlacklists`. This helps reduce the size of backup files.
 
-µBlock.extractSelectedFilterLists = function(callback) {
+µBlock.extractSelectedFilterLists = (callback) => {
     var µb = this;
 
-    var onBuiltinListsLoaded = function(details) {
+    var onBuiltinListsLoaded = (details) => {
         var builtin;
         try {
             builtin = JSON.parse(details.content);
@@ -138,7 +138,7 @@
 
 /******************************************************************************/
 
-µBlock.saveUserFilters = function(content, callback) {
+µBlock.saveUserFilters = (content, callback) => {
     vAPI.storage.preferences.set({"userFilters": content});
     this.assets.put(this.userFiltersPath, content, callback);
     return;
@@ -146,20 +146,20 @@
 
 /******************************************************************************/
 
-µBlock.loadUserFilters = function(callback) {
+µBlock.loadUserFilters = (callback) => {
     return this.assets.get(this.userFiltersPath, callback);
 };
 
 /******************************************************************************/
 
-µBlock.appendUserFilters = function(filters) {
+µBlock.appendUserFilters = (filters) => {
     if ( filters.length === 0 ) {
         return;
     }
 
     var µb = this;
 
-    var onSaved = function() {
+    var onSaved = () => {
         var compiledFilters = µb.compileFilters(filters);
         var snfe = µb.staticNetFilteringEngine;
         var cfe = µb.cosmeticFilteringEngine;
@@ -176,7 +176,7 @@
         µb.cosmeticFilteringEngine.freeze();
     };
 
-    var onLoaded = function(details) {
+    var onLoaded = (details) => {
         // https://github.com/uBlockAdmin/uBlock/issues/976
         // If we reached this point, the filter quite probably needs to be
         // added for sure: do not try to be too smart, trying to avoid
@@ -189,11 +189,11 @@
 
 /******************************************************************************/
 
-µBlock.getAvailableLists = function(callback) {
+µBlock.getAvailableLists = (callback) => {
     var availableLists = {};
     var relocationMap = {};
 
-    var fixLocation = function(location) {
+    var fixLocation = (location) => {
         // https://github.com/uBlockAdmin/uBlock/issues/418
         // We now support built-in external filter lists
         if ( /^https?:/.test(location) === false ) {
@@ -203,7 +203,7 @@
     };
 
     // selected lists
-    var onSelectedListsLoaded = function(store) {
+    var onSelectedListsLoaded = (store) => {
         var µb = µBlock;
         var lists = store.remoteBlacklists;
         var locations = Object.keys(lists);
@@ -250,7 +250,7 @@
     };
 
     // built-in lists
-    var onBuiltinListsLoaded = function(details) {
+    var onBuiltinListsLoaded = (details) => {
         var location, locations;
         try {
             locations = JSON.parse(details.content);
@@ -315,7 +315,7 @@
 
 /******************************************************************************/
 
-µBlock.createShortUniqueId = function(path) {
+µBlock.createShortUniqueId = (path) => {
     var md5 = YaMD5.hashStr(path);
     return md5.slice(0, 4) + md5.slice(-4);
 };
@@ -324,7 +324,7 @@
 
 /******************************************************************************/
 
-µBlock.loadFilterLists = function(callback) {
+µBlock.loadFilterLists = (callback) => {
 
     //quickProfiler.start('µBlock.loadFilterLists()');
 
@@ -339,7 +339,7 @@
     // be as fast as possible.
     µb.assets.remoteFetchBarrier += 1;
 
-    var onDone = function() {
+    var onDone = () => {
         // Remove barrier to remote fetching
         µb.assets.remoteFetchBarrier -= 1;
 
@@ -355,7 +355,7 @@
         µb.toSelfieAsync();
     };
 
-    var applyCompiledFilters = function(path, compiled) {
+    var applyCompiledFilters = (path, compiled) => {
         var snfe = µb.staticNetFilteringEngine;
         var cfe = µb.cosmeticFilteringEngine;
         var acceptedCount = snfe.acceptedCount + cfe.acceptedCount;
@@ -368,7 +368,7 @@
         }
     };
 
-    var onCompiledListLoaded = function(details) {
+    var onCompiledListLoaded = (details) => {
         applyCompiledFilters(details.path, details.content);
         filterlistsCount -= 1;
         if ( filterlistsCount === 0 ) {
@@ -376,7 +376,7 @@
         }
     };
 
-    var onFilterListsReady = function(lists) {
+    var onFilterListsReady = (lists) =>{
         µb.remoteBlacklists = lists;
 
         µb.cosmeticFilteringEngine.reset();
@@ -414,17 +414,17 @@
 
 /******************************************************************************/
 
-µBlock.getCompiledFilterListPath = function(path) {
+µBlock.getCompiledFilterListPath = (path) => {
     return 'cache://compiled-filter-list:' + this.createShortUniqueId(path);
 };
 
 /******************************************************************************/
 
-µBlock.getCompiledFilterList = function(path, callback) {
+µBlock.getCompiledFilterList = (path, callback) => {
     var compiledPath = this.getCompiledFilterListPath(path);
     var µb = this;
 
-    var onRawListLoaded = function(details) {
+    var onRawListLoaded = (details) => {
         if ( details.content !== '' ) {
             var listMeta = µb.remoteBlacklists[path];
             if ( listMeta && listMeta.title === '' ) {
@@ -441,7 +441,7 @@
         callback(details);
     };
 
-    var onCompiledListLoaded = function(details) {
+    var onCompiledListLoaded = (details) => {
         if ( details.content === '' ) {
             //console.debug('µBlock.getCompiledFilterList/onCompiledListLoaded: no compiled version for "%s"', path);
             µb.assets.get(path, onRawListLoaded);
@@ -457,20 +457,20 @@
 
 /******************************************************************************/
 
-µBlock.purgeCompiledFilterList = function(path) {
+µBlock.purgeCompiledFilterList = (path) => {
     this.assets.purge(this.getCompiledFilterListPath(path));
 };
 
 /******************************************************************************/
 
-µBlock.purgeFilterList = function(path) {
+µBlock.purgeFilterList = (path) => {
     this.purgeCompiledFilterList(path);
     this.assets.purge(path);
 };
 
 /******************************************************************************/
 
-µBlock.compileFilters = function(rawText) {
+µBlock.compileFilters = (rawText) => {
     var rawEnd = rawText.length;
     var compiledFilters = [];
 
@@ -564,7 +564,7 @@
 
 /******************************************************************************/
 
-µBlock.applyCompiledFilters = function(rawText) {
+µBlock.applyCompiledFilters = (rawText) => {
     var skipCosmetic = !this.userSettings.parseAllABPHideFilters;
     var staticNetFilteringEngine = this.staticNetFilteringEngine;
     var cosmeticFilteringEngine = this.cosmeticFilteringEngine;
@@ -580,7 +580,7 @@
 
 // `switches` contains the filter lists for which the switch must be revisited.
 
-µBlock.selectFilterLists = function(switches) {
+µBlock.selectFilterLists = (switches) => {
     switches = switches || {};
 
     // Only the lists referenced by the switches are touched.
@@ -610,13 +610,13 @@
 
 // Plain reload of all filters.
 
-µBlock.reloadAllFilters = function() {
+µBlock.reloadAllFilters = () => {
     var µb = this;
 
     // We are just reloading the filter lists: we do not want assets to update.
     this.assets.autoUpdate = false;
 
-    var onFiltersReady = function() {
+    var onFiltersReady = () => {
         µb.assets.autoUpdate = µb.userSettings.autoUpdate;
     };
 
@@ -625,7 +625,7 @@
 
 /******************************************************************************/
 
-µBlock.loadPublicSuffixList = function(callback) {
+µBlock.loadPublicSuffixList = (callback) => {
     var µb = this;
     var path = µb.pslPath;
     var compiledPath = 'cache://compiled-publicsuffixlist';
@@ -633,7 +633,7 @@
     if ( typeof callback !== 'function' ) {
         callback = this.noopFunc;
     }
-    var onRawListLoaded = function(details) {
+    var onRawListLoaded = (details) => {
         if ( details.content !== '' ) {
             //console.debug('µBlock.loadPublicSuffixList/onRawListLoaded: compiling "%s"', path);
             publicSuffixList.parse(details.content, punycode.toASCII);
@@ -642,7 +642,7 @@
         callback();
     };
 
-    var onCompiledListLoaded = function(details) {
+    var onCompiledListLoaded = (details) => {
         if ( details.content === '' ) {
             //console.debug('µBlock.loadPublicSuffixList/onCompiledListLoaded: no compiled version for "%s"', path);
             µb.assets.get(path, onRawListLoaded);
@@ -658,7 +658,7 @@
 
 /******************************************************************************/
 
-µBlock.toSelfie = function() {
+µBlock.toSelfie = () => {
     var selfie = {
         magic: this.systemSettings.selfieMagic,
         publicSuffixList: publicSuffixList.toSelfie(),
@@ -674,7 +674,7 @@
 // be generated if the user doesn't change his filter lists selection for
 // some set time.
 
-µBlock.toSelfieAsync = function(after) {
+µBlock.toSelfieAsync = (after) => {
     if ( typeof after !== 'number' ) {
         after = this.selfieAfter;
     }
@@ -689,7 +689,7 @@
 
 /******************************************************************************/
 
-µBlock.destroySelfie = function() {
+µBlock.destroySelfie = () => {
     vAPI.storage.remove('selfie');
     this.asyncJobs.remove('toSelfie');
     //console.debug('µBlock.destroySelfie()');
@@ -697,9 +697,9 @@
 
 /******************************************************************************/
 
-µBlock.updateStartHandler = function(callback) {
+µBlock.updateStartHandler = (callback) => {
     var µb = this;
-    var onListsReady = function(lists) {
+    var onListsReady = (lists) => {
         var assets = {};
         for ( var location in lists ) {
             if ( lists.hasOwnProperty(location) === false ) {
@@ -720,7 +720,7 @@
 
 /******************************************************************************/
 
-µBlock.assetUpdatedHandler = function(details) {
+µBlock.assetUpdatedHandler = (details) => {
     var path = details.path || '';
     if ( this.remoteBlacklists.hasOwnProperty(path) === false ) {
         return;
@@ -739,7 +739,7 @@
 
 /******************************************************************************/
 
-µBlock.updateCompleteHandler = function(details) {
+µBlock.updateCompleteHandler = (details) => {
     var µb = this;
     var updatedCount = details.updatedCount;
 
@@ -747,11 +747,11 @@
     // remote servers.
     µb.assets.remoteFetchBarrier += 1;
 
-    var onFiltersReady = function() {
+    var onFiltersReady = () => {
         µb.assets.remoteFetchBarrier -= 1;
     };
 
-    var onPSLReady = function() {
+    var onPSLReady = () => {
         if ( updatedCount !== 0 ) {
             //console.debug('storage.js > µBlock.updateCompleteHandler: reloading filter lists');
             µb.loadFilterLists(onFiltersReady);
@@ -775,10 +775,10 @@
 
 /******************************************************************************/
 
-µBlock.assetCacheRemovedHandler = (function() {
+µBlock.assetCacheRemovedHandler = (() => {
     var barrier = false;
 
-    var handler = function(paths) {
+    var handler = (paths) => {
         if ( barrier ) {
             return;
         }

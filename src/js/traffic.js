@@ -25,7 +25,7 @@
 
 // Start isolation from global scope
 
-µBlock.webRequest = (function() {
+µBlock.webRequest = (() => {
 
 'use strict';
 
@@ -257,7 +257,7 @@ var onHeadersReceived = function(details) {
     }
 
     // If we reach this point, we are dealing with a sub_frame
- 
+
     // Lookup the page store associated with this tab id.
     var µb = µBlock;
     var pageStore = µb.pageStoreFromTabId(tabId);
@@ -401,4 +401,3 @@ return exports;
 })();
 
 /******************************************************************************/
-
