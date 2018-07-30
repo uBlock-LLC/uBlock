@@ -23,7 +23,7 @@
 
 /******************************************************************************/
 
-(function() {
+(() => {
 
 'use strict';
 
@@ -49,7 +49,7 @@ function userFiltersChanged() {
 /******************************************************************************/
 
 function renderUserFilters() {
-    var onRead = function(details) {
+    var onRead = (details) => {
         if ( details.error ) {
             return;
         }
@@ -68,10 +68,10 @@ function allFiltersApplyHandler() {
 
 /******************************************************************************/
 
-var handleImportFilePicker = function() {
+var handleImportFilePicker = () => {
     // https://github.com/uBlockAdmin/uBlock/issues/1004
     // Support extraction of filters from ABP backup file
-    var abpImporter = function(s) {
+    var abpImporter = (s) => {
         var reAbpExtractor = /\n\[Subscription\]\n+url=~[\x08-\x7E]+?\[Subscription filters\]([\x08-\x7E]*?)(?:\[Subscription\]|$)/ig;
         var matches = reAbpExtractor.exec(s);
         // Not an ABP backup file
@@ -89,7 +89,7 @@ var handleImportFilePicker = function() {
         return out.join('\n');
     };
 
-    var fileReaderOnLoadHandler = function() {
+    var fileReaderOnLoadHandler = () => {
         var sanitized = abpImporter(this.result);
         var textarea = uDom('#userFilters');
         textarea.val(textarea.val().trim() + '\n' + sanitized);
@@ -109,7 +109,7 @@ var handleImportFilePicker = function() {
 
 /******************************************************************************/
 
-var startImportFilePicker = function() {
+var startImportFilePicker = () => {
     var input = document.getElementById('importFilePicker');
     // Reset to empty string, this will ensure an change event is properly
     // triggered if the user pick a file, even if it is the same as the last
@@ -120,7 +120,7 @@ var startImportFilePicker = function() {
 
 /******************************************************************************/
 
-var exportUserFiltersToFile = function() {
+var exportUserFiltersToFile = () => {
     var val = uDom('#userFilters').val().trim();
     if ( val === '' ) {
         return;
@@ -137,8 +137,8 @@ var exportUserFiltersToFile = function() {
 
 /******************************************************************************/
 
-var userFiltersApplyHandler = function() {
-    var onWritten = function(details) {
+var userFiltersApplyHandler = () => {
+    var onWritten = (details) => {
         if ( details.error ) {
             return;
         }
@@ -155,7 +155,7 @@ var userFiltersApplyHandler = function() {
 
 /******************************************************************************/
 
-uDom.onLoad(function() {
+uDom.onLoad(() => {
     // Handle user interaction
     uDom('#importUserFiltersFromFile').on('click', startImportFilePicker);
     uDom('#importFilePicker').on('change', handleImportFilePicker);
