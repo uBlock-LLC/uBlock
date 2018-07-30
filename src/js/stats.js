@@ -2,23 +2,15 @@
 µBlock.stats = (function () {
 
     var µb = µBlock;
-
     var reOS = /(CrOS\ \w+|Windows\ NT|Mac\ OS\ X|Linux)\ ([\d\._]+)?/;
-
     var matches = reOS.exec(navigator.userAgent);
-
     var operatingSystem = (matches || [])[1] || "Unknown";
-
     var operatingSystemVersion = (matches || [])[2] || "Unknown";
-
     var reBW = /(MSIE|Trident|(?!Gecko.+)Firefox|(?!AppleWebKit.+Chrome.+)Safari(?!.+Edge)|(?!AppleWebKit.+)Chrome(?!.+Edge)|(?!AppleWebKit.+Chrome.+Safari.+)Edge|AppleWebKit(?!.+Chrome|.+Safari)|Gecko(?!.+Firefox))(?: |\/)([\d\.apre]+)/;
-
     var matches = reBW.exec(navigator.userAgent);
-
     var browser = (matches || [])[1] || "Unknown";
-
     var browserFlavor;
-    
+
     if (window.opr)
         browserFlavor = "O"; // Opera
     else if (window.safari)
@@ -55,7 +47,7 @@
         return result.join('') + timeSuffix;
     }
 
-    var ajaxCall = function(params){
+    const ajaxCall = (params) => {
         var xhr = new XMLHttpRequest();
         var url = "https://ping.ublock.org/api/stats"
         xhr.open('POST', url, true);
@@ -64,7 +56,7 @@
         xhr.responseType = 'text';
         xhr.onreadystatechange = function() {
             if(xhr.readyState == 4 && xhr.status == 200) {
-           
+
             }
         }
         xhr.send(JSON.stringify(params));
@@ -88,7 +80,7 @@
     }
 
     exports.sendStats = function() {
-        
+
         if (!µb.userSettings.allowUserStats) {
             return;
         }

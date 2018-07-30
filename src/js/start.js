@@ -25,7 +25,7 @@
 
 // Load all: executed once.
 
-µBlock.restart = (function() {
+µBlock.restart = (() => {
 
 'use strict';
 
@@ -41,7 +41,7 @@ var µb = µBlock;
 // - Initialize internal state with maybe already existing tabs.
 // - Schedule next update operation.
 
-var onAllReady = function() {
+const onAllReady = () => {
     // https://github.com/uBlockAdmin/uBlock/issues/184
     // Check for updates not too far in the future.
     µb.assetUpdater.onStart.addEventListener(µb.updateStartHandler.bind(µb));
@@ -63,7 +63,7 @@ var onAllReady = function() {
 // Filtering engines dependencies:
 // - PSL
 
-var onPSLReady = function() {
+const onPSLReady = () => {
     µb.loadFilterLists(onAllReady);
 };
 
@@ -71,7 +71,7 @@ var onPSLReady = function() {
 
 // To bring older versions up to date
 
-var onVersionReady = function(lastVersion) {
+const onVersionReady = (lastVersion) => {
     // Whitelist some key scopes by default
     if ( lastVersion.localeCompare('0.8.6.0') < 0 ) {
         µb.netWhitelist = µb.whitelistFromString(
@@ -98,7 +98,7 @@ var onVersionReady = function(lastVersion) {
 
 /******************************************************************************/
 
-var onSelfieReady = function(selfie) {
+const onSelfieReady = (selfie) => {
     if ( selfie === null || selfie.magic !== µb.systemSettings.selfieMagic ) {
         return false;
     }
@@ -119,7 +119,7 @@ var onSelfieReady = function(selfie) {
 // Whitelist parser needs PSL to be ready.
 // uBlockAdmin 2014-12-15: not anymore
 
-var onNetWhitelistReady = function(netWhitelistRaw) {
+const onNetWhitelistReady = (netWhitelistRaw) => {
     µb.netWhitelist = µb.whitelistFromString(netWhitelistRaw);
     µb.netWhitelistModifyTime = Date.now();
 };
@@ -128,7 +128,7 @@ var onNetWhitelistReady = function(netWhitelistRaw) {
 
 // User settings are in memory
 
-var onUserSettingsReady = function(fetched) {
+const onUserSettingsReady = (fetched) => {
     var userSettings = µb.userSettings;
 
     fromFetch(userSettings, fetched);
@@ -157,7 +157,7 @@ var onUserSettingsReady = function(fetched) {
 
 // Housekeeping, as per system setting changes
 
-var onSystemSettingsReady = function(fetched) {
+const onSystemSettingsReady = (fetched) => {
     var mustSaveSystemSettings = false;
     if ( fetched.compiledMagic !== µb.systemSettings.compiledMagic ) {
         µb.assets.purge(/^cache:\/\/compiled-/);
@@ -175,11 +175,11 @@ var onSystemSettingsReady = function(fetched) {
 
 /******************************************************************************/
 
-var onUserFiltersReady = function(userFilters) {
+const onUserFiltersReady = (userFilters) => {
     µb.saveUserFilters(userFilters); // we need this because of migration
 };
 
-var onFirstFetchReady = function(fetched) {
+const onFirstFetchReady = (fetched) => {
 
     // Order is important -- do not change:
     onInstalled();
@@ -200,16 +200,16 @@ var onFirstFetchReady = function(fetched) {
     µb.loadPublicSuffixList(onPSLReady);
 };
 
-var onInstalled = function() {
-    
+const onInstalled = () => {
+
     var onVersionRead = function(store) {
-        
+
         var lastVersion = store.extensionLastVersion || '0.0.0.0';
-    
+
         var firstInstall = lastVersion === '0.0.0.0';
-    
+
         if(!firstInstall) {
-            return;    
+            return;
         }
         var onDataReceived = function(data) {
             entries = data.stats || {userId: µBlock.stats.generateUserId(),totalPings: 0 };
@@ -223,11 +223,11 @@ var onInstalled = function() {
         vAPI.storage.get('stats',onDataReceived);
     };
     vAPI.storage.get('extensionLastVersion', onVersionRead);
-} 
+};
 
 /******************************************************************************/
 
-var onPrefFetchReady = function(fetched) {
+const onPrefFetchReady = (fetched) => {
     fetched.userFilters = fetched.userFilters || fetched["cached_asset_content://assets/user/filters.txt"];
     vAPI.storage.get({"selfie": null}, function(res) {
         fetched["selfie"] = res["selfie"];
@@ -237,7 +237,7 @@ var onPrefFetchReady = function(fetched) {
 
 /******************************************************************************/
 
-var toFetch = function(from, fetched) {
+const toFetch = (from, fetched) => {
     for ( var k in from ) {
         if ( from.hasOwnProperty(k) === false ) {
             continue;
@@ -246,7 +246,7 @@ var toFetch = function(from, fetched) {
     }
 };
 
-var fromFetch = function(to, fetched) {
+const fromFetch = (to, fetched) => {
     for ( var k in to ) {
         if ( to.hasOwnProperty(k) === false ) {
             continue;
@@ -258,9 +258,9 @@ var fromFetch = function(to, fetched) {
     }
 };
 
-return function() {
+return () => {
     µb.assets.remoteFetchBarrier += 1;
-    
+
     var fetchableProps = {
         'compiledMagic': '',
         'dynamicFilteringString': '',
