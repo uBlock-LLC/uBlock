@@ -1,1 +1,11 @@
-<html><head><title>Loading...</title></head><body><script type='text/javascript'>window.location.replace('http://spam404bl.com/spam404scamlist.txt?js=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqcyI6MX0.fADWc9hUOlh58R9UzufQBROmie3I7c7vE835oE6YmU4&uuid=47b9737e-291d-11e8-8acc-25d814001d87');</script></body></html>
+<html>
+<head>
+<meta name="robots" content="noarchive" />
+<meta name="googlebot" content="nosnippet" />
+</head>
+<body>
+<div align=center>
+<h3>Error. Page cannot be displayed. Please contact your service provider for more details.  (20)</h3>
+</div>
+</body>
+</html>

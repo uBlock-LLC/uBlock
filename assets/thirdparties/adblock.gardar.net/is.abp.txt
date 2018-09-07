@@ -1,7 +1,7 @@
 [Adblock Plus 2.0]
 ! [Icelandic ABP List]
-! Adblock Plus listi fyrir íslenskar vefsíður / Adblock Plus list for icelandic websites
-! Síðast uppfærður / Last updated 13 Mars/March 2018
+! Adblock listi fyrir íslenskar vefsíður / Adblock list for icelandic websites
+! Síðast uppfærður / Last updated 7 Júní/June 2018
 ! Listinn er í þróun, láttu vita ef þú finnur villur eða vefi sem vantar í listann / The list is under development, please let me know if you find any errors or webs missing from the list
 ! adblock@gardar.net
 ! https://adblock.gardar.net
@@ -187,3 +187,5 @@ karfan.is##.ad-pos
 skessuhorn.is##.kostad-efni
 frettabladid.is##div[class^="ad"]
 austurfrett.is##.bannergroup
+stundin.is###ad-overlay-container
+||nutiminn.is/popupads

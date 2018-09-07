@@ -166,7 +166,7 @@
     "mirror1.malwaredomains.com/files/justdomains": {
         "title": "Malware domains",
         "group": "malware",
-        "homeURL": ""
+        "homeURL": "https://mirror1.malwaredomains.com/files/justdomains"
         },
     "pgl.yoyo.org/as/serverlist": {
         "title": "Peter Lowe’s Ad server list",

@@ -1,8 +1,8 @@
 [Adblock Plus 2.0]
-! Checksum: JPn6VTv/Rfpfd6jZez28LQ
+! Checksum: 4MYH9lkE+S6iLOi+FOtfeg
 ! Title: Anti-Facebook List
-! Updated: 10 Mar 2018
-! This list expires after 6 days
+! Updated: 19 May 2018
+! Expires: 6 days
 ! License: http://creativecommons.org/licenses/by/3.0/
 ! Homepage: http://www.fanboy.co.nz/
 ! Reporting Issues: https://github.com/ryanbr/fanboy-adblock/issues
