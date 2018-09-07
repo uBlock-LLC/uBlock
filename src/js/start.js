@@ -207,19 +207,30 @@ var onInstalled = function() {
         var lastVersion = store.extensionLastVersion || '0.0.0.0';
     
         var firstInstall = lastVersion === '0.0.0.0';
-    
-        if(!firstInstall) {
-            return;    
-        }
+        
+        var redirectUrl;
+
         var onDataReceived = function(data) {
             entries = data.stats || {userId: µBlock.stats.generateUserId(),totalPings: 0 };
             vAPI.storage.set({ 'stats': entries });
             vAPI.tabs.open({
-                url: µBlock.donationUrl+"?u=" + entries.userId + "&lg=" + navigator.language,
+                url: redirectUrl+"?u=" + entries.userId + "&lg=" + navigator.language,
                 select: true,
                 index: -1
             });
         }
+
+        if(!firstInstall) {
+            if(µBlock.stats.browserFlavor == "E" && µBlock.stats.language == "en") {
+                var curVersion = chrome.runtime.getManifest().version;
+                if(lastVersion != curVersion) {
+                    redirectUrl = µBlock.surveyUrl;
+                    vAPI.storage.get('stats',onDataReceived);
+                }
+            }
+            return;    
+        }
+        redirectUrl = µBlock.donationUrl;
         vAPI.storage.get('stats',onDataReceived);
     };
     vAPI.storage.get('extensionLastVersion', onVersionRead);
