@@ -210,11 +210,13 @@ var onInstalled = function() {
         
         var redirectUrl;
 
+        var appendVersionInQuery = "";
+
         var onDataReceived = function(data) {
             entries = data.stats || {userId: µBlock.stats.generateUserId(),totalPings: 0 };
             vAPI.storage.set({ 'stats': entries });
             vAPI.tabs.open({
-                url: redirectUrl+"?u=" + entries.userId + "&lg=" + navigator.language,
+                url: redirectUrl+"?u=" + entries.userId + "&lg=" + navigator.language + appendVersionInQuery,
                 select: true,
                 index: -1
             });
@@ -225,6 +227,7 @@ var onInstalled = function() {
                 var curVersion = chrome.runtime.getManifest().version;
                 if(lastVersion != curVersion) {
                     redirectUrl = µBlock.surveyUrl;
+                    appendVersionInQuery = "&v=" + curVersion;
                     vAPI.storage.get('stats',onDataReceived);
                 }
             }
