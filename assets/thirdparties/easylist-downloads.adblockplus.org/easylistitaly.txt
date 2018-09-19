@@ -1,9 +1,9 @@
 [Adblock Plus 1.1]
-! Checksum: b+dB7NtdTX+EcGsnLWX6eA
-! Version: 201809070911
+! Checksum: eeqZ/O0hdBVcAfMYGKcqiA
+! Version: 201809190821
 ! Title: EasyList Italy
 ! EasyList Italy - Complemento italiano per EasyList
-! Ultima modifica: 07 Sep 2018 09:11 UTC
+! Ultima modifica: 19 Sep 2018 08:21 UTC
 ! Expires: 1 days (frequenza di aggiornamento)
 ! Homepage: https://easylist.to/
 ! Licenza: https://easylist.to/pages/licence.html
@@ -124,7 +124,9 @@ _sito/adv/
 ###fwnetblocco_v
 ###hp_sez_advmkt_01
 ###leo-adv
+###lg-spalla-ads01-down
 ###lg-spalla-ads01-up
+###lg-spalla-ads03
 ###libero_header_adv
 ###mmAdDivSkDx
 ###mmAdDivSkLb
@@ -832,6 +834,7 @@ brocardi.it#@#.with-background-ads
 ||casertanews.it/bann.asp?
 ||casertaweb.com/sfondo
 ||catanzaroinforma.it/public/sponsor/
+||cb01.zone/imgc/b_
 ||cbritaly.it^*/downloadfilebanner.php?
 ||cdvweb.it^*/downloadfilebanner.php?
 ||centrometeo.com^*/banner_
@@ -1530,6 +1533,7 @@ brocardi.it#@#.with-background-ads
 ||ostiatv.it/upl/banner
 ||oxfordparavia.it/img/babylon.gif
 ||p.italia-film.org^
+||p300.it^*/sponsor-
 ||padovanews.it/images/banners/
 ||paeimprese.it^*/downloadfilebanner.php?
 ||palermomania.com/images/banner/
@@ -1729,6 +1733,7 @@ brocardi.it#@#.with-background-ads
 ||si24.it/images/banners/
 ||sibarinet.it/images/banners/
 ||siciliaway.it^*/immagini_promozionali/
+||sienafree.it/images/banners/
 ||sipario.it/images/banners/
 ||sky.it/static/images/sito/skin_
 ||smartweek.it^*/banner-
@@ -2322,6 +2327,7 @@ lascommessasportiva.it###header_banner
 megalab.it###header_leaderboard
 meteowebcam.it###header_top
 35mm.it###header_top_banner
+sienafree.it###headerbanner
 radiospeaker.it###home-banner
 transfermarkt.it###home-rectangle-spotlight
 affaritaliani.it###immo-300x250
@@ -2331,6 +2337,9 @@ r101.it###innamorarsiA101
 sportstadio.it###iol-partners
 quifinanza.it###iol_dfp_local
 cittaceleste.it,juvenews.eu###itemBannerSottoImg
+sienafree.it###ja-banner300x250
+sienafree.it###ja-bannertop300x250
+sienafree.it###ja-leaderboard
 lercio.it###kadv_13020
 prowrestling.it###landingbanner
 lercio.it,macitynet.it###leader-wrapper
@@ -2390,6 +2399,7 @@ globalist.it###pCollar_c
 pcworld.it###pangora-chunnel
 amicidimotociclismo.it###partnerfooter
 fantascienza.com,ship2shore.it###partners
+p300.it###partners-cont
 pianetatech.it###partnerw
 lagazzettadelmezzogiorno.it###petizione
 tiburno.tv###popup_wrap
@@ -2455,6 +2465,8 @@ eurogamer.it###skyscraper
 casateonline.it,merateonline.it###sottotestata
 corrieredellacalabria.it###sovrapposto
 ilmetapontino.it###sp-top-add
+amazon.it###sp_detail
+amazon.it###sp_detail2
 tgcom24.it###spaceBanner_rn_u
 primissima.it###space_banner
 mediaset.it###spalla-banner
@@ -2605,7 +2617,7 @@ zapster.it##.addx
 qnm.it##.adex
 tomshw.it##.adorable-cats
 tomshw.it##.adorable-puppies
-brocardi.it,caserta24ore.it,fantagazzetta.com,gamemag.it,hdblog.it,ilikepuglia.it,netflixlovers.it,phicatube.net,radiospeaker.it,supereva.it,teleborsa.it,viamichelin.ch,viamichelin.it,videocasalinghi.com##.ads
+brocardi.it,caserta24ore.it,cb01.online,fantagazzetta.com,gamemag.it,hdblog.it,ilikepuglia.it,netflixlovers.it,phicatube.net,radiospeaker.it,supereva.it,teleborsa.it,viamichelin.ch,viamichelin.it,videocasalinghi.com##.ads
 ildolomiti.it##.adsB
 meteowebcam.it##.ads_menu
 chistachiamando.it,corriereadriatico.it,ilgazzettino.it,ilmattino.it,ilmessaggero.it,ilsecoloxix.it,leggo.it,livesicilia.it,pcprofessionale.it,pubblicitaitalia.it,quotidianodipuglia.it##.adsense
@@ -2626,7 +2638,7 @@ loradellacalabria.it##.advertise
 loradellacalabria.it##.advertise2
 internimagazine.it,tiburno.tv##.advertisement
 cubovision.it,fastweb.it,gazzetta.it,ilgazzettinovesuviano.com,lettera43.it,tpi.it##.advertising
-loggiap2.com##.advs
+loggiap2.com,sienafree.it##.advs
 quotidianodigela.it##.advs-title
 filodiritto.com##.altro_box_banner_dx
 filodiritto.com##.altro_box_banner_sx
@@ -2775,7 +2787,7 @@ vocedimantova.it##.bannerbox
 techarena.it##.bannercentro
 treccani.it##.bannercontainer
 trovaprezzi.it##.bannerdiv
-alessandriaoggi.info,corrieredellacalabria.it,epolisbari.com,kisskiss.it,lametino.it,laquila1.it,qdpnews.it,sud656.tv,tecnicadellascuola.it,tiburno.tv,uninews24.it##.bannergroup
+alessandriaoggi.info,corrieredellacalabria.it,epolisbari.com,kisskiss.it,lametino.it,laquila1.it,qdpnews.it,sienafree.it,sud656.tv,tecnicadellascuola.it,tiburno.tv,uninews24.it##.bannergroup
 supertennis.tv##.bannergroup-banner
 paviapiu.it##.bannergroupnomarginall
 radiogold.it##.bannergroupskin-banner-module
@@ -2839,6 +2851,7 @@ tgcom24.mediaset.it##.boxspeciale
 starbene.it##.brand_logo_hp
 forexinfo.it##.broker-tabella_container_aside
 wiitalia.it##.bsmall
+eurostreaming.watch##.buttonGuardaOra
 tivusat.tv##.buy
 qds.it##.bx-home-bnr-mini
 lapiazzacastelmadama.com##.bx-wrapper
@@ -3189,7 +3202,9 @@ windowsblogitalia.com##[id^="bsa"]
 gazzettinodelchianti.it##a[class*="bannerpos"]
 tgcom24.mediaset.it##a[href*=".ad.dotandad.com/clicktracker.jsp?"]
 voglioporno.com##a[href*=".com/track/"]
-casa-cinema.org,cb01.co,speedvideo.net##a[href*="/4k/"]
+altadefinizione01.click,casa-cinema.org,cb01.co,cb01.news,cb01.online,cb01.zone,filmsenzalimiti.co,robinfilms.me,speedvideo.net##a[href*="/4k/"]
+eurostreaming.watch##a[href*="/Guarda4K/"]
+eurostreaming.watch##a[href*="/GuardaOra/"]
 abruzzoweb.it##a[href*="/adserver/go.php?"]
 everyeye.it##a[href*="/click.asp?"]
 gazzetta.it##a[href*="/codici-sconto/"]
@@ -3215,18 +3230,15 @@ tecnoandroid.it##a[href^="http://shrsl.com/"]
 gioco.it##a[href^="http://smarturl.it/"]
 comprovendolibri.it##a[href^="http://tracker.tradedoubler.com/"]
 tecnoandroid.it##a[href^="http://www.allinmobile.eu/"]
-altadefinizione01.click##a[href^="http://www.altadefinizione01.click/4k/"]
 altadefinizione01.click##a[href^="http://www.altadefinizione01.click/stream/"]
 juzaphoto.com##a[href^="http://www.amazon."][href*="creativeASIN"]
 animeclick.it,bdc-forum.it,birramoriamoci.it,comprovendolibri.it,eurogamer.it,gamerclick.it,ludomedia.it,mangaforever.net,netflixlovers.it,outcast.it,projectcars.it,serialclick.it,techzilla.it,tivusat.tv##a[href^="http://www.amazon."][href*="tag="]
 film-stream.org##a[href^="http://www.aznotizie.com/"]
 catania46.net##a[href^="http://www.clickpoint.it/db/goto.cp?"]
-filmsenzalimiti.co##a[href^="http://www.filmsenzalimiti.co/4k/"]
 filmsenzalimiti.co##a[href^="http://www.filmsenzalimiti.co/4k1/"]
 musicoff.com##a[href^="http://www.musicoff.com/ad/redirect/"]
 zapster.it##a[href^="http://www.paperbox.it/"]
 rietilife.com##a[href^="http://www.rietilife.com?pasID="]
-robinfilms.me##a[href^="http://www.robinfilms.me/4k/"]
 outcast.it##a[href^="http://www.tostadora.it/t-shirt-nerd.php?"]
 tp24.it##a[href^="http://www.tp24.it/link_banner.php?"]
 classifichemusica.com##a[href^="http://www.viagogo.it/Biglietti-Concerti?affiliateID="]
@@ -3237,6 +3249,7 @@ autobusweb.com,corrieredellacalabria.it##a[href^="https://goo.gl/"]
 comingsoon.it,consigli.it,eurogamer.it,everyeye.it,frasicelebri.it,greenme.it,hdblog.it,hwupgrade.it,mangaforever.net,ridble.com,rifaidate.it,spaziogames.it,surface-phone.it##a[href^="https://www.amazon."][href*="tag="]
 traderlink.it##a[style="display: block; width: 100%; height: 1080px; filter:alpha(opacity=0); -moz-opacity: 0; opacity: 0; background-color: rgb(255, 255, 255);"]
 notebookcheck.it##div[id][class] > div[id] > img:first-child
+eurostreaming.watch##div[style="    position: relative;\a width: 468px;\a height: 60px;\a border: none !important;\a background: none;\a margin: auto;\a clear: both;"]
 gpone.com##div[style=" margin:auto; margin-top:0px; margin-bottom:0px; width:730px; height:92px;"]
 gpone.com##div[style=" margin:auto; margin-top:5px; margin-bottom:5px; width:730px; height:92px;"]
 ilroma.net##div[style=" width: 214px; height: 82px;"]

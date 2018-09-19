@@ -555,6 +555,7 @@ PageStore.prototype.filterRequestNoCache = function(context) {
     // Static filtering never override dynamic filtering
     if ( result === '' ) {
         result = µb.staticNetFilteringEngine.matchString(context);
+        µb.staticNetFilteringEngine.matchAndFetchCspData(context);
     }
 
     return result;

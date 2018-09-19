@@ -646,6 +646,7 @@ ulozisko.sk#@##reklama_big
 ###inclickDock
 ###komercnisdeleni
 ###nike-banner-hokej
+###onlajny-stickers
 ###pf-wrapper
 ###prolinkhd
 ###promo-box

@@ -3,14 +3,14 @@
 # For more information about this list, see: https://pgl.yoyo.org/adservers/
 # ----
 # last updated:   Fri, 31 Aug 2018 16:35:56 GMT
-# entries:        2641
+# entries:        2638
 # format:         hosts (hosts -- in hosts file format)
 # credits:        Peter Lowe - pgl@yoyo.org - https://pgl.yoyo.org/ - https://twitter.com/pgl
 # this URL:       http://pgl.yoyo.org/adservers/serverlist.php?hostformat=hosts&showintro=1&mimetype=plaintext
 # other formats:  https://pgl.yoyo.org/adservers/formats.php
 # policy:         https://pgl.yoyo.org/adservers/policy.php
 #
-# start date:    Sat, 12 Sep 1998 00:00:00
+# start date:    Thu, 24 Sep 1998 00:00:00
 127.0.0.1 101com.com
 127.0.0.1 101order.com
 127.0.0.1 123found.com
@@ -351,6 +351,7 @@
 127.0.0.1 ads.affiliates-spinit.com
 127.0.0.1 ads.affiliates.match.com
 127.0.0.1 ads.ak.facebook.com.edgesuite.net
+127.0.0.1 ads.allvatar.com
 127.0.0.1 ads.alt.com
 127.0.0.1 ads.amdmb.com
 127.0.0.1 ads.amigos.com
@@ -1127,12 +1128,10 @@
 127.0.0.1 budsinc.com
 127.0.0.1 bullseye.backbeatmedia.com
 127.0.0.1 bumpberam.pro
-127.0.0.1 buyhitscheap.com
 127.0.0.1 buysellads.com
 127.0.0.1 buzzonclick.com
 127.0.0.1 bwp.download.com
 127.0.0.1 c.bigmir.net
-127.0.0.1 c.evidon.com
 127.0.0.1 c1.nowlinux.com
 127.0.0.1 c1exchange.com
 127.0.0.1 calmfoot.com
@@ -1486,7 +1485,6 @@
 127.0.0.1 fpctraffic.com
 127.0.0.1 fpctraffic2.com
 127.0.0.1 fqtag.com
-127.0.0.1 fragmentserv.iac-online.de
 127.0.0.1 free-banners.com
 127.0.0.1 freebanner.com
 127.0.0.1 freelogs.com
@@ -1525,6 +1523,7 @@
 127.0.0.1 globe7.com
 127.0.0.1 globus-inter.com
 127.0.0.1 gmads.net
+127.0.0.1 go-clicks.de
 127.0.0.1 go-rank.de
 127.0.0.1 goingplatinum.com
 127.0.0.1 goldstats.com
@@ -1747,13 +1746,13 @@
 127.0.0.1 m.trb.com
 127.0.0.1 m1.webstats4u.com
 127.0.0.1 m32.media
+127.0.0.1 m4n.nl
 127.0.0.1 mackeeperapp.mackeeper.com
 127.0.0.1 madclient.uimserv.net
 127.0.0.1 madisonavenue.com
 127.0.0.1 mads.cnet.com
 127.0.0.1 madvertise.de
 127.0.0.1 marchex.com
-127.0.0.1 market-buster.com
 127.0.0.1 marketing.888.com
 127.0.0.1 marketing.hearstmagazines.nl
 127.0.0.1 marketing.nyi.net
@@ -2220,7 +2219,6 @@
 127.0.0.1 sexinyourcity.com
 127.0.0.1 sexlist.com
 127.0.0.1 sextracker.com
-127.0.0.1 sexystat.com
 127.0.0.1 shakesea.com
 127.0.0.1 shakytaste.com
 127.0.0.1 shareadspace.com
@@ -2442,7 +2440,6 @@
 127.0.0.1 tracker-pm2.spilleren.com
 127.0.0.1 tracker.icerocket.com
 127.0.0.1 tracker.marinsm.com
-127.0.0.1 tracker.trackerfix.com
 127.0.0.1 tracking.crunchiemedia.com
 127.0.0.1 tracking.gajmp.com
 127.0.0.1 tracking.internetstores.de

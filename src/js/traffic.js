@@ -35,6 +35,10 @@ var exports = {};
 
 /******************************************************************************/
 
+let clearCacheInResponseHeaders = (vAPI.browserInfo.flavor == "Firefox" ? true : false);
+   
+let injectCSPHeaders =  (vAPI.browserInfo.flavor == "Firefox" && vAPI.browserInfo.majorVersion < 59 ? true : false);
+
 // Intercept and filter web requests.
 
 var onBeforeRequest = function(details) {
@@ -270,25 +274,26 @@ var onHeadersReceived = function(details) {
     context.requestURL = details.url;
     context.requestHostname = details.hostname;
     context.requestType = 'inline-script';
-
+    µb.staticNetFilteringEngine.cspSubsets = new Map();
     var result = pageStore.filterRequestNoCache(context);
 
     pageStore.logRequest(context, result);
     µb.logger.writeOne(tabId, context, result);
+    
+    var addCsp = [];
 
-    // Don't block
-    if ( µb.isAllowResult(result) ) {
-        return;
+    if ( µb.isAllowResult(result)) {
+        if(µb.staticNetFilteringEngine.cspSubsets.size === 0)
+            return;
+    }
+    else {
+        addCsp.push("script-src 'unsafe-eval' *");
     }
 
-    µb.updateBadgeAsync(tabId);
+    modifyHeaderToAddCsp(pageStore,context,details,addCsp);
+    µb.updateBadgeAsync(tabId);    
 
-    details.responseHeaders.push({
-        'name': 'Content-Security-Policy',
-        'value': "script-src 'unsafe-eval' *"
-    });
-
-    return { 'responseHeaders': details.responseHeaders };
+    return { 'responseHeaders': details.responseHeaders };    
 };
 
 /******************************************************************************/
@@ -322,27 +327,88 @@ var onRootFrameHeadersReceived = function(details) {
     context.requestHostname = requestHostname;
     context.requestType = 'inline-script';
 
+    µb.staticNetFilteringEngine.cspSubsets = new Map();
     var result = pageStore.filterRequestNoCache(context);
 
     pageStore.logRequest(context, result);
     µb.logger.writeOne(tabId, context, result);
+    
+    var addCsp = [];
 
-    // Don't block
-    if ( µb.isAllowResult(result) ) {
-        return;
+    if ( µb.isAllowResult(result)) {
+        if(µb.staticNetFilteringEngine.cspSubsets.size === 0)
+            return;
+    }
+    else {
+        addCsp.push("script-src 'unsafe-eval' *");
     }
 
+    modifyHeaderToAddCsp(pageStore,context,details,addCsp);
     µb.updateBadgeAsync(tabId);
-
-    details.responseHeaders.push({
-        'name': 'Content-Security-Policy',
-        'value': "script-src 'unsafe-eval' *"
-    });
 
     return { 'responseHeaders': details.responseHeaders };
 };
 
+var modifyHeaderToAddCsp = function(pageStore,context,details,addCsp) {
+
+    var cspSubsets = [];
+    var µb = µBlock;
+    var tabId = details.tabId;
+    let headers = details.responseHeaders;
+
+    if ( addCsp.length !== 0 ) {
+        cspSubsets[0] = addCsp.join('; ');
+    }
+   
+    for (let key of µb.staticNetFilteringEngine.cspSubsets.keys()) {
+        cspSubsets.push(key);
+    }
+    
+    if(cspSubsets.length > 0) {
+        for(let [key, value] of µb.staticNetFilteringEngine.cspSubsets.entries()) {
+            var result = 'sb:' + value; 
+            context.requestType = 'csp';
+            µb.logger.writeOne(tabId, context, result);
+        }
+        pageStore.logRequest(context, result);
+    }
+    
+    if ( injectCSPHeaders ) {
+        let i = headerIndex('content-security-policy', headers);
+        if ( i !== -1 ) {
+            cspSubsets.unshift(headers[i].value.trim());
+            headers.splice(i, 1);
+        }
+    }
+
+    if ( cspSubsets.length > 0 && clearCacheInResponseHeaders ) {
+        let i = headerIndex('cache-control', headers);
+        if ( i !== -1 ) {
+            headers[i].value = 'no-cache, no-store, must-revalidate';
+        } else {
+            headers[headers.length] = {
+                name: 'Cache-Control',
+                value: 'no-cache, no-store, must-revalidate'
+            };
+        }
+    }
+
+    headers.push({
+        name: 'Content-Security-Policy',
+        value: cspSubsets.join(', ')
+    });
+}
 /******************************************************************************/
+
+var headerIndex = function(headerName, headers) {
+    var i = headers.length;
+    while ( i-- ) {
+        if ( headers[i].name.toLowerCase() === headerName ) {
+            return i;
+        }
+    }
+    return -1;
+};
 
 var headerValue = function(headers, name) {
     var i = headers.length;

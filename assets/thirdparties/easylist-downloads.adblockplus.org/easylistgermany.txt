@@ -1,9 +1,9 @@
 [Adblock Plus 1.1]
-! Checksum: JOIRji0F+1lUx/a94vTjbw
-! Version: 201809070911
+! Checksum: 1QmbrOSzD1Qd/tChAf9RGA
+! Version: 201809190821
 ! Title: EasyList Germany
 ! EasyList Germany - Deutsche Ergänzung zu EasyList
-! Last modified: 07 Sep 2018 09:11 UTC
+! Last modified: 19 Sep 2018 08:21 UTC
 ! Expires: 1 days (update frequency)
 ! Homepage: https://easylist.github.io/
 ! Licence: https://easylist.github.io/pages/licence.html
@@ -4220,6 +4220,7 @@ sgcoburg.de###PromoRight
 volksfreund.de###RectangleOMS
 rclineforum.de###RotBanner
 express.de###RotatingPartner
+wiesbaden.de###SP-commercials
 helles-koepfchen.de###Sky_left
 dfb.de###SkyscraperContainer
 bayer04.de###Sponsoren_Logo
@@ -5057,6 +5058,7 @@ dict.cc###snhb-listing_wide_skyscraper-0
 ddl-music.org,ddl-warez.in,pornlounge.org###so_ad
 magistrix.de###songtext > .visible-desktop
 amazon.de###sp_detail
+amazon.de###sp_detail2
 wuppertaler-rundschau.de###spalte_anzeigen_links
 wuppertaler-rundschau.de###spalte_anzeigen_rechts
 museumsdienst-hamburg.de###spb
@@ -5309,7 +5311,7 @@ aachener-nachrichten.de,abendblatt.de,ak-kurier.de,alle-immobilien.ch,azonline.d
 ak-kurier.de##.ad + #flashContent
 ak-kurier.de##.ad + .tdt
 ak-kurier.de##.ad + .uk-panel
-1und1.de,gmx.net,web.de##.ad-container
+1und1.de,gmx.net,heise.de,web.de##.ad-container
 vsport.at##.ad1
 vsport.at##.ad2
 med1.de,promiflash.de,stayfriends.de##.adContainer
@@ -5375,6 +5377,7 @@ bild.de##.affiliate.pm172
 rsa-sachsen.de##.affiliates
 tweakpc.de##.aflink
 tarnkappe.info##.after-entry > .wrap > #text-17
+heise.de##.akwa-ad-container
 oxygen-scene.com##.alert_green
 tchgdns.de##.alt-pub
 modernboard.de##.alt1[style="padding-top:0px"] > div[style="clear:both"] + ul[style="list-style-type:none; margin:0px; padding:0px"]
@@ -8257,7 +8260,6 @@ wetteronline.de##div[style*="display: block !important"]
 @@||videostream4u.com^*/ac_oetags_clone.js
 @@||webdisk.ads.mwn.de/Scripts/ext-adv.js
 @@||welect.de/checkout/$document,subdocument
-@@||welt.de/img/$image,domain=welt.de
 @@||werbebanner24.de/templates/_wb24/_assets/images/$image,domain=werbebanner24.de
 @@||werbung.gruppedrei.com^$~third-party
 @@||werbung.karstadt.de^$~third-party

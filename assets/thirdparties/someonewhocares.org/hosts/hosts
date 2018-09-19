@@ -8,7 +8,7 @@
 # Please forward any additions, corrections or comments by email to
 # hosts@someonewhocares.org
 
-# Last updated: Fri, 07 Sep 2018 at 08:33:19 GMT
+# Last updated: Tue, 18 Sep 2018 at 05:53:52 GMT
 
 # Use this file to prevent your computer from connecting to selected
 # internet hosts. This is an easy and effective way to protect you from 
@@ -467,6 +467,7 @@ ff02::3		ip6-allhosts
 127.0.0.1 report.broadcastpc.tv 
 127.0.0.1 www.broadcastpc.tv
 127.0.0.1 browser-message.com
+127.0.0.1 brucelead.com
 127.0.0.1 bserver.blick.com
 127.0.0.1 bstats.adbrite.com
 127.0.0.1 b.stats.paypal.com
@@ -518,6 +519,7 @@ ff02::3		ip6-allhosts
 127.0.0.1 cgi.sexlist.com
 127.0.0.1 ci-accountlock.iovation.com
 127.0.0.1 ci-admin.iovation.com
+127.0.0.1 cig-arrete.com
 127.0.0.1 ci-mpsnare.iesnare.com
 127.0.0.1 ci-mpsnare.iesnare.co.uk
 127.0.0.1 ci-mpsnare.iovation.com	# See http://www.codingthewheel.com/archives/online-gambling-privacy-iesnare
@@ -1144,6 +1146,7 @@ ff02::3		ip6-allhosts
 127.0.0.1 nl.nedstatbasic.net
 #127.0.0.1 nl.sitestat.com	# may interfere with duo.nl
 127.0.0.1 noticias.life
+127.0.0.1 notify1.brucelead.com
 127.0.0.1 o.addthis.com
 127.0.0.1 objects.tremormedia.com
 127.0.0.1 okcounter.com
@@ -1172,6 +1175,7 @@ ff02::3		ip6-allhosts
 127.0.0.1 photobox-tracking.adalyser.com
 127.0.0.1 pings.blip.tv
 127.0.0.1 p.iovation.com
+127.0.0.1 pituitosus.com
 127.0.0.1 pix02.revsci.net
 127.0.0.1 pix03.revsci.net
 127.0.0.1 pix04.revsci.net
@@ -1539,6 +1543,7 @@ ff02::3		ip6-allhosts
 127.0.0.1 track.adrevolver.com
 127.0.0.1 track.anideaevolves.com
 127.0.0.1 track.bannerbridge.net
+127.0.0.1 track.brucelead.com
 127.0.0.1 track.businesstrenders.com
 127.0.0.1 track.businessunionorg.com
 127.0.0.1 track.clearsender.com
@@ -1941,6 +1946,7 @@ ff02::3		ip6-allhosts
 127.0.0.1 www.bluestreak.com
 127.0.0.1 www.c1.thecounter.de
 127.0.0.1 www.c2.thecounter.de
+127.0.0.1 www.cig-arrete.com
 127.0.0.1 www.ci-mpsnare.iesnare.com
 127.0.0.1 www.ci-mpsnare.iesnare.co.uk
 127.0.0.1 www.clickclick.com
@@ -2490,6 +2496,7 @@ ff02::3		ip6-allhosts
 127.0.0.1 mshelp247.weebly.com
 127.0.0.1 mtccsun.imtech.ernet.in
 127.0.0.1 murcia-ban.es
+127.0.0.1 mv0129.stream
 127.0.0.1 mx01.openinternetexchange.com
 127.0.0.1 mx01.openinternetexchange.net
 127.0.0.1 mx01.webwise.com
@@ -2803,6 +2810,7 @@ ff02::3		ip6-allhosts
 127.0.0.1 v1.your-notification.tools
 127.0.0.1 vast.btrll.com
 127.0.0.1 vcipo.info
+127.0.0.1 vedoriska.com
 127.0.0.1 venturead.com
 127.0.0.1 versionsupport.thebig-centeralplacecontentgreat.date
 127.0.0.1 videoamp.com
@@ -2856,6 +2864,8 @@ ff02::3		ip6-allhosts
 127.0.0.1 www1.realsoft34.com
 127.0.0.1 www.1tracksource.online
 127.0.0.1 www21.counsellor.gov.cn
+127.0.0.1 www2.fasterupconcreteflash.icu
+127.0.0.1 www.3tsdaq8viz.us
 127.0.0.1 www4.gy7k.net
 127.0.0.1 www.a2uu36g43l.download
 127.0.0.1 www.abetterinternet.com
@@ -6707,6 +6717,7 @@ ff02::3		ip6-allhosts
 127.0.0.1 app3.letitbefaster.website
 127.0.0.1 app3.letmacwork.world
 127.0.0.1 app3.letslowbefast.site
+127.0.0.1 app3.makeitworkfaster.life
 127.0.0.1 app4.letitbefaster.life
 127.0.0.1 app4.letitbefaster.website
 127.0.0.1 app4.letslowbefast.life
@@ -6804,6 +6815,7 @@ ff02::3		ip6-allhosts
 127.0.0.1 assets.applovin.com
 127.0.0.1 assets.igapi.com
 127.0.0.1 assets.kixer.com
+127.0.0.1 assets.kromtech.net
 127.0.0.1 assets.percentmobile.com
 127.0.0.1 as.sexad.net
 127.0.0.1 assoc-amazon.com
@@ -7401,6 +7413,7 @@ ff02::3		ip6-allhosts
 127.0.0.1 ck.juicyads.com
 127.0.0.1 cl21.v4.adaction.se
 127.0.0.1 cl320.v4.adaction.se
+127.0.0.1 cl96rwprue.com
 127.0.0.1 claimfreerewards.com
 127.0.0.1 clashmediausa.com
 127.0.0.1 classicjack.com
@@ -7427,6 +7440,7 @@ ff02::3		ip6-allhosts
 127.0.0.1 click.go2net.com
 127.0.0.1 click.israelinfo.ru
 127.0.0.1 clickit.go2net.com
+127.0.0.1 click.maaxmarket.com
 127.0.0.1 clickmedia.ro
 127.0.0.1 click.newviralmobistore.com
 127.0.0.1 click.pulse360.com
@@ -7816,6 +7830,7 @@ ff02::3		ip6-allhosts
 127.0.0.1 downloadplayer.xyz
 127.0.0.1 downloads.larivieracasino.com
 127.0.0.1 downloads.mytvandmovies.com
+127.0.0.1 download.weatherblink.com
 127.0.0.1 download.wholestuff.win
 127.0.0.1 download.yesmessenger.com
 127.0.0.1 dp1.33across.com
@@ -8868,6 +8883,7 @@ ff02::3		ip6-allhosts
 127.0.0.1 m4.afs.googleadservices.com
 127.0.0.1 m4.media-box.co
 127.0.0.1 m4ymh0220.tech
+127.0.0.1 maaxmarket.com
 127.0.0.1 ma.baidu.com
 127.0.0.1 macaddictads.snv.futurenet.com
 127.0.0.1 macads.net
@@ -8899,6 +8915,7 @@ ff02::3		ip6-allhosts
 127.0.0.1 mail.radar.imgsmail.ru
 127.0.0.1 main.exoclick.com
 127.0.0.1 main.vodonet.net
+127.0.0.1 makeitworkfaster.life
 127.0.0.1 makemoneyrobot.com
 127.0.0.1 manage001.adtech.de
 127.0.0.1 manage001.adtech.fr
@@ -9086,6 +9103,7 @@ ff02::3		ip6-allhosts
 127.0.0.1 mobile.bet.pt
 127.0.0.1 mobile-browser.me
 127.0.0.1 mobile.juicyads.com
+127.0.0.1 mobileleads.msn.com
 127.0.0.1 mobrevflwms.com
 127.0.0.1 mobscan.info
 127.0.0.1 mobularity.com
@@ -9291,6 +9309,7 @@ ff02::3		ip6-allhosts
 127.0.0.1 o0.winfuture.de
 127.0.0.1 o1.qnsr.com
 127.0.0.1 o2.eyereturn.com
+127.0.0.1 o-2-s-f.win
 127.0.0.1 o.admob.com
 127.0.0.1 oads.cracked.com
 127.0.0.1 oamsrhads.us.publicus.com
@@ -9373,6 +9392,8 @@ ff02::3		ip6-allhosts
 127.0.0.1 onet.hit.gemius.pl
 127.0.0.1 onlinadverts.com
 127.0.0.1 online1.webcams.com
+127.0.0.1 online2018codeopen.win
+127.0.0.1 online2018softwarefree.win
 127.0.0.1 onlineads.magicvalley.com
 127.0.0.1 onlinebestoffers.net
 127.0.0.1 only2date.com
@@ -10868,6 +10889,7 @@ ff02::3		ip6-allhosts
 127.0.0.1 vast.vertamedia.com
 127.0.0.1 vcdn.adnxs.com
 127.0.0.1 vclick.adbrite.com
+127.0.0.1 veirregnant.club
 127.0.0.1 venus.goclick.com
 127.0.0.1 versionsupport.set2updatenowsafesystemset4now.info
 127.0.0.1 ve.tscapeplay.com
@@ -11699,6 +11721,7 @@ ff02::3		ip6-allhosts
 127.0.0.1 www.healthclicks.co.uk
 127.0.0.1 www.hebdotop.com
 127.0.0.1 www.heusmarketing.nl
+127.0.0.1 www.hibids10.com
 127.0.0.1 www.hightrafficads.com
 127.0.0.1 www.histats.com
 127.0.0.1 www.holiday-gift-offers.com
@@ -11815,6 +11838,7 @@ ff02::3		ip6-allhosts
 127.0.0.1 www.lucky-day-uk.com
 127.0.0.1 www.luckyday.world
 127.0.0.1 www.m2trk.com
+127.0.0.1 www.maaxmarket.com
 127.0.0.1 www.mac.com-w.net
 127.0.0.1 www.macfillerck.com
 127.0.0.1 www.macombdisplayads.com
@@ -12278,6 +12302,7 @@ ff02::3		ip6-allhosts
 127.0.0.1 z.moatads.com
 127.0.0.1 z-na.amazon-adsystem.com
 127.0.0.1 zrh.bewilderinglyalbumin.com
+127.0.0.1 zrrat.31772.club
 127.0.0.1 zu1.november-lax.com
 127.0.0.1 zuzzer5.com
 127.0.0.1 zytpirwai.net
