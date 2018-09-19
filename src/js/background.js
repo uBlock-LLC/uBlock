@@ -92,9 +92,8 @@ return {
     // read-only
     systemSettings: {
         compiledMagic: 'eopszukpnrcq',
-        selfieMagic: 'menhiasrxfes'
+        selfieMagic: 'menhiasrxfed'
     },
-
     restoreBackupSettings: {
         lastRestoreFile: '',
         lastRestoreTime: 0,
@@ -105,7 +104,7 @@ return {
     // EasyList, EasyPrivacy and many others have an 4-day update period,
     // as per list headers.
     updateAssetsEvery: 97 * oneHour,
-    projectServerRoot: 'https://raw.githubusercontent.com/uBlockAdmin/uBlock/master/',
+    projectServerRoot: 'https://raw.githubusercontent.com/uBlock-LLC/uBlock/master/',
     donationUrl: 'https://www.ublock.org/donate/',
     surveyUrl:'https://www.ublock.org/update/',
     pslPath: 'assets/thirdparties/publicsuffix.org/list/effective_tld_names.dat',
