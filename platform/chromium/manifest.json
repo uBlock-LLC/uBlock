@@ -57,8 +57,7 @@
         "webNavigation",
         "webRequest",
         "webRequestBlocking",
-        "http://*/*",
-        "https://*/*"
+        "<all_urls>"
     ],
     "short_name": "uBlock"
 }

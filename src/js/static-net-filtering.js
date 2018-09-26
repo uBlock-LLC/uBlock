@@ -62,7 +62,8 @@ var typeNameToTypeValue = {
             'script':  4 << 4,
     'xmlhttprequest':  5 << 4,
          'sub_frame':  6 << 4,
-             'other':  7 << 4,
+         'websocket':  9 << 4,
+             'other':  10 << 4,
 'cosmetic-filtering': 13 << 4,
      'inline-script': 14 << 4,
              'popup': 15 << 4,
@@ -1318,7 +1319,8 @@ FilterParser.prototype.toNormalizedType = {
           'elemhide': 'cosmetic-filtering',
      'inline-script': 'inline-script',
              'popup': 'popup',
-              'csp' : 'csp' 
+              'csp' : 'csp', 
+         'websocket': 'websocket'
 };
 
 /******************************************************************************/

@@ -710,6 +710,23 @@ vAPI.net.registerListeners = function() {
         normalizeRequestDetails(details);
         return onBeforeRequestClient(details);
     };
+    
+    var urls, types;
+    urls = this.onBeforeRequest.urls || ['<all_urls>'];
+    types = this.onBeforeRequest.types ||  [];
+    if (
+        (chrome.webRequest.ResourceType.WEBSOCKET == 'websocket') &&
+        (urls.indexOf('<all_urls>') === -1)
+    ) {
+        types.push('websocket');
+        if ( urls.indexOf('ws://*/*') === -1 ) {
+            urls.push('ws://*/*');
+        }
+        if ( urls.indexOf('wss://*/*') === -1 ) {
+            urls.push('wss://*/*');
+        }
+    }
+    
     chrome.webRequest.onBeforeRequest.addListener(
         onBeforeRequest,
         //function(details) {
