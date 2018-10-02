@@ -350,6 +350,135 @@ var matchWhitelistDirective = function(url, hostname, directive) {
     return injectAsync;
 })();
 
+µBlock.contentscriptCode = (function() {
+    let parts = [
+        '(',
+        function(hostname, scriptlets) {
+            if (
+                document.location === null ||
+                hostname !== document.location.hostname
+            ) {
+                return;
+            }
+            let injectScriptlets = function(d) {
+                let script;
+                try {
+                    script = d.createElement('script');
+                    script.appendChild(d.createTextNode(
+                        decodeURIComponent(scriptlets))
+                    );
+                    (d.head || d.documentElement).appendChild(script);
+                } catch (ex) {
+                }
+                if ( script ) {
+                    if ( script.parentNode ) {
+                        script.parentNode.removeChild(script);
+                    }
+                    script.textContent = '';
+                }
+            };
+            injectScriptlets(document);
+            let processIFrame = function(iframe) {
+                let src = iframe.src;
+                if ( /^https?:\/\//.test(src) === false ) {
+                    injectScriptlets(iframe.contentDocument);
+                }
+            };
+            let observerTimer,
+                observerLists = [];
+            let observerAsync = function() {
+                for ( let nodelist of observerLists ) {
+                    for ( let node of nodelist ) {
+                        if ( node.nodeType !== 1 ) { continue; }
+                        if ( node.parentElement === null ) { continue; }
+                        if ( node.localName === 'iframe' ) {
+                            processIFrame(node);
+                        }
+                        if ( node.childElementCount === 0 ) { continue; }
+                        let iframes = node.querySelectorAll('iframe');
+                        for ( let iframe of iframes ) {
+                            processIFrame(iframe);
+                        }
+                    }
+                }
+                observerLists = [];
+                observerTimer = undefined;
+            };
+            let ready = function(ev) {
+                if ( ev !== undefined ) {
+                    window.removeEventListener(ev.type, ready);
+                }
+                let iframes = document.getElementsByTagName('iframe');
+                if ( iframes.length !== 0 ) {
+                    observerLists.push(iframes);
+                    observerTimer = setTimeout(observerAsync, 1);
+                }
+                let observer = new MutationObserver(function(mutations) {
+                    for ( let mutation of mutations ) {
+                        if ( mutation.addedNodes.length !== 0 ) {
+                            observerLists.push(mutation.addedNodes);
+                        }
+                    }
+                    if (
+                        observerLists.length !== 0 &&
+                        observerTimer === undefined
+                    ) {
+                        observerTimer = setTimeout(observerAsync, 1);
+                    }
+                });
+                observer.observe(
+                    document.documentElement,
+                    { childList: true, subtree: true }
+                );
+            };
+            if ( document.readyState === 'loading' ) {
+                window.addEventListener('DOMContentLoaded', ready);
+            } else {
+                ready();
+            }
+        }.toString(),
+        ')(',
+            '"', 'hostname-slot', '", ',
+            '"', 'scriptlets-slot', '"',
+        '); void 0;',
+    ];
+    return {
+        parts: parts,
+        hostnameSlot: parts.indexOf('hostname-slot'),
+        scriptletsSlot: parts.indexOf('scriptlets-slot'),
+        assemble: function(hostname, scriptlets) {
+            this.parts[this.hostnameSlot] = hostname;
+            this.parts[this.scriptletsSlot] =
+                encodeURIComponent(scriptlets);
+            return this.parts.join('');
+        }
+    };
+})();
+
+µBlock.scriptlets = (function(){
+    var µb = µBlock;
+    let injectNow = function(context,details) {
+        var onDataReceived = function(response){
+            if(response.content != "") {
+                var scriptlets = response.content;
+                let code = µb.contentscriptCode.assemble(context.pageHostname, scriptlets);
+                vAPI.tabs.injectScript(
+                    details.tabId,
+                    {
+                        code: code,
+                        frameId: details.frameId,
+                        matchAboutBlank: false,
+                        runAt: 'document_start'
+                    }
+                ); 
+            }
+        }
+        µb.assets.get('assets/scriptlets/nowebrtc.js', onDataReceived);
+    }
+    return {
+        injectNow:injectNow
+        };
+})();
 /******************************************************************************/
 
 })();

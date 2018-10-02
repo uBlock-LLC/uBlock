@@ -389,6 +389,26 @@ vAPI.tabs.onNavigation = function(details) {
     // TODO: Eventually, we will have to use an API to check whether a scheme
     //       is supported as I suspect we are going to start to see `ws`, `wss`
     //       as well soon.
+    var µburi = µb.URI;
+    var context = pageStore.createContextFromPage();
+    context.requestURL = vAPI.punycodeURL(details.url);
+    context.requestHostname = µburi.hostnameFromURI(details.url);
+    context.requestDomain = µburi.domainFromHostname(context.requestHostname);
+    context.requestType = 'webrtc';
+    
+    // Blocking behind-the-scene requests can break a lot of stuff: prevent
+    // browser updates, prevent extension updates, prevent extensions from
+    // working properly, etc.
+    // So we filter if and only if the "advanced user" mode is selected
+    
+    var result = '';
+    result = pageStore.filterRequestNoCache(context);
+    if ( !µb.isAllowResult(result) ) {
+        µb.scriptlets.injectNow(context,details);
+        pageStore.logRequest(context, result);
+        µb.logger.writeOne(details.tabId, context, result);
+    }
+    
     if ( pageStore && tabContext.rawURL.lastIndexOf('http', 0) === 0 ) {
         pageStore.hostnameToCountMap[tabContext.rootHostname] = 0;
     }

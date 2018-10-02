@@ -56,6 +56,7 @@ var projectRepositoryRoot = µBlock.projectServerRoot;
 var nullFunc = function() {};
 var reIsExternalPath = /^[a-z]+:\/\//;
 var reIsUserPath = /^assets\/user\//;
+var reIsScriptletsPath = /^assets\/scriptlets\//;
 var reIsCachePath = /^cache:\/\//;
 var lastRepoMetaTimestamp = 0;
 var lastRepoMetaIsRemote = false;
@@ -346,7 +347,6 @@ var updateLocalChecksums = function() {
     }
     cachedAssetsManager.save('assets/checksums.txt', localChecksums.join('\n'));
 };
-
 /******************************************************************************/
 
 // Gather meta data of all assets.
@@ -941,6 +941,31 @@ var readCacheAsset = function(path, callback) {
     cachedAssetsManager.load(path, onCachedContentLoaded, onCachedContentError);
 };
 
+var readlocalJSFile = function(path,callback) {
+    var reportBack = function(content, err) {
+        var details = {
+            'content': content
+        };
+        if ( err ) {
+            details.error = err;
+        }
+        callback(details);
+    };
+    var getFileContent = function() {
+        getTextFileFromURL(vAPI.getURL(path), onFileLoaded, onFileError);
+    }
+    var onFileLoaded = function() {
+        let scriptlets = this.responseText;
+        if ( scriptlets === undefined ) { reportBack('','error'); }
+        else reportBack(scriptlets);
+        
+    }
+    var onFileError  = function()  {
+        console.log('File not found.');
+        reportBack('','error');
+    }
+    getFileContent();
+};
 /******************************************************************************/
 
 // Assets
@@ -989,11 +1014,15 @@ exports.get = function(path, callback) {
         readCacheAsset(path, callback);
         return;
     }
-
+    if(reIsScriptletsPath.test(path)) {
+        readlocalJSFile(path, callback);
+        return;
+    }
     if ( reIsExternalPath.test(path) ) {
         readExternalAsset(path, callback);
         return;
     }
+    
 
     var onRepoMetaReady = function(meta) {
         var assetEntry = meta.entries[path];

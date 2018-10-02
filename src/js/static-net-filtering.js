@@ -67,7 +67,8 @@ var typeNameToTypeValue = {
 'cosmetic-filtering': 13 << 4,
      'inline-script': 14 << 4,
              'popup': 15 << 4,
-             'csp'  : 16 << 4
+             'csp'  : 16 << 4,
+          'webrtc'  : 17 << 4
 };
 var typeOtherValue = typeNameToTypeValue.other;
 
@@ -1320,7 +1321,8 @@ FilterParser.prototype.toNormalizedType = {
      'inline-script': 'inline-script',
              'popup': 'popup',
               'csp' : 'csp', 
-         'websocket': 'websocket'
+         'websocket': 'websocket',
+            'webrtc': 'webrtc' 
 };
 
 /******************************************************************************/
