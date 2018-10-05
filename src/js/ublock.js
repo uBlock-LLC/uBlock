@@ -350,6 +350,63 @@ var matchWhitelistDirective = function(url, hostname, directive) {
     return injectAsync;
 })();
 
+µBlock.rewriteEngine = (function (){
+    
+    var parseResult = function(result) {
+		let rewrite = '';
+		let pos = result.indexOf('$');
+        let text = result.slice(0, pos);
+    	if ( pos !== -1 ) {
+          	rewrite = result.slice(pos + 1).slice(8);
+    	}
+    	return [text,rewrite];
+	}
+	
+	var convertTextToRexExp = function (text){
+		// remove multiple wildcards
+        if (text.length >= 2 && text[0] == "/" && text[text.length - 1] == "/") {
+            text = text.substr(1, text.length - 2);
+        } else {
+            text = text.replace(/\*+/g, "*");
+
+            text = text
+                // remove anchors following separator placeholder
+                .replace(/\^\|$/, "^")
+                // escape special symbols
+                .replace(/\W/g, "\\$&")
+                // replace wildcards by .*
+                .replace(/\\\*/g, ".*")
+                // process separator placeholders (all ANSI characters but alphanumeric
+                // characters and _%.-)
+                .replace(/\\\^/g, "(?:[\\x00-\\x24\\x26-\\x2C\\x2F\\x3A-\\x40\\x5B-\\x5E\\x60\\x7B-\\x7F]|$)")
+                // process extended anchor at expression start
+                .replace(/^\\\|\\\|/, "^[\\w\\-]+:\\/+(?!\\/)(?:[^\\/]+\\.)?")
+                // process anchor at expression start
+                .replace(/^\\\|/, "^")
+                // process anchor at expression end
+                .replace(/\\\|$/, "$");
+        }
+        let regexp = new RegExp(text,false ? "" : "i");
+        return regexp;
+	}
+	
+	var rewriteUrl = function(url,result) {
+		let [text,rewrite] = parseResult(result);
+        let regexp = convertTextToRexExp(text);
+        try
+        {
+            let rewrittenUrl = new URL(url.replace(regexp, rewrite), url);
+            if (rewrittenUrl.origin == new URL(url).origin)
+                return rewrittenUrl.href;
+            }
+        catch (e)
+        {
+        }
+        return url;
+    }
+   return {rewriteUrl : rewriteUrl};
+})();
+
 µBlock.contentscriptCode = (function() {
     let parts = [
         '(',

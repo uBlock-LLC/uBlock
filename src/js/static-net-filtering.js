@@ -68,7 +68,8 @@ var typeNameToTypeValue = {
      'inline-script': 14 << 4,
              'popup': 15 << 4,
              'csp'  : 16 << 4,
-          'webrtc'  : 17 << 4
+          'webrtc'  : 17 << 4,
+          'rewrite' : 18 << 4
 };
 var typeOtherValue = typeNameToTypeValue.other;
 
@@ -859,6 +860,65 @@ FilterRegex.fromSelfie = function(s) {
     return new FilterRegex(s);
 };
 
+var FilterRegexRewrite = function(s,rewrite){
+    FilterRegex.call(this,s);
+    this.rewrite = rewrite;
+}
+FilterRegexRewrite.prototype = Object.create(FilterRegex.prototype);
+FilterRegexRewrite.prototype.constructor = FilterRegexRewrite;
+
+FilterRegexRewrite.prototype.match = function(url) {
+    return FilterRegex.prototype.match.call(this, url); 
+};
+
+FilterRegexRewrite.fid = FilterRegexRewrite.prototype.fid = '//r';
+
+FilterRegexRewrite.prototype.toString = function() {
+    return '/' + this.re.source + '/' + '$rewrite=' + this.rewrite;
+};
+
+FilterRegexRewrite.prototype.toSelfie = function() {
+    return this.re.source + '\t' + this.rewrite;
+};
+
+FilterRegexRewrite.compile = function(details) {
+    return details.f + '\t' + details.rewrite;
+};
+
+FilterRegexRewrite.fromSelfie = function(s) {
+    var pos = s.indexOf('\t');
+    return new FilterRegexRewrite(s.slice(0, pos), s.slice(pos + 1));
+};
+
+var FilterRewrite = function(s,rewrite) {
+    this.s = s;
+    this.rewrite = rewrite;
+}
+FilterRewrite.prototype = Object.create(FilterPlainHnAnchored.prototype);
+FilterRewrite.prototype.constructor = FilterRewrite;
+
+FilterRewrite.prototype.match = function(url,tokenBeg) {
+    return FilterPlainHnAnchored.prototype.match.call(this, url,tokenBeg); 
+};
+
+FilterRewrite.fid = FilterRewrite.prototype.fid = '||r';
+
+FilterRewrite.prototype.toString = function() {
+    return '||' + this.s + '$rewrite=' + this.rewrite;
+};
+
+FilterRewrite.prototype.toSelfie = function() {
+    return this.s + '\t' + this.rewrite;
+};
+
+FilterRewrite.compile = function(details) {
+    return details.f + '\t' + details.rewrite;
+};
+
+FilterRewrite.fromSelfie = function(s) {
+    var pos = s.indexOf('\t');
+    return new FilterRewrite(s.slice(0, pos), s.slice(pos + 1));
+};
 /******************************************************************************/
 
 var FilterRegexHostname = function(s, hostname) {
@@ -1198,8 +1258,14 @@ FilterBucket.fromSelfie = function() {
 
 var getFilterClass = function(details) {
     if ( details.isRegex ) {
-        return FilterRegex;
+        if(details.rewrite != '')
+            return FilterRegexRewrite;
+        else
+            return FilterRegex;
     }
+    if(details.rewrite != '')
+        return FilterRewrite;
+
     var s = details.f;
     if ( s.indexOf('*') !== -1 || details.token === '*' ) {
 
@@ -1302,6 +1368,7 @@ var FilterParser = function() {
     this.notHostnames = [];
     this.dataType = '';
     this.dataStr = '';
+    this.rewrite = '';
     this.reset();
 };
 
@@ -1322,7 +1389,8 @@ FilterParser.prototype.toNormalizedType = {
              'popup': 'popup',
               'csp' : 'csp', 
          'websocket': 'websocket',
-            'webrtc': 'webrtc' 
+            'webrtc': 'webrtc',
+           'rewrite': 'rewrite' 
 };
 
 /******************************************************************************/
@@ -1442,6 +1510,11 @@ FilterParser.prototype.parseOptions = function(s) {
             this.parseOptType('csp', not);
             this.dataType = 'csp';
             this.dataStr = '';
+            continue;
+        }
+        if ( opt.slice(0,8) === 'rewrite=') {
+            this.parseOptType('rewrite', not);
+            this.rewrite = opt.slice(8);
             continue;
         }
         if ( this.toNormalizedType.hasOwnProperty(opt) ) {
@@ -1743,8 +1816,10 @@ FilterContainer.prototype.factories = {
     'a|h': FilterPlainRightAnchoredHostname,
     '||a': FilterPlainHnAnchored,
    '||ah': FilterPlainHnAnchoredHostname,
+    '||r': FilterRewrite,
      '//': FilterRegex,
     '//h': FilterRegexHostname,
+    '//r': FilterRegexRewrite,
     '{h}': FilterHostnameDict,
       '_': FilterGeneric,
      '_h': FilterGenericHostname,
@@ -1917,7 +1992,7 @@ FilterContainer.prototype.compile = function(raw, out) {
 
 FilterContainer.prototype.compileHostnameOnlyFilter = function(parsed, out) {
     // Can't fit the filter in a pure hostname dictionary.
-    if ( parsed.hostnames.length !== 0 || parsed.notHostnames.length !== 0 || parsed.dataType == 'csp') {
+    if ( parsed.hostnames.length !== 0 || parsed.notHostnames.length !== 0 || parsed.dataType == 'csp' || parsed.rewrite != '') {
         return;
     }
 

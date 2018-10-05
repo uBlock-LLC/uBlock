@@ -102,6 +102,15 @@ var onBeforeRequest = function(details) {
     if ( µb.isAllowResult(result) ) {
         //console.debug('traffic.js > onBeforeRequest(): ALLOW "%s" (%o) because "%s"', details.url, details, result);
 
+        requestContext.requestType = 'rewrite';
+        var result = pageStore.filterRequest(requestContext);
+        
+        if ( µb.isBlockResult(result) ) {
+            let rewrittenUrl = µBlock.rewriteEngine.rewriteUrl(requestContext.requestURL,result.replace("sb:","")); 
+            if (rewrittenUrl != details.url)
+                return {redirectUrl: rewrittenUrl};
+        }
+
         // https://github.com/uBlockAdmin/uBlock/issues/114
         frameId = details.frameId;
         if ( frameId > 0 ) {
