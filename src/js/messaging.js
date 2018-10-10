@@ -409,7 +409,10 @@ var onMessage = function(request, sender, callback) {
     switch ( request.what ) {
         case 'retrieveDomainCosmeticSelectors':
             if ( pageStore && pageStore.getSpecificCosmeticFilteringSwitch() ) {
-                response = µb.cosmeticFilteringEngine.retrieveDomainSelectors(request);
+                var options = {
+                    skipCosmeticFiltering: pageStore.skipCosmeticFiltering                    
+                };
+                response = µb.cosmeticFilteringEngine.retrieveDomainSelectors(request,options);
             }
             break;
 

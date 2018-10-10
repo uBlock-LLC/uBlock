@@ -69,7 +69,8 @@ var typeNameToTypeValue = {
              'popup': 15 << 4,
              'csp'  : 16 << 4,
           'webrtc'  : 17 << 4,
-          'rewrite' : 18 << 4
+          'rewrite' : 18 << 4,
+      'generichide' : 19 << 4
 };
 var typeOtherValue = typeNameToTypeValue.other;
 
@@ -1390,7 +1391,8 @@ FilterParser.prototype.toNormalizedType = {
               'csp' : 'csp', 
          'websocket': 'websocket',
             'webrtc': 'webrtc',
-           'rewrite': 'rewrite' 
+           'rewrite': 'rewrite',
+       'generichide':'generichide'
 };
 
 /******************************************************************************/
@@ -1482,9 +1484,18 @@ FilterParser.prototype.parseOptions = function(s) {
             continue;
         }
         if ( opt === 'elemhide' ) {
-            if ( this.action === AllowAction ) {
+           // if ( this.action === AllowAction ) {
+            if ( not === false ) {   
                 this.parseOptType('elemhide', false);
-                this.action = BlockAction;
+                continue;
+            }
+            this.unsupported = true;
+            break;
+        }
+        if ( opt === 'generichide' ) {
+           // if ( this.action === AllowAction ) {
+            if ( not === false ) {      
+                this.parseOptType('generichide', false);
                 continue;
             }
             this.unsupported = true;
@@ -2157,7 +2168,7 @@ FilterContainer.prototype.fromCompiledContent = function(text, lineBeg) {
             lineEnd = textEnd;
         }
         line = text.slice(lineBeg + 2, lineEnd);
-       
+        
         fields = line.split('\v');
         
         lineBeg = lineEnd + 1;
@@ -2374,6 +2385,30 @@ FilterContainer.prototype.matchStringExactType = function(context, requestURL, r
     return 'sb:' + bf.toString();
 };
 
+FilterContainer.prototype.matchStringCosmeticHide = function(url,requestType) {
+    var categories = this.categories;
+    var af = false,bf = false, bucket;
+    
+    var type = typeNameToTypeValue[requestType] || 0;
+    if ( type === 0 ) {
+        return '';
+    }
+    this.tokenize(url);
+
+    if ( bucket = categories[this.makeCategoryKey(BlockAction | AnyParty | type | Important)] ) {
+        bf = this.matchTokens(bucket, url);
+        if ( bf !== false ) {
+            return 'sb:' + bf.toString();
+        }
+    }
+    if ( bucket = categories[this.makeCategoryKey(AllowAction | AnyParty | type)]) {
+        af = this.matchTokens(bucket, url);
+        if ( af !== false ) {
+            return 'sa:' + af.toString();
+        }
+    }
+    return '';
+};
 FilterContainer.prototype.matchCspRules = function(bucket, url,out) {
     this.tokenize(url);
     var tokens = this.tokens;
