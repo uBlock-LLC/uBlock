@@ -1159,7 +1159,7 @@ FilterContainer.prototype.retrieveGenericSelectors = function(request) {
 
 /******************************************************************************/
 
-FilterContainer.prototype.retrieveDomainSelectors = function(request) {
+FilterContainer.prototype.retrieveDomainSelectors = function(request,options) {
     if ( !request.locationURL ) {
         return;
     }
@@ -1178,13 +1178,15 @@ FilterContainer.prototype.retrieveDomainSelectors = function(request) {
         ready: this.frozen,
         domain: domain,
         entity: pos === -1 ? domain : domain.slice(0, pos - domain.length),
-        skipCosmeticFiltering: this.acceptedCount === 0,
+        skipCosmeticFiltering: options.skipCosmeticFiltering,
         cosmeticHide: [],
         cosmeticDonthide: [],
         netHide: [],
         netCollapse: µb.userSettings.collapseBlocked
     };
-
+    if(options.skipCosmeticFiltering){
+        return r;
+    }
     var hash, bucket;
     hash = makeHash(0, domain, this.domainHashMask);
     if ( bucket = this.hostnameFilters[hash] ) {
