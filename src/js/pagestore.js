@@ -310,7 +310,7 @@ PageStore.prototype.init = function(tabId) {
 
     this.skipCosmeticFiltering = false;
     var result;
-    result = µb.staticNetFilteringEngine.matchStringCosmeticHide(
+    result = µb.staticNetFilteringEngine.matchStringExceptionOnlyRule(
         tabContext.normalURL,'cosmetic-filtering');
     this.skipCosmeticFiltering = result.charAt(1) === 'a';
     if(this.skipCosmeticFiltering) {
@@ -321,12 +321,25 @@ PageStore.prototype.init = function(tabId) {
     // context is all setup at this point.
     this.skipGenericFiltering = this.skipCosmeticFiltering;     
     if ( this.skipGenericFiltering !== true ) {
-        result = µb.staticNetFilteringEngine.matchStringCosmeticHide(
+        result = µb.staticNetFilteringEngine.matchStringExceptionOnlyRule(
             tabContext.normalURL,'generichide');
         this.skipGenericFiltering = result.charAt(1) === 'a';
-        context.requestType = 'generichide';
-        µb.logger.writeOne(tabId, context, result);    
+        if(this.skipGenericFiltering) {
+            context.requestType = 'generichide';
+            µb.logger.writeOne(tabId, context, result);   
+        }
     }
+
+    result = µb.staticNetFilteringEngine.matchStringExceptionOnlyRule(
+        tabContext.normalURL,'genericblock');
+    
+    this.skipGenericBlocking = result.charAt(1) === 'a';
+
+    if(this.skipGenericBlocking) {
+        context.requestType = 'genericblock';
+        µb.logger.writeOne(tabId, context, result);   
+    }
+
     return this;
 };
 
@@ -527,6 +540,7 @@ PageStore.prototype.filterRequest = function(context) {
 
     // Static filtering never override dynamic filtering
     if ( result === '' ) {
+        context.skipGenericBlocking = this.skipGenericBlocking;
         result = µb.staticNetFilteringEngine.matchString(context);
     }
 
@@ -570,6 +584,7 @@ PageStore.prototype.filterRequestNoCache = function(context) {
 
     // Static filtering never override dynamic filtering
     if ( result === '' ) {
+        context.skipGenericBlocking = this.skipGenericBlocking;
         result = µb.staticNetFilteringEngine.matchString(context);
         µb.staticNetFilteringEngine.matchAndFetchCspData(context);
     }

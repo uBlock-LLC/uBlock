@@ -91,8 +91,8 @@ return {
 
     // read-only
     systemSettings: {
-        compiledMagic: 'eopszukpnrdj',
-        selfieMagic: 'menhiasrxfff'
+        compiledMagic: 'eopszukpnrdx',
+        selfieMagic: 'menhiasrxffx'
     },
     restoreBackupSettings: {
         lastRestoreFile: '',
