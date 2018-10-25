@@ -307,10 +307,26 @@ PageStore.prototype.init = function(tabId) {
     // Support `elemhide` filter option. Called at this point so the required
     // context is all setup at this point.
     var context = this.createContextFromPage();
-    this.skipCosmeticFiltering = µb.staticNetFilteringEngine
-                                   .matchStringExactType(context, tabContext.normalURL, 'cosmetic-filtering')
-                                   .charAt(1) === 'b';
 
+    this.skipCosmeticFiltering = false;
+    var result;
+    result = µb.staticNetFilteringEngine.matchStringCosmeticHide(
+        tabContext.normalURL,'cosmetic-filtering');
+    this.skipCosmeticFiltering = result.charAt(1) === 'a';
+    if(this.skipCosmeticFiltering) {
+        context.requestType = 'elemhide';
+        µb.logger.writeOne(tabId, context, result);    
+    }
+    // Support `generichide` filter option. Called at this point so the required
+    // context is all setup at this point.
+    this.skipGenericFiltering = this.skipCosmeticFiltering;     
+    if ( this.skipGenericFiltering !== true ) {
+        result = µb.staticNetFilteringEngine.matchStringCosmeticHide(
+            tabContext.normalURL,'generichide');
+        this.skipGenericFiltering = result.charAt(1) === 'a';
+        context.requestType = 'generichide';
+        µb.logger.writeOne(tabId, context, result);    
+    }
     return this;
 };
 
@@ -461,7 +477,7 @@ PageStore.prototype.getSpecificCosmeticFilteringSwitch = function() {
 /******************************************************************************/
 
 PageStore.prototype.getGenericCosmeticFilteringSwitch = function() {
-    if ( this.skipCosmeticFiltering ) {
+    if ( this.skipCosmeticFiltering || this.skipGenericFiltering) {
         return false;
     }
     return this.getSpecificCosmeticFilteringSwitch();
@@ -555,6 +571,7 @@ PageStore.prototype.filterRequestNoCache = function(context) {
     // Static filtering never override dynamic filtering
     if ( result === '' ) {
         result = µb.staticNetFilteringEngine.matchString(context);
+        µb.staticNetFilteringEngine.matchAndFetchCspData(context);
     }
 
     return result;

@@ -6,8 +6,8 @@
 ! Licence: CC-BY, see http://creativecommons.org/licenses/by/4.0/
 ! Title: hufilter
 ! Expires: 16 hours
-! Version: 201802281517
-! Checksum: R3GiIrDu2pprD/8870qCWA
+! Version: 201809171605
+! Checksum: Hz10CTj4adOxU7AQ+4z4uA
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! Magyar Adblock Plus szurolista
 ! 
@@ -289,13 +289,20 @@ gyakorikerdesek.hu/pic/bannerek/
 !
 itcafe.hu##body > a[href*="http://itshinspirationboard.com"]
 itcafe.hu##body > a[href="http://iknowit.hu"]
+itcafe.hu##body > a[href="http://huomdgde.hit.gemius.pl/hitredir/id=1_1L0uue.HvLCkhtq89oI6Pej8MiTI9ou00xDGK2ufz.e7/fastid=mkrengjaevepzhnpjhboammvvxlj/stparam=rpkmjujnuv/url=https://www.meetup.com/Onjaro-Autokat-Budapesten-Self-Driving-Cars-in-Budapest/events/249593503/"]
+itcafe.hu##body > [href="http://skillmatch.hu/"]
 itcafe.hu##a[href^="https://track.adform.net/C/"]
+itcafe.hu##a[href="http://huomdgde.hit.gemius.pl/hitredir/id=1_1L0uue.HvLCkhtq89oI6Pej8MiTI9ou00xDGK2ufz.e7/fastid=dakgyragclmmtjjioeptifpgbnjo/stparam=peftntejdz/url=https://www.meetup.com/Onjaro-Autokat-Budapesten-Self-Driving-Cars-in-Budapest/events/249593503/"]
 https://itcafe.hu/dl/cnt/2017-05/3701
 https://itcafe.hu/dl/cnt/2017-05/3703
 https://itcafe.hu/dl/cnt/2017-10/3816
 https://itcafe.hu/dl/cnt/2017-11/3890
-!
-https://itcafe.hu/dl/sp/
+https://itcafe.hu/dl/cnt/2018-04/4005
+https://itcafe.hu/dl/cnt/2018-04/4007
+https://itcafe.hu/dl/cnt/2018-06/4065
+https://itcafe.hu/dl/cnt/2018-07/4079
+https://itcafe.hu/dl/cnt/2018-07/4080
+https://itcafe.hu/dl/cnt/2018-07/4082
 !
 itcafe.hu##a[href="http://www.laptop.hu"]
 itcafe.hu##div:not([id="page"]):not([id="shadow"]):not([id="main"]):not([id="center"]):not([id="right"]):not([class="cntcolumn"]):not([class="anyag hir"]):not([itemprop="articleBody"]):not([class="anyag cikk"]):not([class="defcnt taj"]):has(a[href="http://www.laptop.hu"])
@@ -395,7 +402,8 @@ startlap.hu##[id*="banner"]
 startlap.hu##[id*="peelgame"]
 startlap.hu##[class*="adsense"]
 startlap.hu##[class*="Adv"]
-startlap.hu##[class*="banner"]
+! GH issue #115
+!startlap.hu##[class*="banner"]
 startlap.hu##[class*="peelgame"]
 startlap.hu##[class^="adact"]
 startlap.hu##[id*="Advert"]
@@ -601,6 +609,7 @@ hazipatika.com##[class*="advert"]
 hazipatika.com##[class*="adv_"]
 hazipatika.com##DIV[class="wrap"]
 !
+ipon.hu##.u-hide\@mobile.flag-wrapper--fill.flag-wrapper.grid-col-lg-1-4.grid-col-md-1-2.grid-col-1.article-list__item
 ||ipon.hu/banner
 ipon.hu##[id*="banner"]
 ipon.hu###leftPoszter-section
@@ -630,10 +639,15 @@ sonline.hu##[class*="hirdetes"]
 sonline.hu##[id*="ctnet_ad_"]
 !
 logout.hu##body > a[href*="http://itshinspirationboard.com"]
+logout.hu##body > [href="http://skillmatch.hu/"]
 logout.hu##a[href^="https://track.adform.net/C/"]
 !
 https://logout.hu/dl/cnt/2017-05/3701
-https://logout.hu/dl/cnt/2017-05/3703/
+https://logout.hu/dl/cnt/2017-05/3703
+https://logout.hu/dl/cnt/2018-06/4065
+https://logout.hu/dl/cnt/2018-07/4079
+https://logout.hu/dl/cnt/2018-07/4080
+https://logout.hu/dl/cnt/2018-07/4082
 !
 https://logout.hu/dl/sp/
 !
@@ -755,10 +769,27 @@ prohardver.hu##body > a[href*="http://itshinspirationboard.com"]
 prohardver.hu##body > a[href="http://oaziscomputer.hu/kategoria/111/uj-dell-s-szeria"]
 prohardver.hu##body > a[href="http://iknowit.hu"]
 prohardver.hu##body > a[href="http://oaziscomputer.hu/kategoria/81/intuos-pro"]
+prohardver.hu##body > a[href="http://huomdgde.hit.gemius.pl/hitredir/id=1_1L0uue.HvLCkhtq89oI6Pej8MiTI9ou00xDGK2ufz.e7/fastid=emvodjccbsiunkldnertgjbayskc/stparam=ybqpdmhlek/url=https://www.meetup.com/Onjaro-Autokat-Budapesten-Self-Driving-Cars-in-Budapest/events/249593503/"]
+prohardver.hu##body > a[href="http://huomdgde.hit.gemius.pl/hitredir/id=1_1L0uue.HvLCkhtq89oI6Pej8MiTI9ou00xDGK2ufz.e7/fastid=dakgyragclmmtjjioeptifpgbnjo/stparam=peftntejdz/url=https://www.meetup.com/Onjaro-Autokat-Budapesten-Self-Driving-Cars-in-Budapest/events/249593503/"]
+prohardver.hu##body > [href="https://oaziscomputer.hu/kereso/p/210-AP"]
+prohardver.hu##body > [href="http://skillmatch.hu/"]
+prohardver.hu##body > [href="https://prohardver.hu/nyeremenyjatek/harom_napos_villamjatek_egy_zyxel_multy_routerert.html"]
+prohardver.hu##body > [href="https://oaziscomputer.hu/kereso/p/dell%20p2%2019"]
+prohardver.hu##body > [href="https://oaziscomputer.hu/termek/4012/dell-p2217h"]
+prohardver.hu##body > [href="https://www.asus.com/hu/Laptops/ASUS-ZenBook-Pro-15-UX580GE"]
+prohardver.hu##body > [href="https://www.lg.com/hu/projektorok"]
 prohardver.hu##a[href^="https://track.adform.net/C/"]
 prohardver.hu##a[href^="https://www.javachallenge.hu/"]
 prohardver.hu##a[href="http://www.laptop.hu/laptop"]
 prohardver.hu##a[href="http://www.lg.com/hu/monitorok/lg-34UC89G"]
+prohardver.hu##a[href^="http://codingcup.hu/"]
+prohardver.hu##a[href^="http://www.conticup.hu/?utm_source=prohardver&utm_medium=banner"]
+prohardver.hu##a[href^="http://www.itechchallenge.hu/?utm_source=prohardver&utm_medium=banner"]
+prohardver.hu##[href^="http://www.alza.hu/van-itt-minden"]
+prohardver.hu##[href="https://www.lg.com/hu/monitorok/lg-38WK95C-W"]
+prohardver.hu##[href^="http://www.alza.hu/black-friday"]
+prohardver.hu##[href="http://www.lg.com/hu/projektorok"]
+prohardver.hu##[href="https://www.asus.com/hu/Laptops/ASUS-ZenBook-Pro-15-UX580GE/"]
 https://prohardver.hu/dl/cnt/2016-11/3547
 https://prohardver.hu/dl/cnt/2016-11/3542
 https://prohardver.hu/dl/cnt/2017-02/3626
@@ -793,6 +824,24 @@ https://prohardver.hu/dl/cnt/2017-11/3868
 https://prohardver.hu/dl/cnt/2017-11/3890
 https://prohardver.hu/dl/cnt/2017-11/3903
 https://prohardver.hu/dl/cnt/2017-11/3905
+https://prohardver.hu/dl/cnt/2018-04/3993
+https://prohardver.hu/dl/cnt/2018-04/4005
+https://prohardver.hu/dl/cnt/2018-04/4006
+https://prohardver.hu/dl/cnt/2018-05/4025
+https://prohardver.hu/dl/cnt/2018-05/4034
+https://prohardver.hu/dl/cnt/2018-06/4050
+https://prohardver.hu/dl/cnt/2018-06/4063
+https://prohardver.hu/dl/cnt/2018-06/4065
+https://prohardver.hu/dl/cnt/2018-07/4025
+https://prohardver.hu/dl/cnt/2018-07/4079
+https://prohardver.hu/dl/cnt/2018-07/4080
+https://prohardver.hu/dl/cnt/2018-07/4082
+https://prohardver.hu/dl/cnt/2018-07/4084
+https://prohardver.hu/dl/cnt/2018-07/4097
+https://prohardver.hu/dl/cnt/2018-08/4145/
+https://prohardver.hu/dl/cnt/2018-08/4147/
+https://prohardver.hu/dl/cnt/2018-08/4164/
+https://prohardver.hu/dl/cnt/2018-08/4165/
 !
 https://prohardver.hu/dl/sp/
 !
@@ -834,6 +883,10 @@ https://prohardver.hu/ajanlo/lapcsalad.html
 ||prohardver.hu/dl/cnt/2017-04/3663/image.jpg$image
 ||prohardver.hu/dl/cnt/2017-04/3664/image.jpg$image
 ||prohardver.hu/dl/cnt/2017-11/3879/image.jpg$image
+||prohardver.hu/dl/cnt/2018-03/3979/image.jpg$image
+||prohardver.hu/dl/cnt/2018-03/3969/image.jpg$image
+||prohardver.hu/dl/cnt/2018-03/3968/image.jpg$image
+||prohardver.hu/dl/cnt/2018-03/144224/foramax_banner.thumb.jpg$image
 ||prohardver.hu/design/sp/autoalkatreszek24_300x60.png$image
 ||prohardver.hu/design/sp/autoalkatreszonline24_300x60.png$image
 !
@@ -894,7 +947,16 @@ mobilarena.hu##body > a[href="https://www.nokia.com/hu_hu/phones/nokia-8"]
 mobilarena.hu##body > a[href="https://www.speedshop.hu/black-friday-2017-hbfday.html"]
 mobilarena.hu##body > a[href="https://www.speedshop.hu/adventi-akciok-a-speedshopnal-hADVENT.html"]
 mobilarena.hu##body > a[href="https://www.allviewmobile.com/hu/"]
+mobilarena.hu##body > a[href="http://www.veletech.hu"]
+mobilarena.hu##body > [href="https://www.xprotector.hu/tipus/autos-tartok/"]
+mobilarena.hu##[href^="http://www.alza.hu/van-itt-minden"]
+mobilarena.hu##a[href="http://firstphone.hu/hu-hu/huaweip20/"]
 mobilarena.hu##a[href^="http://www.gearbest.com/m-promotion-active-317.html"]
+mobilarena.hu##[href="http://skillmatch.hu/"]
+mobilarena.hu##[href^="http://www.alza.hu/black-friday"]
+mobilarena.hu##[href="https://www.vwh.hu"]
+mobilarena.hu##[href^="http://www.alza.hu/megbizhatobolt"]
+mobilarena.hu##[href^="http://www.alza.hu/kuponfuzet"]
 https://mobilarena.hu/dl/cnt/2016-06/2251
 https://mobilarena.hu/dl/cnt/2016-06/2252
 https://mobilarena.hu/dl/cnt/2017-06/3722
@@ -912,6 +974,15 @@ https://mobilarena.hu/dl/cnt/2017-11/3880
 https://mobilarena.hu/dl/cnt/2017-11/3894
 https://mobilarena.hu/dl/cnt/2017-12/3911
 https://mobilarena.hu/dl/cnt/2017-12/3915
+https://mobilarena.hu/dl/cnt/2018-04/3990
+https://mobilarena.hu/dl/cnt/2018-04/3997
+https://mobilarena.hu/dl/cnt/2018-05/4039
+https://mobilarena.hu/dl/cnt/2018-06/4065
+https://mobilarena.hu/dl/cnt/2018-07/4079
+https://mobilarena.hu/dl/cnt/2018-07/4080
+https://mobilarena.hu/dl/cnt/2018-07/4082
+https://mobilarena.hu/dl/cnt/2018-08/4164
+https://mobilarena.hu/dl/cnt/2018-08/4165
 !
 https://mobilarena.hu/dl/sp/
 https://mobilarena.hu/dl/pr/
@@ -924,7 +995,6 @@ mobilarena.hu##div:not([id="page"]):not([id="shadow"]):not([id="main"]):not([id=
 mobilarena.hu##div:not([id="page"]):not([id="shadow"]):not([id="main"]):not([id="center"]):not([id="right"]):not([class="cntcolumn"]):not([class="anyag hir"]):not([class="anyag cikk"]):not([itemprop="articleBody"]):has(script[src*="ad.adverticum.net"])
 mobilarena.hu##div:not([id="page"]):not([id="shadow"]):not([id="main"]):not([id="center"]):not([id="right"]):not([class="cntcolumn"]):not([class="anyag hir"]):not([class="anyag cikk"]):not([itemprop="articleBody"]):has(script[src*="ad.doubleclick.net"])
 mobilarena.hu##div:not([id="page"]):not([id="shadow"]):not([id="main"]):not([id="center"]):not([id="right"]):not([class="cntcolumn"]):not([class="anyag hir"]):not([class="anyag cikk"]):not([itemprop="articleBody"]):has(a[href*="htc.com"])
-mobilarena.hu##div:not([id="page"]):not([id="shadow"]):not([id="main"]):not([id="head"]):not([id="navi"]):not([id="center"]):has(a[href*="https://www.tomtop.com"])
 mobilarena.hu##div:not([id="page"]):not([id="shadow"]):not([id="main"]):not([id="center"]):not([id="right"]):not([class="cntcolumn"]):not([class="anyag hir"]):not([class="anyag cikk"]):not([itemprop="articleBody"]):has(iframe[src*="m2mzona.hu/ads"])
 mobilarena.hu##div:not([id="page"]):not([id="shadow"]):not([id="main"]):not([id="center"]):not([id="right"]):not([class="cntcolumn"]):not([class="anyag hir"]):not([class="anyag cikk"]):not([itemprop="articleBody"]):has(a[href*="https://www.nokia.com/hu_hu/phones/nokia-8"])
 !
@@ -1351,7 +1421,13 @@ blogstar.hu##DIV[id="lightview1"]
 blogstar.hu##[class*="banner"]
 blogstar.hu##[class*="popupBanner"]
 !
-https://gamepod.hu/dl/cnt/2017-10/3837/
+gamepod.hu##body > [href="http://skillmatch.hu/"]
+!
+https://gamepod.hu/dl/cnt/2017-10/3837
+https://gamepod.hu/dl/cnt/2018-06/4065
+https://gamepod.hu/dl/cnt/2018-07/4079
+https://gamepod.hu/dl/cnt/2018-07/4080
+https://gamepod.hu/dl/cnt/2018-07/4082
 !
 https://gamepod.hu/dl/sp/
 !
@@ -1385,6 +1461,7 @@ https://gamepod.hu/ajanlo/lapcsalad.html
 ||gamepod.hu/design/sp/autoalkatreszonline24_300x60.png$image
 !
 gamepod.hu##[class*="xabre"]
+!
 !
 hungliaonline.com##script:contains(adblocker)
 hungliaonline.com##.tqWLsnEEqeEw-bg
@@ -1428,7 +1505,9 @@ hir444.blogspot.com###LinkList94
 hir444.blogspot.com###SC_TBlock_342633_Table
 !
 fototrend.hu##a[href="http://consumer.huawei.com/hu/phones/mate10series/"]
+fototrend.hu##[href="https://www.barion.com/hu/vasarlok/arak-vasarloknak/"]
 https://fototrend.hu/design/hatter.jpg
+fototrend.hu##.foot-logos.col-md
 !
 prohardver.hu,mobilarena.hu,itcafe.hu,gamepod.hu,logout.hu##.spleft
 prohardver.hu,mobilarena.hu,itcafe.hu,gamepod.hu,logout.hu##.spright
@@ -1456,7 +1535,48 @@ prohardver.hu,mobilarena.hu,itcafe.hu,gamepod.hu,logout.hu##:xpath(//div[div[a[c
 prohardver.hu,mobilarena.hu,itcafe.hu,gamepod.hu,logout.hu##:xpath(//div[div[a[contains(@href, 'http://iknowit.hu')]]])
 prohardver.hu,mobilarena.hu,itcafe.hu,gamepod.hu,logout.hu##:xpath(//div[div[a[contains(@href, 'https://bank360.hu')]]])
 prohardver.hu,mobilarena.hu,itcafe.hu,gamepod.hu,logout.hu##:xpath(//div[@class="defcnt cntatc"]/p[@align="center"]/a[contains(@href, 'http://www.cedrus.hu/')]/img[contains(@src, 'dl/sp/cedrus.png')]/parent::a/parent::p)
+prohardver.hu,mobilarena.hu,itcafe.hu,gamepod.hu,logout.hu,hardverapro.hu##:xpath(//div[div[script[contains(@src, 'track.adform.net')]]])
+prohardver.hu,mobilarena.hu,itcafe.hu,gamepod.hu,logout.hu##:xpath(//div[div[script[contains(@src, 'cdn.doubleverify.com')]]])
+prohardver.hu,mobilarena.hu,itcafe.hu,gamepod.hu,logout.hu##:xpath(//div[div[a[contains(@href, 'hit.gemius.pl')]]])
 prohardver.hu,mobilarena.hu,itcafe.hu,gamepod.hu,logout.hu##:xpath(//div[div[img[contains(@src, '/dl/cnt/2017-12/3930/image.gif')]]])
+prohardver.hu,mobilarena.hu,itcafe.hu,gamepod.hu,logout.hu##:xpath(//div[div[img[contains(@src, '/dl/cnt/2018-03/3969/image.jpg')]]])
+prohardver.hu,mobilarena.hu,itcafe.hu,gamepod.hu,logout.hu##:xpath(//div[div[img[contains(@src, '/dl/cnt/2018-03/3968/image.jpg')]]])
+prohardver.hu,mobilarena.hu,itcafe.hu,gamepod.hu,logout.hu##:xpath(//div[div[img[contains(@src, '/dl/pr/3977.jpg')]]])
+prohardver.hu,mobilarena.hu,itcafe.hu,gamepod.hu,logout.hu##:xpath(//div[div[img[contains(@src, '/dl/cnt/2018-03/3979/image.jpg')]]])
+prohardver.hu,mobilarena.hu,itcafe.hu,gamepod.hu,logout.hu##:xpath(//div[div[img[contains(@src, '/dl/cnt/2018-04/3990/image.gif')]]])
+prohardver.hu,mobilarena.hu,itcafe.hu,gamepod.hu,logout.hu##:xpath(//div[div[img[contains(@src, '/dl/cnt/2018-04/3994/image.jpg')]]])
+prohardver.hu,mobilarena.hu,itcafe.hu,gamepod.hu,logout.hu##:xpath(//div[div[img[contains(@src, '/dl/cnt/2018-04/3996/image.jpg')]]])
+prohardver.hu,mobilarena.hu,itcafe.hu,gamepod.hu,logout.hu##:xpath(//div[div[img[contains(@src, '/dl/cnt/2018-04/3997/image.gif')]]])
+prohardver.hu,mobilarena.hu,itcafe.hu,gamepod.hu,logout.hu##:xpath(//div[div[img[contains(@src, '/dl/cnt/2018-04/3998/image.jpg')]]])
+prohardver.hu,mobilarena.hu,itcafe.hu,gamepod.hu,logout.hu##:xpath(//div[div[img[contains(@src, '/dl/cnt/2018-06/4050/image.png')]]])
+prohardver.hu,mobilarena.hu,itcafe.hu,gamepod.hu,logout.hu##:xpath(//div[div[p[a[contains(@href, 'https://www.xprotector.hu/tipus/magneses-tartok/')]]]])
+prohardver.hu,mobilarena.hu,itcafe.hu,gamepod.hu,logout.hu##:xpath(//p[a[img[contains(@src, '/dl/cnt/2018-03/144224/foramax_banner.thumb.jpg')]]])
+prohardver.hu,mobilarena.hu,itcafe.hu,gamepod.hu,logout.hu##:xpath(//div[div[iframe[contains(@src, 'https://img.prohardver.hu/ad/MM2/iframe_300x600.html')]]])
+prohardver.hu,mobilarena.hu,itcafe.hu,gamepod.hu,logout.hu##:xpath(//div[div[img[contains(@src, '/dl/cnt/2018-05/4034/image.png')]]])
+prohardver.hu,mobilarena.hu,itcafe.hu,gamepod.hu,logout.hu##:xpath(//div[div[img[contains(@src, '/dl/cnt/2018-05/4039/image.gif')]]])
+prohardver.hu,mobilarena.hu,itcafe.hu,gamepod.hu,logout.hu##:xpath(//div[div[img[contains(@src, '/dl/cnt/2018-05/4025/image.png')]]])
+prohardver.hu,mobilarena.hu,itcafe.hu,gamepod.hu,logout.hu##:xpath(//div[div[img[contains(@src, '/dl/pr/4059.png')]]])
+prohardver.hu,mobilarena.hu,itcafe.hu,gamepod.hu,logout.hu##:xpath(//div[div[img[contains(@src, '/dl/cnt/2018-06/4065/image.png')]]])
+prohardver.hu,mobilarena.hu,itcafe.hu,gamepod.hu,logout.hu##:xpath(//div[div[img[contains(@src, '/dl/cnt/2018-07/4079/image.jpg')]]])
+prohardver.hu,mobilarena.hu,itcafe.hu,gamepod.hu,logout.hu##:xpath(//div[div[img[contains(@src, '/dl/cnt/2018-07/4080/image.jpg')]]])
+prohardver.hu,mobilarena.hu,itcafe.hu,gamepod.hu,logout.hu##:xpath(//div[div[img[contains(@src, '/dl/cnt/2018-07/4082/image.jpg')]]])
+prohardver.hu,mobilarena.hu,itcafe.hu,gamepod.hu,logout.hu##:xpath(//div[div[img[contains(@src, '/dl/cnt/2018-07/4084/image.png')]]])
+prohardver.hu,mobilarena.hu,itcafe.hu,gamepod.hu,logout.hu##:xpath(//div[div[img[contains(@src, '/dl/cnt/2018-07/4100/image.jpg')]]])
+prohardver.hu,mobilarena.hu,itcafe.hu,gamepod.hu,logout.hu##:xpath(//div[div[img[contains(@src, '/dl/cnt/2018-07/4101/image.jpg')]]])
+prohardver.hu,mobilarena.hu,itcafe.hu,gamepod.hu,logout.hu##:xpath(//div[div[img[contains(@src, '/dl/cnt/2018-07/4099/image.gif')]]])
+prohardver.hu,mobilarena.hu,itcafe.hu,gamepod.hu,logout.hu##:xpath(//div[div[img[contains(@src, '/dl/cnt/2018-08/4135/image.jpg')]]])
+prohardver.hu,mobilarena.hu,itcafe.hu,gamepod.hu,logout.hu##:xpath(//div[div[img[contains(@src, '/dl/cnt/2018-08/4137/image.jpg')]]])
+prohardver.hu,mobilarena.hu,itcafe.hu,gamepod.hu,logout.hu##:xpath(//div[div[iframe[contains(@src, 'https://img.prohardver.hu/ad/MM2/iframe_970x250.html')]]])
+prohardver.hu,mobilarena.hu,itcafe.hu,gamepod.hu,logout.hu##:xpath(//div[div[img[contains(@src, '/dl/cnt/2018-07/4097/image.png')]]])
+prohardver.hu,mobilarena.hu,itcafe.hu,gamepod.hu,logout.hu##:xpath(//div[div[img[contains(@src, '/dl/cnt/2018-08/4147/image.png')]]])
+prohardver.hu,mobilarena.hu,itcafe.hu,gamepod.hu,logout.hu##:xpath(//div[div[img[contains(@src, '/dl/cnt/2018-08/4145/image.png')]]])
+prohardver.hu,mobilarena.hu,itcafe.hu,gamepod.hu,logout.hu##:xpath(//div[div[img[contains(@src, '/dl/cnt/2018-08/4148/image.gif')]]])
+prohardver.hu,mobilarena.hu,itcafe.hu,gamepod.hu,logout.hu##:xpath(//div[div[img[contains(@src, '/dl/cnt/2018-08/4153/image.jpg')]]])
+prohardver.hu,mobilarena.hu,itcafe.hu,gamepod.hu,logout.hu,hardverapro.hu##:xpath(//div[div[img[contains(@src, '/dl/cnt/2018-09/4164/image.jpg')]]])
+prohardver.hu,mobilarena.hu,itcafe.hu,gamepod.hu,logout.hu,hardverapro.hu##:xpath(//div[div[img[contains(@src, '/dl/cnt/2018-09/4165/image.jpg')]]])
+prohardver.hu,mobilarena.hu,itcafe.hu,gamepod.hu,logout.hu,hardverapro.hu##:xpath(//div[div[img[contains(@src, '/dl/cnt/2018-09/4164/image.png')]]])
+prohardver.hu,mobilarena.hu,itcafe.hu,gamepod.hu,logout.hu,hardverapro.hu##:xpath(//div[div[img[contains(@src, '/dl/cnt/2018-09/4165/image.png')]]])
+prohardver.hu,mobilarena.hu,itcafe.hu,gamepod.hu,logout.hu##:xpath(//div[div[iframe[contains(@src, 'https://img.prohardver.hu/ad/MM/iframe_300x600.html')]]])
 prohardver.hu,mobilarena.hu,itcafe.hu,gamepod.hu,logout.hu##a[href^="https://bank360.hu"]
 prohardver.hu,mobilarena.hu,itcafe.hu,gamepod.hu,logout.hu##a[href="http://www.cedrus.hu/"]
 prohardver.hu,mobilarena.hu,itcafe.hu,gamepod.hu,logout.hu##a[href="http://www.pcx.hu/"]

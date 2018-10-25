@@ -39,6 +39,10 @@
 
     var exports = {};
 
+    exports.browserFlavor = browserFlavor;
+
+    exports.language = browserLanguage;
+
     exports.generateUserId = function() {
 
         var timeSuffix = (Date.now()) % 1e8; // 8 digits from end of timestamp

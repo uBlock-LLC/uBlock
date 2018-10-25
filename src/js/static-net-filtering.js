@@ -62,10 +62,15 @@ var typeNameToTypeValue = {
             'script':  4 << 4,
     'xmlhttprequest':  5 << 4,
          'sub_frame':  6 << 4,
-             'other':  7 << 4,
+         'websocket':  9 << 4,
+             'other':  10 << 4,
 'cosmetic-filtering': 13 << 4,
      'inline-script': 14 << 4,
-             'popup': 15 << 4
+             'popup': 15 << 4,
+             'csp'  : 16 << 4,
+          'webrtc'  : 17 << 4,
+          'rewrite' : 18 << 4,
+      'generichide' : 19 << 4
 };
 var typeOtherValue = typeNameToTypeValue.other;
 
@@ -349,6 +354,63 @@ FilterPlainPrefix0Hostname.fromSelfie = function(s) {
     var pos = s.indexOf('\t');
     return new FilterPlainPrefix0Hostname(s.slice(0, pos), s.slice(pos + 1));
 };
+
+var FilterPlainCsp = function(s,dataStr) {
+    this.s = s;
+    this.dataStr = dataStr;
+};
+
+FilterPlainCsp.fid = FilterPlainCsp.prototype.fid = 'c';
+
+FilterPlainCsp.prototype.match = function(url, tokenBeg) {
+    return url.substr(tokenBeg, this.s.length) === this.s;
+};
+
+FilterPlainCsp.prototype.toSelfie = function() {
+    return this.s + '\t' + this.dataStr;
+};
+FilterPlainCsp.prototype.toString = function() {
+    return "||"+ this.s + '^$csp=' + this.dataStr;
+};
+
+FilterPlainCsp.compile = function(details) {
+    return details.f + '\t' + details.dataStr;
+};
+FilterPlainCsp.fromSelfie = function(s) {
+    //var pos = s.indexOf('\t');
+    var args = s.split('\t');
+    return new FilterPlainCsp(args[0], args[1]);
+};
+
+var FilterPlainCspHostname = function(s,dataStr, hostname) {
+    this.s = s;
+    this.dataStr = dataStr;
+    this.hostname = hostname;
+};
+FilterPlainCspHostname.fid = FilterPlainCspHostname.prototype.fid = 'ch';
+
+FilterPlainCspHostname.prototype.match = function(url, tokenBeg) {
+    return pageHostnameRegister.slice(-this.hostname.length) === this.hostname &&
+           (url.substr(tokenBeg - 1, this.s.length) === this.s || this.s == "*");
+};
+
+FilterPlainCspHostname.prototype.toSelfie = function() {
+    return this.s + '\t' + this.dataStr + '\t' + this.hostname;
+};
+FilterPlainCspHostname.prototype.toString = function() {
+    return '$csp=' + this.dataStr + ",domain=" + this.hostname;
+};
+
+FilterPlainCspHostname.compile = function(details,hostname) {
+    return details.f + '\t' + details.dataStr + '\t' + hostname;
+};
+FilterPlainCspHostname.fromSelfie = function(s) {
+    var fields = s.split('\t'); 
+    return new FilterPlainCspHostname(fields[0], fields[1], fields[2]);
+};
+
+
+
 
 /******************************************************************************/
 
@@ -799,6 +861,65 @@ FilterRegex.fromSelfie = function(s) {
     return new FilterRegex(s);
 };
 
+var FilterRegexRewrite = function(s,rewrite){
+    FilterRegex.call(this,s);
+    this.rewrite = rewrite;
+}
+FilterRegexRewrite.prototype = Object.create(FilterRegex.prototype);
+FilterRegexRewrite.prototype.constructor = FilterRegexRewrite;
+
+FilterRegexRewrite.prototype.match = function(url) {
+    return FilterRegex.prototype.match.call(this, url); 
+};
+
+FilterRegexRewrite.fid = FilterRegexRewrite.prototype.fid = '//r';
+
+FilterRegexRewrite.prototype.toString = function() {
+    return '/' + this.re.source + '/' + '$rewrite=' + this.rewrite;
+};
+
+FilterRegexRewrite.prototype.toSelfie = function() {
+    return this.re.source + '\t' + this.rewrite;
+};
+
+FilterRegexRewrite.compile = function(details) {
+    return details.f + '\t' + details.rewrite;
+};
+
+FilterRegexRewrite.fromSelfie = function(s) {
+    var pos = s.indexOf('\t');
+    return new FilterRegexRewrite(s.slice(0, pos), s.slice(pos + 1));
+};
+
+var FilterRewrite = function(s,rewrite) {
+    this.s = s;
+    this.rewrite = rewrite;
+}
+FilterRewrite.prototype = Object.create(FilterPlainHnAnchored.prototype);
+FilterRewrite.prototype.constructor = FilterRewrite;
+
+FilterRewrite.prototype.match = function(url,tokenBeg) {
+    return FilterPlainHnAnchored.prototype.match.call(this, url,tokenBeg); 
+};
+
+FilterRewrite.fid = FilterRewrite.prototype.fid = '||r';
+
+FilterRewrite.prototype.toString = function() {
+    return '||' + this.s + '$rewrite=' + this.rewrite;
+};
+
+FilterRewrite.prototype.toSelfie = function() {
+    return this.s + '\t' + this.rewrite;
+};
+
+FilterRewrite.compile = function(details) {
+    return details.f + '\t' + details.rewrite;
+};
+
+FilterRewrite.fromSelfie = function(s) {
+    var pos = s.indexOf('\t');
+    return new FilterRewrite(s.slice(0, pos), s.slice(pos + 1));
+};
 /******************************************************************************/
 
 var FilterRegexHostname = function(s, hostname) {
@@ -1138,14 +1259,28 @@ FilterBucket.fromSelfie = function() {
 
 var getFilterClass = function(details) {
     if ( details.isRegex ) {
-        return FilterRegex;
+        if(details.rewrite != '')
+            return FilterRegexRewrite;
+        else
+            return FilterRegex;
     }
+    if(details.rewrite != '')
+        return FilterRewrite;
+
     var s = details.f;
     if ( s.indexOf('*') !== -1 || details.token === '*' ) {
+
+        if(details.dataType == "csp"){
+            return FilterPlainCsp;
+        }
+
         if ( details.hostnameAnchored ) {
             return FilterGenericHnAnchored;
         }
         return FilterGeneric;
+    }
+    if ( details.dataType == "csp" ) {
+        return FilterPlainCsp;
     }
     if ( details.anchor < 0 ) {
         return FilterPlainLeftAnchored;
@@ -1162,6 +1297,7 @@ var getFilterClass = function(details) {
     if ( details.tokenBeg === 1 ) {
         return FilterPlainPrefix1;
     }
+    
     return FilterPlain;
 };
 
@@ -1173,6 +1309,10 @@ var getHostnameBasedFilterClass = function(details) {
     }
     var s = details.f;
     if ( s.indexOf('*') !== -1 || details.token === '*' ) {
+
+        if(details.dataType == "csp"){
+            return FilterPlainCspHostname;
+        }
         if ( details.hostnameAnchored ) {
             return FilterGenericHnAnchoredHostname;
         }
@@ -1227,6 +1367,9 @@ var FilterParser = function() {
     this.reHasUnicode = /[^\x00-\x7F]/;
     this.hostnames = [];
     this.notHostnames = [];
+    this.dataType = '';
+    this.dataStr = '';
+    this.rewrite = '';
     this.reset();
 };
 
@@ -1244,7 +1387,12 @@ FilterParser.prototype.toNormalizedType = {
           'document': 'main_frame',
           'elemhide': 'cosmetic-filtering',
      'inline-script': 'inline-script',
-             'popup': 'popup'
+             'popup': 'popup',
+              'csp' : 'csp', 
+         'websocket': 'websocket',
+            'webrtc': 'webrtc',
+           'rewrite': 'rewrite',
+       'generichide':'generichide'
 };
 
 /******************************************************************************/
@@ -1268,6 +1416,8 @@ FilterParser.prototype.reset = function() {
     this.types = 0;
     this.important = 0;
     this.unsupported = false;
+    this.dataType = '';
+    this.dataStr = '';
     return this;
 };
 
@@ -1334,9 +1484,18 @@ FilterParser.prototype.parseOptions = function(s) {
             continue;
         }
         if ( opt === 'elemhide' ) {
-            if ( this.action === AllowAction ) {
+           // if ( this.action === AllowAction ) {
+            if ( not === false ) {   
                 this.parseOptType('elemhide', false);
-                this.action = BlockAction;
+                continue;
+            }
+            this.unsupported = true;
+            break;
+        }
+        if ( opt === 'generichide' ) {
+           // if ( this.action === AllowAction ) {
+            if ( not === false ) {      
+                this.parseOptType('generichide', false);
                 continue;
             }
             this.unsupported = true;
@@ -1349,6 +1508,25 @@ FilterParser.prototype.parseOptions = function(s) {
             }
             this.unsupported = true;
             break;
+        }
+        if ( opt.startsWith('csp=') ) {
+            if ( opt.length > 4) {
+                this.parseOptType('csp', not);
+                this.dataType = 'csp';
+                this.dataStr = opt.slice(4).trim();
+            }
+            continue;
+        }
+        if ( opt === 'csp' && this.action === AllowAction ) {
+            this.parseOptType('csp', not);
+            this.dataType = 'csp';
+            this.dataStr = '';
+            continue;
+        }
+        if ( opt.slice(0,8) === 'rewrite=') {
+            this.parseOptType('rewrite', not);
+            this.rewrite = opt.slice(8);
+            continue;
         }
         if ( this.toNormalizedType.hasOwnProperty(opt) ) {
             this.parseOptType(opt, not);
@@ -1366,6 +1544,7 @@ FilterParser.prototype.parseOptions = function(s) {
             this.important = Important;
             continue;
         }
+        
         this.unsupported = true;
         break;
     }
@@ -1378,7 +1557,6 @@ FilterParser.prototype.parse = function(raw) {
     this.reset();
 
     var s = raw;
-
     // plain hostname?
     if ( reHostnameRule.test(s) ) {
         this.f = s;
@@ -1600,8 +1778,10 @@ FilterContainer.prototype.reset = function() {
     this.duplicateCount = 0;
     this.duplicateBuster = {};
     this.categories = Object.create(null);
+    this.cspFilters = Object.create(null);
     this.filterParser.reset();
     this.filterCounts = {};
+    this.cspSubsets = new Map();
 };
 
 /******************************************************************************/
@@ -1614,6 +1794,14 @@ FilterContainer.prototype.freeze = function() {
     var bucket;
     for ( var k in categories ) {
         bucket = categories[k]['.'];
+        if ( bucket !== undefined ) {
+            bucket.freeze();
+        }
+    }
+    var cspFilters = this.cspFilters;
+    var bucket;
+    for ( var k in cspFilters ) {
+        bucket = cspFilters[k]['.'];
         if ( bucket !== undefined ) {
             bucket.freeze();
         }
@@ -1639,13 +1827,17 @@ FilterContainer.prototype.factories = {
     'a|h': FilterPlainRightAnchoredHostname,
     '||a': FilterPlainHnAnchored,
    '||ah': FilterPlainHnAnchoredHostname,
+    '||r': FilterRewrite,
      '//': FilterRegex,
     '//h': FilterRegexHostname,
+    '//r': FilterRegexRewrite,
     '{h}': FilterHostnameDict,
       '_': FilterGeneric,
      '_h': FilterGenericHostname,
     '||_': FilterGenericHnAnchored,
-   '||_h': FilterGenericHnAnchoredHostname
+   '||_h': FilterGenericHnAnchoredHostname,
+      'c': FilterPlainCsp,
+     'ch': FilterPlainCspHostname
 };
 
 /******************************************************************************/
@@ -1693,7 +1885,8 @@ FilterContainer.prototype.toSelfie = function() {
         allowFilterCount: this.allowFilterCount,
         blockFilterCount: this.blockFilterCount,
         duplicateCount: this.duplicateCount,
-        categories: categoriesToSelfie(this.categories)
+        categories: categoriesToSelfie(this.categories),
+        cspFilters: categoriesToSelfie(this.cspFilters)
     };
 };
 
@@ -1707,43 +1900,50 @@ FilterContainer.prototype.fromSelfie = function(selfie) {
     this.allowFilterCount = selfie.allowFilterCount;
     this.blockFilterCount = selfie.blockFilterCount;
     this.duplicateCount = selfie.duplicateCount;
-
-    var catKey, tokenKey;
-    var dict = this.categories, subdict;
-    var bucket = null;
-    var rawText = selfie.categories;
-    var rawEnd = rawText.length;
-    var lineBeg = 0, lineEnd;
-    var line, pos, what, factory;
-    while ( lineBeg < rawEnd ) {
-        lineEnd = rawText.indexOf('\n', lineBeg);
-        if ( lineEnd < 0 ) {
-            lineEnd = rawEnd;
+    var fc = this;
+    var filterFromSelfie = function(categories) {
+        
+        var catKey, tokenKey;
+        var dict = Object.create(null),subdict;
+        var bucket = null;
+        var rawText = categories;//selfie.categories;
+        var rawEnd = rawText.length;
+        var lineBeg = 0, lineEnd;
+        var line, pos, what, factory;
+        while ( lineBeg < rawEnd ) {
+            lineEnd = rawText.indexOf('\n', lineBeg);
+            if ( lineEnd < 0 ) {
+                lineEnd = rawEnd;
+            }
+            line = rawText.slice(lineBeg, lineEnd);
+            lineBeg = lineEnd + 1;
+            pos = line.indexOf('\t');
+            what = line.slice(0, pos);
+            if ( what === 'k1' ) {
+                catKey = decode(line.slice(pos + 1));
+                subdict = dict[catKey] = Object.create(null);
+                bucket = null;
+                continue;
+            }
+            if ( what === 'k2' ) {
+                tokenKey = decode(line.slice(pos + 1));
+                bucket = null;
+                continue;
+            }
+            factory = fc.factories[what];
+            if ( bucket === null ) {
+                bucket = subdict[tokenKey] = factory.fromSelfie(line.slice(pos + 1));
+                continue;
+            }
+            // When token key is reused, it can't be anything
+            // else than FilterBucket
+            bucket.add(factory.fromSelfie(line.slice(pos + 1)));
         }
-        line = rawText.slice(lineBeg, lineEnd);
-        lineBeg = lineEnd + 1;
-        pos = line.indexOf('\t');
-        what = line.slice(0, pos);
-        if ( what === 'k1' ) {
-            catKey = decode(line.slice(pos + 1));
-            subdict = dict[catKey] = Object.create(null);
-            bucket = null;
-            continue;
-        }
-        if ( what === 'k2' ) {
-            tokenKey = decode(line.slice(pos + 1));
-            bucket = null;
-            continue;
-        }
-        factory = this.factories[what];
-        if ( bucket === null ) {
-            bucket = subdict[tokenKey] = factory.fromSelfie(line.slice(pos + 1));
-            continue;
-        }
-        // When token key is reused, it can't be anything
-        // else than FilterBucket
-        bucket.add(factory.fromSelfie(line.slice(pos + 1)));
+        return dict;
     }
+    this.categories = filterFromSelfie(selfie.categories);
+    this.cspFilters = filterFromSelfie(selfie.cspFilters);
+    
 };
 
 /******************************************************************************/
@@ -1762,7 +1962,7 @@ FilterContainer.prototype.compile = function(raw, out) {
     if ( s.length === 0 ) {
         return false;
     }
-
+    
     // Ignore comments
     var c = s.charAt(0);
     if ( c === '[' || c === '!' ) {
@@ -1785,7 +1985,7 @@ FilterContainer.prototype.compile = function(raw, out) {
     // Pure hostnames, use more efficient liquid dict
     // https://github.com/uBlockAdmin/uBlock/issues/665
     // Create a dict keyed on request type etc.
-    if ( parsed.hostnamePure && this.compileHostnameOnlyFilter(parsed, out) ) {
+    if ( parsed.hostnamePure && this.compileHostnameOnlyFilter(parsed, out)) {
         return true;
     }
 
@@ -1803,7 +2003,7 @@ FilterContainer.prototype.compile = function(raw, out) {
 
 FilterContainer.prototype.compileHostnameOnlyFilter = function(parsed, out) {
     // Can't fit the filter in a pure hostname dictionary.
-    if ( parsed.hostnames.length !== 0 || parsed.notHostnames.length !== 0 ) {
+    if ( parsed.hostnames.length !== 0 || parsed.notHostnames.length !== 0 || parsed.dataType == 'csp' || parsed.rewrite != '') {
         return;
     }
 
@@ -1968,17 +2168,36 @@ FilterContainer.prototype.fromCompiledContent = function(text, lineBeg) {
             lineEnd = textEnd;
         }
         line = text.slice(lineBeg + 2, lineEnd);
+        
         fields = line.split('\v');
+        
         lineBeg = lineEnd + 1;
 
         this.acceptedCount += 1;
 
-        bucket = this.categories[fields[0]];
-        if ( bucket === undefined ) {
-            bucket = this.categories[fields[0]] = Object.create(null);
-        }
-        entry = bucket[fields[1]];
+        var blnCspMatch = false;
 
+        if(fields.length > 2) {
+            if(fields[2] == "c" || fields[2] == "ch"){
+                blnCspMatch = true;
+            }
+        }
+
+        if(blnCspMatch) {
+            bucket = this.cspFilters[fields[0]];
+            if ( bucket === undefined ) {
+                bucket = this.cspFilters[fields[0]] = Object.create(null);
+            }
+        }
+        else {
+            bucket = this.categories[fields[0]];
+            if ( bucket === undefined ) {
+                bucket = this.categories[fields[0]] = Object.create(null);
+            }
+        }
+        
+        entry = bucket[fields[1]];
+        
         if ( fields[1] === '.' ) {
             if ( entry === undefined ) {
                 entry = bucket['.'] = new FilterHostnameDict();
@@ -1995,7 +2214,10 @@ FilterContainer.prototype.fromCompiledContent = function(text, lineBeg) {
         }
         this.duplicateBuster[line] = true;
 
+
         factory = this.factories[fields[2]];
+
+        
 
         // For development purpose
         //if ( this.filterCounts.hasOwnProperty(fields[2]) === false ) {
@@ -2163,6 +2385,92 @@ FilterContainer.prototype.matchStringExactType = function(context, requestURL, r
     return 'sb:' + bf.toString();
 };
 
+FilterContainer.prototype.matchStringCosmeticHide = function(url,requestType) {
+    var categories = this.categories;
+    var af = false,bf = false, bucket;
+    
+    var type = typeNameToTypeValue[requestType] || 0;
+    if ( type === 0 ) {
+        return '';
+    }
+    this.tokenize(url);
+
+    if ( bucket = categories[this.makeCategoryKey(BlockAction | AnyParty | type | Important)] ) {
+        bf = this.matchTokens(bucket, url);
+        if ( bf !== false ) {
+            return 'sb:' + bf.toString();
+        }
+    }
+    if ( bucket = categories[this.makeCategoryKey(AllowAction | AnyParty | type)]) {
+        af = this.matchTokens(bucket, url);
+        if ( af !== false ) {
+            return 'sa:' + af.toString();
+        }
+    }
+    return '';
+};
+FilterContainer.prototype.matchCspRules = function(bucket, url,out) {
+    this.tokenize(url);
+    var tokens = this.tokens;
+    var tokenEntry, token;
+    var i = 0;
+    var matchCsp = [];
+    var f;
+    for (;;) {
+        tokenEntry = tokens[i++];
+        token = tokenEntry.token;
+        if ( token === '' ) {
+            break;
+        }
+        f = bucket[token];
+        if ( f !== undefined && f.match(url, tokenEntry.beg) !== false ) {
+            out.set(f.dataStr,f);
+        }
+    }
+    f = bucket['*'];
+    if ( f !== undefined) {
+        var filters = f.filters;
+        var n = filters.length;
+        for ( var i = 0; i < n; i++ ) {
+            if ( filters[i].match(url) !== false ) {
+               out.set(filters[i].dataStr,filters[i]);
+            }
+        }
+    }
+};
+
+FilterContainer.prototype.matchAndFetchCspData = function(context) {
+    pageHostnameRegister = context.pageHostname || '';
+    requestHostnameRegister = context.requestHostname;
+    var bucket;
+    var type = typeNameToTypeValue["csp"];
+    var toBlockCSP = new Map();
+    var toAllowCSP = new Map();
+
+    if ( bucket = this.cspFilters[this.makeCategoryKey(BlockAnyParty | type)] ) {
+        this.matchCspRules(bucket, context.requestURL,toBlockCSP);
+    }
+    if ( bucket = this.cspFilters[this.makeCategoryKey(AllowAnyParty | type)] ) {
+        this.matchCspRules(bucket, context.requestURL,toAllowCSP);
+    }   
+
+    if ( toBlockCSP.size === 0 ) { return; }
+    
+    var key;
+    for ( key of toAllowCSP.keys()) {
+        if ( key == '' || key === undefined ) {
+            toBlockCSP.clear();
+            break;
+        }
+        toBlockCSP.delete(key);
+    }
+    for (let [key, value] of toBlockCSP.entries()) {
+         if ( key == '' || key === undefined ) {
+            break;
+        }
+        this.cspSubsets.set(key,value.toString());
+    }
+}
 /******************************************************************************/
 
 FilterContainer.prototype.matchString = function(context) {

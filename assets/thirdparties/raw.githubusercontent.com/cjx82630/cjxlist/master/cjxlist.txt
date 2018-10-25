@@ -1,15 +1,20 @@
 [Adblock Plus 2.0]
-! Checksum: xrUV2NSe2JhjYzvzuWA/FQ
-! Version: 201803010914
-! Title: EasyList Lite
-! This is a Lite version of EasyList. Only for Simplified Chinese Language Websites
-! Last modified: 2018/03/01 09:14 +0800
+! Version: 201809172300
+! Title: CJX's EasyList Lite
+! Last modified: 2018/09/17 23:00 +0800
 ! Expires: 10 days (update frequency)
-! Fork of: EasyList https://easylist.adblockplus.org/
-! Licence: https://easylist-downloads.adblockplus.org/COPYING
-! Email: cjxlist@gmail.com
 ! Homepage: http://abpchina.org/forum/forum.php?mod=viewthread&tid=29667
+! Licence: https://easylist-downloads.adblockplus.org/COPYING
 !
+! If you only visite Simplified Chinese Websites,
+! you can replace default "EasyList China+EasyList" with "EasyList China+CJX's EasyList Lite"
+! Email (cjxlist@gmail.com)
+! Fork of EasyList https://easylist-downloads.adblockplus.org/easylist.txt
+###bottom-ads-container
+###bannerAd
+###slide_ad
+||teads.tv^$third-party
+/bannerad.
 ##.ads-item
 ##.trc-content-sponsored
 ##.mks_ads_widget
@@ -33,7 +38,7 @@
 ##.ad-r
 ##.widget_advert
 ##.ad_hover_href
-/adservice.
+/adservice.$domain=~adservice.io
 _box_ad_
 /ajs.php?
 /adsystem/*
@@ -297,8 +302,6 @@ _728_90_
 ##.adbottom
 ###topad1
 /300x250-
-/addata.
-||fastapi.net^$third-party
 ##.ad980
 ##.ads1
 ##.ads3

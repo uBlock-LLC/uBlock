@@ -1,11 +1,11 @@
 [Adblock Plus 2.8.2]
-! Checksum: X7bBfCRx/c3XqeiL746yXQ
+! Checksum: oWuUK9awaCO8DICLUN8Phg
 ! Homepage: https://github.com/k2jp/abp-japanese-filters/
 ! Title: ABP Japanese filters (ONLY FOR Japanese and experienced users: READ Support Policy)
 ! Expires: 6 hours
-! Version: 201803150441
+! Version: 201809111118
 !
-! Last modified: 2018-03-15 04:41 JST(UTC+0900)
+! Last modified: 2018-09-11 11:18 JST(UTC+0900)
 ! Change log: https://github.com/k2jp/abp-japanese-filters/wiki/FilterChangeLog
 ! Code license: GNU GPL v3: http://www.gnu.org/licenses/gpl.html
 ! Content license: Creative Commons BY-NC-SA 4.0 http://creativecommons.org/licenses/by-nc-sa/4.0/
@@ -311,8 +311,8 @@
 ! Commented out for the incompatibility with uBlock Origin, Dec 08, 2016
 ! |http:$ping
 ! |https:$ping
-|http:$popup,domain=1channel.ch|1fichier.com|2baksa.net|6brj.com|adexprt.com|adnxs.com|adshostnet.com|adspirit.de|adsplats.com|airliners.net|alphatv.gr|alrincon.com|animeflv.net|animeid.tv|bitporno.com|bitshare.com|booking.com|cinerip.com|cloudfront.net|co-co-co.co|cpasbien.io|cpasbien.pw|ctdisk.com|depositfiles.com|ellinofreneiafm.gr|emule-island.ru|eurosptp.com|extra.to|extratorrent.cc|extratorrentlive.com|eztv.ag|filenuke.com|filesonic.com|filesonic.fr|filesonic.jp|flashx.tv|freakshare.com|freebunker.com|freshremix.ru|hao123.com|hdtorrents.info|hikaritube.com|hot-jav.com|hotavxxx.com|hotporndl.com|humoron.com|imagecarry.com|imagefruit.com|imagesnake.com|imgcarry.com|imgchili.com|imgking.co|imgshots.com|isohunt.com|javlinks.com|kinoman.tv|kinox.to|kinox.tv|leversions.info|libertyland.tv|lumfile.com|megafilmesonline.net|megaupload.com|megavideo.com|mk-sniper.net|movie4k.to|movie4k.tv|movie8k.me|newpct1.com|nuvid.com|openadserving.com|openload.co|peliculaspepito.to|pornbus.org|primewire.ag|promptfile.com|qponning.com|rev2pub.com|rueducommerce.fr|senmanga.com|seriesflv.net|seriespepito.to|slickdeals.net|speedyshare.com|streamcloud.eu|streamingclic.net|swesub.tv|t411.ch|t411.li|telechargementz.org|torrentbox.com|torrentfrancais.com|torrentunblock.com|torrentz.eu|tucinecom.com|turbobit.net|umbertoarciero.it|un-lien.fr|unblocked.li|uploadable.ch|uploadrocket.net|uptobox.com|veoh.com|videomega.tv|vidtodo.com|vidzi.tv|viooz.co|vshare.eu|watch-series.to|xhamster.com|xnxx.com|xvideos.com|youporn.com|yourfilehost.com|yourlib.net|yunfile.com|yyets.com
-|https:$popup,domain=1channel.ch|1fichier.com|2baksa.net|6brj.com|adexprt.com|adnxs.com|adshostnet.com|adspirit.de|adsplats.com|airliners.net|alphatv.gr|alrincon.com|animeflv.net|animeid.tv|bitporno.com|bitshare.com|booking.com|cinerip.com|cloudfront.net|co-co-co.co|cpasbien.io|cpasbien.pw|ctdisk.com|depositfiles.com|ellinofreneiafm.gr|emule-island.ru|eurosptp.com|extra.to|extratorrent.cc|extratorrentlive.com|eztv.ag|filenuke.com|filesonic.com|filesonic.fr|filesonic.jp|flashx.tv|freakshare.com|freebunker.com|freshremix.ru|hao123.com|hdtorrents.info|hikaritube.com|hot-jav.com|hotavxxx.com|hotporndl.com|humoron.com|imagecarry.com|imagefruit.com|imagesnake.com|imgcarry.com|imgchili.com|imgking.co|imgshots.com|isohunt.com|javlinks.com|kinoman.tv|kinox.to|kinox.tv|leversions.info|libertyland.tv|lumfile.com|megafilmesonline.net|megaupload.com|megavideo.com|mk-sniper.net|movie4k.to|movie4k.tv|movie8k.me|newpct1.com|nuvid.com|openadserving.com|openload.co|peliculaspepito.to|pornbus.org|primewire.ag|promptfile.com|qponning.com|rev2pub.com|rueducommerce.fr|senmanga.com|seriesflv.net|seriespepito.to|slickdeals.net|speedyshare.com|streamcloud.eu|streamingclic.net|swesub.tv|t411.ch|t411.li|telechargementz.org|torrentbox.com|torrentfrancais.com|torrentunblock.com|torrentz.eu|tucinecom.com|turbobit.net|umbertoarciero.it|un-lien.fr|unblocked.li|uploadable.ch|uploadrocket.net|uptobox.com|veoh.com|videomega.tv|vidtodo.com|vidzi.tv|viooz.co|vshare.eu|watch-series.to|xhamster.com|xnxx.com|xvideos.com|youporn.com|yourfilehost.com|yourlib.net|yunfile.com|yyets.com
+|http:$popup,domain=1channel.ch|1fichier.com|2baksa.net|6brj.com|adexprt.com|adnxs.com|adshostnet.com|adspirit.de|adsplats.com|airliners.net|alphatv.gr|alrincon.com|animeflv.net|animeid.tv|ann-kate.jp|bitporno.com|bitshare.com|booking.com|cinerip.com|cloudfront.net|co-co-co.co|cpasbien.io|cpasbien.pw|ctdisk.com|depositfiles.com|ellinofreneiafm.gr|emule-island.ru|eurosptp.com|extra.to|extratorrent.cc|extratorrentlive.com|eztv.ag|filenuke.com|filesonic.com|filesonic.fr|filesonic.jp|flashx.tv|freakshare.com|freebunker.com|freshremix.ru|hao123.com|hdtorrents.info|hikaritube.com|hot-jav.com|hotavxxx.com|hotporndl.com|humoron.com|imagecarry.com|imagefruit.com|imagesnake.com|imgcarry.com|imgchili.com|imgking.co|imgshots.com|isohunt.com|javlinks.com|kinoman.tv|kinox.to|kinox.tv|leversions.info|libertyland.tv|lumfile.com|megafilmesonline.net|megaupload.com|megavideo.com|mk-sniper.net|moppy.jp|movie4k.to|movie4k.tv|movie8k.me|newpct1.com|nuvid.com|openadserving.com|openload.co|peliculaspepito.to|pornbus.org|primewire.ag|promptfile.com|qponning.com|rev2pub.com|rueducommerce.fr|senmanga.com|seriesflv.net|seriespepito.to|slickdeals.net|speedyshare.com|streamcloud.eu|streamingclic.net|swesub.tv|t411.ch|t411.li|telechargementz.org|torrentbox.com|torrentfrancais.com|torrentunblock.com|torrentz.eu|tucinecom.com|turbobit.net|umbertoarciero.it|un-lien.fr|unblocked.li|uploadable.ch|uploadrocket.net|uptobox.com|veoh.com|videomega.tv|vidtodo.com|vidzi.tv|viooz.co|vshare.eu|watch-series.to|xhamster.com|xnxx.com|xvideos.com|youporn.com|yourfilehost.com|yourlib.net|yunfile.com|yyets.com
+|https:$popup,domain=1channel.ch|1fichier.com|2baksa.net|6brj.com|adexprt.com|adnxs.com|adshostnet.com|adspirit.de|adsplats.com|airliners.net|alphatv.gr|alrincon.com|animeflv.net|animeid.tv|ann-kate.jp|bitporno.com|bitshare.com|booking.com|cinerip.com|cloudfront.net|co-co-co.co|cpasbien.io|cpasbien.pw|ctdisk.com|depositfiles.com|ellinofreneiafm.gr|emule-island.ru|eurosptp.com|extra.to|extratorrent.cc|extratorrentlive.com|eztv.ag|filenuke.com|filesonic.com|filesonic.fr|filesonic.jp|flashx.tv|freakshare.com|freebunker.com|freshremix.ru|hao123.com|hdtorrents.info|hikaritube.com|hot-jav.com|hotavxxx.com|hotporndl.com|humoron.com|imagecarry.com|imagefruit.com|imagesnake.com|imgcarry.com|imgchili.com|imgking.co|imgshots.com|isohunt.com|javlinks.com|kinoman.tv|kinox.to|kinox.tv|leversions.info|libertyland.tv|lumfile.com|megafilmesonline.net|megaupload.com|megavideo.com|mk-sniper.net|moppy.jp|movie4k.to|movie4k.tv|movie8k.me|newpct1.com|nuvid.com|openadserving.com|openload.co|peliculaspepito.to|pornbus.org|primewire.ag|promptfile.com|qponning.com|rev2pub.com|rueducommerce.fr|senmanga.com|seriesflv.net|seriespepito.to|slickdeals.net|speedyshare.com|streamcloud.eu|streamingclic.net|swesub.tv|t411.ch|t411.li|telechargementz.org|torrentbox.com|torrentfrancais.com|torrentunblock.com|torrentz.eu|tucinecom.com|turbobit.net|umbertoarciero.it|un-lien.fr|unblocked.li|uploadable.ch|uploadrocket.net|uptobox.com|veoh.com|videomega.tv|vidtodo.com|vidzi.tv|viooz.co|vshare.eu|watch-series.to|xhamster.com|xnxx.com|xvideos.com|youporn.com|yourfilehost.com|yourlib.net|yunfile.com|yyets.com
 |http:$subdocument,domain=jump.2ch.net|mangahere.co
 |https:$subdocument,domain=jump.2ch.net|mangahere.co
 ! ---------- Option only END ----------
@@ -424,6 +424,7 @@
 &impid=$document
 |http:*?*&ip=$third-party
 |https:*?*&ip=$third-party
+&key=*&scrWidth=*&scrHeight=*&tz=$document
 |http:*?*&lp=*id=$popup
 |https:*?*&lp=*id=$popup
 &lp_domain=$popup
@@ -1773,6 +1774,7 @@
 .dsp_$third-party
 .engine?$third-party
 .engine?id=
+.engine?id=$document
 .engine?guid=$popup
 .evercookie-
 .evercookie.
@@ -1798,6 +1800,8 @@
 .impression_id_
 .jeu-a-telecharger.
 .jeuxofferts.
+.js?cid=$third-party
+.js?cid=*&v=
 .kissinsights.com/
 .landing-$popup
 .landing-$third-party
@@ -3060,6 +3064,7 @@
 ?clk=*&rfr=$popup
 ?dist_id=*&channel=$popup
 ?dist_id=*&channel=$third-party
+?enqId=*&monitorId=$popup
 ! Commented out duplicated filters [https://github.com/k2jp/abp-japanese-filters/issues/9 reported] by [https://github.com/SMed79 SMed79], Jun 20, 2015
 ! ?file=ads&
 ?id_promo=
@@ -4998,6 +5003,10 @@
 ^nativendo.
 ^nativendo^
 ^nativendo_
+^nicoad-*$domain=~nicoad.nicovideo.jp|nicovideo.jp
+^nicoad.*$domain=~nicoad.nicovideo.jp|nicovideo.jp
+^nicoad^*$domain=~nicoad.nicovideo.jp|nicovideo.jp
+^nicoad_*$domain=~nicoad.nicovideo.jp|nicovideo.jp
 ^nielsen-
 ^nielsen.
 ^nielsen^
@@ -7382,6 +7391,7 @@ _yahooads_
 ||aolcdn.com/js/mg2.$script
 ||aolp.jp^
 ||aondenamoro.com^
+||aoxmediamarketing.com^$third-party
 ||apabox.com^
 ||apicit.net^
 ||apivids.com^$third-party
@@ -8256,6 +8266,7 @@ _yahooads_
 ||dmm.co.jp^$domain=~dmm.co.jp|~dmm.com
 ||dmm.co.jp/lp/$popup
 ||dmm.com^$domain=~dmm.co.jp|~dmm.com
+||dmm.com/af/
 ||dmm.com/lp/$popup
 ||aqua.dmm.co.jp^
 ||dmpcounter.com^
@@ -9954,6 +9965,7 @@ _yahooads_
 ||neudesicmediagroup.com^$third-party
 ||new-akiba.com/images/banner/$domain=new-akiba.com
 ||new-akiba.com/special/$domain=new-akiba.com
+||newagemarketinggroupdigital.info^
 ||newdopoln.ru^
 ||newpoptab.com^
 ||newpoptab.com^$popup
@@ -9989,6 +10001,7 @@ _yahooads_
 ! Commented out to avoid closing connection 2011-10-23
 ! ||ow.live.nicovideo.jp^$domain=nicovideo.jp
 ||urc.live.nicovideo.jp^$domain=nicovideo.jp
+||nicoad.nicovideo.jp^$domain=~nicoad.nicovideo.jp|nicovideo.jp
 ||uad-api.nicovideo.jp^$domain=nicovideo.jp
 ||api.uad.nicovideo.jp^$domain=~uad.nicovideo.jp
 ||nielsen.com^$third-party
@@ -10050,6 +10063,7 @@ _yahooads_
 ||novamov.com^$third-party
 ||novostimira.$third-party
 ||novoteka.ru^$third-party
+||now.sh^$third-party
 ||nowvisitors.com^$third-party
 ||npario-inc.net^$third-party
 ||nr-data.net^
@@ -11090,6 +11104,7 @@ _yahooads_
 ||synasender.com^
 ||syngrestic.com^
 ||syoh.jp^$third-party
+||syouhisya-kinyu.com^$popup
 ||systweak.com^$popup
 ||systweak.com^$third-party
 ||syxy.com^

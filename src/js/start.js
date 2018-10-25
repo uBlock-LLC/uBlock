@@ -207,10 +207,7 @@ var onInstalled = function() {
         var lastVersion = store.extensionLastVersion || '0.0.0.0';
     
         var firstInstall = lastVersion === '0.0.0.0';
-    
-        if(!firstInstall) {
-            return;    
-        }
+        
         var onDataReceived = function(data) {
             entries = data.stats || {userId: µBlock.stats.generateUserId(),totalPings: 0 };
             vAPI.storage.set({ 'stats': entries });
@@ -219,6 +216,10 @@ var onInstalled = function() {
                 select: true,
                 index: -1
             });
+        }
+
+        if(!firstInstall) {
+            return;    
         }
         vAPI.storage.get('stats',onDataReceived);
     };

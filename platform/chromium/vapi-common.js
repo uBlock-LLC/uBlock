@@ -35,6 +35,25 @@ self.vAPI = self.vAPI || {};
 var chrome = self.chrome;
 var vAPI = self.vAPI;
 
+vAPI.browserInfo = { flavor:'', majorVersion: ''};
+
+var browserInfo = vAPI.browserInfo;
+
+var match;
+if ( (match = /\bFirefox\/(\d+)/.exec(navigator.userAgent)) !== null ) {
+    browserInfo.majorVersion = parseInt(match[1], 10) || 0;
+    browserInfo.flavor = 'Firefox';
+} else if ( (match = /\bEdge\/(\d+)/.exec(navigator.userAgent)) !== null ) {
+    browserInfo.majorVersion = parseInt(match[1], 10) || 0;
+    browserInfo.flavor = 'Edge';
+} else if ( (match = /\bChrome\/(\d+)/.exec(navigator.userAgent)) !== null ) {
+    browserInfo.majorVersion = parseInt(match[1], 10) || 0;
+    browserInfo.flavor = 'Chrome';
+} else if ( (match = /\bSafari\/(\d+)/.exec(navigator.userAgent)) !== null ) {
+    browserInfo.majorVersion = parseInt(match[1], 10) || 0;
+    browserInfo.flavor = 'Safari';
+}
+
 /******************************************************************************/
 
 // http://www.w3.org/International/questions/qa-scripts#directions

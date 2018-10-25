@@ -44,6 +44,11 @@
         "group": "ads",
         "homeURL": "https://easylist-downloads.adblockplus.org/easylist.txt"
         },
+    "abp-filters-anti-cv/english.txt": {
+        "title": "ABP Anti-Circumvention Filter List",
+        "group": "ads",
+        "homeURL": "https://raw.githubusercontent.com/abp-filters/abp-filters-anti-cv/master/english.txt"
+        },
       "adblock-nocoin-list/nocoin.txt": {
           "title": "Cryptocurrency (Bitcoin) Mining Protection List",
           "group": "privacy",
@@ -166,7 +171,7 @@
     "mirror1.malwaredomains.com/files/justdomains": {
         "title": "Malware domains",
         "group": "malware",
-        "homeURL": ""
+        "homeURL": "https://mirror1.malwaredomains.com/files/justdomains"
         },
     "pgl.yoyo.org/as/serverlist": {
         "title": "Peter Lowe’s Ad server list",

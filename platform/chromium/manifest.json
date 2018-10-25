@@ -2,7 +2,7 @@
     "manifest_version": 2,
 
     "name": "uBlock",
-    "version": "0.9.5.7",
+    "version": "0.9.5.11",
     
     "default_locale": "en",
     "description": "__MSG_extShortDesc__",
@@ -57,8 +57,7 @@
         "webNavigation",
         "webRequest",
         "webRequestBlocking",
-        "http://*/*",
-        "https://*/*"
+        "<all_urls>"
     ],
     "short_name": "uBlock"
 }

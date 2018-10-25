@@ -54,7 +54,8 @@ THIRDPARTY_REMOTEURLS=(
     'http://abp.mozilla-hispano.org/nauscopio/filtros.txt'
     'https://gitorious.org/adblock-latvian/adblock-latvian/raw/master%3Alists/latvian-list.txt'
     'http://www.zoso.ro/pages/rolist.txt',
-    'https://raw.githubusercontent.com/hoshsadiq/adblock-nocoin-list/master/nocoin.txt'
+    'https://raw.githubusercontent.com/hoshsadiq/adblock-nocoin-list/master/nocoin.txt',
+    'https://raw.githubusercontent.com/abp-filters/abp-filters-anti-cv/master/english.txt'
     )
 
 THIRDPARTY_LOCALURLS=(
@@ -105,7 +106,8 @@ THIRDPARTY_LOCALURLS=(
     'thirdparties/abp.mozilla-hispano.org/nauscopio/filtros.txt'
     'thirdparties/gitorious.org/adblock-latvian/adblock-latvian/raw/master_lists/latvian-list.txt'
     'thirdparties/www.zoso.ro/pages/rolist.txt',
-    'thirdparties/adblock-nocoin-list/nocoin.txt'
+    'thirdparties/adblock-nocoin-list/nocoin.txt',
+    'thirdparties/abp-filters-anti-cv/english.txt'
     )
 
 ENTRY_INDEX=0
