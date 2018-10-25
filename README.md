@@ -7,8 +7,8 @@
             </a>
       </td>
       <td align="right" width="20%">
-            <a href="https://travis-ci.org/uBlockAdmin/uBlock">
-                  <img src="https://travis-ci.org/uBlockAdmin/uBlock.svg?branch=master" alt="Build status">
+            <a href="https://travis-ci.org/uBlock-LLC/uBlock">
+                  <img src="https://travis-ci.org/uBlock-LLC/uBlock.svg?branch=master" alt="Build status">
             </a>
             <a href="https://donorbox.org/support-ublock-development">
                   <img src="https://raw.githubusercontent.com/uBlockAdmin/uBlock/master/doc/img/oncedonate.png" alt="Support development">
