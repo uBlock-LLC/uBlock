@@ -5,11 +5,11 @@
 ! Licencija: šis turinys yra pateikiamas pagal GNU GPL3 licenciją.
 ! Licencijos url: http://www.gnu.org/licenses/gpl-3.0.txt
 ! Homepage: http://margevicius.lt/easylist_lithuania/
-! Paskutinis atnaujinimas: 2018-09-17
+! Paskutinis atnaujinimas: 2018-10-06
 ! Expires: 30 days (update frequency)
 
-@@||lib.lrytas.lt/js/cx/EAS_fif.js
-@@||entitlements.jwplayer.com/*.json
+||diena.lt/sites/default/files/forma/cikaga.gif
+||diena.lt/sites/default/files/forma/izel-3.gif
 ###delfi-front-right-column
 ##.reklamos_nuorodos
 ##.reklamos_tarpas
@@ -108,6 +108,7 @@
 @@||cosmopolitan.lt^$generichide
 @@||delfi.lt^$generichide
 @@||dujuirangoskaina.lt^$document
+@@||entitlements.jwplayer.com/*.json
 @@||eurobasket.lt$generichide
 @@||eurovaistine.lt/uploads/banners/
 @@||filmux.org/ad_adsense.js
@@ -123,12 +124,11 @@
 @@||imasdk.googleapis.com/js/core/
 @@||jaunatvesnamai.lt/wp-content/uploads/2013/01/baneriukas-20-proc-kuno-pirminiems.jpg
 @@||kvt.lt/ebilet.cup.static/img/header/
+@@||lib.lrytas.lt/js/cx/EAS_fif.js
 @@||localhost^$document
 @@||lrytas.lt/*/advertisement.js
-@@||lrytas.lt/EAS_tag.1.0.js
 @@||lrytas.lt/eas
 @@||lrytas.lt/files/js/ado.js
-@@||lrytas.lt/inc/fab/advertisement.js
 @@||manomeskeres.lt$generichide
 @@||manonamai.lt^$generichide
 @@||mega.lt/uploads/img/banners/
@@ -310,13 +310,15 @@ delfi.lt##DIV[class^="con-"]
 delfi.lt##DIV[id^="alio-"]
 delfi.lt##DIV[style="delfi-ads-block"]
 delfi.lt##IFRAME[name^="CPbanner"]
-delfi.lt##IFRAME[src="https://www.delfi.lt/apps/banners/infoblock/prenumerata/newdesign/"]
 delfi.lt##[style="position:fixed;top:50%;left:50%;margin:-250px 0 0 -450px;z-index:9999999991;"] *
 delfi.lt##[title="Uždaryti"]
 delfi.lt##a[style="background:url('https://g1.dcdn.lt/wsst23_1.jpg?v1') 50% 50% / cover no-repeat; width:100%; height:330px;display:inline-block"]
+delfi.lt##a[style="background:url('https://g3.dcdn.lt/wsst24_1.jpg?v1') 50% 50% / cover no-repeat; width:100%; height:330px;display:inline-block"]
 delfi.lt##a[style="width:995px; height:180px; display:block;"]
+delfi.lt##div>a[href*="bit.ly"]
 delfi.lt##i[style="font-size: 16px; background: #888; padding: 8px 10px; color:#fff; border-radius: 50%; line-height: 17px;"]
 delfi.lt##iframe[src*="delfi.lt/apps/banners/"]
+delfi.lt#@#.afs_ads
 democ.eu###uzdanga
 democ.eu##.fanai
 depiliacija.eu###products_page_container > *
@@ -438,7 +440,6 @@ kasvyksta.lt##.ad-block-content
 kasvyksta.lt##.iskelta-galerija
 kasvyksta.lt##.skelbimu-lenta.left
 kasvyksta.lt##.susijusios-galerijos
-kasvyksta.lt##DIV.exit-wrapper.main-isejimas-wrapper
 kasvyksta.lt##DIV[class*="exit-wrapper"]
 kasvyksta.lt##DIV[id*="existing-inside"]
 kasvyksta.lt##div[id*="mobile-post-main"]
@@ -512,7 +513,16 @@ lrt.lt##.Scrolling_banner
 lrt.lt##TD[height="118"]
 lrvalstybe.lt##.left_banners
 lrvalstybe.lt##.right_banners
+lrytas.lt###blockAside__top
 lrytas.lt###fabPost
+lrytas.lt###wallpaper
+lrytas.lt##.ad.filled
+lrytas.lt##.article__aside
+lrytas.lt##.block__aside
+lrytas.lt##div[class="adv_feed"]
+lrytas.lt##div[class="block__asideInner nosticky"]
+lrytas.lt##div[class="block__horizontalAd block__horizontalAdVirs"]
+lrytas.lt##div[id="div_680x120_po_TOP1"]
 lrytas.lt#@#.afs_ads
 lttv.us##A[href="http://www.filmux.us"]
 lttv.us/images/300x100_5.gif
@@ -784,8 +794,7 @@ zurnalai.lt##IMG[alt="Informacija ir pagalba telefonu 1588"]
 ||adverum.lt^$third-party
 ||aleja.lt^$third-party
 ||alio.lt/positionPages
-||alio.lt/positionPages.html?position=Titulinis_Carusele_2
-||alio.lt/positionPages.html?position=Titulinis_Carusele_3
+||alio.lt/positionPages.html?position=KomentaraiS_VisaA_580x150
 ||alkas.lt/uploads/init-logo.jpg
 ||alkas.lt/wp-content/uploads/2010/09/remeju-logo.png
 ||alytausgidas.lt/media/_banners/
@@ -887,9 +896,9 @@ zurnalai.lt##IMG[alt="Informacija ir pagalba telefonu 1588"]
 ||dcdn.lt/projektai/tautos-gydytojas/880x67.jpg
 ||dcdn.lt/wd/x/4948/r/079d346cdd9c7d833a017b2bc1143d85.q88.trim.250x250.jpeg
 ||dcdn.lt/wsst23_2_.jpg
+||dcdn.lt/wsst24_1.jpg
 ||dcdn.lt/wts*_
 ||delfi.lt/apps/banners
-||delfi.lt/apps/banners/infoblock/prenumerata/rightbig
 ||delfi.lt/b?region=
 ||delfi.lt/c/ib/
 ||delfi.lt/files/*.mp4
@@ -977,7 +986,9 @@ zurnalai.lt##IMG[alt="Informacija ir pagalba telefonu 1588"]
 ||fotofaze.lt/img/vestuveskitaip.jpg
 ||fotofaze.lt/img/zzet.jpg
 ||g1.dcdn.lt/wsst23_
-||g1.dcdn.lt/wsst23_2.jpg?v1
+||g3.dcdn.lt/wsst24_2.jpg
+||g3.dcdn.lt/wsst24_3.jpg
+||g3.dcdn.lt/wsst24_4.jpg
 ||games.lt/i/banners/
 ||games4you.lt/img/game1.gif
 ||games4you.lt/img/game2.gif

@@ -1,12 +1,13 @@
 [Adblock Plus 1.1]
-! Checksum: eeqZ/O0hdBVcAfMYGKcqiA
-! Version: 201809190821
+! Checksum: HRLKc2iSDGNzUdrztnYIqg
+! Version: 201810230911
 ! Title: EasyList Italy
-! EasyList Italy - Complemento italiano per EasyList
-! Ultima modifica: 19 Sep 2018 08:21 UTC
+! Last modified: 23 Oct 2018 09:11 UTC
 ! Expires: 1 days (frequenza di aggiornamento)
 ! Homepage: https://easylist.to/
 ! Licenza: https://easylist.to/pages/licence.html
+!
+! EasyList Italy - Complemento italiano per EasyList
 !
 ! Per favore segnala problemi o pubblicità non bloccate
 ! nel forum: (https://forums.lanik.us/)
@@ -324,6 +325,7 @@ brocardi.it#@#.with-background-ads
 ||ebuzzing.it^$third-party
 ||edinetadv.com^$third-party
 ||erosadv.com^$third-party
+||evolutionadv.it^$third-party
 ||exmarketplace.com^$third-party
 ||firebanner.com^$third-party
 ||gambling-italia.com^$third-party
@@ -416,6 +418,7 @@ brocardi.it#@#.with-background-ads
 ||alpinotizie.it^*/banner.aspx?
 ||amazonaws.com/cronachemaceratesi/banner/
 ||amazonaws.com^*-promo-$domain=lonelyplanetitalia.it
+||amazonaws.com^*/banner.$domain=ilbianconero.com
 ||andreafranzoso.com/banner/
 ||angelobonorino.com/neve/*268x90.gif
 ||artera.it/banners.php?
@@ -895,6 +898,7 @@ brocardi.it#@#.with-background-ads
 ||coplanet.it^*/bannerzon/
 ||coriglianocalabro.it/images/banners/
 ||coriglianocalabro.it^*/banner/
+||corriere.ca^*/Banners/
 ||corriere.it^*/adv/
 ||corriere.it^*/icon_csnai.gif
 ||corriere.it^*/icon_csnai_shared.gif
@@ -2425,6 +2429,7 @@ vg247.it###recommendations
 gazzetta.it###rectangle
 tio.ch###rectangleGallery
 ticinonews.ch###rectangleleaderhome1_FormView1_ctl00_Banmanpro3Label
+spaziogames.it###riga-pc
 dagospia.com###right-160x90
 lecconotizie.com###right-domination
 veronica.it###rightSkin
@@ -2676,7 +2681,7 @@ lavorincasa.it##.bak
 milanofinanza.it,oggitreviso.it##.ban
 lacnews24.it##.ban_1000x45
 lacnews24.it##.ban_300x250
-advertiser.it,agi.it,agichina24.it,airdave.it,alessandrianews.it,america24.com,casateonline.it,chiamarsibomber.com,corrieredelgiorno.com,corrieremercantile.it,cronachemaceratesi.it,dagospia.com,diretta.it,finanzaonline.com,gazzettadiavellino.it,gazzettadinapoli.it,gazzettadisalerno.it,gazzettahockey.it,giochidicalcio.com,globalist.it,gossip.it,greenstyle.it,html.it,ilcambiamento.it,ilfriuli.it,ilgarantista.it,ilgiornale.it,insegreto.it,ivid.it,lindro.it,lipari.biz,macitynet.it,merateonline.it,meteoweb.eu,oggitreviso.it,orangedropdesign.com,orizzontescuola.it,orvietosi.it,pmi.it,programmitv.com,projectcars.it,pubblicitaitalia.it,quattroruote.it,quibrianza.it,quotidianocanavese.it,r101.it,rcdc.it,rockit.it,secoloditalia.it,softonic.it,strettoweb.com,telejato.it,telenord.it,tenews.it,tg24.info,ticinolibero.ch,traniviva.it,ultimouomo.com,varesenews.it,vocenuova.tv##.banner
+advertiser.it,agi.it,agichina24.it,airdave.it,alessandrianews.it,america24.com,casateonline.it,chiamarsibomber.com,corrieredelgiorno.com,corrieremercantile.it,cronachemaceratesi.it,dagospia.com,diretta.it,finanzaonline.com,gazzettadiavellino.it,gazzettadinapoli.it,gazzettadisalerno.it,gazzettahockey.it,giochidicalcio.com,globalist.it,gossip.it,greenstyle.it,html.it,ilcambiamento.it,ilfriuli.it,ilgarantista.it,ilgiornale.it,insegreto.it,ivid.it,lindro.it,lipari.biz,macitynet.it,mediaworld.it,merateonline.it,meteoweb.eu,oggitreviso.it,orangedropdesign.com,orizzontescuola.it,orvietosi.it,pmi.it,programmitv.com,projectcars.it,pubblicitaitalia.it,quattroruote.it,quibrianza.it,quotidianocanavese.it,r101.it,rcdc.it,rockit.it,secoloditalia.it,softonic.it,strettoweb.com,telejato.it,telenord.it,tenews.it,tg24.info,ticinolibero.ch,traniviva.it,ultimouomo.com,varesenews.it,vocenuova.tv##.banner
 m100.it##.banner-1
 sanfrancescopatronoditalia.it##.banner-100
 sanfrancescopatronoditalia.it##.banner-250
@@ -2913,7 +2918,7 @@ socialchannel.it##.footer2-wrapper
 violachannel.tv##.footer_home
 liberatv.ch##.front_orrizzontale
 quattroruote.it##.fullBanner
-rietinvetrina.it##.g
+rietinvetrina.it,stradeeautostrade.it##.g
 spaziogames.it##.g_adv
 netflixlovers.it##.gadget
 agendadigitale.eu##.gallery-container-home
@@ -2938,6 +2943,7 @@ bora.la##.headerbtm
 transfermarkt.it##.hide-for-small[style="height: 273px; text-align: center; overflow: hidden;"]
 formiche.net##.himedia_sidebar
 gazzettadasti.it##.homepage-central-ban
+corriere.ca##.horizontal_banner
 radioitalia.it##.iTunes
 ildesk.it##.img_banner385x50
 autoline-eu.it##.index-center-banners-1
@@ -3089,6 +3095,7 @@ agrigentonotizie.it,anconatoday.it,avellinotoday.it,baritoday.it,bolognatoday.it
 agrigentonotizie.it,anconatoday.it,avellinotoday.it,baritoday.it,bolognatoday.it,bresciatoday.it,brindisireport.it,cataniatoday.it,cesenatoday.it,chietitoday.it,firenzetoday.it,foggiatoday.it,forlitoday.it,genovatoday.it,ilpescara.it,ilpiacenza.it,latinatoday.it,lecceprima.it,leccotoday.it,milanotoday.it,modenatoday.it,monzatoday.it,napolitoday.it,novaratoday.it,padovaoggi.it,palermotoday.it,parmatoday.it,perugiatoday.it,pisatoday.it,ravennatoday.it,riminitoday.it,romatoday.it,salernotoday.it,sondriotoday.it,sportpiacenza.it,today.it,torinotoday.it,trentotoday.it,trevisotoday.it,triesteprima.it,udinetoday.it,veneziatoday.it,veronasera.it,vicenzatoday.it##.slot-skin
 agrigentonotizie.it,anconatoday.it,avellinotoday.it,baritoday.it,bolognatoday.it,bresciatoday.it,brindisireport.it,cataniatoday.it,cesenatoday.it,chietitoday.it,firenzetoday.it,foggiatoday.it,forlitoday.it,genovatoday.it,ilpescara.it,ilpiacenza.it,latinatoday.it,lecceprima.it,leccotoday.it,milanotoday.it,modenatoday.it,monzatoday.it,napolitoday.it,novaratoday.it,padovaoggi.it,palermotoday.it,parmatoday.it,perugiatoday.it,pisatoday.it,ravennatoday.it,riminitoday.it,romatoday.it,salernotoday.it,sondriotoday.it,sportpiacenza.it,today.it,torinotoday.it,trentotoday.it,trevisotoday.it,triesteprima.it,udinetoday.it,veneziatoday.it,veronasera.it,vicenzatoday.it##.slots
 soldionline.it##.sm_widget_contenitore
+corriere.ca##.small_banner
 gazzettinodelchianti.it##.small_link
 finanzaonline.com,tgcom24.mediaset.it##.spaceBanner
 pmi.it##.special-widget
@@ -3195,6 +3202,7 @@ notizie.it##.yahoo-white-bg
 corrieredinovara.com,corrieredinovara.it##.z-banner
 corrieredinovara.com##.z-bannerpub
 01net.it,ambientecucinaweb.it,eurosat-online.it,millecanali.it##.zedo
+ilquotidianodellazio.it##.zkslide
 cittaceleste.it##.zodiak
 nursetimes.org##AMP-IMG[width="320"][height="50"]
 djmagitalia.com##[href^="http://www.djpoint.net/"]
@@ -3246,7 +3254,7 @@ italia-film.org##a[href^="http://x.italia-film.org/get.php"]
 greenme.it##a[href^="https://ad.zanox.com/"]
 mentelocale.it##a[href^="https://clk.tradedoubler.com/"]
 autobusweb.com,corrieredellacalabria.it##a[href^="https://goo.gl/"]
-comingsoon.it,consigli.it,eurogamer.it,everyeye.it,frasicelebri.it,greenme.it,hdblog.it,hwupgrade.it,mangaforever.net,ridble.com,rifaidate.it,spaziogames.it,surface-phone.it##a[href^="https://www.amazon."][href*="tag="]
+beppegrillo.it,comingsoon.it,consigli.it,eurogamer.it,everyeye.it,frasicelebri.it,greenme.it,hdblog.it,hwupgrade.it,mangaforever.net,ridble.com,rifaidate.it,spaziogames.it,surface-phone.it##a[href^="https://www.amazon."][href*="tag="]
 traderlink.it##a[style="display: block; width: 100%; height: 1080px; filter:alpha(opacity=0); -moz-opacity: 0; opacity: 0; background-color: rgb(255, 255, 255);"]
 notebookcheck.it##div[id][class] > div[id] > img:first-child
 eurostreaming.watch##div[style="    position: relative;\a width: 468px;\a height: 60px;\a border: none !important;\a background: none;\a margin: auto;\a clear: both;"]
@@ -3497,12 +3505,14 @@ bikeitalia.it##img[height="128"][width="541"]
 giornaledicalabria.it##img[height="134"][width="300"]
 teslaitalia.it##img[height="150"][width="250"]
 laprimapagina.it##img[height="150"][width="300"]
+beppegrillo.it##img[height="225"][width="300"]
 giornaledicalabria.it##img[height="250"][width="250"]
 gioco.it,giornaledicalabria.it,latinaquotidiano.it,liguriaoggi.it,sette-giorni.ro,startmag.it##img[height="250"][width="300"]
 nursetimes.org##img[height="300"][width="250"]
 volleyball.it##img[height="300"][width="300"]
 giornaledicalabria.it##img[height="432"][width="300"]
 volleyball.it##img[height="490"][width="745"]
+beppegrillo.it##img[height="500"][width="300"]
 gioco.it##img[height="600"][width="160"]
 zoomsud.it##img[height="74"][width="350"]
 volleyball.it##img[height="80"][width="700"]
@@ -3653,7 +3663,7 @@ clubalfa.it##td[width="310"][height="255"]
 @@||misterdomain.eu/affiliation/$~third-party
 @@||mymovies.it/live/myads/preroll/$object-subrequest
 @@||net-static.tccstatic.com/template/fcinter1908.it/img/banner/logod.gif
-@@||oasjs.kataweb.it/adsetup.$domain=video.repubblica.it
+@@||oasjs.kataweb.it/adsetup.$domain=video.huffingtonpost.it|video.repubblica.it
 @@||online-retail.unicredit.it/adv/$~third-party
 @@||pad.mymovies.it/v9/adv/media/preroll/*.flv$object-subrequest
 @@||paesesera.it/design/paesesera/stylesheets/advertising.css

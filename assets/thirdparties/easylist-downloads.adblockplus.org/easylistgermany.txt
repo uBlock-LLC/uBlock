@@ -1,12 +1,13 @@
 [Adblock Plus 1.1]
-! Checksum: 1QmbrOSzD1Qd/tChAf9RGA
-! Version: 201809190821
+! Checksum: LVBMQzjue7/PrCf09Bck9w
+! Version: 201810230911
 ! Title: EasyList Germany
-! EasyList Germany - Deutsche Ergänzung zu EasyList
-! Last modified: 19 Sep 2018 08:21 UTC
+! Last modified: 23 Oct 2018 09:11 UTC
 ! Expires: 1 days (update frequency)
 ! Homepage: https://easylist.github.io/
 ! Licence: https://easylist.github.io/pages/licence.html
+!
+! EasyList Germany - Deutsche Ergänzung zu EasyList
 !
 ! Bitte melde ungeblockte Werbung und fälschlicherweise geblockte Dinge:
 ! Forum: https://forums.lanik.us/viewforum.php?f=90
@@ -3539,7 +3540,10 @@ guterhut.de,hardwareluxx.de,hbf-info.de,rakuten.at,rakuten.de,zalando.de#@#div[i
 ||swimnews.de^*_960x120.jpg
 ||symptomat.de/ama/
 ||synchronkartei.de/amazonproxy.php
+||synchronkartei.de/img/ext/
 ||t-online.de/auto/id_$xmlhttprequest,domain=t-online.de
+||t-online.de/to/common/next/amazon?
+||t-online.de/to/common/next/billiger?
 ||t-online.de^*/-|$xmlhttprequest,domain=t-online.de
 ||tag-des-hundes.de/tl_files/images/banner/*_skyscraper.swf
 ||tagblatt.de/cms_media/module_wb/
@@ -4614,6 +4618,7 @@ paules-pc-forum.de,wardriving-forum.de###header_right_cell
 gratissoft.de,winfuture.de###homepage_rectangle
 hornoxe.com###horn
 falk.de###hotel_container
+amazon.de###huc-first-upsell-row
 mobile.de###huesgesReport
 wiwo.de###ibm-adv-experts-corner
 viamichelin.de###idHeaderGDH
@@ -5311,6 +5316,7 @@ aachener-nachrichten.de,abendblatt.de,ak-kurier.de,alle-immobilien.ch,azonline.d
 ak-kurier.de##.ad + #flashContent
 ak-kurier.de##.ad + .tdt
 ak-kurier.de##.ad + .uk-panel
+synchronkartei.de##.ad-box
 1und1.de,gmx.net,heise.de,web.de##.ad-container
 vsport.at##.ad1
 vsport.at##.ad2
@@ -6277,6 +6283,7 @@ schuelerzeitung-tbb.de##.vertical
 ebay.de##.vi-as
 ebay.de##.vi-d-pad
 ebay.de##.vi-is1-vtp
+ebay.de##.vi-lb-placeholder
 dwdl.de##.viad_bttn
 mrstiff-deutsch.com##.videobereich_rechts
 tvmovie.de##.videoload
@@ -7820,6 +7827,7 @@ wetteronline.de##div[style*="display: block !important"]
 @@||11freunde.de/sites/all/themes/elf/gujAd/gujAd.js$domain=11freunde.de
 @@||123people.us/trackads/display?zones=$script,domain=123people.de
 @@||2mdn.net/ads/studio/Enabler.js$domain=marketing-a.akamaihd.net
+@@||2mdn.net/instream/video/client.js$domain=welect.de
 @@||360yield.com/adj?$script,domain=girlsgogames.de|jetztspielen.de|spielen.com
 @@||6inserate.ch/images/banner/$image,domain=ameliatantra.jimdo.com
 @@||71iv.nuggad.net/crossdomain.xml$object-subrequest
@@ -7832,6 +7840,7 @@ wetteronline.de##div[style*="display: block !important"]
 @@||ad.71i.de/global_js/Sites/$script,domain=7tv.de|n24.de|sport1.fm
 @@||ad.adworx.at/crossdomain.xml$object-subrequest
 @@||ad.amgdgt.com/ads/?$subdocument,domain=payback.de
+@@||ad.doubleclick.net/ddm/$image,domain=welect.de
 @@||ad.doubleclick.net/ddm/ad/*/;ord=$image,domain=erdbeerlounge.de|gamona.de|giga.de|kino.de|spielaffe.de|spieletipps.de
 @@||ad.netzquadrat.de/viewbanner.php3?bannerid=$image,domain=sms.de
 @@||ad.yieldlab.net/yp/$script,domain=dance-charts.de
@@ -7933,6 +7942,7 @@ wetteronline.de##div[style*="display: block !important"]
 @@||binarus.de/sonderangebote/adlink-$image,domain=binarus.de
 @@||bluelithium.com/imp?$script,domain=girlsgogames.de|jetztspielen.de|spielen.com
 @@||bluelithium.com/st?$script,domain=girlsgogames.de|jetztspielen.de|spielen.com
+@@||bs.serving-sys.com/serving/adServer.bs?*&mc=imp&$image,domain=welect.de
 @@||bundesliga.de/js/my_ad_integration.js
 @@||camerartist.de/wp-content/plugins/adrotate/$~third-party
 @@||campaign.adindex.de^*?idPartner=$subdocument,domain=gutscheindoktor.de
@@ -8001,6 +8011,7 @@ wetteronline.de##div[style*="display: block !important"]
 @@||fh-muenster.de/leitbild/banner.php
 @@||figgä.ch/sites/default/files/ms_ads/banner$domain=ameliatantra.jimdo.com
 @@||firebaseapp.com^$script,domain=freenet.de
+@@||flashtalking.com^$domain=welect.de
 @@||fn-neon.de/javascript/adserver_banner.js
 @@||forum-duewupp.de/images/ad-gallery/$~third-party
 @@||forum.froxlor.org^*/adsense.css
@@ -8045,8 +8056,9 @@ wetteronline.de##div[style*="display: block !important"]
 @@||idowa.de^*/advertisement/$xmlhttprequest
 @@||im.banner.t-online.de/?advideo/*;vidRT=VAST;$domain=t-online.de
 @@||im.banner.t-online.de/crossdomain.xml$domain=t-online.de
+@@||imasdk.googleapis.com/js/core/bridge$document,subdocument,domain=welect.de
 @@||imasdk.googleapis.com/js/core/bridge*.html$subdocument,domain=heise.de|radio.de
-@@||imasdk.googleapis.com/js/sdkloader/ima3.js$domain=chip.de|event.mivitec.net|radio.de
+@@||imasdk.googleapis.com/js/sdkloader/ima3.js$domain=chip.de|event.mivitec.net|radio.de|welect.de
 @@||impde.tradedoubler.com/imp?type(img)$image,domain=sms-box.de|smsgott.de
 @@||ino24.de^*/ratenkredit.jsp$subdocument
 @@||insel-usedom-wollin.de/ads/$script,stylesheet
@@ -8125,6 +8137,7 @@ wetteronline.de##div[style*="display: block !important"]
 @@||peitsche.de/adserver/www/images/*.jpg|$~third-party
 @@||photo.knuddels.de/kde/ad2/$image
 @@||pixel.adsafeprotected.com/jspix?$script,domain=girlsgogames.de|jetztspielen.de|spielen.com
+@@||pixel.adsafeprotected.com^$image,domain=welect.de
 @@||playboy.de/files/html/Advertorials/$~third-party
 @@||player.newsnetz.tv/player/iframe.php?vid=*&adurl=$subdocument
 @@||promo.douglas.de^$subdocument,domain=facebook.com
@@ -8163,6 +8176,7 @@ wetteronline.de##div[style*="display: block !important"]
 @@||saugking.net/css/ads.css
 @@||save.tv/stv/img/global/trailer20sec.swf?
 @@||schluetersche.de/adwords/$~third-party
+@@||search.spotxchange.com^$image,domain=welect.de
 @@||searchx.ch/img/Banner$image,domain=searchx.ch
 @@||searchx.ch/img/Banner_$image,domain=ameliatantra.jimdo.com
 @@||searchx.ch/img/links/$domain=searchx.ch
@@ -8171,6 +8185,7 @@ wetteronline.de##div[style*="display: block !important"]
 @@||secserv.adtech.de/adiframe/3.0/1135/5787749/0/2466/ADTECH;target=_blank$document,subdocument,domain=nzz.at
 @@||servedby.flashtalking.com/crossdomain.xml$object-subrequest
 @@||servedby.flashtalking.com/imp/$object-subrequest,domain=t-online.de
+@@||servedby.flashtalking.com^$image,domain=welect.de
 @@||servettefc.ch^*.swf?clicktag=http://www.servettefc.ch$object
 @@||serving-sys.com/burstingpipe/adserver.bs?$subdocument,domain=preismafia.com
 @@||sexabc.ch/xxx/topliste/img/sexabc_topliste$image,domain=ameliatantra.jimdo.com
@@ -8248,6 +8263,7 @@ wetteronline.de##div[style*="display: block !important"]
 @@||toggo.de/xml/admeta.xml?$object-subrequest
 @@||track.adform.net/C/?$subdocument,domain=abosgratis.de
 @@||track.adform.net/serving/scripts/trackpoint/$script,domain=mazda.de
+@@||track.adform.net^$image,domain=welect.de
 @@||tradedoubler.com/click?$subdocument,domain=eule.de|gutscheindoktor.de|preismafia.com
 @@||tradedoubler.com/redirect/*^affID^$subdocument,domain=gutscheindoktor.de
 @@||treesarekeys.com/shops/|$document,domain=treesarekeys.com

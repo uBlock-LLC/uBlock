@@ -53,6 +53,8 @@
 _clickthru.swf?
 @@/moje-inzeraty/
 @@/moje-konto/inzeraty/
+@@https://games.tiscali.cz/img/bg/sprite.png
+@@https://games.tiscali.cz/img/bg/main.jpg
 !
 ! ---------- Czech 1st party blocking rules ---------- !
 !
@@ -129,6 +131,8 @@ _clickthru.swf?
 ||bannery.ccb.cz^
 ||bbelements.com/bb/$script,third-party
 ||bbelements.com/please/showit/*/$script,domain=idnes.cz|moviezone.cz
+||adx.adform.net$domain=idnes.cz
+||ibillboard.com$domain=idnes.cz
 ||bcastgw.livebox.cz/TA3_VOD_COM/
 ||blisty.cz/ad/
 ||budejckadrbna.cz/files/drbna/banner/
@@ -185,6 +189,7 @@ _clickthru.swf?
 ||i.stream.cz/img-mnt/player_brand/
 ||i0.cz/abcampaign/
 ||i0.cz/realitymix/ext-data/
+||i0.cz/l.gif?s=admon
 ||idnes.bbelements.com$image,domain=idnes.cz
 ||im9.cz/*aukro
 ||imedia.cz$subdocument,domain=novinky.cz
@@ -289,6 +294,7 @@ _clickthru.swf?
 ||sasoft.cz/files/banner.gif
 ||serialycz.cz/wp-content/uploads/fbbannercz.jpg
 ||serialycz.cz/wp-content/uploads/kupi.png
+||seznam.cz#?#.Layout--left>div:-abp-has(a[href*=imedia])
 ||showcase.gamepark.cz/
 ||skjalovec.com/img/banners/
 ||slevy.tyden.cz/banner/
@@ -351,6 +357,9 @@ _clickthru.swf?
 ||zive.cz/_rev2015/js/*?bn=$script
 ||zive.cz/Client.Scripts/*please$script
 ||zive.cz/Client.Scripts/*zive?format=js
+||zive.cz^*AdConstructor$script,first-party
+||zive.cz^*+$script,first-party
+||zive.cz/*/js/layout.adscroller.js$script,first-party
 ||zkouknito.cz/js/js.htmlad.js
 ||zrks.cz/storage/$third-party,domain=aktualne.cz
 ||zvraceny.cz/data/upload/
@@ -377,7 +386,7 @@ _clickthru.swf?
 ||fony.sk/content/banners/
 ||fs5.mojevideo.sk/securevd/siet.mp4
 ||gamesite.sk/templates/gamesite_sk/images/background*/
-||hnonline.sk/*hn_lekaren_extra_blok.png
+||hnonline.sk/*/*-*-*-*-*&keywords=
 ||hojko.com/images/banner*.gif
 ||i.sme.sk/fst/
 ||img.teevee.sk/img/beangel*.gif
@@ -386,6 +395,7 @@ _clickthru.swf?
 ||img.zoznam.sk/adimages/
 ||img5.uloz.to/ul3/images/hp_brand_tsbohemia.jpg
 ||kamzakrasou.sk/actions/
+||media.hnonline.sk/api/v1/hn-player/stripe
 ||mediacentrum.sk/google/
 ||mhdba.eu/banerova-reklama-animacia.gif
 ||michalovskespravy.sk/files/a57xq6rhr5uuzzyf.gif
@@ -411,6 +421,7 @@ _clickthru.swf?
 ||spartak.sk/pics-new2/reklamy/
 ||sport.aktuality.sk/css/skins/
 ||static.itnews.sk/branding/
+||ta3.com/api/v1/livebox/video/
 ||techbox.sk/*colorbox
 ||totalpozicky.sk/images/banners/
 ||tu-ke.com/ali-jewelry.jpg
@@ -916,6 +927,7 @@ heureka.cz##.banner-leaderboard-cover
 heureka.cz##.filtr.category-partner
 heureka.cz,heureka.sk##div[class*="__banner"]
 hihinky.cz##.smoke-alert
+hokej.cz##.bcg-sys-top
 hokej.cz##.dolni_reklama
 hokej.cz##.promo-container
 hokej.cz##.top_banner
@@ -949,6 +961,10 @@ ihned.cz##.karieraweb-label
 ihned.cz,programujte.com##.jobs
 idnes.cz##stripe
 idnes.cz##stripemark
+idnes.cz##stable
+idnes.cz###space-c-add
+idnes.cz###selfart-box
+idnes.cz##.catchbox-full
 info.cz##.sticky-wrapper
 iprima.cz###banner-wrapper
 iprima.cz###reklamicka-inform
@@ -1173,6 +1189,7 @@ ronnie.cz###fixedMenu
 ronnie.cz###rek3
 ronnie.cz###rodkaz
 root.cz###box-64bit-eu
+root.cz##.design-box--jobs
 root.cz###servers-promo
 rozzlobenimuzi.com##.bgg
 rychlost.cz##.hb
@@ -1199,6 +1216,7 @@ serialycz.cz##iframe[src^="http://vk.com/"]
 serialzone.cz###hpbglink-watch
 seznam.cz##.d_d1
 seznam.cz##.ogm-advert-vendor-sizer
+seznam.cz#?#.Result:-abp-has(.SklikBox)
 seznamzpravy.cz##.f_fl
 seznamzpravy.cz##.f_fq
 simpsonovi-tv.cz###a92
@@ -1310,6 +1328,10 @@ zive.cz##div[id$="_protec"]
 zive.cz##div[id$="_protec-2"]
 zive.cz##form > div > div[id*="3.1.2"]
 zive.cz##table#prolinkhdr-v3 + div:not(.cs-cnt-wrapper)
+zive.cz##div:has(:scope > #HalfPageTop)
+zive.cz##.fs-os.css-clear.bileto
+zive.cz##div:has(:scope > #Leader-1)
+zive.cz##div[class$="column"]
 zpravy.tiscali.cz###zone-tiscali-zpravy-wide
 zvraceny.cz###video-reklama-obal
 zvraceny.cz##.opacne.text-reklama
@@ -1355,6 +1377,7 @@ freefilm.sk###blockerINFO
 heureka.sk###banner-leaderboard
 heureka.sk##.filtr.category-partner
 hladaj.referaty.atlas.sk###specbox
+hnonline.sk##[id^="banner-"]
 hnonline.sk##.s-branding
 hnonline.sk##stripemark
 info.cz###interstitial
@@ -1381,6 +1404,7 @@ pcrevue.sk##.col_12_of_12.col > .row > .col_12_of_12.col > .widget
 pokec.azet.sk##.c_banner300x300
 pretaktovanie.zoznam.sk##.post.bg5
 recepty.sk##.box
+sector.sk##[id^="back"][onclick]
 slovnik.azet.sk##.articlesBnr
 sme.sk###b-napizzu
 sme.sk###wg_megaboard

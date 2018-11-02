@@ -1,11 +1,10 @@
 [Adblock Plus 2.8.2]
-! Checksum: oWuUK9awaCO8DICLUN8Phg
 ! Homepage: https://github.com/k2jp/abp-japanese-filters/
 ! Title: ABP Japanese filters (ONLY FOR Japanese and experienced users: READ Support Policy)
 ! Expires: 6 hours
-! Version: 201809111118
+! Version: 201810120552
 !
-! Last modified: 2018-09-11 11:18 JST(UTC+0900)
+! Last modified: 2018-10-12 05:52 JST(UTC+0900)
 ! Change log: https://github.com/k2jp/abp-japanese-filters/wiki/FilterChangeLog
 ! Code license: GNU GPL v3: http://www.gnu.org/licenses/gpl.html
 ! Content license: Creative Commons BY-NC-SA 4.0 http://creativecommons.org/licenses/by-nc-sa/4.0/
@@ -5200,9 +5199,13 @@
 ^pub_config^
 ^pub_config_
 ^pubads-
+^pubads-$document
 ^pubads.
+^pubads.$document
 ^pubads^
+^pubads^$document
 ^pubads_
+^pubads_$document
 ^quantcast-
 ^quantcast.
 ^quantcast^
@@ -8511,6 +8514,7 @@ _yahooads_
 ||extra33.com^
 ||extreme-dm.com^
 ||exyu-soft.com^
+||eyeota.net^$third-party
 ||eyewonder.com^$third-party
 ||ezbbs.net/*/sample*/img/
 ||ezlkflefig.ru^
@@ -11271,6 +11275,7 @@ _yahooads_
 ||trafex.net^
 ||traffic-exchange.tv^$third-party
 ||traffic.ru^$third-party
+||trafficads.net^
 ||trafficandrei.ru^
 ||trafficbroker.com^
 ||trafficdna.com^$third-party
@@ -11504,6 +11509,7 @@ _yahooads_
 ||t.vimeo.com^
 ||vindicosuite.com^
 ||vinregle.com^
+||vinumr.com^
 ||vipscasinodirectory.com^
 ||viptizer.com^$third-party
 ||virtuagirlhd.com^$third-party
