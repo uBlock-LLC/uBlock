@@ -64,14 +64,15 @@ var typeNameToTypeValue = {
          'sub_frame':  6 << 4,
          'websocket':  9 << 4,
              'other':  10 << 4,
-'cosmetic-filtering': 13 << 4,
-     'inline-script': 14 << 4,
-             'popup': 15 << 4,
-             'csp'  : 16 << 4,
-          'webrtc'  : 17 << 4,
-          'rewrite' : 18 << 4,
-      'generichide' : 19 << 4,
-      'genericblock': 20 << 4
+        'main_frame':  12 << 4,  
+'cosmetic-filtering':  13 << 4,
+     'inline-script':  14 << 4,
+             'popup':  15 << 4,
+             'csp'  :  16 << 4,
+          'webrtc'  :  17 << 4,
+          'rewrite' :  18 << 4,
+      'generichide' :  19 << 4,
+      'genericblock':  20 << 4
 };
 var typeOtherValue = typeNameToTypeValue.other;
 
@@ -1490,7 +1491,6 @@ FilterParser.prototype.parseOptions = function(s) {
             continue;
         }
         if ( opt === 'elemhide' ) {
-           // if ( this.action === AllowAction ) {
             if ( not === false ) {   
                 this.parseOptType('elemhide', false);
                 continue;
@@ -1499,7 +1499,6 @@ FilterParser.prototype.parseOptions = function(s) {
             break;
         }
         if ( opt === 'generichide' ) {
-           // if ( this.action === AllowAction ) {
             if ( not === false ) {      
                 this.parseOptType('generichide', false);
                 continue;
@@ -1508,11 +1507,11 @@ FilterParser.prototype.parseOptions = function(s) {
             break;
         }
         if ( opt === 'document' ) {
-            if ( this.action === BlockAction ) {
-                this.parseOptType('document', false);
+            //if ( this.action === BlockAction ) {
+                this.parseOptType('document', not);
                 continue;
-            }
-            this.unsupported = true;
+           // }
+           // this.unsupported = true;
             break;
         }
         if ( opt.startsWith('csp=') ) {
@@ -2399,6 +2398,8 @@ FilterContainer.prototype.matchStringExactType = function(context, requestURL, r
 };
 
 FilterContainer.prototype.matchStringExceptionOnlyRule = function(url,requestType) {
+    pageHostnameRegister = µb.URI.hostnameFromURI(url) || '';
+    requestHostnameRegister = µb.URI.hostnameFromURI(url);
     var categories = this.categories;
     var af = false,bf = false, bucket;
     skipGenericBlocking = false;

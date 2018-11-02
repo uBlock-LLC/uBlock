@@ -310,9 +310,19 @@ PageStore.prototype.init = function(tabId) {
 
     this.skipCosmeticFiltering = false;
     var result;
-    result = µb.staticNetFilteringEngine.matchStringExceptionOnlyRule(
-        tabContext.normalURL,'cosmetic-filtering');
-    this.skipCosmeticFiltering = result.charAt(1) === 'a';
+  
+    this.applyDocumentFiltering =  µb.staticNetFilteringEngine.matchStringExceptionOnlyRule(
+        tabContext.normalURL,'main_frame').charAt(1) === 'a';   
+    if(this.applyDocumentFiltering) {
+        this.skipCosmeticFiltering = this.applyDocumentFiltering;
+    }
+
+    if(this.skipCosmeticFiltering !== true) {
+        result = µb.staticNetFilteringEngine.matchStringExceptionOnlyRule(
+            tabContext.normalURL,'cosmetic-filtering');
+        this.skipCosmeticFiltering = result.charAt(1) === 'a';
+    }
+    
     if(this.skipCosmeticFiltering) {
         context.requestType = 'elemhide';
         µb.logger.writeOne(tabId, context, result);    
@@ -539,7 +549,7 @@ PageStore.prototype.filterRequest = function(context) {
     }
 
     // Static filtering never override dynamic filtering
-    if ( result === '' ) {
+    if ( result === '' && !this.applyDocumentFiltering) {
         context.skipGenericBlocking = this.skipGenericBlocking;
         result = µb.staticNetFilteringEngine.matchString(context);
     }
@@ -583,7 +593,7 @@ PageStore.prototype.filterRequestNoCache = function(context) {
     }
 
     // Static filtering never override dynamic filtering
-    if ( result === '' ) {
+    if ( result === '' && !this.applyDocumentFiltering) {
         context.skipGenericBlocking = this.skipGenericBlocking;
         result = µb.staticNetFilteringEngine.matchString(context);
         µb.staticNetFilteringEngine.matchAndFetchCspData(context);

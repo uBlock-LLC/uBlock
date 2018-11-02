@@ -408,7 +408,7 @@ var onMessage = function(request, sender, callback) {
 
     switch ( request.what ) {
         case 'retrieveDomainCosmeticSelectors':
-            if ( pageStore && pageStore.getSpecificCosmeticFilteringSwitch() ) {
+            if ( pageStore && pageStore.getSpecificCosmeticFilteringSwitch() && !pageStore.applyDocumentFiltering ) {
                 var options = {
                     skipCosmeticFiltering: pageStore.skipCosmeticFiltering                    
                 };
@@ -508,7 +508,7 @@ var onMessage = function(request, sender, callback) {
                 shutdown: !pageStore || !pageStore.getNetFilteringSwitch(),
                 result: null
             };
-            if ( !response.shutdown && pageStore.getGenericCosmeticFilteringSwitch() ) {
+            if ( !response.shutdown && pageStore.getGenericCosmeticFilteringSwitch() && !pageStore.applyDocumentFiltering) {
                 response.result = µb.cosmeticFilteringEngine.retrieveGenericSelectors(request);
             }
             break;
@@ -519,7 +519,7 @@ var onMessage = function(request, sender, callback) {
                 shutdown: !pageStore || !pageStore.getNetFilteringSwitch(),
                 result: null
             };
-            if(!response.shutdown) {
+            if(!response.shutdown && !pageStore.applyDocumentFiltering) {
                 response.result = filterRequests(pageStore, request);
             }
             break;
