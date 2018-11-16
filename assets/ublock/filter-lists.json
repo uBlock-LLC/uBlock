@@ -308,5 +308,54 @@
         "title": "ROU: RO-LIST (modified)",
         "group": "regions",
         "homeURL": ""
-        }
+        },
+    "filters.adtidy.org/extension/ublock/filters/2_without_easylist.txt": {
+        "off": true,
+        "title": "Adguard Base Filters",
+        "group": "ads",
+        "homeURL": "https://filters.adtidy.org/extension/ublock/filters/2_without_easylist.txt"
+        },
+    "filters.adtidy.org/extension/ublock/filters/3.txt": {
+        "off": true,
+        "title": "Adguard Spyware Filters",
+        "group": "privacy",
+        "homeURL": "https://filters.adtidy.org/extension/ublock/filters/3.txt"
+    },    
+    "filters.adtidy.org/extension/ublock/filters/14.txt": {
+        "off": true,
+        "title": "Adguard’s Annoyance List",
+        "group": "social",
+        "homeURL": "https://filters.adtidy.org/extension/ublock/filters/14.txt"
+    },
+    "secure.fanboy.co.nz/fanboy-cookiemonster.txt": {
+        "off": true,
+        "title": "Fanboy’s Cookiemonster List",
+        "group": "social",
+        "homeURL": "https://secure.fanboy.co.nz/fanboy-cookiemonster.txt"
+    },
+    "secure.fanboy.co.nz/fanboy-cookiemonster.txt": {
+        "off": true,
+        "title": "Malvertising filter list by Disconnect",
+        "group": "malware",
+        "homeURL": "https://s3.amazonaws.com/lists.disconnect.me/simple_malvertising.txt"
+    },
+    "filters.adtidy.org/extension/ublock/filters/7.txt": {
+        "off": true,
+        "title": "JPN: Adguard Japan Filter",
+        "group": "regions",
+        "homeURL": "https://filters.adtidy.org/extension/ublock/filters/7.txt"
+    },
+    "filters.adtidy.org/extension/ublock/filters/1.txt": {
+        "off": true,
+        "title": "RUS: Adguard Russian Filter",
+        "group": "regions",
+        "homeURL": "https://filters.adtidy.org/extension/ublock/filters/1.txt"
+    },
+    "filters.adtidy.org/extension/ublock/filters/13.txt": {
+        "off": true,
+        "title": "TUR: Adguard Turkish Filter",
+        "group": "regions",
+        "homeURL": "https://filters.adtidy.org/extension/ublock/filters/13.txt"
+    }
+    
 }

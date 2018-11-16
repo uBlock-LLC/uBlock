@@ -49,6 +49,7 @@ var injectedSelectors = [];
 var reProperties = /\s*\{[^}]+\}\s*/;
 var i;
 var styles = vAPI.styles || [];
+var injectedProcedureSelector = vAPI.injectedProcedureCosmeticFilters || [];
 
 i = styles.length;
 while ( i-- ) {
@@ -74,6 +75,15 @@ while ( i-- ) {
     loggedSelectors[selector] = true;
     matchedSelectors.push(selector);
 }
+
+for (let selector of injectedProcedureSelector) {
+    if ( loggedSelectors.hasOwnProperty(selector) ) {
+        continue;
+    }
+    loggedSelectors[selector] = true;
+    matchedSelectors.push(selector);
+}
+
 
 vAPI.loggedSelectors = loggedSelectors;
 

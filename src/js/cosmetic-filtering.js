@@ -38,6 +38,7 @@ var µb = µBlock;
 // which seems faster on Firefox.
 var encode = JSON.stringify;
 var decode = JSON.parse;
+const abpSelectorRegexp = /:-abp-([\w-]+)\(/i;
 
 /******************************************************************************/
 /*
@@ -238,7 +239,7 @@ var FilterParser = function() {
     this.hostnames = [];
     this.invalid = false;
     this.cosmetic = true;
-    this.reParser = /^\s*([^#]*)(##|#@#)(.+)\s*$/;
+    this.reParser = /^\s*([^#]*)(##|#@#|#\?#)(.+)\s*$/;
 };
 
 /******************************************************************************/
@@ -446,7 +447,7 @@ SelectorCacheEntry.prototype.retrieve = function(type, out) {
 // +-- filter type (0=hide 1=unhide)
 //
 
-var makeHash = function(unhide, token, mask) {
+var makeHash = function(unhide, token, mask, proceduremask = "") {
     // Ref: Given a URL, returns a unique 4-character long hash string
     // Based on: FNV32a
     // http://www.isthe.com/chongo/tech/comp/fnv/index.html#FNV-reference-source
@@ -483,6 +484,9 @@ var makeHash = function(unhide, token, mask) {
         if ( unhide !== 0 ) {
             hval |= 0x20000;
         }
+        if(proceduremask != "") {
+            hval |= proceduremask;
+        }
     return hval.toString(36);
 };
 
@@ -507,6 +511,7 @@ var makeHash = function(unhide, token, mask) {
 var FilterContainer = function() {
     this.domainHashMask = (1 << 10) - 1; // 10 bits
     this.genericHashMask = (1 << 15) - 1; // 15 bits
+    this.procedureMask = 0x10000;
     this.type0NoDomainHash = 'type0NoDomain';
     this.type1NoDomainHash = 'type1NoDomain';
     this.parser = new FilterParser();
@@ -602,12 +607,13 @@ FilterContainer.prototype.compile = function(s, out) {
         this.compileGenericSelector(parsed, out);
         return true;
     }
-
+    
+    let isValid = abpSelectorRegexp.test(parsed.suffix) ? true : this.isValidSelector(parsed.suffix); 
     // For hostname- or entity-based filters, class- or id-based selectors are
     // still the most common, and can easily be tested using a plain regex.
     if (
         this.reClassOrIdSelector.test(parsed.suffix) === false &&
-        this.isValidSelector(parsed.suffix) === false
+        isValid === false
     ) {
         return true;
     }
@@ -735,8 +741,9 @@ FilterContainer.prototype.compileHostnameSelector = function(hostname, parsed, o
     if ( domain === '' ) {
         hash = unhide === 0 ? this.type0NoDomainHash : this.type1NoDomainHash;
     } else {
-        hash = makeHash(unhide, domain, this.domainHashMask);
+        hash = abpSelectorRegexp.test(parsed.suffix) ? makeHash(unhide, domain, this.domainHashMask, this.procedureMask) : makeHash(unhide, domain, this.domainHashMask);
     }
+    
     out.push(
         'c\v' +
         'h\v' +
@@ -1180,6 +1187,7 @@ FilterContainer.prototype.retrieveDomainSelectors = function(request,options) {
         entity: pos === -1 ? domain : domain.slice(0, pos - domain.length),
         skipCosmeticFiltering: options.skipCosmeticFiltering,
         cosmeticHide: [],
+        procedureHide: [],
         cosmeticDonthide: [],
         netHide: [],
         netCollapse: µb.userSettings.collapseBlocked
@@ -1207,6 +1215,14 @@ FilterContainer.prototype.retrieveDomainSelectors = function(request,options) {
     hash = makeHash(1, domain, this.domainHashMask);
     if ( bucket = this.hostnameFilters[hash] ) {
         bucket.retrieve(hostname, r.cosmeticDonthide);
+    }
+    
+    hash = makeHash(0, domain, this.domainHashMask, this.procedureMask);
+    if ( bucket = this.hostnameFilters[hash] ) {
+        bucket.retrieve(hostname, r.procedureHide);
+    }
+    if(request.procedureSelectorsOnly) {
+        return r.procedureHide;
     }
 
     // https://github.com/uBlockAdmin/uBlock/issues/188

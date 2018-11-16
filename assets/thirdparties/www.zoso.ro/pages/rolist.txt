@@ -1,0 +1,327 @@
+[Adblock]
+! Title: ROLIST - Romanian Adblock List by MenetZ & Zoso
+! Original list, by Menetz, was handed over to Zoso to host and maintain.
+! A complementary list, with more strict items, is here zoso.ro/pages/rolist2.txt
+! Expires: 2 days
+! Homepage: https://zoso.ro/rolist/
+! Email: mail@zoso.ro
+! Last modified: 21 July 2018 10:00 UTC
+
+!hosts
+||01.creativecdn.com^
+||2mdn.net^
+||7w.ro^
+||ad.dc2.adtech.de^
+||ad2.ip.ro^
+||admonitoring.bsgroup.ro^
+||adnxs.com^
+||ado.icorp.ro^
+||adocean.pl^
+||ads.tradeads.eu^
+||ads2.evz.ro^
+||adservingfactory.com^
+||adsymptotic.com^
+||akamai.smartadserver.com^
+||app.marketizator.com^
+||apps.thinkdigital.ro^
+||bat.bing.com^
+||bbcdn.ad2.ip.ro
+||bbcdn.go.adevolution.bbelements.com^
+||bbcdn.go.cz.bbelements.com^
+||bidswitch.net^
+||block.sw1block.com^
+||brand.ad^
+||brat-online.ro^
+||bride.ru^
+||cdn.onesignal.com^
+||cdn.teads.tv^
+||content.ad20.net^
+||content.adunity.com^
+||content.zontera.com^
+||core.ad20.net^
+||core.adservingfactory.com^
+||ctx.inin.ro^
+||da.feedsportal.com^
+||data.tradeville.eu^
+||digital4ro.adocean.pl^
+||engageya.com^
+||evensys.ro^$third-party
+||ewatch.ro^
+||eyeviewads.com^
+||feedads.g.doubleclick.net^
+||flx1.com^
+||fx.gtop.ro^
+||gemius.pl^
+||go.netbet.ro^
+||gravityrd-services.com^
+||ib.adnxs.com^
+||icorpadro.hit.gemius.pl^
+||js-agent.newrelic.com^
+||linkweb.ro^
+||media.leftclick.ro^
+||megapopads.com^
+||moatads.com^
+||new.cetrk.com^
+||onlinesupaads.com^
+||pagefair.com^
+||parsely.com^
+||profiling.avandor.com^
+||projectagora.s3.amazonaws.com
+||realitatero.adocean.pl^
+||recs.engageya.com^
+||retargeting-data.eu^
+||revsci.net^
+||ro.adocean.pl^
+||ro.noprimetime.com^
+||ro.search.etargetnet.com
+||rt.awstaticdn.net^
+||s.atemda.com^
+||smartadserver.com^
+||st.ad.adnow.com^
+||st-n.ads1-adnow.com^
+||st-n.pc1ads.com^
+||storage.trafic.ro^
+||sync.teads.tv^
+||t00t2.com^
+||tags.crwdcntrl.net^
+||tinypass.com^
+||tynt.com
+||zontera.com^
+||zopim.com^
+||serving-sys.com^
+||coinhive.com^
+||cotatii.tradeville.eu^
+||adservice.google.ro^
+
+!wildcard hosts
+||arbocontext.ro^
+||einformatii.ro/content/website
+||img.2parale.ro/system/paperclip/banner_pictures
+
+!words
+/ads/*
+/bannere/*
+/reclama/*
+/reclame/*
+/simple-pull-quote/*
+/plugins/convertplug/*
+
+!CSS
+##DIV[id*="reclama"]
+info##DIV[class="banda-sticky-mini"]
+info##DIV[class="banda-sticky-vp"]
+ro##[href*="/promo"]
+ro##DIV#popup_facebook
+ro##DIV#popup_facebook2
+ro##DIV[class^="banner"]
+ro##DIV[class="banda-sticky-mini"]
+ro##DIV[class="banda-sticky-vp"]
+ro##DIV[id*="banner"]
+ro##IFRAME[id^="ETARGET"]
+ro##trafic
+	
+!Whitelist
+@@||googletagmanager.com/gtm.js?id=GTM-TKS335$script,domain=emag.ro
+@@||homebank.ro^$~third-party
+@@||hotnews.ro^$generichide
+@@||lumea-luminilor.ro/promotii*
+@@||olx.ro/i2/ajax/ad/getcontact/*
+@@||profitshare.emag.ro/get_ads.php?*
+@@||profitshare.ro/get_ads.php?*
+@@||rezitests.ro/advertisement.js
+@@||s1emagst.akamaized.net/layout/all/js/showads.js$script,domain=emag.ro
+@@AC_RunActiveContent.js
+~4tuning.ro##.adsbygoogle
+promozone.ro,emag.ro#@#[href*="/promo"]
+revista22.ro##IMG[src*="banner"]
+@@||imasdk.googleapis.com/js/sdkloader/*$domain=observator.tv
+
+!porcarii
+||24fun.ro/widget/?
+||academiacatavencu.info/js/plugins/magnific-popup/magnific.js
+||agerpres.ro/agerpres/BannerFetch*
+||ajax.cloudflare.com/cdn-cgi/nexp/dok3v=088620b277/cloudflare.min.js$script,domain=vocea.biz
+||assets.protv.ro/assets/promotor/deBarbati/banner-top-simple.png$image
+||b.rcs-rds.ro/assets/2580
+||b.rcs-rds.ro/assets/2606$image
+||b1.ro/media/*$object,image
+||b1.ro/static/caldoprivatsecurity_
+||bestmusic.ro/external/banners/*
+||bzi.ro/public/js/*
+||capital.ro/js/scripts.js?*
+||catavencii.ro/bnr/alexandrion.jpg
+||clujust.ro/wp-content/uploads/2015/11/Banner-300-250-CBP.jpg$image
+||clujust.ro/wp-content/uploads/2016/04/banner-800x100-px-coratim.jpg$image
+||clujust.ro/wp-content/uploads/2016/05/bannere-online-01-cantemir.jpg$image
+||clujust.ro/wp-content/uploads/2016/07/ebs-cluj-just-800x100.jpg$image
+||clujust.ro/wp-content/uploads/2016/08/300x-600-px-clujust.jpg$image
+||desteptarea.ro/wp-content/uploads/2018/01/banner.jpg$image
+||desteptarea.ro/wp-content/uploads/2018/04/1000x200.jpg$image
+||ejobs.ro/3rdparty/wall_street/wall_street.js
+||europafm.ro/wp-content/uploads/2017/09/telekom-Sea-Hero.jpg$image
+||forum.computergames.ro/extra/
+||http://s1.olx.ro/static/olxro/naspersclassifieds-regional/olxeu-atlas-web/static/js/advertising.js
+||i.imgur.com/gBCvbAM.png$image
+||img.wall-street.ro/images/common/
+||iqads.ro/upcoming/*
+||jurnalul.ro/usr/casete/
+||l.yimg.com/g/images/spaceball.gif
+||libertatea.ro/usr/casete/
+||media.hotnews.ro/media_server1/image-2010-03-18-7044595-0-comunicat-presa.jpg
+||media.hotnews.ro/media_server1/image-2013-01-8-13964838-0-2013-siveco-stanga.jpg$image
+||media.hotnews.ro/media_server1/image-2015-12-4-20641634-0-paravion-londra-4-dec.jpg$image
+||media.hotnews.ro/media_server1/image-2016-04-11-20928782-0-timbru-lidl.jpg$image
+||media.hotnews.ro/media_server1/image-2016-09-13-21286827-0-fakepath-brd.png$image
+||media.hotnews.ro/media_server1/image-2016-09-13-21286832-0-bit.jpg$image
+||media.hotnews.ro/media_server1/image-2016-10-6-21335901-0-timbru-arpim.jpg$image
+||media.hotnews.ro/media_server1/image-2017-02-20-21622336-0-buchete-flori.jpg$image
+||nosteam.ro/js/common.lib.js
+||nosteam.ro/js/jquery.min.25-t1.js
+||nosteam.ro/Themes/*alph21$script
+||priceexpert.com/detect.js
+||profitshare.ro/j/jXY
+||reportervirtual.ro/wp-content/plugins/facebook-page-promoter-lightbox-premium/*
+||res3.feedsportal.com/images/
+||romanialibera.ro/images/2banda%20green%20city%20980x50.swf
+||romanialibera.ro/img/banner_280x250_2.gif$image
+||romanialibera.ro/js/adblock.js
+||smartdreamers.ro/embed/jobs/$subdocument
+||startupcafe.ro/images/startupcafe/resurse-img.jpg$image
+||subs.ro/layout/img/head_xs.png
+||terrapops.com^$popup
+||titrari.ro/*.swf
+||turcescu.ro/wp-content/uploads/myfragrancero72890.jpg?v=2
+||vocea.biz/wp-admin/admin-ajax.php
+||web3.protv.ro/assets/protv/widgets/newsletter.swf?
+||zdbc.ro/wp-content/uploads/2018/04/output_0LPAnM.gif$image
+||zdbc.ro/wp-content/uploads/2018/04/output_w1Rl5z.gif$image
+||zdbc.ro/wp-content/uploads/2018/06/Ub_baner-360x600.gif$image
+||ziuaconstanta.ro/images/banners/*
+
+!div rules
+220.ro##DIV#nql_optiuni
+a1.ro##.vulping_articol
+activenews.ro###header > div:nth-of-type(3)
+adevarul.ro###top-video
+adevarul.ro##.categories-bottom
+adevarul.ro##.meta.clearfix
+adevarul.ro##.part.part-left
+adevarul.ro##.tl-content.clearfix
+adevarul.ro##DIV.article-box.alte-stiri.related
+agrointel.ro###randimage
+agrointel.ro###text-318
+agrointel.ro##.banner
+agrointel.ro##DIV[style="text-align:center; width:100%;"]
+antena3.ro###emisiuni
+antena3.ro###footer
+antena3.ro##.listing-stiri.stiri-atasate
+antena3.ro##DIV.spliter.listing-stiri *
+antena3.ro##STYLE + * + * + * > .elements
+automarket.ro###box_alert_container *
+avocatnet.ro###parteneri
+cancan.ro###column_3
+cancan.ro##.caseta_html.w1_1
+cancan.ro##a[href="http://www.parfumeria.ro/"]
+cancan.ro##DIV#top_side *
+cancan.ro##DIV.col_300 *
+cancan.ro##DIV.highslide-container + *
+catavencii.ro##IMG[src="/bnr/volk_larg.gif"]
+clujust.ro###sidebar > .theiaStickySidebar
+daciaclub.ro##.signature
+digi24.ro###slide_main > .stiri-digi24-actualitate-politica.actualitate.content-bar.full:nth-of-type(2)
+digi24.ro##.box.box-contest-word.m-t-c1
+digi24.ro##.nav.nav-pills.nav-stacked
+digi24.ro##.top-branding.m-b-1.text-xs-center > .ad_1200x250.regional_1200x250_top.ad-container
+distanta.ro##DIV[style$="width: 336px; height: 280px;"]
+distanta.ro##DIV[style*="display: block; background-color: white;"]
+evenimentul.ro##TD[width="160"]
+evz.ro##.row.catbottom
+executari.com##.promohide
+forum.computergames.ro###navbar_notice_1
+forum.computergames.ro###navbar_notice_7
+gandul.info###bula-ultima-ora
+gandul.info##.ad
+gandul.info##.cross
+gandul.info##DIV[class*="TopCarousel"]
+gsp.ro##DIV.caseta_footer_rss
+hotnews.ro##.parteneri
+hotnews.ro##DIV.stiri_science trackable_box + *
+incont.stirileprotv.ro##.mod.header
+iqads.ro##DIV.bd
+libertatea.ro###floating
+lovendal.ro##.left
+mariustuca.ro###continut
+money.ro##.bd
+money.ro##.gruprcfooter
+noobz.ro##.lightbox
+nosteam.ro##DIV#stickynote4 > *
+nwradu.ro##[class^="reclama"]
+paginademedia.ro##.hidden-xs-down.site-video
+paginademedia.ro##.video-sticky
+playtech.ro##a[href^="http://profitshare.ro/"]
+price.ro##TABLE#effortTable > TBODY > *:first-child + * *
+profit.ro##.box-readmore
+realitatea.feedsportal.com##DIV.mf-viral + * + * + A:last-child > *
+reno.ro###mediacafe
+republica.ro##.box.box-c2a-login
+ro##DIV#simple-ribbon
+ro##IMG.linked-sig-image
+romanialibera.ro###widgetArticleControlsLeft
+romanialibera.ro###widgetArticleControlsRight
+romanialibera.ro##.container_12.row:nth-of-type(3)
+romanialibera.ro##.container_12.row:nth-of-type(7)
+romanialibera.ro##.image-links
+romanialibera.ro##.overlay
+romanialibera.ro##.widget-associated
+romanialibera.ro##.widget-breadcrumbs
+smartbank.ro##TD[class="color_golden"]
+softpedia.com##table[class='ipbtable'] tr td[id='post-main-0']
+stirileprotv.ro###box_400051071d129964 > .primaPaginaPeScurt
+stirileprotv.ro##barUltimeleStiri
+stirileprotv.ro##[href="http://onelink.to/dhrsfr"]
+stiripesurse.ro##.giant-modal--fb-like.giant-modal
+subs.ro##DIV[class="rclm_table"]
+subs.ro##IMG[src="/layout/rclm/mynotebook.png"]
+subs.ro##IMG[src="/layout/rclm/vplay.png"]
+teotrandafir.com##a[href^="http://profitshare.ro/"]
+thediaryofadam.com##.row-container.style-color-jevc-bg > .row-parent.limit-width.row
+tolo.ro###cookie-notice > .cookie-notice-container
+trafictube.ro#@#.widget-adv
+vocea.biz##.clearfix.article__cross-4-col:nth-of-type(2) > .clearfix
+vocea.biz##.clearfix.article__cross-4-col:nth-of-type(5) > .clearfix
+vocea.biz##.clearfix.article__cross-4-col:nth-of-type(6) > .clearfix
+vplowlive.m.ro###myLive
+wall-street.ro##DIV#qra_popup_wrapper *
+yoda.ro##a[href^="http://bit.ly/"]
+yoda.ro##a[href^="https://goo.gl/"]
+zf.ro###bula-ultima-ora
+realitatea.net##a[href^="http://l.profitshare.ro/"]
+
+!bfcrap
+##a[href^="/magazin/"]
+##a[href^="/url/"]
+##a[href^="https://blackfridaysales.ro/trk/shop/"]
+blackfriday.ro##a[href^="http://event.2parale.ro/"]
+blackfriday.ro##a[href^="https://bit.ly/"]
+blackfriday.ro##a[href^="https://goo.gl/"]
+blackfridaymania.ro##a[href^="http://blackfridaymania.ro/mag/"]
+blackfridaymania.ro##a[href^="https://bit.ly/"]
+blackfridaymania.ro##a[href^="https://goo.gl/"]
+blackfriday-romania.com##a[href^="/go/"]
+blackfriday-romania.com##a[href^="https://bit.ly/"]
+blackfriday-romania.com##a[href^="https://goo.gl/"]
+blackfridayromania.net##a[href^="https://bit.ly/"]
+blackfridayromania.net##a[href^="https://goo.gl/"]
+black-friday-romania.ro##a[href^="https://bit.ly/"]
+black-friday-romania.ro##a[href^="https://goo.gl/"]
+blackfridaysales.ro##a[href^="https://bit.ly/"]
+blackfridaysales.ro##a[href^="https://goo.gl/"]
+devicer.ro##a[href^="http://bit.ly/"]
+devicer.ro##a[href^="http://goo.gl/aXGFm"]
+idevice.ro##a[href^="http://bit.ly/"]
+idevice.ro##a[href^="https://goo.gl/"]
+realitatea.net##a[href^="http://event.2performant.com/"]
+reduceriblackfriday.ro##a[href^="http://bit.ly/"]
+reduceriblackfriday.ro##a[href^="https://goo.gl/"]
+stirileprotv.ro##a[href^="http://bit.ly/"]
+stirileprotv.ro##a[href^="https://goo.gl/"]

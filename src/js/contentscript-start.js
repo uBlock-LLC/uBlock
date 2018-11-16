@@ -54,6 +54,7 @@ if ( vAPI.contentscriptStartInjected ) {
 }
 vAPI.contentscriptStartInjected = true;
 vAPI.styles = vAPI.styles || [];
+vAPI.injectedProcedureCosmeticFilters = vAPI.injectedProcedureCosmeticFilters || [];
 
 /******************************************************************************/
 
@@ -70,6 +71,7 @@ var cosmeticFilters = function(details) {
     var hideCosmeticFilters = {};
     var donthide = details.cosmeticDonthide;
     var hide = details.cosmeticHide;
+    var hideProcedureFilters = details.procedureHide || [];
     var i;
     if ( donthide.length !== 0 ) {
         i = donthide.length;
@@ -105,6 +107,7 @@ var cosmeticFilters = function(details) {
     }
     vAPI.donthideCosmeticFilters = donthideCosmeticFilters;
     vAPI.hideCosmeticFilters = hideCosmeticFilters;
+    vAPI.hideProcedureFilters = hideProcedureFilters;
 };
 
 var netFilters = function(details) {
@@ -127,7 +130,7 @@ var filteringHandler = function(details) {
 
     vAPI.skipCosmeticFiltering = !details || details.skipCosmeticFiltering;
     if ( details ) {
-        if ( details.cosmeticHide.length !== 0 || details.cosmeticDonthide.length !== 0 ) {
+        if ( details.cosmeticHide.length !== 0 || details.cosmeticDonthide.length !== 0 || details.procedureHide !== 0) {
             cosmeticFilters(details);
         }
         if ( details.netHide.length !== 0 ) {
@@ -170,7 +173,8 @@ localMessager.send(
     {
         what: 'retrieveDomainCosmeticSelectors',
         pageURL: url,
-        locationURL: url
+        locationURL: url,
+        procedureSelectorsOnly: false
     },
     filteringHandler
 );

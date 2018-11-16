@@ -64,13 +64,15 @@ var typeNameToTypeValue = {
          'sub_frame':  6 << 4,
          'websocket':  9 << 4,
              'other':  10 << 4,
-'cosmetic-filtering': 13 << 4,
-     'inline-script': 14 << 4,
-             'popup': 15 << 4,
-             'csp'  : 16 << 4,
-          'webrtc'  : 17 << 4,
-          'rewrite' : 18 << 4,
-      'generichide' : 19 << 4
+        'main_frame':  12 << 4,  
+'cosmetic-filtering':  13 << 4,
+     'inline-script':  14 << 4,
+             'popup':  15 << 4,
+             'csp'  :  16 << 4,
+          'webrtc'  :  17 << 4,
+          'rewrite' :  18 << 4,
+      'generichide' :  19 << 4,
+      'genericblock':  20 << 4
 };
 var typeOtherValue = typeNameToTypeValue.other;
 
@@ -101,6 +103,7 @@ var reURLPostHostnameAnchors = /[\/?#]/;
 
 var pageHostnameRegister = '';
 var requestHostnameRegister = '';
+var skipGenericBlocking = false;
 //var filterRegister = null;
 //var categoryRegister = '';
 
@@ -1227,6 +1230,9 @@ FilterBucket.prototype.match = function(url, tokenBeg) {
     var filters = this.filters;
     var n = filters.length;
     for ( var i = 0; i < n; i++ ) {
+        if(filters[i].fid.indexOf('h') === -1 && skipGenericBlocking) {
+            continue;
+        }
         if ( filters[i].match(url, tokenBeg) !== false ) {
             this.f = filters[i];
             if ( i >= this.vip ) {
@@ -1392,7 +1398,8 @@ FilterParser.prototype.toNormalizedType = {
          'websocket': 'websocket',
             'webrtc': 'webrtc',
            'rewrite': 'rewrite',
-       'generichide':'generichide'
+       'generichide': 'generichide',
+      'genericblock': 'genericblock'
 };
 
 /******************************************************************************/
@@ -1484,7 +1491,6 @@ FilterParser.prototype.parseOptions = function(s) {
             continue;
         }
         if ( opt === 'elemhide' ) {
-           // if ( this.action === AllowAction ) {
             if ( not === false ) {   
                 this.parseOptType('elemhide', false);
                 continue;
@@ -1493,7 +1499,6 @@ FilterParser.prototype.parseOptions = function(s) {
             break;
         }
         if ( opt === 'generichide' ) {
-           // if ( this.action === AllowAction ) {
             if ( not === false ) {      
                 this.parseOptType('generichide', false);
                 continue;
@@ -1502,11 +1507,11 @@ FilterParser.prototype.parseOptions = function(s) {
             break;
         }
         if ( opt === 'document' ) {
-            if ( this.action === BlockAction ) {
-                this.parseOptType('document', false);
+            //if ( this.action === BlockAction ) {
+                this.parseOptType('document', not);
                 continue;
-            }
-            this.unsupported = true;
+           // }
+           // this.unsupported = true;
             break;
         }
         if ( opt.startsWith('csp=') ) {
@@ -2281,7 +2286,7 @@ FilterContainer.prototype.tokenize = function(url) {
 FilterContainer.prototype.matchTokens = function(bucket, url) {
     // Hostname-only filters
     var f = bucket['.'];
-    if ( f !== undefined && f.match() !== false ) {
+    if ( f !== undefined && !skipGenericBlocking && f.match() !== false) {
         return f;
     }
 
@@ -2295,6 +2300,11 @@ FilterContainer.prototype.matchTokens = function(bucket, url) {
             break;
         }
         f = bucket[token];
+       
+        if(f !== undefined && f.fid.indexOf('h') === -1 && f.fid != "[]" && skipGenericBlocking) {
+            continue;
+        }
+
         if ( f !== undefined && f.match(url, tokenEntry.beg) !== false ) {
             return f;
         }
@@ -2323,6 +2333,7 @@ FilterContainer.prototype.matchStringExactType = function(context, requestURL, r
     // These registers will be used by various filters
     pageHostnameRegister = context.pageHostname || '';
     requestHostnameRegister = µb.URI.hostnameFromURI(requestURL);
+    skipGenericBlocking = context.skipGenericBlocking;
 
     var party = isFirstParty(context.pageDomain, requestHostnameRegister) ? FirstParty : ThirdParty;
 
@@ -2367,6 +2378,7 @@ FilterContainer.prototype.matchStringExactType = function(context, requestURL, r
         return '';
     }
 
+    skipGenericBlocking = false;
     // Test against allow filters
     var af;
     if ( bucket = categories[this.makeCategoryKey(AllowAnyParty | type)] ) {
@@ -2385,9 +2397,12 @@ FilterContainer.prototype.matchStringExactType = function(context, requestURL, r
     return 'sb:' + bf.toString();
 };
 
-FilterContainer.prototype.matchStringCosmeticHide = function(url,requestType) {
+FilterContainer.prototype.matchStringExceptionOnlyRule = function(url,requestType) {
+    pageHostnameRegister = µb.URI.hostnameFromURI(url) || '';
+    requestHostnameRegister = µb.URI.hostnameFromURI(url);
     var categories = this.categories;
     var af = false,bf = false, bucket;
+    skipGenericBlocking = false;
     
     var type = typeNameToTypeValue[requestType] || 0;
     if ( type === 0 ) {
@@ -2513,6 +2528,7 @@ FilterContainer.prototype.matchString = function(context) {
     // These registers will be used by various filters
     pageHostnameRegister = context.pageHostname || '';
     requestHostnameRegister = context.requestHostname;
+    skipGenericBlocking = context.skipGenericBlocking;
 
     var party = isFirstParty(context.pageDomain, context.requestHostname) ? FirstParty : ThirdParty;
     var filterClasses = this.categories;
@@ -2582,6 +2598,7 @@ FilterContainer.prototype.matchString = function(context) {
 
     // Test against allow filters
     var af;
+    skipGenericBlocking = false;
 
     if ( bucket = filterClasses[this.makeCategoryKey(AllowAnyTypeAnyParty)] ) {
         af = this.matchTokens(bucket, url);

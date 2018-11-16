@@ -54,6 +54,593 @@ if ( vAPI.contentscriptEndInjected ) {
     //console.debug('contentscript-end.js > content script already injected');
     return;
 }
+vAPI.proceduralCosmeticFiltering = (function() {
+    const abpSelectorRegexp = /:-abp-([\w-]+)\(/i;
+    let scopeSupported = true;
+    const incompletePrefixRegexp = /[\s>+~]$/;
+    let reRegexRule = /^\/(.*)\/$/;
+    //let testdocument = document;
+    
+    function scopedQuerySelector(subtree, selector, all) {
+      
+        if (selector[0] == ">") {
+            selector = ":scope" + selector;
+    
+        if (scopeSupported) {
+          return all ? subtree.querySelectorAll(selector) :
+            subtree.querySelector(selector);
+        }
+        if (scopeSupported == null)
+          return tryQuerySelector(subtree, selector, all);
+        return null;
+      }
+      return all ? subtree.querySelectorAll(selector) :
+        subtree.querySelector(selector);
+    }
+    function filterToRegExp(text, captureAll = false) {
+        // remove multiple wildcards
+        text = text.replace(/\*+/g, "*");
+  
+        if (!captureAll)
+        {
+            // remove leading wildcard
+            if (text[0] == "*")
+            text = text.substring(1);
+  
+            // remove trailing wildcard
+            if (text[text.length - 1] == "*")
+            text = text.substring(0, text.length - 1);
+        }
+  
+        return text
+            // remove anchors following separator placeholder
+            .replace(/\^\|$/, "^")
+            // escape special symbols
+            .replace(/\W/g, "\\$&")
+            // replace wildcards by .*
+            .replace(/\\\*/g, ".*")
+            // process separator placeholders (all ANSI characters but alphanumeric
+            // characters and _%.-)
+            .replace(/\\\^/g, "(?:[\\x00-\\x24\\x26-\\x2C\\x2F\\x3A-\\x40\\x5B-\\x5E\\x60\\x7B-\\x7F]|$)")
+            // process extended anchor at expression start
+            .replace(/^\\\|\\\|/, "^[\\w\\-]+:\\/+(?!\\/)(?:[^\\/]+\\.)?")
+            // process anchor at expression start
+            .replace(/^\\\|/, "^")
+            // process anchor at expression end
+            .replace(/\\\|$/, "$");
+    }
+    function scopedQuerySelectorAll(subtree, selector) {
+      return scopedQuerySelector(subtree, selector, true);
+    }
+    function findIndex(iterable, callback, thisArg) {
+      let index = 0;
+      for (let item of iterable) {
+        if (callback.call(thisArg, item))
+          return index;
+        index++;
+      }
+      return -1;
+    }
+    function indexOf(iterable, searchElement) {
+      return findIndex(iterable, item => item === searchElement);
+    }
+    function positionInParent(node) {
+      return indexOf(node.parentNode.children, node) + 1;
+    }
+    function makeSelector(node, selector = "") {
+        if (node == null)
+            return null;
+        if (!node.parentElement) {
+            let newSelector = ":root";
+            if (selector)
+                newSelector += " > " + selector;
+            return newSelector;
+        }
+        let idx = positionInParent(node);
+        if (idx > 0) {
+            let newSelector = `${node.tagName}:nth-child(${idx})`;
+            if (selector)
+                newSelector += " > " + selector;
+            return makeSelector(node.parentElement, newSelector);
+        }
+    
+        return selector;
+    }
+    function cartesianProductOf() {
+      return Array.prototype.reduce.call(arguments, function(a, b) {
+        var ret = [];
+        a.forEach(function(a) {
+          b.forEach(function(b) {
+            ret.push(a.concat([b]));
+          });
+        });
+        return ret;
+      }, [[]]);
+    }
+    function prime(input,prefix) {
+        var root = input || document;
+        let actualPrefix = (!prefix || incompletePrefixRegexp.test(prefix)) ?
+        prefix + "*" : prefix;
+        let elements = scopedQuerySelectorAll(root, actualPrefix);
+        return elements;
+    }
+    function makeRegExpParameter(text) {
+      let [, pattern, flags] = /^\/(.*)\/([imu]*)$/.exec(text) || [null, text.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&")];
+      try {
+        return new RegExp(pattern, flags);
+      } catch (e) {
+      }
+      return null;
+    }
+    
+    const styleObserver = (function () { 
+        let sheetToFilterSelectorMap = new Map();
+        let parsedFilters = [];
+        let registeredFiltersMap = Object.create(null);
+         
+        const registerStylePropertyFilter = function (filter) {
+            filter = filter.trim();
+            if (registeredFiltersMap[filter]) { return; }
+            let re;
+            let regexpString;
+            if (filter.length >= 2 && filter[0] == "/" &&
+                        filter[filter.length - 1] == "/")
+            {
+                regexpString = filter.slice(1, -1)
+                    .replace("\\7B ", "{").replace("\\7D ", "}").replace(/;$/,"");
+            }
+            else
+                regexpString = filterToRegExp(filter);
+  
+            re = new RegExp(regexpString, "i");
+            
+            parsedFilters.push({
+                filter: filter,
+                re: re
+            });
+            registeredFiltersMap[filter] = true;
+        };
+        const getSelector = function(filter) {
+            var styleSheets = document.styleSheets;
+            var selectors = [];
+    
+            for (var _i10 = 0, _length10 = styleSheets.length; _i10 < _length10; _i10++) {
+                var styleSheet = styleSheets[_i10];
+                if (styleSheet.disabled) {
+                    continue;
+                } 
+                var map = sheetToFilterSelectorMap.get(styleSheet);
+                if (typeof map === 'undefined') {
+                    continue;
+                }
+                Array.prototype.push.apply(selectors, map[filter]);
+            }
+            return selectors;
+        };
+        const isSameOrigin = function(stylesheet) {
+            try {
+                return new URL(stylesheet.href).origin == document.location.origin;
+            }
+            catch (e) {
+                return true;
+            }
+        };
+        const readStyleSheetContent = function (styleSheet) {
+            if (!isSameOrigin(styleSheet)) {
+                return;
+            }
+            var rules = styleSheet.cssRules;
+            var map = Object.create(null);
+    
+            for (var _i8 = 0, _length8 = rules.length; _i8 < _length8; _i8++) {
+                var rule = rules[_i8];
+                if (rule.type !== CSSRule.STYLE_RULE) {
+                    continue;
+                }
+                var stringifiedStyle = stringifyStyle(rule);
+                
+                for (var _i9 = 0, _length9 = parsedFilters.length; _i9 < _length9; _i9++) {
+                    var parsedFilter = parsedFilters[_i9];
+                    var re = parsedFilter.re;
+                  
+                    if (!re.test(stringifiedStyle)) {
+                        continue;
+                    }
+                    var selectorText = rule.selectorText.replace(/::(?:after|before)/, '');
+                    let filter = parsedFilter.filter;
+    
+                    if (typeof map[filter] === 'undefined') {
+                        map[filter] = [selectorText];
+                    } else {
+                        map[filter].push(selectorText);
+                    }
+               }
+            }
+            sheetToFilterSelectorMap.set(styleSheet, map);
+        };
+        const stringifyStyle = function (rule) {
+            var styles = [];
+            var style = rule.style;
+            var i = void 0,
+                l = void 0;
+            for (i = 0, l = style.length; i < l; i++) {
+                styles.push(style[i]);
+            }
+            styles.sort();
+            for (i = 0; i < l; i++) {
+                var property = styles[i];
+                var value = style.getPropertyValue(property);
+                var priority = style.getPropertyPriority(property);
+                styles[i] += ': ' + value;
+                if (priority.length) {
+                    styles[i] += '!' + priority;
+                }
+            }
+            return styles.join(" ");
+        };
+        return {
+            registerStylePropertyFilter: registerStylePropertyFilter,
+            getSelector: getSelector,
+            readStyleSheetContent: readStyleSheetContent
+        };
+    })();
+    
+    const getCombineSelectors = function(selectors) {
+        let arrSelector = [];
+        let productOfSelectors = [];
+        let combineSelectors = [];
+        for (var value of selectors.values()) {
+            Array.isArray(value) ? arrSelector.push([...value]) : arrSelector.push([value]);
+        }
+        if(arrSelector.length > 1) {
+            productOfSelectors = cartesianProductOf(...arrSelector)
+            for ( var arrayOfCombineSelector of productOfSelectors ) {
+                let combineSelector = arrayOfCombineSelector.join("");
+                combineSelectors.push(combineSelector);
+            }
+        } else {
+            combineSelectors = arrSelector[0];
+        }
+        return combineSelectors;
+    }
+    var hasSelector = function(hasSelector, prefix) {
+        this.prefix = prefix;
+        this._innerSelectors = hasSelector;
+        this.hasParallelSiblingSelector = false;
+        this.dependsOnDOM = true;
+    }
+    hasSelector.prototype = {
+        get maybeContainsSiblingCombinators() {
+          return this._innerSelectors.some(selector => selector.maybeContainsSiblingCombinators);
+        },
+        get maybeDependsOnAttributes() {
+          return this._innerSelectors.some(selector => selector.maybeDependsOnAttributes);
+        },
+        get dependsOnCharacterData() {
+          return this._innerSelectors.some(selector => selector.dependsOnCharacterData);
+        },
+        get dependsOnStyles() {
+          return this._innerSelectors.some(selector => selector.dependsOnStyles);
+        },
+        getSelectors: function(rootnode, selectors, targets) {
+            var nodes = prime(rootnode,this.prefix);
+            var matchSelector = [];
+            var lastRoot = null;
+            for ( var node of nodes ) {
+                if (lastRoot && lastRoot.contains(node) && !this.hasParallelSiblingSelector) {
+                    continue;
+                }
+                if (targets && !targets.some(target => node.contains(target) ||
+                                               target.contains(node))) {
+                    continue;
+                }
+                let iselectors = new Map();
+                evaluate(this._innerSelectors, 0, node, iselectors, targets);
+                if(iselectors.size > 0) {
+                    let combineSelectors = getCombineSelectors(iselectors);
+                    for ( var combineSelector of combineSelectors ) {
+                        if(scopedQuerySelector(node, combineSelector,false)) {
+                            matchSelector.push(makeSelector(node));
+                            lastRoot = node;
+                            break;
+                        }
+                    }
+                }
+            }
+            if(matchSelector.length > 0) 
+                selectors.set('has',matchSelector);
+            return;
+        }
+    }
+    var containSelector = function(selectorText, prefix) {
+        this.prefix = prefix;
+        this._regexp = makeRegExpParameter(selectorText);
+        this.hasParallelSiblingSelector = false;
+        this.dependsOnCharacterData = true;
+        this.dependsOnDOM = true;
+    }
+    containSelector.prototype = {
+        getSelectors: function(rootnode, selectors, targets) {
+            var matchSelector = [];
+            let lastRoot = null;
+            var nodes = prime(rootnode, this.prefix);
+            for ( var node of nodes ) {
+                if (lastRoot && lastRoot.contains(node) && !this.hasParallelSiblingSelector){
+                    continue;
+                }
+                if (targets && !targets.some(target => node.contains(target) ||
+                                               target.contains(node))) {
+                    continue;
+                }
+                lastRoot = node;
+                if (this._regexp && this._regexp.test(node.textContent)) {
+                    matchSelector.push(makeSelector(node));
+                }
+            }
+            if(matchSelector.length > 0) 
+                selectors.set('contains',matchSelector);
+            return;
+        }
+    }
+    var plainSelector = function(selectorText) {
+        this.selector = selectorText;
+        this.maybeContainsSiblingCombinators = /[~+]/.test(selectorText);
+        this.maybeDependsOnAttributes = /[#.]|\[.+\]/.test(selectorText);
+        this.dependsOnDOM = true;
+    }
+    plainSelector.prototype =  {
+        getSelectors: function(input, selectors) {
+            selectors.set('plain',[this.selector]);
+            return;
+        }
+    }
+    var propsSelector = function(propertyExpression, prefix) {
+        this.prefix = prefix;
+        this.propertyExpression = propertyExpression;
+        this.hasParallelSiblingSelector = false;
+        this.dependsOnStyles = true;
+        this.dependsOnDOM = true;
+        styleObserver.registerStylePropertyFilter(propertyExpression);
+    }
+    propsSelector.prototype = {
+        getSelectors: function(rootnode, selectors, targets) {
+            var matchSelector = [];
+            var nodes = prime(rootnode, this.prefix);
+            var styleSelectors = styleObserver.getSelector(this.propertyExpression);
+            if (styleSelectors.length === 0)
+                return;
+            let lastRoot = null;    
+            for ( var node of nodes ) {
+                if (lastRoot && lastRoot.contains(node) && !this.hasParallelSiblingSelector) {
+                    continue;
+                }
+                for (var i = 0, length = styleSelectors.length; i < length; i++) {
+                    var stypleSelector = styleSelectors[i];
+                    if (node.matches(stypleSelector)) {   
+                        matchSelector.push(makeSelector(node));
+                        lastRoot = node;
+                        break;
+                    }
+                }
+            }
+            if(matchSelector.length > 0) 
+                selectors.set('properties',matchSelector);
+            return;        
+        }
+    }
+    var proceduralSelector = function() {
+        this.operatorMap = new Map([['has', hasSelector], ['contains', containSelector], ['properties', propsSelector]]);
+        this.patterns = [];
+    }
+    proceduralSelector.prototype = {
+        parseProcedure : function(expression, prefix = "") {
+            let tasks = [];
+            let matches = abpSelectorRegexp.exec(expression);
+            if(!matches) {
+                return [new plainSelector(expression)];
+            } 
+            var prefix = expression.substring(0,matches.index);
+            let remaining = expression.substring(matches.index + matches[0].length);
+            let parsed = this.parseContent(remaining,0);
+            let selectorText = parsed.text;
+            if(matches[1] == "properties") {
+                tasks.push(new (this.operatorMap.get(matches[1]))(selectorText,prefix));
+            }
+            else if(matches[1] == "has") {
+                let procSelector = this.parseProcedure(selectorText, prefix);
+                tasks.push(new (this.operatorMap.get(matches[1]))(procSelector,prefix));
+            }
+            else if(matches[1] == "contains") {
+                tasks.push(new (this.operatorMap.get(matches[1]))(selectorText,prefix));
+            }
+            else {
+                console.error(new SyntaxError("Failed to parse uBlock."));
+                return null;
+            }
+            let suffixtext = remaining.substring(parsed.end + 1);
+            if (suffixtext != "") {
+                let suffix = this.parseProcedure(suffixtext);
+                if(suffix.length == 1 && suffix[0] instanceof plainSelector && suffix[0].maybeContainsSiblingCombinators) {
+                    for (let task of tasks) {
+                        if(task instanceof hasSelector || task instanceof containSelector ||  task instanceof proceduralSelector) {
+                            task.hasParallelSiblingSelector = true;
+                        }
+                    }
+                }
+                tasks.push(...suffix);
+            }
+            return tasks;
+        },
+        parseContent: function(content, startIndex) {
+            let parens = 1;
+            let quote = null;
+            let i = startIndex;
+            for (; i < content.length; i++) {
+                let c = content[i];
+                if (c == "\\") {
+                i++;
+                }
+                else if (quote) {
+                if (c == quote)
+                    quote = null;
+                }
+                else if (c == "'" || c == '"')
+                quote = c;
+                else if (c == "(")
+                parens++;
+                else if (c == ")") {
+                parens--;
+                if (parens == 0)
+                    break;
+                }
+            }
+            if (parens > 0)
+                return null;
+            return {text: content.substring(startIndex, i), end: i};
+        },
+        applyPatterns: function(patterns) {
+            this.patterns = [];
+            for (let selector of patterns) {
+                var tasks = this.parseProcedure(selector,"");
+                this.patterns.push([selector, tasks]);
+            } 
+            if(this.patterns.length > 0) {
+                this.processPattern();
+                document.addEventListener("load", onLoad.bind(this), true);
+            }
+        },
+        processPattern: function(stylesheets, mutations) {
+            let patterns = this.patterns.filter(([selector, tasks]) => this.filterPatterns(tasks, mutations, stylesheets));
+            
+            if (!stylesheets && !mutations)
+                stylesheets = document.styleSheets;
+            
+            if (mutations && this.patterns.some(([selector, tasks]) => tasks.some(task => task.dependsOnStyles && task.dependsOnDOM)))
+                stylesheets = document.styleSheets;
+  
+            for (let stylesheet of stylesheets || []) {   
+                styleObserver.readStyleSheetContent(stylesheet);
+            }
+  
+            var matchSelector = [];
+            var matchProcSelector = [];
+            let mutationTargets = this.extractMutationTargets(mutations);
+            var mutations = mutations;
+  
+            for (let [selector, tasks] of patterns) {
+                let patternHasSiblingCombinator = tasks.some(task => task.maybeContainsSiblingCombinators);
+                let selectors = new Map();
+                if(tasks != null) {
+                    evaluate(tasks, 0, "", selectors, (patternHasSiblingCombinator) ? null : mutationTargets);
+                }
+                if(selectors.size > 0) {
+                    let combineSelectors = getCombineSelectors(selectors);
+                    for ( var combineSelector of combineSelectors ) {
+                        if(scopedQuerySelector(document, combineSelector,false)) {
+                            if(!matchProcSelector.includes(selector))
+                                matchProcSelector.push(selector);
+                                matchSelector.push(combineSelector);
+                        }
+                    }
+                }
+            }
+            if(matchSelector.length > 0) {
+                vAPI.injectedProcedureCosmeticFilters.push(...matchProcSelector);
+                let text = matchSelector.join(',\n');
+                hideElements(text);
+            }
+        },
+        matchesMutationTypes: function(patterns, mutationTypes) {
+            let mutationTypeMatchMap = new Map([
+                ["childList", true],
+                ["attributes", patterns.some(pattern => pattern.maybeDependsOnAttributes)],
+                ["characterData", patterns.some(pattern => pattern.dependsOnCharacterData)]
+            ]);
+  
+            for (let mutationType of mutationTypes) {
+                if (mutationTypeMatchMap.get(mutationType))
+                    return true;
+            }
+            return false;
+        },
+        filterPatterns: function(patterns, mutations, stylesheets) {
+            if (!stylesheets && !mutations)
+                return patterns;
+  
+            let mutationTypes = mutations ? extractMutationTypes(mutations) : null;
+            
+            return (stylesheets && patterns.some(pattern => pattern.dependsOnStyles)) ||
+                        (mutations &&  patterns.some(pattern => pattern.dependsOnDOM) &&
+                            this.matchesMutationTypes(patterns, mutationTypes)
+            );
+        },
+        extractMutationTargets: function(mutations) {
+            if (!mutations)
+                return null;
+  
+            let targets = new Set();
+            for (let mutation of mutations) {
+                if (mutation.type == "childList") {
+                    for (let node of mutation.addedNodes)
+                        targets.add(node);
+                }
+                else {
+                    targets.add(mutation.target);
+                }
+            }
+            return [...targets];
+        },
+        shouldObserveAttributes: function() {
+            return this.patterns.some(([selector, tasks]) => tasks.some(task => task.maybeDependsOnAttributes));
+        },
+        shouldObserveCharacterData: function() {
+            return this.patterns.some(([selector, tasks]) => tasks.some(task => task.dependsOnCharacterData));
+        }
+    }
+    var evaluate = function(tasks, index, rootnode, selectors, targets) {
+       tasks[index].getSelectors(rootnode,selectors, targets);
+       index = index + 1;
+       if(index >= tasks.length) {
+           return;
+       } else {
+           evaluate(tasks, index, rootnode, selectors, targets);
+       }
+    }
+    function extractMutationTypes(mutations) {
+      let types = new Set();
+      for (let mutation of mutations) {
+          types.add(mutation.type);
+          if (types.size == 3)
+          break;
+      }
+      return types;
+      }
+    function onLoad(event) {
+      let stylesheet = event.target.sheet;
+      if (stylesheet)
+      this.processPattern([stylesheet]);
+    }
+    var hideElements = function(selectors) {
+      // https://github.com/uBlockAdmin/uBlock/issues/207
+      // Do not call querySelectorAll() using invalid CSS selectors
+      if ( selectors.length === 0 ) {
+          return;
+      }
+      if ( document.body === null ) {
+          return;
+      }
+      // https://github.com/uBlockAdmin/uBlock/issues/158
+      // Using CSSStyleDeclaration.setProperty is more reliable
+      var elems = document.querySelectorAll(selectors);
+      var i = elems.length;
+      while ( i-- ) {
+          elems[i].style.setProperty('display', 'none', 'important');
+      }
+      messager.send({ what: 'cosmeticFiltersActivated' });
+    };
+    return new proceduralSelector();
+  })();
+
 vAPI.contentscriptEndInjected = true;
 vAPI.styles = vAPI.styles || [];
 
@@ -680,6 +1267,29 @@ var uBlockCollapser = (function() {
     idsFromNodeList(document.querySelectorAll('[id]'));
     classesFromNodeList(document.querySelectorAll('[class]'));
     retrieveGenericSelectors();
+    if(typeof vAPI.hideProcedureFilters !== 'undefined') {
+        vAPI.proceduralCosmeticFiltering.applyPatterns(vAPI.hideProcedureFilters);
+    } else {
+        var localMessager = vAPI.messaging.channel('contentscript-start.js');
+        var proceduresHandler = function(details) {
+            if(details) {
+                vAPI.hideProcedureFilters = details;
+                vAPI.proceduralCosmeticFiltering.applyPatterns(vAPI.hideProcedureFilters);
+            }
+            localMessager.close();
+        }
+        localMessager.send(
+            {
+                what: 'retrieveDomainCosmeticSelectors',
+                pageURL: window.location.href,
+                locationURL: window.location.href,
+                procedureSelectorsOnly: true
+            },
+            proceduresHandler
+        );
+        
+    }
+
 
     //console.debug('%f: uBlock: survey time', timer.now() - tStart);
 
@@ -709,7 +1319,7 @@ var uBlockCollapser = (function() {
     var addedNodeListsTimer = null;
     var collapser = uBlockCollapser;
 
-    var treeMutationObservedHandler = function() {
+    var treeMutationObservedHandler = function(mutations) {
         var nodeList, iNode, node;
         while ( nodeList = addedNodeLists.pop() ) {
             iNode = nodeList.length;
@@ -732,6 +1342,8 @@ var uBlockCollapser = (function() {
             retrieveGenericSelectors();
             messager.send({ what: 'cosmeticFiltersActivated' });
         }
+        if(mutations.length != 0)
+            vAPI.proceduralCosmeticFiltering.processPattern(null, mutations);
     };
 
     // https://github.com/uBlockAdmin/uBlock/issues/205
@@ -749,7 +1361,7 @@ var uBlockCollapser = (function() {
             // I arbitrarily chose 100 ms for now:
             // I have to compromise between the overhead of processing too few
             // nodes too often and the delay of many nodes less often.
-            addedNodeListsTimer = setTimeout(treeMutationObservedHandler, 100);
+            addedNodeListsTimer = setTimeout(treeMutationObservedHandler, 100, mutations);
         }
     };
 
@@ -757,7 +1369,9 @@ var uBlockCollapser = (function() {
     var treeObserver = new MutationObserver(treeMutationObservedHandlerAsync);
     treeObserver.observe(document.body, {
         childList: true,
-        subtree: true
+        subtree: true,
+        attributes: vAPI.proceduralCosmeticFiltering.shouldObserveAttributes(),
+        characterData: vAPI.proceduralCosmeticFiltering.shouldObserveCharacterData()
     });
 
     // https://github.com/gorhill/uMatrix/issues/144

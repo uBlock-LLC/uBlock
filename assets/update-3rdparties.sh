@@ -53,9 +53,17 @@ THIRDPARTY_REMOTEURLS=(
     'https://www.void.gr/kargig/void-gr-filters.txt'
     'http://abp.mozilla-hispano.org/nauscopio/filtros.txt'
     'https://gitorious.org/adblock-latvian/adblock-latvian/raw/master%3Alists/latvian-list.txt'
-    'http://www.zoso.ro/pages/rolist.txt',
-    'https://raw.githubusercontent.com/hoshsadiq/adblock-nocoin-list/master/nocoin.txt',
+    'http://www.zoso.ro/pages/rolist.txt'
+    'https://raw.githubusercontent.com/hoshsadiq/adblock-nocoin-list/master/nocoin.txt'
     'https://raw.githubusercontent.com/abp-filters/abp-filters-anti-cv/master/english.txt'
+    'https://filters.adtidy.org/extension/ublock/filters/2_without_easylist.txt'
+    'https://filters.adtidy.org/extension/ublock/filters/3.txt'
+    'https://filters.adtidy.org/extension/ublock/filters/14.txt'
+    'https://secure.fanboy.co.nz/fanboy-cookiemonster.txt'
+    'https://s3.amazonaws.com/lists.disconnect.me/simple_malvertising.txt'
+    'https://filters.adtidy.org/extension/ublock/filters/7.txt'
+    'https://filters.adtidy.org/extension/ublock/filters/1.txt'
+    'https://filters.adtidy.org/extension/ublock/filters/13.txt'
     )
 
 THIRDPARTY_LOCALURLS=(
@@ -105,9 +113,17 @@ THIRDPARTY_LOCALURLS=(
     'thirdparties/www.void.gr/kargig/void-gr-filters.txt'
     'thirdparties/abp.mozilla-hispano.org/nauscopio/filtros.txt'
     'thirdparties/gitorious.org/adblock-latvian/adblock-latvian/raw/master_lists/latvian-list.txt'
-    'thirdparties/www.zoso.ro/pages/rolist.txt',
-    'thirdparties/adblock-nocoin-list/nocoin.txt',
+    'thirdparties/www.zoso.ro/pages/rolist.txt'
+    'thirdparties/adblock-nocoin-list/nocoin.txt'
     'thirdparties/abp-filters-anti-cv/english.txt'
+    'thirdparties/filters.adtidy.org/extension/ublock/filters/2_without_easylist.txt'
+    'thirdparties/filters.adtidy.org/extension/ublock/filters/3.txt'
+    'thirdparties/filters.adtidy.org/extension/ublock/filters/14.txt'
+    'thirdparties/secure.fanboy.co.nz/fanboy-cookiemonster.txt'
+    'thirdparties/s3.amazonaws.com/lists.disconnect.me/simple_malvertising.txt'
+    'thirdparties/filters.adtidy.org/extension/ublock/filters/7.txt'
+    'thirdparties/filters.adtidy.org/extension/ublock/filters/1.txt'
+    'thirdparties/filters.adtidy.org/extension/ublock/filters/13.txt'
     )
 
 ENTRY_INDEX=0
