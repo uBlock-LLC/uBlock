@@ -13,6 +13,6 @@ deploy:
   file: dist/build/uBlock.${BROWSER}.${EXT}
   skip_cleanup: true
   on:
-    repo: uBlockAdmin/uBlock
+    repo: uBlock-LLC/uBlock
     tags: true
     all_branches: true
