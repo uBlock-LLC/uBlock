@@ -10,7 +10,7 @@
             <a href="https://travis-ci.org/uBlock-LLC/uBlock">
                   <img src="https://travis-ci.org/uBlock-LLC/uBlock.svg?branch=master" alt="Build status">
             </a>
-            <a href="https://donorbox.org/support-ublock-development">
+            <a href="https://www.ublock.org/donate">
                   <img src="https://raw.githubusercontent.com/uBlock-LLC/uBlock/master/doc/img/oncedonate.png" alt="Support development">
             </a>
       </td>
