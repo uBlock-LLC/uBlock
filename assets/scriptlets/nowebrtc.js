@@ -1,3 +1,10 @@
+/*
+    The below code is borrowed from:
+    https://github.com/uBlockOrigin/uAssets/blob/e4702d88404dd2e7c7346d6e38b55781cdd08dc3/filters/resources.txt#L1309
+
+    License is GPL3:
+    https://github.com/gorhill/uBlock/blob/master/README.md
+*/
 (function() {
 	var rtcName = window.RTCPeerConnection ? 'RTCPeerConnection' : (
 		window.webkitRTCPeerConnection ? 'webkitRTCPeerConnection' : ''
