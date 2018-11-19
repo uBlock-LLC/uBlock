@@ -407,6 +407,13 @@ var matchWhitelistDirective = function(url, hostname, directive) {
    return {rewriteUrl : rewriteUrl};
 })();
 
+/*
+    The below code is borrowed from:
+    https://github.com/gorhill/uBlock/blob/13f2b6b86ff00827650ee2e70ea5f4779845ce4a/src/js/scriptlet-filtering.js#L61
+
+    License is GPL3:
+    https://github.com/gorhill/uBlock/blob/master/README.md
+*/
 µBlock.contentscriptCode = (function() {
     let parts = [
         '(',
