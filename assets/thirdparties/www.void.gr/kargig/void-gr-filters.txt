@@ -1,6 +1,6 @@
 [Adblock Plus 1.1]
 ! Title: Greek AdBlock Filter
-! Version: 2018050100
+! Version: 2019012800
 ! Expires: 2 days
 ! Homepage: https://www.void.gr/kargig/blog/greek-adblock-plus-filter/
 ! License: http://creativecommons.org/licenses/by-sa/3.0/
@@ -237,7 +237,6 @@ lifo.gr/adsimg/*
 ||sportsmedia.gr/banners/subs.php
 ||kathimerini.gr/webadmin/home/Xor/*
 ||real.gr/BannersExternal.aspx*
-||gpoint.gpoint.com.gr/ntou-widget/*
 ||gpoint.gpoint.com.gr^
 ||oneman.gr/incoming/article1517780.ece/BINARY/original/skin_onemanSONY.jpg
 ||in.gr/Themes/1/Default/Media/UB_180x18.gif
@@ -267,7 +266,6 @@ ad.gr.doubleclick.net
 ||dealspro.gr/cart/random_ads/*
 ||sport103.gr/images/banners/*
 ||thestival.gr/images/stories/banners/*
-||newsbomb.gr/media/com_skins/skins/24/*
 ||skai.gr/Themes/1/Default/Media/Skins/kri-kri*
 ||iefimerida.gr/sites/all/themes/base/images/*CHIVAS*
 ||protothema.gr/files/1/2012/11/12/anytime*
@@ -288,7 +286,6 @@ ad.gr.doubleclick.net
 ||prismanewsmedia.gr/ads/foto/*
 ||gazzetta.gr/sites/all/themes/basic/images/banners/PokerStar*.jpg
 ||gossip-tv.gr/images/banner*
-||gossip-tv.gr/media/com_skins/skins/20/*
 ||ough.gr/uploads/skins/skin_ough_gapyear-01.jpg
 ||media.mybet.com^
 ||static.scar.gr/ads/*
@@ -314,7 +311,6 @@ ad.gr.doubleclick.net
 ||katimagiko.gr/sites/all/themes/thrileole/images/*skin*
 ||roumlouki.gr/images/roumlouki_banners/*
 ||roumlouki.gr/images/banners/*
-||yupiii.gr/banners/bg/3yupiii.jpg
 ||media.adslgr.com/www/images/e3026593eee92619a864ff0841906cd0.gif
 ||egob2.feed.gr/filesystem/images/20130927/low/*
 ||flix.gr/skins/*
@@ -366,7 +362,6 @@ ad.gr.doubleclick.net
 ||unboxholics.com/images/banners/eGalaxy/e-galaxyNew.jpg
 ||www.sportkit.gr/Widget.aspx*
 ||luben.tv/wp-content/uploads/2015/09/unnamed.png
-||contra.gr/multimedia/article3679751.ece/BINARY/original/contra-fasa-hp.png
 ||dikaiologitika.gr/images/banners/defence1.gif
 ||defencenet.gr/defence/images/aroma300x250_black.jpg
 ||makeleio.gr/wp-content/uploads/2015/09/HyalurOn-250X250-Zampidis-2.jpg
@@ -428,6 +423,45 @@ ad.gr.doubleclick.net
 ||logotypos.gr/wp-content/uploads/2018/03/TELIKO_BACKGROUND.jpg$image
 ||logotypos.gr/wp-content/uploads/2018/02/EKTYPOTIKH_LOW.jpg$image
 ||logotypos.gr/wp-content/uploads/2018/01/ektypotik3.gif$image
+||protagon.gr/wp-content/uploads/2018/11/OPAP-NEW_Generic_3_174px-Protagon-1.jpg$image
+||e-ptolemeos.gr/*banner$image
+||e-ptolemeos.gr/*.gif$image
+||e-ptolemeos.gr/wp-content/uploads/2017/05/roi-eid-ban.jpg
+||eleftheria.gr/IMAGES/BANNERS^
+||usay.gr/hyperads/
+||imerodromos.gr/wp-content/uploads/2018/05/Tiniakosgr.gif$image
+||imerodromos.gr/wp-content/uploads/2018/11/500X417_COLUMBIA.jpg$image
+||imerodromos.gr/wp-content/uploads/2018/11/500X417_MARCOS.jpg$image
+||imerodromos.gr/wp-content/uploads/2018/11/500X417_MARX.jpg$image
+||imerodromos.gr/wp-content/uploads/2018/07/BoukoviBanner-500x417.jpg$image
+||imerodromos.gr/wp-content/uploads/2018/12/MEGALH-ISTORIA-THS-ELLADAS-2.jpg$image
+||imerodromos.gr/wp-content/uploads/2018/12/MEGALH-ISTORIA-THS-ELLADAS-1.jpg$image
+||imerodromos.gr/wp-content/uploads/2017/06/collectives1-20.jpg$image
+||imerodromos.gr/wp-content/uploads/2018/12/na_ntysoume_tous_gymnous_500x417pix-2-1.gif$image
+||imerodromos.gr/wp-content/uploads/2017/02/podium-2.gif$image
+||imerodromos.gr/wp-content/uploads/2018/05/Screen-Shot-2018-05-07-at-20.41.56.png$image
+||imerodromos.gr/wp-content/uploads/2018/04/BANER_ASFALISTIKO_300X249.jpg$image
+||i-kyr.gr/wp-content/uploads/2016/03/banner*$image
+||i-kyr.gr/wp-content/uploads/2018/05/alpha*$image
+||onlarissa.gr/wp-content/uploads/2016/09/icbsnew1200small.gif$image
+||onlarissa.gr/wp-content/uploads/2018/09/chefs-feb19-300x250.gif
+||onlarissa.gr/wp-content/uploads/2018/09/eda-thess.png$image
+||onlarissa.gr/wp-content/uploads/2018/09/europroodos.gif$image
+||onlarissa.gr/wp-content/uploads/2018/09/fashion-city.gif$image
+||onlarissa.gr/wp-content/uploads/2018/09/larisa-300x250.gif$image
+||onlarissa.gr/wp-content/uploads/2018/09/nona-rossa.gif$image
+||onlarissa.gr/wp-content/uploads/2018/09/snoopy-1.gif$image
+||onlarissa.gr/wp-content/uploads/2018/09/snoopy.gif$image
+||onlarissa.gr/wp-content/uploads/2018/11/victoria-10.gif$image
+||onlarissa.gr/wp-content/uploads/2018/11/Webp.net-gifmaker-1.gif$image
+||onlarissa.gr/wp-content/uploads/2018/12/benneton.jpg$image
+||onlarissa.gr/wp-content/uploads/2018/12/giannakos-christmas.gif$image
+||onlarissa.gr/wp-content/uploads/2018/12/giannakos-miltos.gif$image
+||onlarissa.gr/wp-content/uploads/2018/12/karla-final.gif$image
+||onlarissa.gr/wp-content/uploads/2018/12/ktimatografisi.jpg$image
+||onlarissa.gr/wp-content/uploads/2019/01/leroy.gif$image
+||onlarissa.gr/wp-content/uploads/2018/09/kazanas_xeimerines_ekptwseis_2019.gif$image
+||deliver.mediacdn.com/live24/itrofi-wide.jpg$image
 !Element-Hiding Rules
 www.insomnia.gr###ipbwrapper > .bgad[href="http://ads.nativad.net/servlet/click/zone?zid=351&pid=111&lookup=true&position=1&uuid=(email)"]
 www.insomnia.gr###ipbwrapper > .bgad[href="http://www.kotsovolos.gr/site/mobile-phones-gps/mobile-phones/smartphones?v=0&company=Apple&11202=44834&utm_source=insomnia.gr&utm_medium=skin&utm_content=NEWiphone6s-6splus-insomnia-skin-2015&utm_campaign=iphone6s-6splus-insomnia-"]
@@ -697,7 +731,6 @@ adslgr.com###mainBanner
 koutipandoras.gr##.top_ad_big
 imerisia.gr##.srs
 imerisia.gr##.sls
-in.gr###RightBanner6
 koutipandoras.gr##.box_banner
 gazzetta.gr##A[href*="http://www.novibet.com/Handlers/"]
 gazzetta.gr##A[href*="https://www.playbet.com/portal/"]
@@ -807,18 +840,89 @@ autotriti.gr##strong > a[href^="http://autotriti.adman.gr/click"]
 cnn.gr##div[class="story-textlinks row"]
 onmed.gr##div[class="story-textlinks"]
 onsports.gr###textlinks
-contra.gr##A[href*="http://el.betclic.com/"]
 www.lifo.gr##a[href*="/lines/click/"]
 www.taxheaven.gr###main > .ads
 www.taxheaven.gr##.aside
-www.e-food.gr###coca-cola-btn
+www.e-food.gr##.cart-reminder
 www.eklogika.gr##.left_fixed
 www.eklogika.gr##.right_fixed
+www.filadelfia-xalkidona.gr##.td_block_3
+www.filadelfia-xalkidona.gr##.td_block_16
+www.filadelfia-xalkidona.gr##.td-a-rec-id-content_top
+www.filadelfia-xalkidona.gr##.td-header-sp-rec
 voicenews.gr##.row.sidebar-nav
 fonien.gr##.bdaia-bellow-header
 fonien.gr##.bdaia-custom-area > .bd-container > div
 fonien.gr##.bdaia-ad-container
 fonien.gr##.bdaia-widget-e3
+e-ptolemeos.gr##.background-cover
+e-ptolemeos.gr##.e3lan-top
+e-ptolemeos.gr##.afterheader
+e-ptolemeos.gr###custom_html-4
+e-ptolemeos.gr###custom_html-6
+e-ptolemeos.gr###custom_html-14
+e-ptolemeos.gr###custom_html-24
+e-ptolemeos.gr###custom_html-11
+e-ptolemeos.gr###custom_html-17
+e-ptolemeos.gr###custom_html-25
+e-ptolemeos.gr###custom_html-30
+e-ptolemeos.gr##.custom-html-widget
+www.xo.gr###AdPremiumSticky
+www.larissanet.gr##.widgets_header_big
+www.larissanet.gr##div.row-fluid:nth-of-type(2) > .widget-area
+www.larissanet.gr##div.row-fluid:nth-of-type(4) > .widget-area > .widget_sp_image.box_outer > .widget_sp_image-image-link
+www.larissanet.gr##.widgets_header_small > .widget_sp_image-image-link
+www.larissanet.gr##div.widget_sp_image.box_outer:nth-of-type(10) > .widget > .widget_sp_image-image-link
+www.larissanet.gr##div.widget_sp_image.box_outer:nth-of-type(1) > .widget > .widget_sp_image-image-link
+www.larissanet.gr##div.widget_sp_image.box_outer:nth-of-type(2) > .widget > .widget_sp_image-image-link
+www.larissanet.gr##div.widget_sp_image.box_outer:nth-of-type(3) > .widget > .widget_sp_image-image-link
+www.larissanet.gr##div.widget_sp_image.box_outer:nth-of-type(11) > .widget > .widget_sp_image-image-link
+www.larissanet.gr##div.widget_sp_image.box_outer:nth-of-type(12) > .widget > .widget_sp_image-image-link
+www.larissanet.gr##div.widget_sp_image.box_outer:nth-of-type(13) > .widget
+www.larissanet.gr##div.widget_sp_image.box_outer:nth-of-type(14) > .widget > .widget_sp_image-image-link
+www.larissanet.gr##div.widget_sp_image.box_outer:nth-of-type(15) > .widget > .widget_sp_image-image-link
+www.larissanet.gr##div.widget_sp_image.box_outer:nth-of-type(16) > .widget
+www.larissanet.gr##div.widget_sp_image.box_outer:nth-of-type(17) > .widget > .widget_sp_image-image-link
+www.larissanet.gr##div.widget_sp_image.box_outer:nth-of-type(18) > .widget > .widget_sp_image-image-link
+www.larissanet.gr##div.widget_sp_image.box_outer:nth-of-type(19) > .widget
+www.larissanet.gr##div.widget_sp_image.box_outer:nth-of-type(20) > .widget > .widget_sp_image-image-link
+www.larissanet.gr##div.widget_sp_image.box_outer:nth-of-type(21) > .widget > .widget_sp_image-image-link
+www.larissanet.gr##div.widget_sp_image.box_outer:nth-of-type(22) > .widget > .widget_sp_image-image-link
+www.larissanet.gr##div.widget_sp_image.box_outer:nth-of-type(23) > .widget
+www.larissanet.gr##div.widget_sp_image.box_outer:nth-of-type(24) > .widget > .widget_sp_image-image-link
+www.larissanet.gr##div.widget_sp_image.box_outer:nth-of-type(25) > .widget
+www.larissanet.gr##div.widget_sp_image.box_outer:nth-of-type(26) > .widget > .widget_sp_image-image-link
+www.larissanet.gr##div.widget_sp_image.box_outer:nth-of-type(30) > .widget
+www.larissanet.gr##div.widget_sp_image.box_outer:nth-of-type(31) > .widget > .widget_sp_image-image-link
+www.larissanet.gr##div.widget_sp_image.box_outer:nth-of-type(32) > .widget > .widget_sp_image-image-link
+www.larissanet.gr##div.widget_sp_image.box_outer:nth-of-type(33) > .widget > .widget_sp_image-image-link
+www.larissanet.gr##div.enhanced-text-widget.widget_text.box_outer.banner:nth-of-type(34) > .widget.banner
+eleftheria.gr##[src*="/BANNERS/"]
+eleftheria.gr##[src*="/banners/"]
+eleftheria.gr##div.title.sp-module:nth-of-type(5)
+i-kyr.gr###rightcolumn > div:nth-of-type(1)
+i-kyr.gr##footer > div:nth-of-type(1) > div:nth-of-type(2)
+imerodromos.gr##.elementor-inner-column.elementor-col-33.elementor-column.elementor-element-7f24.elementor-element.has_ae_slider > .elementor-element-populated.elementor-column-wrap
+imerodromos.gr##.elementor-inner-column.elementor-col-33.elementor-column.elementor-element-79c1.elementor-element.has_ae_slider > .elementor-element-populated.elementor-column-wrap
+imerodromos.gr##.elementor-top-column.elementor-col-50.elementor-column.elementor-element-fc62ef0.elementor-element.has_ae_slider > .elementor-element-populated.elementor-column-wrap
+imerodromos.gr##.elementor-widget-wp-widget-adrotate_widgets.elementor-widget.elementor-element-99aff7b.elementor-element
+imerodromos.gr##.elementor-widget-wp-widget-adrotate_widgets.elementor-widget.elementor-element-f45669a.elementor-element > .elementor-widget-container
+imerodromos.gr##.elementor-widget-wp-widget-adrotate_widgets.elementor-widget.elementor-element-aabbe09.elementor-element
+imerodromos.gr##.elementor-widget-wp-widget-adrotate_widgets.elementor-widget.opapad.elementor-element-48f3775.elementor-element > .elementor-widget-container
+imerodromos.gr##.elementor-widget-wp-widget-adrotate_widgets.elementor-widget.elementor-element-f8eec79.elementor-element
+imerodromos.gr##.elementor-widget-wp-widget-adrotate_widgets.elementor-widget.elementor-element-5032.elementor-element
+imerodromos.gr##.elementor-widget-wp-widget-adrotate_widgets.elementor-widget.adrotateSmall.elementor-element-1183.elementor-element
+imerodromos.gr##.post-horizad
+usay.gr##div.adds_sec:nth-of-type(5)
+usay.gr##div.adds_sec:nth-of-type(4)
+usay.gr##.new60sbanners
+usay.gr###frame_id_1
+usay.gr###frame_id_2
+usay.gr##.central_banner_area
+usay.gr##.hyperad_iframe
+usay.gr##[href="http://www.escore.gr/"]
+live24.gr###itrofi-left
+live24.gr###itrofi-right
 ! Exception Rules
 @@sport-fm.gr/newspapers/$elemhide
 @@resources.sport-fm.gr/sportfm/newspapers/

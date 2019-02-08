@@ -5,7 +5,7 @@
 ! Expires: 2 days
 ! Homepage: https://zoso.ro/rolist/
 ! Email: mail@zoso.ro
-! Last modified: 21 July 2018 10:00 UTC
+! Last modified: 03 FEB 2019 18:00 UTC
 
 !hosts
 ||01.creativecdn.com^
@@ -19,6 +19,7 @@
 ||adocean.pl^
 ||ads.tradeads.eu^
 ||ads2.evz.ro^
+||adservice.google.ro^
 ||adservingfactory.com^
 ||adsymptotic.com^
 ||akamai.smartadserver.com^
@@ -35,11 +36,13 @@
 ||bride.ru^
 ||cdn.onesignal.com^
 ||cdn.teads.tv^
+||coinhive.com^
 ||content.ad20.net^
 ||content.adunity.com^
 ||content.zontera.com^
 ||core.ad20.net^
 ||core.adservingfactory.com^
+||cotatii.tradeville.eu^
 ||ctx.inin.ro^
 ||da.feedsportal.com^
 ||data.tradeville.eu^
@@ -53,7 +56,7 @@
 ||fx.gtop.ro^
 ||gemius.pl^
 ||go.netbet.ro^
-||gravityrd-services.com^
+||worldgravity.com^
 ||ib.adnxs.com^
 ||icorpadro.hit.gemius.pl^
 ||js-agent.newrelic.com^
@@ -76,6 +79,7 @@
 ||ro.search.etargetnet.com
 ||rt.awstaticdn.net^
 ||s.atemda.com^
+||serving-sys.com^
 ||smartadserver.com^
 ||st.ad.adnow.com^
 ||st-n.ads1-adnow.com^
@@ -88,10 +92,6 @@
 ||tynt.com
 ||zontera.com^
 ||zopim.com^
-||serving-sys.com^
-||coinhive.com^
-||cotatii.tradeville.eu^
-||adservice.google.ro^
 
 !wildcard hosts
 ||arbocontext.ro^
@@ -122,19 +122,21 @@ ro##trafic
 	
 !Whitelist
 @@||googletagmanager.com/gtm.js?id=GTM-TKS335$script,domain=emag.ro
+@@||grgs.ro/1/i/icons/favicon.ico$image,domain=www.pcgarage.ro
 @@||homebank.ro^$~third-party
 @@||hotnews.ro^$generichide
+@@||imasdk.googleapis.com/js/sdkloader/*$domain=observator.tv
 @@||lumea-luminilor.ro/promotii*
 @@||olx.ro/i2/ajax/ad/getcontact/*
 @@||profitshare.emag.ro/get_ads.php?*
 @@||profitshare.ro/get_ads.php?*
 @@||rezitests.ro/advertisement.js
 @@||s1emagst.akamaized.net/layout/all/js/showads.js$script,domain=emag.ro
+@@||static-olxeu.akamaized.net/static/olxro/naspersclassifieds-regional/olxeu-atlas-web-olxro/static/img/favicon.ico?v=4$image,domain=www.olx.ro
 @@AC_RunActiveContent.js
 ~4tuning.ro##.adsbygoogle
 promozone.ro,emag.ro#@#[href*="/promo"]
 revista22.ro##IMG[src*="banner"]
-@@||imasdk.googleapis.com/js/sdkloader/*$domain=observator.tv
 
 !porcarii
 ||24fun.ro/widget/?
@@ -159,9 +161,7 @@ revista22.ro##IMG[src*="banner"]
 ||desteptarea.ro/wp-content/uploads/2018/04/1000x200.jpg$image
 ||ejobs.ro/3rdparty/wall_street/wall_street.js
 ||europafm.ro/wp-content/uploads/2017/09/telekom-Sea-Hero.jpg$image
-||forum.computergames.ro/extra/
 ||http://s1.olx.ro/static/olxro/naspersclassifieds-regional/olxeu-atlas-web/static/js/advertising.js
-||i.imgur.com/gBCvbAM.png$image
 ||img.wall-street.ro/images/common/
 ||iqads.ro/upcoming/*
 ||jurnalul.ro/usr/casete/
@@ -237,8 +237,6 @@ distanta.ro##DIV[style*="display: block; background-color: white;"]
 evenimentul.ro##TD[width="160"]
 evz.ro##.row.catbottom
 executari.com##.promohide
-forum.computergames.ro###navbar_notice_1
-forum.computergames.ro###navbar_notice_7
 gandul.info###bula-ultima-ora
 gandul.info##.ad
 gandul.info##.cross
@@ -253,12 +251,9 @@ lovendal.ro##.left
 mariustuca.ro###continut
 money.ro##.bd
 money.ro##.gruprcfooter
-noobz.ro##.lightbox
 nosteam.ro##DIV#stickynote4 > *
-nwradu.ro##[class^="reclama"]
 paginademedia.ro##.hidden-xs-down.site-video
 paginademedia.ro##.video-sticky
-playtech.ro##a[href^="http://profitshare.ro/"]
 price.ro##TABLE#effortTable > TBODY > *:first-child + * *
 profit.ro##.box-readmore
 realitatea.feedsportal.com##DIV.mf-viral + * + * + A:last-child > *
@@ -277,51 +272,21 @@ romanialibera.ro##.widget-breadcrumbs
 smartbank.ro##TD[class="color_golden"]
 softpedia.com##table[class='ipbtable'] tr td[id='post-main-0']
 stirileprotv.ro###box_400051071d129964 > .primaPaginaPeScurt
-stirileprotv.ro##barUltimeleStiri
 stirileprotv.ro##[href="http://onelink.to/dhrsfr"]
+stirileprotv.ro##[href="http://onelink.to/dhrsfr"]
+stirileprotv.ro##barUltimeleStiri
+stirileprotv.ro##div#artcontainer > p:nth-last-child(5)
+stirileprotv.ro##div#artcontainer > p:nth-last-child(6)
+stirileprotv.ro##div#stuck > p:nth-last-child(1)
+stirileprotv.ro##div#stuck > p:nth-last-child(2)
 stiripesurse.ro##.giant-modal--fb-like.giant-modal
 subs.ro##DIV[class="rclm_table"]
 subs.ro##IMG[src="/layout/rclm/mynotebook.png"]
 subs.ro##IMG[src="/layout/rclm/vplay.png"]
-teotrandafir.com##a[href^="http://profitshare.ro/"]
-thediaryofadam.com##.row-container.style-color-jevc-bg > .row-parent.limit-width.row
 tolo.ro###cookie-notice > .cookie-notice-container
-trafictube.ro#@#.widget-adv
 vocea.biz##.clearfix.article__cross-4-col:nth-of-type(2) > .clearfix
 vocea.biz##.clearfix.article__cross-4-col:nth-of-type(5) > .clearfix
 vocea.biz##.clearfix.article__cross-4-col:nth-of-type(6) > .clearfix
 vplowlive.m.ro###myLive
 wall-street.ro##DIV#qra_popup_wrapper *
-yoda.ro##a[href^="http://bit.ly/"]
-yoda.ro##a[href^="https://goo.gl/"]
 zf.ro###bula-ultima-ora
-realitatea.net##a[href^="http://l.profitshare.ro/"]
-
-!bfcrap
-##a[href^="/magazin/"]
-##a[href^="/url/"]
-##a[href^="https://blackfridaysales.ro/trk/shop/"]
-blackfriday.ro##a[href^="http://event.2parale.ro/"]
-blackfriday.ro##a[href^="https://bit.ly/"]
-blackfriday.ro##a[href^="https://goo.gl/"]
-blackfridaymania.ro##a[href^="http://blackfridaymania.ro/mag/"]
-blackfridaymania.ro##a[href^="https://bit.ly/"]
-blackfridaymania.ro##a[href^="https://goo.gl/"]
-blackfriday-romania.com##a[href^="/go/"]
-blackfriday-romania.com##a[href^="https://bit.ly/"]
-blackfriday-romania.com##a[href^="https://goo.gl/"]
-blackfridayromania.net##a[href^="https://bit.ly/"]
-blackfridayromania.net##a[href^="https://goo.gl/"]
-black-friday-romania.ro##a[href^="https://bit.ly/"]
-black-friday-romania.ro##a[href^="https://goo.gl/"]
-blackfridaysales.ro##a[href^="https://bit.ly/"]
-blackfridaysales.ro##a[href^="https://goo.gl/"]
-devicer.ro##a[href^="http://bit.ly/"]
-devicer.ro##a[href^="http://goo.gl/aXGFm"]
-idevice.ro##a[href^="http://bit.ly/"]
-idevice.ro##a[href^="https://goo.gl/"]
-realitatea.net##a[href^="http://event.2performant.com/"]
-reduceriblackfriday.ro##a[href^="http://bit.ly/"]
-reduceriblackfriday.ro##a[href^="https://goo.gl/"]
-stirileprotv.ro##a[href^="http://bit.ly/"]
-stirileprotv.ro##a[href^="https://goo.gl/"]
