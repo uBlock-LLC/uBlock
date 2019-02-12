@@ -273,11 +273,9 @@
             }
             availableLists[location] = entry;
         }
-        if(µb.turnOffAA) {
-            let locationOfAA = 'assets/thirdparties/easylist-downloads.adblockplus.org/exceptionrules.txt';
-            if(availableLists.hasOwnProperty(locationOfAA) !== false) {
-                availableLists[locationOfAA].off = true;
-            }
+        let locationOfAA = 'assets/thirdparties/easylist-downloads.adblockplus.org/exceptionrules.txt';
+        if(availableLists.hasOwnProperty(locationOfAA) !== false) {
+            availableLists[locationOfAA].off = µb.turnOffAA;
         }
         // Now get user's selection of lists
         vAPI.storage.preferences.get(
