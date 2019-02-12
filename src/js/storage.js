@@ -251,7 +251,9 @@
 
     // built-in lists
     var onBuiltinListsLoaded = function(details) {
+        var µb = µBlock;
         var location, locations;
+       
         try {
             locations = JSON.parse(details.content);
         } catch (e) {
@@ -271,7 +273,12 @@
             }
             availableLists[location] = entry;
         }
-
+        if(µb.turnOffAA) {
+            let locationOfAA = 'assets/thirdparties/easylist-downloads.adblockplus.org/exceptionrules.txt';
+            if(availableLists.hasOwnProperty(locationOfAA) !== false) {
+                availableLists[locationOfAA].off = true;
+            }
+        }
         // Now get user's selection of lists
         vAPI.storage.preferences.get(
             { 'remoteBlacklists': availableLists },
@@ -430,13 +437,13 @@
             if ( listMeta && listMeta.title === '' ) {
                 var matches = details.content.slice(0, 1024).match(/(?:^|\n)!\s*Title:([^\n]+)/i);
                 if ( matches !== null ) {
-                    listMeta.title = matches[1].trim();
+                    listMeta.title = JSON.parse(JSON.stringify(matches[1].trim()));
                 }
             }
-
             //console.debug('µBlock.getCompiledFilterList/onRawListLoaded: compiling "%s"', path);
-            details.content = µb.compileFilters(details.content);
+            details.content = JSON.stringify(Array.from(µb.compileFilters(details.content)));
             µb.assets.put(compiledPath, details.content);
+            details.content = new Map(JSON.parse(details.content));
         }
         callback(details);
     };
@@ -447,6 +454,7 @@
             µb.assets.get(path, onRawListLoaded);
             return;
         }
+        details.content = new Map(JSON.parse(details.content));
         //console.debug('µBlock.getCompiledFilterList/onCompiledListLoaded: using compiled version for "%s"', path);
         details.path = path;
         callback(details);
@@ -470,24 +478,27 @@
 
 /******************************************************************************/
 
+
 µBlock.compileFilters = function(rawText) {
-    var rawEnd = rawText.length;
-    var compiledFilters = [];
+    let rawEnd = rawText.length;
+    let compiledFilters = new Map();
+    compiledFilters.set('n',[]);
+    compiledFilters.set('c',[]);
 
     // Useful references:
     //    https://adblockplus.org/en/filter-cheatsheet
     //    https://adblockplus.org/en/filters
-    var staticNetFilteringEngine = this.staticNetFilteringEngine;
-    var cosmeticFilteringEngine = this.cosmeticFilteringEngine;
-    var reIsWhitespaceChar = /\s/;
-    var reMaybeLocalIp = /^[\d:f]/;
-    var reIsLocalhostRedirect = /\s+(?:broadcasthost|local|localhost|localhost\.localdomain)(?=\s|$)/;
-    var reLocalIp = /^(?:0\.0\.0\.0|127\.0\.0\.1|::1|fe80::1%lo0)/;
+    let staticNetFilteringEngine = this.staticNetFilteringEngine;
+    let cosmeticFilteringEngine = this.cosmeticFilteringEngine;
+    let reIsWhitespaceChar = /\s/;
+    let reMaybeLocalIp = /^[\d:f]/;
+    let reIsLocalhostRedirect = /\s+(?:broadcasthost|local|localhost|localhost\.localdomain)(?=\s|$)/;
+    let reLocalIp = /^(?:0\.0\.0\.0|127\.0\.0\.1|::1|fe80::1%lo0)/;
 
-    var lineBeg = 0, lineEnd, currentLineBeg;
-    var line, lineRaw, c, pos;
-
-    while ( lineBeg < rawEnd ) {
+    let lineBeg = 0, lineEnd, currentLineBeg;
+    let line, c, pos;
+   
+   while ( lineBeg < rawEnd ) {
         lineEnd = rawText.indexOf('\n', lineBeg);
         if ( lineEnd === -1 ) {
             lineEnd = rawText.indexOf('\r', lineBeg);
@@ -499,10 +510,10 @@
         // rhill 2014-04-18: The trim is important here, as without it there
         // could be a lingering `\r` which would cause problems in the
         // following parsing code.
-        line = lineRaw = rawText.slice(lineBeg, lineEnd).trim();
+        line = JSON.parse(JSON.stringify(rawText.slice(lineBeg, lineEnd).trim()));
         currentLineBeg = lineBeg;
         lineBeg = lineEnd + 1;
-
+    
         if ( line.length === 0 ) {
             continue;
         }
@@ -515,7 +526,7 @@
 
         // Parse or skip cosmetic filters
         // All cosmetic filters are caught here
-        if ( cosmeticFilteringEngine.compile(line, compiledFilters) ) {
+        if ( cosmeticFilteringEngine.compile(line, compiledFilters.get('c')) ) {
             continue;
         }
 
@@ -554,25 +565,18 @@
         if ( line.length === 0 ) {
             continue;
         }
-
-        //staticNetFilteringEngine.add(line);
-        staticNetFilteringEngine.compile(line, compiledFilters);
+        staticNetFilteringEngine.compile(line, compiledFilters.get('n'));
     }
-
-    return compiledFilters.join('\n');
+    return compiledFilters;
 };
 
 /******************************************************************************/
 
 µBlock.applyCompiledFilters = function(rawText) {
-    var skipCosmetic = !this.userSettings.parseAllABPHideFilters;
-    var staticNetFilteringEngine = this.staticNetFilteringEngine;
-    var cosmeticFilteringEngine = this.cosmeticFilteringEngine;
-    var lineBeg = 0;
-    var rawEnd = rawText.length;
-    while ( lineBeg < rawEnd ) {
-        lineBeg = cosmeticFilteringEngine.fromCompiledContent(rawText, lineBeg, skipCosmetic);
-        lineBeg = staticNetFilteringEngine.fromCompiledContent(rawText, lineBeg);
+    let skipCosmetic = !this.userSettings.parseAllABPHideFilters;
+    if(rawText != "") {
+        this.staticNetFilteringEngine.fromCompiledContent(rawText.get('n'));
+        this.cosmeticFilteringEngine.fromCompiledContent(rawText.get('c'), skipCosmetic);
     }
 };
 
@@ -659,10 +663,11 @@
 /******************************************************************************/
 
 µBlock.toSelfie = function() {
-    var selfie = {
+    let selfie = {
         magic: this.systemSettings.selfieMagic,
         publicSuffixList: publicSuffixList.toSelfie(),
         filterLists: this.remoteBlacklists,
+        domainList: this.domainHolder.toSelfie(),
         staticNetFilteringEngine: this.staticNetFilteringEngine.toSelfie(),
         cosmeticFilteringEngine: this.cosmeticFilteringEngine.toSelfie()
     };
@@ -729,11 +734,12 @@
     if ( entry.off ) {
         return;
     }
+    
     // Compile the list while we have the raw version in memory
     //console.debug('µBlock.getCompiledFilterList/onRawListLoaded: compiling "%s"', path);
     this.assets.put(
         this.getCompiledFilterListPath(path),
-        this.compileFilters(details.content)
+        JSON.stringify(Array.from(this.compileFilters(details.content)))
     );
 };
 

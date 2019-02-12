@@ -2,9 +2,9 @@
 ! Homepage: https://github.com/k2jp/abp-japanese-filters/
 ! Title: ABP Japanese filters (ONLY FOR Japanese and experienced users: READ Support Policy)
 ! Expires: 6 hours
-! Version: 201810120552
+! Version: 201902062109
 !
-! Last modified: 2018-10-12 05:52 JST(UTC+0900)
+! Last modified: 2019-02-06 21:09 JST(UTC+0900)
 ! Change log: https://github.com/k2jp/abp-japanese-filters/wiki/FilterChangeLog
 ! Code license: GNU GPL v3: http://www.gnu.org/licenses/gpl.html
 ! Content license: Creative Commons BY-NC-SA 4.0 http://creativecommons.org/licenses/by-nc-sa/4.0/
@@ -2890,6 +2890,9 @@
 /wad.$subdocument,third-party
 /wanalytics-
 /wanalytics/*
+/watch.*.js?key=*&refer=
+/watch.*?key=*&refer=$document
+/watch.*?key=*&refer=$popup
 /watch?key=$document
 /watch?key=$popup
 /watch?refer=*&key=$document
@@ -3261,6 +3264,10 @@
 ^adblock-checker.$domain=~github.com
 ^adblock-checker^$domain=~github.com
 ^adblock-checker_$domain=~github.com
+^adblockcheck-$domain=~github.com
+^adblockcheck.$domain=~github.com
+^adblockcheck^$domain=~github.com
+^adblockcheck_$domain=~github.com
 ^adcall-
 ^adcall.
 ^adcall^
@@ -3333,6 +3340,10 @@
 ^adcounter.
 ^adcounter^
 ^adcounter_
+^abDetector-$domain=~github.com
+^abDetector.$domain=~github.com
+^abDetector^$domain=~github.com
+^abDetector_$domain=~github.com
 ^adfarm-
 ^adfarm.
 ^adfarm^
@@ -5210,6 +5221,10 @@
 ^quantcast.
 ^quantcast^
 ^quantcast_
+^quit-hogging-$domain=~github.com
+^quit-hogging.$domain=~github.com
+^quit-hogging^$domain=~github.com
+^quit-hogging_$domain=~github.com
 ^random_banner-
 ^random_banner.
 ^random_banner^
@@ -6740,6 +6755,7 @@ _yahooads_
 ||aceadsys.net^$popup
 ||aceadsys.net^$third-party
 ||acestream.net^$third-party
+||acloudimages.com^
 ||acnt.biz^$third-party
 ||acs86.com^
 ||actaads.com^$third-party
@@ -7566,6 +7582,7 @@ _yahooads_
 ||bbelements.com^$third-party
 ||bbs-ad.com^$third-party
 ||bcegovo.ru^
+||bcloudhost.com^
 ||bcooljs.info^
 ||beanscattering.jp^
 ||bebi.com^$third-party
@@ -8996,6 +9013,7 @@ _yahooads_
 ||idyllove.com^
 ||idylnetwork.com^
 ||idylsenior.com^
+||ie8eamus.com^
 ||iesnare.com^
 ||iforex.com^$third-party
 ||ifortino.ru^
@@ -10351,6 +10369,7 @@ _yahooads_
 ||ppro.de^
 ||ppsearcher.ru^
 ||preact.io^$third-party
+||preaf.jp^$third-party
 ||precisionclick.com^$third-party
 ||predictad.com^$third-party
 ||predictormedia.com^
@@ -10544,6 +10563,7 @@ _yahooads_
 ||related.deals^$third-party
 ||relax.ru^
 ||relexion-credit.com^
+||remarketingpixel.com^
 ||remontvdome.com.ua^$popup
 ||removeadblock.com^
 ||rencontre-en-direct.com^
@@ -11250,6 +11270,7 @@ _yahooads_
 ||trackfox2.com^$popup
 ||tracking.to^
 ||tracking101.com^
+||trackingpro.pro^
 ||tracknson.com^
 ||tracksitetraffic1.com^
 ||trackstatsnow.com^
@@ -11412,6 +11433,7 @@ _yahooads_
 ||urlcash.$document
 ||urlcash.$popup
 ||urlcash.$third-party
+||urldelivery.com^
 ||urlgalleries.net^
 ||urlgalleries.net^$popup
 ||usagc.org^$third-party
@@ -11499,6 +11521,7 @@ _yahooads_
 ||videostrip.com^
 ||videosz.com^$third-party
 ||videozer.com^$third-party
+||vidsdelivery.com^
 ||vidustal.com^
 ||vietad.vn^$third-party
 ||vietalle.com^

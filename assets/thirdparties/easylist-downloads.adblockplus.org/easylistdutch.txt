@@ -1,9 +1,9 @@
 [Adblock Plus 2.0]
-! Checksum: 9uvVdY6nLv7aKB4lW5Sc0A
-! Version: 201810230902
+! Checksum: 90sLa6BG2XxWH4odRTNJdg
+! Version: 201902081232
 ! Title: EasyList Dutch
 ! Description: Dutch supplement for the Easylist filters
-! Last modified: 23 Oct 2018 09:02 UTC
+! Last modified: 08 Feb 2019 12:32 UTC
 ! Expires: 4 days (update frequency)
 ! Homepage: https://easylist.adblockplus.org/
 ! Licence: https://easylist-downloads.adblockplus.org/COPYING
@@ -22,8 +22,8 @@
 /adv_tekstlinks.
 /adverteerders/*
 /advertentie-banner-
-/advertentie.$domain=~2dehands.be|~tweedehands.nl
-/advertentie/*$domain=~2dehands.be|~tweedehands.nl
+/advertentie.$domain=~2dehands.be|~anzeigen-aufgabe-alpha.de|~anzeigen-aufgabe-beta.de|~anzeigen-aufgabe-test.de|~rd.nl|~tweedehands.nl
+/advertentie/*$domain=~2dehands.be|~anzeigen-aufgabe-alpha.de|~anzeigen-aufgabe-beta.de|~anzeigen-aufgabe-test.de|~tweedehands.nl~rd.nl
 /advertentie1.
 /advertentie2/*
 /advertentie_head.

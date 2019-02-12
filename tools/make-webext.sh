@@ -25,7 +25,7 @@ cp platform/chromium/*.json             $DES/
 cp LICENSE.txt                          $DES/
 
 cp platform/webext/manifest.json        $DES/
-mv $DES/img/icon_128.png                $DES/icon.png
+#mv $DES/img/icon_128.png                $DES/icon.png
 
 echo "*** uBlock.webext: Generating meta..."
 python tools/make-webext-meta.py $DES/
