@@ -91,8 +91,8 @@ return {
 
     // read-only
     systemSettings: {
-        compiledMagic: 'eopszukpnrdx',
-        selfieMagic: 'menhiasrxffx'
+        compiledMagic: 'eopszukpnabe',
+        selfieMagic: 'menhiasrxabe'
     },
     restoreBackupSettings: {
         lastRestoreFile: '',
@@ -129,7 +129,7 @@ return {
     remoteBlacklists: {
     },
 
-    selfieAfter: 23 * oneMinute,
+    selfieAfter: 10 * oneMinute,
 
     pageStores: {},
 
@@ -146,7 +146,8 @@ return {
     epickerEprom: null,
 
     // so that I don't have to care for last comma
-    dummy: 0
+    dummy: 0,
+    turnOffAA: false
 };
 
 /******************************************************************************/

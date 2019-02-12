@@ -292,6 +292,20 @@ var matchWhitelistDirective = function(url, hostname, directive) {
     vAPI.tabs.injectScript(tabId, { file: 'js/element-picker.js' });
 };
 
+
+/*
+The below scriptlet is taken from given link
+https://github.com/darkskyapp/string-hash/blob/master/index.js
+*/
+
+µBlock.tokenHash = function(str) {
+    let hash = 5381,
+    i = str.length;
+    while(i) {
+      hash = (hash * 33) ^ str.charCodeAt(--i);
+    }
+   return hash >>> 0;
+}
 /******************************************************************************/
 
 µBlock.toggleFirewallRule = function(details) {
@@ -328,6 +342,103 @@ var matchWhitelistDirective = function(url, hostname, directive) {
 };
 
 /******************************************************************************/
+
+µBlock.domainHolder = (function() {
+    var domains = [];
+    var parseOptHostnames = function(raw) {
+        let ihostnames = [];
+        let notHostnames = []
+        let hostnames = raw.split('|');
+        let hostname;
+        for ( let i = 0; i < hostnames.length; i++ ) {
+            hostname = hostnames[i];
+            if ( hostname.charAt(0) === '~' ) {
+                notHostnames.push(hostname.slice(1));
+            } else {
+                ihostnames.push(hostname);
+            }
+        }
+        return [ihostnames, notHostnames];
+    };
+
+    var FilterDomain = function(domainList) {
+       this.domainList = domainList;
+    }
+    FilterDomain.prototype.toString = function() {
+        return '$domain='+ this.domainList;
+    };
+    FilterDomain.prototype.match = function(pageHostnameRegister) {
+        let [hostnames , notHostnames] =  parseOptHostnames(this.domainList);
+        return (
+                (hostnames.length == 0 ? true : hostnames.some(hostname => pageHostnameRegister.slice(-hostname.length) === hostname)) &&
+                (notHostnames.some(hostname => pageHostnameRegister.slice(-hostname.length) === hostname) === false)
+               );
+    }
+    FilterDomain.prototype.toSelfie = function() {
+        return this.domainList;
+    }
+    FilterDomain.fromSelfie = function(domainList) {
+        return FilterDomain(domainList);
+    }
+    FilterDomain.prototype.toJSON = function() {
+        return this.toSelfie();
+    } 
+
+    var getIndex = function(domainStr) {
+        let objHostname;   
+        var finddomain = function(element) {
+            return element.domainList === this;
+        }
+        let index = domains.findIndex(finddomain, domainStr);
+        if(index != -1) {
+            return index;
+        } else {
+            domains.push(new FilterDomain(domainStr));
+            return domains.findIndex(finddomain, domainStr);
+        }
+    }
+    var reset = function(){
+        domains.length = 0;
+    }
+    var getData = function(index) {
+        return domains[index];
+    }
+    var match = function(index, hostname) { 
+       let objFilterDomain =  domains[index];
+       if(objFilterDomain === undefined) {
+           console.error("match: missing Index: " + index);
+           return false;
+       }
+       return objFilterDomain.match(hostname);
+    }
+    var toSelfie = function() {
+        return JSON.stringify(domains);
+    }
+    var fromSelfie = function(domainslst) {
+        let arr = JSON.parse(domainslst);
+        arr.forEach(function(value, key) {
+            domains[key] = new FilterDomain(value);
+        });
+    }
+    var toString = function(index) {
+        let objFilterDomain =  domains[index];
+        if(objFilterDomain === undefined) {
+            console.error("toString: missing Index: " + index);
+            return '';
+        } 
+        return objFilterDomain.toString();
+    }
+    return {
+        "getIndex": getIndex,
+         "getData": getData,
+           "match": match,
+        "toString": toString,
+        "toSelfie": toSelfie,
+      "fromSelfie": fromSelfie,
+         "domains": domains,
+           "reset": reset
+    };
+})();
 
 µBlock.logCosmeticFilters = (function() {
     var tabIdToTimerMap = {};

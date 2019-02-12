@@ -107,6 +107,7 @@ var onSelfieReady = function(selfie) {
     }
     //console.log('start.js/onSelfieReady: selfie looks good');
     µb.remoteBlacklists = selfie.filterLists;
+    µb.domainHolder.fromSelfie(selfie.domainList); 
     µb.staticNetFilteringEngine.fromSelfie(selfie.staticNetFilteringEngine);
     µb.cosmeticFilteringEngine.fromSelfie(selfie.cosmeticFilteringEngine);
     return true;
@@ -219,8 +220,9 @@ var onInstalled = function() {
         }
 
         if(!firstInstall) {
+            µb.turnOffAA = true;
             return;    
-        }
+        } 
         vAPI.storage.get('stats',onDataReceived);
     };
     vAPI.storage.get('extensionLastVersion', onVersionRead);

@@ -37,8 +37,8 @@
 
 /******************************************************************************/
 
-var exceptions = {};
-var rules = {};
+var exceptions = new Map();
+var rules = new Map();
 var selfieMagic = 'iscjsfsaolnm';
 
 // This value dictate how the search will be performed:
@@ -127,20 +127,17 @@ function search(store, hostname) {
         tld = hostname.slice(pos + 1);
         remainder = hostname.slice(0, pos);
     }
-    var substore = store[tld];
-    if ( !substore ) {
-        return false;
-    }
+    var substore = store.get(tld);
+    if ( substore === undefined ) { return false; }
     // If substore is a string, use indexOf()
     if ( typeof substore === 'string' ) {
         return substore.indexOf(' ' + remainder + ' ') >= 0;
     }
     // It is an array: use binary search.
     var l = remainder.length;
+    if ( l >= substore.length ) { return false; }
     var haystack = substore[l];
-    if ( !haystack ) {
-        return false;
-    }
+    if ( haystack == null || haystack.length == 0 ) { return false; }
     var left = 0;
     var right = Math.floor(haystack.length / l + 0.5);
     var i, needle;
@@ -168,8 +165,8 @@ function search(store, hostname) {
 // Suggestion: use <https://github.com/bestiejs/punycode.js> it's quite good.
 
 function parse(text, toAscii) {
-    exceptions = {};
-    rules = {};
+    exceptions = new Map();
+    rules = new Map();
 
     // http://publicsuffix.org/list/:
     // "... all rules must be canonicalized in the normal way
@@ -188,7 +185,8 @@ function parse(text, toAscii) {
                 lineEnd = textEnd;
             }
         }
-        line = text.slice(lineBeg, lineEnd).trim();
+        line = JSON.parse(JSON.stringify(text.slice(lineBeg, lineEnd).trim()));
+
         lineBeg = lineEnd + 1;
 
         if ( line.length === 0 ) {
@@ -229,11 +227,12 @@ function parse(text, toAscii) {
         }
 
         // Store suffix using tld as key
-        if ( !store.hasOwnProperty(tld) ) {
-            store[tld] = [];
+        var substore = store.get(tld);
+        if ( substore === undefined ) {
+            store.set(tld, (substore = []));
         }
         if ( line ) {
-            store[tld].push(line);
+            substore.push(line);
         }
     }
     crystallize(exceptions);
@@ -249,20 +248,23 @@ function parse(text, toAscii) {
 function crystallize(store) {
     var suffixes, suffix, i, l;
 
-    for ( var tld in store ) {
-        if ( !store.hasOwnProperty(tld) ) {
-            continue;
-        }
-        suffixes = store[tld].join(' ');
+    for ( var value of store ) { //for ( var tld in store ) {
+        var tld = value[0];
+        var arrSuffixes = value[1];
+
+        
         // No suffix
-        if ( !suffixes ) {
-            store[tld] = '';
+        if (  arrSuffixes.length === 0) {
+            //store[tld] = '';
+            store.set(tld, '');
             continue;
         }
+        let strSuffix = arrSuffixes.join(' ');
         // Concatenated list of suffixes less than cutoff length:
         //   Store as string, lookup using indexOf()
-        if ( suffixes.length < cutoffLength ) {
-            store[tld] = ' ' + suffixes + ' ';
+        if ( strSuffix.length < cutoffLength ) {
+            //store[tld] = ' ' + suffixes + ' ';
+            store.set(tld, ' ' + strSuffix + ' ');
             continue;
         }
         // Concatenated list of suffixes greater or equal to cutoff length
@@ -270,10 +272,10 @@ function crystallize(store) {
         // I borrowed the idea to key on string length here:
         //   http://ejohn.org/blog/dictionary-lookups-in-javascript/#comment-392072
 
-        i = store[tld].length;
+        i = arrSuffixes.length;
         suffixes = [];
         while ( i-- ) {
-            suffix = store[tld][i];
+            suffix = arrSuffixes[i];
             l = suffix.length;
             if ( !suffixes[l] ) {
                 suffixes[l] = [];
@@ -286,7 +288,8 @@ function crystallize(store) {
                 suffixes[l] = suffixes[l].sort().join('');
             }
         }
-        store[tld] = suffixes;
+        //store[tld] = suffixes;
+        store.set(tld, suffixes);
     }
     return store;
 }
@@ -296,8 +299,8 @@ function crystallize(store) {
 function toSelfie() {
     return {
         magic: selfieMagic,
-        rules: rules,
-        exceptions: exceptions
+        rules: Array.from(rules),
+        exceptions: Array.from(exceptions)
     };
 }
 
@@ -305,8 +308,8 @@ function fromSelfie(selfie) {
     if ( typeof selfie !== 'object' || typeof selfie.magic !== 'string' || selfie.magic !== selfieMagic ) {
         return false;
     }
-    rules = selfie.rules;
-    exceptions = selfie.exceptions;
+    rules = new Map(selfie.rules);
+    exceptions = new Map(selfie.exceptions);
     callListeners(onChangedListeners);
     return true;
 }

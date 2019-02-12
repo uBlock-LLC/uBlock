@@ -444,6 +444,7 @@ vAPI.net.onBeforeRequest = {
         "image",
         "object",
         "xmlhttprequest",
+        "ping",
         "other"
     ],
     extra: [ 'blocking' ],

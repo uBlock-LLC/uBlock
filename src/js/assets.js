@@ -210,7 +210,8 @@ var cachedAssetsManager = (function() {
             // Saving over an existing item must be seen as removing an
             // existing item and adding a new one.
             if ( typeof exports.onRemovedListener === 'function' ) {
-                exports.onRemovedListener(removedItems);
+                if(removedItems.length > 0)
+                    exports.onRemovedListener(removedItems);
             }
             cbSuccess(details);
         };
@@ -443,7 +444,7 @@ var getRepoMetadata = function(callback) {
             if ( entries[assetPath] === undefined ) {
                 entries[assetPath] = new AssetEntry();
             }
-            entries[assetPath][which + 'Checksum'] = fields[0];
+            entries[assetPath][which + 'Checksum'] = JSON.parse(JSON.stringify(fields[0]));
         }
     };
 

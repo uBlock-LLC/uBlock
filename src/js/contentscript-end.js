@@ -54,13 +54,60 @@ if ( vAPI.contentscriptEndInjected ) {
     //console.debug('contentscript-end.js > content script already injected');
     return;
 }
+const MIN_INTERVAL = 500;
+const queueProcessing = function () {
+    this.taskArguments = [];
+    this.onComplete = this.complete.bind(this);
+    this.endProcessTime = -MIN_INTERVAL;
+    //this.startProcessTime = this.now; 
+    this.settimeoutid = null;
+  }
+  queueProcessing.prototype = {
+    get now() {
+      return performance.now();
+    },
+    add: function(...args) {
+      this.taskArguments.push(
+        {"stylesheet":args[0], "mutation":args[1]}
+      );
+      this.exec();
+    },
+    complete: function() {
+      this.endProcessTime = this.now;
+      this.settimeoutid = null;
+      this.exec();
+    },
+    exec: function() {
+        if(this.taskArguments.length > 0 && !this.settimeoutid) {
+          if (this.now - this.endProcessTime < MIN_INTERVAL) {
+            let timeoutperiod = MIN_INTERVAL - (performance.now() - this.endProcessTime);
+            this.settimeoutid = setTimeout(() =>
+              { 
+                let nextProcessingArgs = this.taskArguments.shift();
+                //this.startProcessTime = this.now;
+                vAPI.proceduralCosmeticFiltering.processPattern(nextProcessingArgs.stylesheet, nextProcessingArgs.mutation, this.onComplete);
+              },
+              timeoutperiod);
+            }
+            else {
+              let nextProcessingArgs = this.taskArguments.shift();
+              //this.startProcessTime = this.now;
+              vAPI.proceduralCosmeticFiltering.processPattern(nextProcessingArgs.stylesheet, nextProcessingArgs.mutation, this.onComplete);
+            } 
+        }
+        else {
+          return;
+        }
+    }
+  }
+let objQueueProcessing = new queueProcessing();
+
 vAPI.proceduralCosmeticFiltering = (function() {
     const abpSelectorRegexp = /:-abp-([\w-]+)\(/i;
     let scopeSupported = true;
     const incompletePrefixRegexp = /[\s>+~]$/;
     let reRegexRule = /^\/(.*)\/$/;
-    //let testdocument = document;
-    
+    /* Scriptlet below borrowed from: https://github.com/adblockplus/adblockpluscore/blob/3e16d3602509b2dbb2238ab1ebcbc5e5b5993862/lib/content/elemHideEmulation.js#L175 */
     function scopedQuerySelector(subtree, selector, all) {
       
         if (selector[0] == ">") {
@@ -77,6 +124,7 @@ vAPI.proceduralCosmeticFiltering = (function() {
       return all ? subtree.querySelectorAll(selector) :
         subtree.querySelector(selector);
     }
+    /* Scriptlet below borrowed from: https://github.com/adblockplus/adblockpluscore/blob/3e16d3602509b2dbb2238ab1ebcbc5e5b5993862/lib/common.js#L40 */
     function filterToRegExp(text, captureAll = false) {
         // remove multiple wildcards
         text = text.replace(/\*+/g, "*");
@@ -109,6 +157,7 @@ vAPI.proceduralCosmeticFiltering = (function() {
             // process anchor at expression end
             .replace(/\\\|$/, "$");
     }
+    /* Scriptlet below borrowed from: https://github.com/adblockplus/adblockpluscore/blob/3e16d3602509b2dbb2238ab1ebcbc5e5b5993862/lib/content/elemHideEmulation.js#L193 */
     function scopedQuerySelectorAll(subtree, selector) {
       return scopedQuerySelector(subtree, selector, true);
     }
@@ -127,6 +176,7 @@ vAPI.proceduralCosmeticFiltering = (function() {
     function positionInParent(node) {
       return indexOf(node.parentNode.children, node) + 1;
     }
+    /* Scriptlet below borrowed from: https://github.com/adblockplus/adblockpluscore/blob/3e16d3602509b2dbb2238ab1ebcbc5e5b5993862/lib/content/elemHideEmulation.js#L63 */
     function makeSelector(node, selector = "") {
         if (node == null)
             return null;
@@ -164,6 +214,7 @@ vAPI.proceduralCosmeticFiltering = (function() {
         let elements = scopedQuerySelectorAll(root, actualPrefix);
         return elements;
     }
+    /* Scriptlet below borrowed from: https://github.com/adblockplus/adblockpluscore/blob/3e16d3602509b2dbb2238ab1ebcbc5e5b5993862/lib/content/elemHideEmulation.js#L206 */
     function makeRegExpParameter(text) {
       let [, pattern, flags] = /^\/(.*)\/([imu]*)$/.exec(text) || [null, text.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&")];
       try {
@@ -172,50 +223,35 @@ vAPI.proceduralCosmeticFiltering = (function() {
       }
       return null;
     }
-    
     const styleObserver = (function () { 
-        let sheetToFilterSelectorMap = new Map();
-        let parsedFilters = [];
+        let styleFilterMap = new Map();
+        let registeredFilters = [];
         let registeredFiltersMap = Object.create(null);
          
-        const registerStylePropertyFilter = function (filter) {
-            filter = filter.trim();
-            if (registeredFiltersMap[filter]) { return; }
-            let re;
+        const registerStyleFilter = function (filter) {
+            if (registeredFilters[filter]) { return; }
             let regexpString;
-            if (filter.length >= 2 && filter[0] == "/" &&
-                        filter[filter.length - 1] == "/")
-            {
-                regexpString = filter.slice(1, -1)
-                    .replace("\\7B ", "{").replace("\\7D ", "}").replace(/;$/,"");
+            if (filter.length >= 2 && filter[0] == "/" && filter[filter.length - 1] == "/") {
+                regexpString = filter.slice(1, -1).replace("\\7B ", "{").replace("\\7D ", "}").replace(/;$/,"");
             }
             else
                 regexpString = filterToRegExp(filter);
-  
-            re = new RegExp(regexpString, "i");
-            
-            parsedFilters.push({
-                filter: filter,
-                re: re
-            });
-            registeredFiltersMap[filter] = true;
+            registeredFilters.push({filter: filter, regex: new RegExp(regexpString, "i")});
         };
         const getSelector = function(filter) {
-            var styleSheets = document.styleSheets;
-            var selectors = [];
-    
-            for (var _i10 = 0, _length10 = styleSheets.length; _i10 < _length10; _i10++) {
-                var styleSheet = styleSheets[_i10];
-                if (styleSheet.disabled) {
-                    continue;
-                } 
-                var map = sheetToFilterSelectorMap.get(styleSheet);
-                if (typeof map === 'undefined') {
-                    continue;
-                }
-                Array.prototype.push.apply(selectors, map[filter]);
+          var styleSheets = document.styleSheets;
+          var selectors = [];
+          for(let styleSheet of styleSheets){
+            if (styleSheet.disabled) {
+              continue;
+            } 
+            var styleFilter = styleFilterMap.get(styleSheet);
+            if (typeof styleFilter === 'undefined') {
+                continue;
             }
-            return selectors;
+            selectors.push(styleFilter[filter]);
+          }
+          return selectors;
         };
         const isSameOrigin = function(stylesheet) {
             try {
@@ -225,66 +261,52 @@ vAPI.proceduralCosmeticFiltering = (function() {
                 return true;
             }
         };
-        const readStyleSheetContent = function (styleSheet) {
+        const readStyleSheet = function (styleSheet) {
             if (!isSameOrigin(styleSheet)) {
                 return;
             }
             var rules = styleSheet.cssRules;
-            var map = Object.create(null);
-    
-            for (var _i8 = 0, _length8 = rules.length; _i8 < _length8; _i8++) {
-                var rule = rules[_i8];
-                if (rule.type !== CSSRule.STYLE_RULE) {
-                    continue;
+            const getMatchedFilters = function(rule, matchFilter){
+              var stringifiedStyle = stringifyStyle(rule);
+              for(let {filter,regex} of registeredFilters){
+                if (!regex.test(stringifiedStyle)) {
+                  continue;
                 }
-                var stringifiedStyle = stringifyStyle(rule);
-                
-                for (var _i9 = 0, _length9 = parsedFilters.length; _i9 < _length9; _i9++) {
-                    var parsedFilter = parsedFilters[_i9];
-                    var re = parsedFilter.re;
-                  
-                    if (!re.test(stringifiedStyle)) {
-                        continue;
-                    }
-                    var selectorText = rule.selectorText.replace(/::(?:after|before)/, '');
-                    let filter = parsedFilter.filter;
-    
-                    if (typeof map[filter] === 'undefined') {
-                        map[filter] = [selectorText];
-                    } else {
-                        map[filter].push(selectorText);
-                    }
-               }
+                if (typeof matchFilter[filter] === 'undefined') {
+                  matchFilter[filter] = [rule.selectorText];
+                } else {
+                  matchFilter[filter].push(rule.selectorText);
+                }
+              }
+           }
+           let matchFilter = {};
+            for(let rule of rules) {
+              if (rule.type !== CSSRule.STYLE_RULE) {
+                continue;
+              }
+              getMatchedFilters(rule, matchFilter);
             }
-            sheetToFilterSelectorMap.set(styleSheet, map);
+            styleFilterMap.set(styleSheet, matchFilter);
         };
-        const stringifyStyle = function (rule) {
-            var styles = [];
-            var style = rule.style;
-            var i = void 0,
-                l = void 0;
-            for (i = 0, l = style.length; i < l; i++) {
-                styles.push(style[i]);
-            }
-            styles.sort();
-            for (i = 0; i < l; i++) {
-                var property = styles[i];
-                var value = style.getPropertyValue(property);
-                var priority = style.getPropertyPriority(property);
-                styles[i] += ': ' + value;
-                if (priority.length) {
-                    styles[i] += '!' + priority;
-                }
-            }
-            return styles.join(" ");
+        /*Scriptlet below borrowed from: https://github.com/adblockplus/adblockpluscore/blob/3e16d3602509b2dbb2238ab1ebcbc5e5b5993862/lib/content/elemHideEmulation.js#L132 */
+        const stringifyStyle = function(rule) {
+          let styles = [];
+          for (let i = 0; i < rule.style.length; i++)
+          {
+            let property = rule.style.item(i);
+            let value = rule.style.getPropertyValue(property);
+            let priority = rule.style.getPropertyPriority(property);
+            styles.push(`${property}: ${value}${priority ? " !" + priority : ""}`);
+          }
+          styles.sort();
+          return styles.join(" ");
         };
         return {
-            registerStylePropertyFilter: registerStylePropertyFilter,
+            registerStyleFilter: registerStyleFilter,
             getSelector: getSelector,
-            readStyleSheetContent: readStyleSheetContent
+            readStyleSheet: readStyleSheet
         };
     })();
-    
     const getCombineSelectors = function(selectors) {
         let arrSelector = [];
         let productOfSelectors = [];
@@ -400,7 +422,7 @@ vAPI.proceduralCosmeticFiltering = (function() {
         this.hasParallelSiblingSelector = false;
         this.dependsOnStyles = true;
         this.dependsOnDOM = true;
-        styleObserver.registerStylePropertyFilter(propertyExpression);
+        styleObserver.registerStyleFilter(propertyExpression);
     }
     propsSelector.prototype = {
         getSelectors: function(rootnode, selectors, targets) {
@@ -509,7 +531,7 @@ vAPI.proceduralCosmeticFiltering = (function() {
                 document.addEventListener("load", onLoad.bind(this), true);
             }
         },
-        processPattern: function(stylesheets, mutations) {
+        processPattern: function(stylesheets, mutations, callback) {
             let patterns = this.patterns.filter(([selector, tasks]) => this.filterPatterns(tasks, mutations, stylesheets));
             
             if (!stylesheets && !mutations)
@@ -519,10 +541,10 @@ vAPI.proceduralCosmeticFiltering = (function() {
                 stylesheets = document.styleSheets;
   
             for (let stylesheet of stylesheets || []) {   
-                styleObserver.readStyleSheetContent(stylesheet);
+                styleObserver.readStyleSheet(stylesheet);
             }
   
-            var matchSelector = [];
+           var matchSelector = [];
             var matchProcSelector = [];
             let mutationTargets = this.extractMutationTargets(mutations);
             var mutations = mutations;
@@ -549,7 +571,11 @@ vAPI.proceduralCosmeticFiltering = (function() {
                 let text = matchSelector.join(',\n');
                 hideElements(text);
             }
+            if(typeof callback === "function"){
+                callback(); 
+            }
         },
+        /* Scriptlet below borrowed from: https://github.com/adblockplus/adblockpluscore/blob/3e16d3602509b2dbb2238ab1ebcbc5e5b5993862/lib/content/elemHideEmulation.js#L517 */
         matchesMutationTypes: function(patterns, mutationTypes) {
             let mutationTypeMatchMap = new Map([
                 ["childList", true],
@@ -563,6 +589,7 @@ vAPI.proceduralCosmeticFiltering = (function() {
             }
             return false;
         },
+        /* Scriptlet below borrowed from: https://github.com/adblockplus/adblockpluscore/blob/3e16d3602509b2dbb2238ab1ebcbc5e5b5993862/lib/content/elemHideEmulation.js#L582 */
         filterPatterns: function(patterns, mutations, stylesheets) {
             if (!stylesheets && !mutations)
                 return patterns;
@@ -574,6 +601,7 @@ vAPI.proceduralCosmeticFiltering = (function() {
                             this.matchesMutationTypes(patterns, mutationTypes)
             );
         },
+        /* Scriptlet below borrowed from: https://github.com/adblockplus/adblockpluscore/blob/3e16d3602509b2dbb2238ab1ebcbc5e5b5993862/lib/content/elemHideEmulation.js#L557 */
         extractMutationTargets: function(mutations) {
             if (!mutations)
                 return null;
@@ -590,9 +618,11 @@ vAPI.proceduralCosmeticFiltering = (function() {
             }
             return [...targets];
         },
+        /* Scriptlet below borrowed from: https://github.com/adblockplus/adblockpluscore/blob/3e16d3602509b2dbb2238ab1ebcbc5e5b5993862/lib/content/elemHideEmulation.js#L596 */
         shouldObserveAttributes: function() {
             return this.patterns.some(([selector, tasks]) => tasks.some(task => task.maybeDependsOnAttributes));
         },
+        /* Scriptlet below borrowed from: https://github.com/adblockplus/adblockpluscore/blob/3e16d3602509b2dbb2238ab1ebcbc5e5b5993862/lib/content/elemHideEmulation.js#L601 */
         shouldObserveCharacterData: function() {
             return this.patterns.some(([selector, tasks]) => tasks.some(task => task.dependsOnCharacterData));
         }
@@ -606,6 +636,7 @@ vAPI.proceduralCosmeticFiltering = (function() {
            evaluate(tasks, index, rootnode, selectors, targets);
        }
     }
+    /* Scriptlet below borrowed from: https://github.com/adblockplus/adblockpluscore/blob/3e16d3602509b2dbb2238ab1ebcbc5e5b5993862/lib/content/elemHideEmulation.js#L540 */
     function extractMutationTypes(mutations) {
       let types = new Set();
       for (let mutation of mutations) {
@@ -618,7 +649,8 @@ vAPI.proceduralCosmeticFiltering = (function() {
     function onLoad(event) {
       let stylesheet = event.target.sheet;
       if (stylesheet)
-      this.processPattern([stylesheet]);
+      //this.processPattern([stylesheet]);
+      objQueueProcessing.add([stylesheet]);
     }
     var hideElements = function(selectors) {
       // https://github.com/uBlockAdmin/uBlock/issues/207
@@ -640,6 +672,7 @@ vAPI.proceduralCosmeticFiltering = (function() {
     };
     return new proceduralSelector();
   })();
+
 
 vAPI.contentscriptEndInjected = true;
 vAPI.styles = vAPI.styles || [];
@@ -1268,12 +1301,13 @@ var uBlockCollapser = (function() {
     classesFromNodeList(document.querySelectorAll('[class]'));
     retrieveGenericSelectors();
     if(typeof vAPI.hideProcedureFilters !== 'undefined') {
-        vAPI.proceduralCosmeticFiltering.applyPatterns(vAPI.hideProcedureFilters);
+        if(vAPI.hideProcedureFilters.length > 0) 
+            vAPI.proceduralCosmeticFiltering.applyPatterns(vAPI.hideProcedureFilters);
     } else {
         var localMessager = vAPI.messaging.channel('contentscript-start.js');
         var proceduresHandler = function(details) {
-            if(details) {
-                vAPI.hideProcedureFilters = details;
+            if(details.procedureHide.length > 0) {
+                vAPI.hideProcedureFilters = details.procedureHide;
                 vAPI.proceduralCosmeticFiltering.applyPatterns(vAPI.hideProcedureFilters);
             }
             localMessager.close();
@@ -1343,7 +1377,8 @@ var uBlockCollapser = (function() {
             messager.send({ what: 'cosmeticFiltersActivated' });
         }
         if(mutations.length != 0)
-            vAPI.proceduralCosmeticFiltering.processPattern(null, mutations);
+            //vAPI.proceduralCosmeticFiltering.processPattern(null, mutations);
+            objQueueProcessing.add(null, mutations);
     };
 
     // https://github.com/uBlockAdmin/uBlock/issues/205
