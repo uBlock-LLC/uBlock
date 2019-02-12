@@ -45,6 +45,7 @@
         "homeURL": "https://easylist-downloads.adblockplus.org/easylist.txt"
         },
     "easylist-downloads.adblockplus.org/exceptionrules.txt": {
+        "off": true,
         "title": "Acceptable Ads",
         "group": "ads",
         "homeURL": "https://easylist-downloads.adblockplus.org/exceptionrules.txt"

@@ -220,9 +220,10 @@ var onInstalled = function() {
         }
 
         if(!firstInstall) {
-            µb.turnOffAA = true;
             return;    
-        } 
+        } else {
+            µb.turnOffAA = false;
+        }
         vAPI.storage.get('stats',onDataReceived);
     };
     vAPI.storage.get('extensionLastVersion', onVersionRead);

@@ -147,7 +147,7 @@ return {
 
     // so that I don't have to care for last comma
     dummy: 0,
-    turnOffAA: false
+    turnOffAA: true
 };
 
 /******************************************************************************/
