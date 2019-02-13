@@ -435,7 +435,6 @@ https://github.com/darkskyapp/string-hash/blob/master/index.js
         "toString": toString,
         "toSelfie": toSelfie,
       "fromSelfie": fromSelfie,
-         "domains": domains,
            "reset": reset
     };
 })();
