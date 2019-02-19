@@ -1,346 +1,292 @@
-[Adblock Plus 1.2]
-! Checksum: gs9iImLDGe/hQ4ATJgrdDg
-! Title: Latvian List
-! Last modified: 2015-03-04 10:16 UTC
-! Expires: 2 days (update frequency)
-! Redirect: https://notabug.org/latvian-list/adblock-latvian/raw/master/lists/latvian-list.txt
-! Homepage: http://latvian-list.site11.com/
-! Licence: CC BY-SA 4.0  https://creativecommons.org/licenses/by-sa/4.0/
-!
-! Lūdzu paziņojiet par nebloķētām reklāmām vai problēmām
-! forumā (https://forums.lanik.us/viewforum.php?f=99)
-! vai pa e-pastu (latvian-list@googlegroups.com)
-!
-! -------------- Generic ad blocking filters ---------------
-!
-.lv/ads/
-.lv/banners/
-.lv/images/banners/
-.lv/img/banners/
-!
-! ------------- 1st party ad blocking filters --------------
-!
-||1188.lv/img/special/
-||1w.lv/banner_
-||220.lv/rek_html/
-||2x2.lv/img/$object
-||ad.one.lv^
-||ads.inbox.lv^
-||ads.sportacentrs.com^
-||apollo.lv^*/customBanners/
-||apollo.lv^*/widgets/Banner
-||atlaides.delfi.lv/export.php
-||b.inbox.lv^
-||banners.zl.lv^
-||bigshop.lv/baners/
-||bilesuserviss.lv/upload/banner/
-||bm.lv/images/*.swf
-||bm.lv^*_banner.swf
-||cenuklubs.lv/assets/images/BANERI/
-||cenuklubs.lv/assets/media/
-||db.lv/images/tmp/
-||delfi.lv/ap/edu/g/
-||delfi.lv/d/h2011/pardotnet/
-||delfi.lv/d/infoblock/
-||delfi.lv/fp/i/city24
-||delfi.lv/jo/g/
-||delfi.lv/misc/xml_infoblocks/
-||delfi.lv/tr/g/
-||delfi.lv/ve/g/
-||discover.lv/userfiles/promofotos/
-||e-pica.lv/mce/uploads/banners/
-||ecompics.power.oho.lv^
-||ehalle.lv/grupu_bildes/
-||elittesport.lv/pictures/banneri_gar_malam/
-||elittesport.lv/pictures/Tirgoshanas/
-||gudriem.lv/App_Themes/Default/Banners/
-||gudrinieks.lv/res/banner/
-||gudrinieks.lv/res/js/sb_banner.js
-||hop.lv^*/banneri/
-||iaptieka.lv/atteli/apmaina/
-||intim.lv/res/banners/
-||kasjauns.lv/objs/shops/
-||kurpirkt.lv/ba/
-||leta.lv/img/*/info_banneris_
-||lu.lv/uploads/tx_macinabanners/
-||lv.lv/bildes/reklaama.png
-||manstv.lv/js/bannerhandlerv2.js
-||miljons.com/bnr/
-||nekrize.lv/nkr300x250_
-||notepad.lv/adfoter2.png
-||notepad.lv/partneri/
-||nra.lv/_rekl/
-||nra.lv/spec/
-||oga.lv/ieBildes/
-||petits.lv/pics/banners/
-||pv2013.cvk.lv/lmt.jpg
-||q.tvnet.lv^
-||r.inbox.lv^
-||receptes.lv/images/design/davana_tev.png
-||reklama.lv/images/picads/users/
-||reklama.lv/services/ads_count.html
-||riga.lv/MEDIA/Misc/
-||semicom.lv/admin/files/$object
-||serveris.lv/images/Baners/
-||sexparty.lv/style/flash/banner.swf
-||sexparty.lv/uploads/banner/
-||sexparty.lv/uploads/vip/
-||signe.lv/userfiles/image/main%20page%20banners/
-||simpsoni.lv/rtr/
-||spoki.lv/img/backs/*-banner.png
-||spoki.lv/img/okarte/
-||spoki.lv/js/ad.js
-||spoki.lv/js/okarte.js
-||sudzibas.lv/baneris_
-||tavacena.lv/images/ltc/
-||tele2.lv^*_popup_
-||tours.lv/images/misc/
-||vgk.lv/adv/
-||viastream.viasat.tv/Commercials/
-||xp.lv/res/banners/
-||zip.lv/kasjauns.swf
-!
-! ------------- 3rd party ad blocking filters --------------
-!
-||1shop.lv/i/ban/
-||a.draugiem.lv^
-||adbox.lv^$third-party
-||adnet.lt^$third-party
-||ads.image.lv^$third-party
-||adsplius.lt^$third-party
-||adsxchange.lv^$third-party
-||agk.lv^$third-party
-||alida.lv/upload/banner/
-||anymedia.lv^$third-party
-||apollo.lv/article/feed/iframe/$third-party
-||apollo.lv/upload/city24
-||apps.lv/timthumb.php?*/uploads/shop_images/
-||ass.lv/iframe/$third-party
-||auto24.lv^$third-party
-||b.itvnet.lv^
-||banneri.lv^$third-party
-||bbes.lv^$third-party
-||beta.lt^*/banners
-||cetrassezonas.lv/tvnet.php
-||chaula.tv/lv/output/$third-party
-||city24.lv/ibox/$third-party
-||clo.lv^$third-party
-||cv.lv^*?type=banner
-||deal24.lv^$third-party
-||delphi.lv^*/ads/
-||diena.lv/boxnews.html$third-party
-||doaffiliate.net^$third-party
-||emediate.se/eas?cu=$third-party
-||emediate.se/EAS_tag.$third-party
-||evolution.lv^$third-party
-||freewheel.mtgx.tv^*.mp4
-||garmtech.lv^$third-party
-||getgamers.ru^$popup
-||getgamers.ru^$third-party
-||goaff.com^$third-party
-||ifrype.com/ad_v/
-||ifrype.com/adv/
-||ifrype.com/miniads
-||ifrype.com^*/ad_v.
-||ifrype.com^*/ads.
-||imd.petit.lv^
-||img.petit.lv^
-||inectar.lv^$third-party
-||itvnet.lv/partner/
-||knc.lv^$third-party
-||latloto.lv/banner/
-||leta.lv/bm/www/images/$third-party
-||mtgonline.lv/counter-smscredit/
-||nagi.ee^$third-party
-||nerealitate.lv^$third-party
-||next.lv^$third-party
-||novonews.lv/ticker/flash/$third-party
-||openx.diena.lv^$popup
-||otrapuse.lv^$third-party
-||partneriem.smscredit.lv^$third-party
-||pay4results.ee^$third-party
-||perkamkopa.lv^$third-party
-||prieks.lv^*/banner/
-||promo.boomtime.lv^
-||reklama.lv/promotion/
-||saites.eon.lv^$third-party
-||salidzini.lv/affiliate/
-||salidzini.lv/images/120x40.php
-||salidzini.lv/images/88x31.php
-||salidzini.lv/images/banner/
-||serveris.lv/images/affiliate/
-||sludini.lv^$third-party
-||smartad.lv^$third-party
-||tvnet.lv/export_news/$third-party
-||videoavatars.com^$third-party
-||w.ifrype.com^
-||zizu.lv/bpublic/
-||zizu.lv/campaigns/$third-party
-!
-! ------------------ 1st party whitelists ------------------
-!
-@@||openx.kasjauns.lv/www/delivery/spcjs.php$domain=kasjauns.lv
-!
-! ------------------ 3rd party whitelists ------------------
-!
-@@||emediate.se/eas?*ty=video$object-subrequest,domain=apollo.lv
-@@||fwmrm.net/ad/l/1?rnd=$object-subrequest,domain=tvplay.lv
-@@||fwmrm.net/p/MTG_Live/Video2AdRenderer.swf$object-subrequest,domain=tvplay.lv
-@@||v.fwmrm.net/ad/p/1?$object-subrequest,domain=tvplay.lv
-@@||v.fwmrm.net/|$object-subrequest,domain=tvplay.lv
-@@||viastream.viasat.tv^*?affiliate=
-!
-! ------------- Generic element hiding filters -------------
-!
-##a[href="http://www.salidzini.lv/"][style="display: block; width: 120px; height: 40px; overflow: hidden; position: relative;"]
-##a[href="http://www.salidzini.lv/"][style="display: block; width: 88px; height: 31px; overflow: hidden; position: relative;"]
-!
-! ---------- Site specific element hiding filters ----------
-!
-1188.lv##.LabsservissAdd
-1s.lv##.reklama2
-apollo.tvnet.lv###e-shop-banner-block
-apollo.tvnet.lv##.banner-block
-apollo.tvnet.lv##.banner-block-small
-apollo.tvnet.lv##.custom-ad-widget
-apollo.tvnet.lv##.e-shop-banner-block
-bilesuserviss.lv##.banner_clicker
-bilesuserviss.lv##.main_column_banner
-bilesuserviss.lv##.top_banner
-boot.lv###shop-item
-boot.lv##.bootlv_recommends
-boot.lv##div[style="padding: 10px;text-align:center;"]
-boot.lv##td[style="padding: 0 0 0 10px; width: 250px; vertical-align: top;"]
-db.lv###outer-left
-db.lv###outer-right
-db.lv###slid_close
-db.lv,sportacentrs.com,tvnet.lv##.banner
-delfi.lv###background-giga
-delfi.lv###column3 a[style="margin-bottom: 10px;"]
-delfi.lv###horoweatherblock
-delfi.lv##.ads-block-small
-delfi.lv##.ads-blocks-link
-delfi.lv##.car-city24
-delfi.lv##.pardod-widget
-delfi.lv##.top-banner
-delfi.lv##.veikali-banners-active
-delfi.lv##.zave_r
-delfi.lv##div[style="background:#fef2d9;"]
-delfi.lv##div[style="margin:10px;border:1px dashed #8e8e9e;overflow:auto;padding-left:15px;padding-right:15px;padding-top:10px;padding-bottom:10px"]
-delfi.lv##div[style="margin:10px;margin-bottom:0;padding-bottom:10px;text-align:center;border-bottom:1px solid #b4c8de;text-align:center;"]
-delfi.lv##div[style="width:150px;margin-bottom:5px;"]
-delfi.lv##table[style="background-color: #ECECEC; width:250px;"]
-delfi.lv,gudriem.lv,kurpirkt.lv##.clo
-delfi.lv,morning.lv###right
-delfi.lv,morning.lv##.articlebanner
-delfi.lv,morning.lv##.delfi_shop
-delfi.lv,morning.lv##[id^="adoceandelfilv"]
-draugiem.lv##.adv
-e-klase.lv###mammtet_box
-e-klase.lv##.adv_urls
-e-klase.lv##.adv_urls_b
-e-klase.lv##.adv_urls_t
-e-klase.lv##.right_widget_item.tvnet
-easyget.lv##[class^="adholder"]
-easyget.lv##div[style="padding-top:5px;text-align:center;margin-bottom:10px;line-height:1;"]
-europeanhitradio.com,europeanhitradio.lv##td[style="padding-top:10px;padding-left:6px;padding-bottom:10px;"]
-forums.delfi.lv##div[style="width:250px;"]:last-child
-gay.lv##div[style="width:568px;height:60px;background-color:#000000;"]
-google.lv###rhscol
-google.lv###taw
-gramata.ucoz.lv##[style="text-align:center;border:1px dashed #000000;width:468px;height:60px;position:absolute;overflow:hidden;margin-top:-20px;margin-right:160px;"]
-gramata.ucoz.lv##[style^="background-image:none !important"]
-inbox.lv###inboxshops_div
-inbox.lv###inx-main-roof
-inbox.lv###inx-textAds
-inbox.lv###inxAds-imr
-inbox.lv###inxHeadAdsPlace
-inbox.lv##.bxS-text_link
-inbox.lv##[style^="background:url(http://b.inbox.lv/"]
-inbox.lv##a[href^="http://b.inbox.lv/"]
-intim.lv##div[style="margin: 8px 0px; cursor: hand;"]
-ir.lv###abonbanner
-izklaide.delfi.lv###rightTop
-izklaide.delfi.lv##.iepazisanas
-kasjauns.lv###left
-kasjauns.lv###top_banner_container
-kasjauns.lv##.oxbanner
-kasjauns.lv##div[style="overflow:hidden; width:277px; height:70px; border-bottom: 1px dotted #C1C1C1; margin-bottom: 3px;"]
-kasjauns.lv##div[style="overflow:hidden; width:277px; height:70px; border: 1px solid #C1C1C1; margin-bottom: 3px;"]
-kasjauns.lv##li[style=" line-height:1.5em;"]
-kurpirkt.lv###leja_scroll
-kurpirkt.lv##.campaignblock1
-kurpirkt.lv##.campaignblock2
-kurpirkt.lv##.producttd[style="border:solid 1px #448c26;background:#fafafa;"]
-lattelecom.lv##[id^="fixme_"]
-mac.tunt.lv##div[style="border-top: 1px solid #eaeaea; width: 90%;"] + center
-mac.tunt.lv##div[style="padding-left: 10px;"] + br + table[width="100%"]
-mac.tunt.lv##table[style="border: 1px solid #CBCBCB; background-color: #F3F3F3;"]
-miljons.com###opencredit
-miljons.com##div[style="padding:3px; font-size:13px;"]
-notepad.lv###blocks > .tabsaction + .news
-notepad.lv###footer > div:last-child
-notepad.lv###section_full + #blocks > .news:first-child
-notepad.lv##.aptauja[style="margin-top:0px;margin-bottom:20px;"]
-notepad.lv##.banner_center
-notepad.lv##.hostnet
-nozare.lv##div[style="position:absolute;width:725px;height:90px;margin-left:250px;margin-top:33px;"]
-nra.lv##div[style="padding-top:2px; font-size:0.917em;"]
-oho.lv##div[style="width:180px; overflow:hidden; background:#ffffff; border: solid 1px #D30528; font-family:Verdana; font-size:11px; margin: 5px 0px 10px 0px;"]
-pornotv.lv###footer > table[width="100%"]
-pornotv.lv##.top_slud.sakums
-receptes.lv###slider-wrap
-reklama.lv##.right_column
-reklama.lv##div[style="margin-bottom:15px;"]
-riga.lv###_ctl16_HtmlBanner
-riga.lv##[id^="_ctl20_Elements__"]
-rigaslaiks.lv###ctl00_divAd1
-salidzini.lv##.add_cell
-salidzini.lv##[id^="media_place"]
-salidzini.lv##div[style="padding: 5px; margin: 8px; border: 2px solid red; background-color: #FFE479;"]
-salidzini.lv##div[style="padding: 7px; margin: 2px 0px 6px 0px; border: 3px solid red; background-color: white; width: 1100px; font-size: 17px;"]
-salidzini.lv##div[style^="padding: 4px; margin: 4px; border: 2px solid red; background-color:"][style$="width: 930px;"]
-salidzini.lv##td[style="background-color: #FFDAB5; border: 1px solid #FF8040;"]
-salidzini.lv##td[style="background-color: #FFDCB9; border: 1px solid #FF8040; background-color: #FFFAD9; border: 1px solid #DFC400;"]
-salidzini.lv##td[style="background-color: #FFF4EA; border: 1px solid #FFC6AA;"]
-salidzini.lv##td[style="border: 1px solid #D4D4D4;"]
-salidzini.lv##td[style="padding: 0px 2px;"]
-salidzini.lv##td[style="width: 340px; background-color: #FFFFFF; border: 1px solid #CCCCCC;"]
-salidzini.lv##td[width="165"][valign="top"][height="100%"][align="center"][style="padding: 2px 1px;"]
-sexparty.lv##td[width="230"]
-simpsoni.lv###head_banner
-spoki.lv###labakie
-spoki.lv###mod_eshops_b
-spoki.lv###okarte-banner
-spoki.lv###scroll_ban1
-spoki.lv###scroll_ban2
-spoki.lv##.garnier-banner
-spoki.lv##div[style="background: url('/img/bg.png') 0 -427px; margin: 5px 0 0 0; width:250px;height:365px;font-family:verdana"]
-sportacentrs.com##.r_article
-sportacentrs.com##table[style="width: 240px; height: 97px;"]
-ss.lv###sys_bnr_tbl
-tele2.lv###fancybox-overlay
-tera.lv###REKLAI
-travelnews.lv##table + #div_main_right_block
-tv.delfi.lv##.toolblock
-tvnet.lv###ad_center_top_500x150
-tvnet.lv###flag-banner
-tvnet.lv###footer_banner
-tvnet.lv###shops_offer
-tvnet.lv##.autoplius-ad
-tvnet.lv##.banner_container
-tvnet.lv##.c24-box
-tvnet.lv##.customers
-tvnet.lv##.fp_horiz_ads_150x150
-tvnet.lv##.list.customer
-tvnet.lv##.right_custom_ad_2_pics
-tvnet.lv##.right_custom_ad_four_pics_city24
-tvnet.lv##[href^="http://q.tvnet.lv/"]
-tvnet.lv##[id^="ad120x600"]
-tvnet.lv##a[style="text-decoration: underline; cursor: pointer; padding-right: 17px; background: url('/assets/images/title_link.gif') right center no-repeat;"]
-tvnet.lv##div[style="height:53px; width:100%; position:fixed; bottom:0px; left:0px; background-color:white; z-index:999999; background-position:center center; background-image: url('http://b.itvnet.lv/_sa_alkohols.jpg'); background-repeat:no-repeat;"]
-uzkartes.lv###sz
-vgk.lv##.infobox
-zeltazivtina.lv###banner
-zip.lv###perkam_group_banner
-zip.lv##.zip_spotlight.main_td
+[Adblock]
+! Title: ROLIST - Romanian Adblock List by MenetZ & Zoso
+! Original list, by Menetz, was handed over to Zoso to host and maintain.
+! A complementary list, with more strict items, is here zoso.ro/pages/rolist2.txt
+! Expires: 2 days
+! Homepage: https://zoso.ro/rolist/
+! Email: mail@zoso.ro
+! Last modified: 03 FEB 2019 18:00 UTC
+
+!hosts
+||01.creativecdn.com^
+||2mdn.net^
+||7w.ro^
+||ad.dc2.adtech.de^
+||ad2.ip.ro^
+||admonitoring.bsgroup.ro^
+||adnxs.com^
+||ado.icorp.ro^
+||adocean.pl^
+||ads.tradeads.eu^
+||ads2.evz.ro^
+||adservice.google.ro^
+||adservingfactory.com^
+||adsymptotic.com^
+||akamai.smartadserver.com^
+||app.marketizator.com^
+||apps.thinkdigital.ro^
+||bat.bing.com^
+||bbcdn.ad2.ip.ro
+||bbcdn.go.adevolution.bbelements.com^
+||bbcdn.go.cz.bbelements.com^
+||bidswitch.net^
+||block.sw1block.com^
+||brand.ad^
+||brat-online.ro^
+||bride.ru^
+||cdn.onesignal.com^
+||cdn.teads.tv^
+||coinhive.com^
+||content.ad20.net^
+||content.adunity.com^
+||content.zontera.com^
+||core.ad20.net^
+||core.adservingfactory.com^
+||cotatii.tradeville.eu^
+||ctx.inin.ro^
+||da.feedsportal.com^
+||data.tradeville.eu^
+||digital4ro.adocean.pl^
+||engageya.com^
+||evensys.ro^$third-party
+||ewatch.ro^
+||eyeviewads.com^
+||feedads.g.doubleclick.net^
+||flx1.com^
+||fx.gtop.ro^
+||gemius.pl^
+||go.netbet.ro^
+||worldgravity.com^
+||ib.adnxs.com^
+||icorpadro.hit.gemius.pl^
+||js-agent.newrelic.com^
+||linkweb.ro^
+||media.leftclick.ro^
+||megapopads.com^
+||moatads.com^
+||new.cetrk.com^
+||onlinesupaads.com^
+||pagefair.com^
+||parsely.com^
+||profiling.avandor.com^
+||projectagora.s3.amazonaws.com
+||realitatero.adocean.pl^
+||recs.engageya.com^
+||retargeting-data.eu^
+||revsci.net^
+||ro.adocean.pl^
+||ro.noprimetime.com^
+||ro.search.etargetnet.com
+||rt.awstaticdn.net^
+||s.atemda.com^
+||serving-sys.com^
+||smartadserver.com^
+||st.ad.adnow.com^
+||st-n.ads1-adnow.com^
+||st-n.pc1ads.com^
+||storage.trafic.ro^
+||sync.teads.tv^
+||t00t2.com^
+||tags.crwdcntrl.net^
+||tinypass.com^
+||tynt.com
+||zontera.com^
+||zopim.com^
+
+!wildcard hosts
+||arbocontext.ro^
+||einformatii.ro/content/website
+||img.2parale.ro/system/paperclip/banner_pictures
+
+!words
+/ads/*
+/bannere/*
+/reclama/*
+/reclame/*
+/simple-pull-quote/*
+/plugins/convertplug/*
+
+!CSS
+##DIV[id*="reclama"]
+info##DIV[class="banda-sticky-mini"]
+info##DIV[class="banda-sticky-vp"]
+ro##[href*="/promo"]
+ro##DIV#popup_facebook
+ro##DIV#popup_facebook2
+ro##DIV[class^="banner"]
+ro##DIV[class="banda-sticky-mini"]
+ro##DIV[class="banda-sticky-vp"]
+ro##DIV[id*="banner"]
+ro##IFRAME[id^="ETARGET"]
+ro##trafic
+	
+!Whitelist
+@@||googletagmanager.com/gtm.js?id=GTM-TKS335$script,domain=emag.ro
+@@||grgs.ro/1/i/icons/favicon.ico$image,domain=www.pcgarage.ro
+@@||homebank.ro^$~third-party
+@@||hotnews.ro^$generichide
+@@||imasdk.googleapis.com/js/sdkloader/*$domain=observator.tv
+@@||lumea-luminilor.ro/promotii*
+@@||olx.ro/i2/ajax/ad/getcontact/*
+@@||profitshare.emag.ro/get_ads.php?*
+@@||profitshare.ro/get_ads.php?*
+@@||rezitests.ro/advertisement.js
+@@||s1emagst.akamaized.net/layout/all/js/showads.js$script,domain=emag.ro
+@@||static-olxeu.akamaized.net/static/olxro/naspersclassifieds-regional/olxeu-atlas-web-olxro/static/img/favicon.ico?v=4$image,domain=www.olx.ro
+@@AC_RunActiveContent.js
+~4tuning.ro##.adsbygoogle
+promozone.ro,emag.ro#@#[href*="/promo"]
+revista22.ro##IMG[src*="banner"]
+
+!porcarii
+||24fun.ro/widget/?
+||academiacatavencu.info/js/plugins/magnific-popup/magnific.js
+||agerpres.ro/agerpres/BannerFetch*
+||ajax.cloudflare.com/cdn-cgi/nexp/dok3v=088620b277/cloudflare.min.js$script,domain=vocea.biz
+||assets.protv.ro/assets/promotor/deBarbati/banner-top-simple.png$image
+||b.rcs-rds.ro/assets/2580
+||b.rcs-rds.ro/assets/2606$image
+||b1.ro/media/*$object,image
+||b1.ro/static/caldoprivatsecurity_
+||bestmusic.ro/external/banners/*
+||bzi.ro/public/js/*
+||capital.ro/js/scripts.js?*
+||catavencii.ro/bnr/alexandrion.jpg
+||clujust.ro/wp-content/uploads/2015/11/Banner-300-250-CBP.jpg$image
+||clujust.ro/wp-content/uploads/2016/04/banner-800x100-px-coratim.jpg$image
+||clujust.ro/wp-content/uploads/2016/05/bannere-online-01-cantemir.jpg$image
+||clujust.ro/wp-content/uploads/2016/07/ebs-cluj-just-800x100.jpg$image
+||clujust.ro/wp-content/uploads/2016/08/300x-600-px-clujust.jpg$image
+||desteptarea.ro/wp-content/uploads/2018/01/banner.jpg$image
+||desteptarea.ro/wp-content/uploads/2018/04/1000x200.jpg$image
+||ejobs.ro/3rdparty/wall_street/wall_street.js
+||europafm.ro/wp-content/uploads/2017/09/telekom-Sea-Hero.jpg$image
+||http://s1.olx.ro/static/olxro/naspersclassifieds-regional/olxeu-atlas-web/static/js/advertising.js
+||img.wall-street.ro/images/common/
+||iqads.ro/upcoming/*
+||jurnalul.ro/usr/casete/
+||l.yimg.com/g/images/spaceball.gif
+||libertatea.ro/usr/casete/
+||media.hotnews.ro/media_server1/image-2010-03-18-7044595-0-comunicat-presa.jpg
+||media.hotnews.ro/media_server1/image-2013-01-8-13964838-0-2013-siveco-stanga.jpg$image
+||media.hotnews.ro/media_server1/image-2015-12-4-20641634-0-paravion-londra-4-dec.jpg$image
+||media.hotnews.ro/media_server1/image-2016-04-11-20928782-0-timbru-lidl.jpg$image
+||media.hotnews.ro/media_server1/image-2016-09-13-21286827-0-fakepath-brd.png$image
+||media.hotnews.ro/media_server1/image-2016-09-13-21286832-0-bit.jpg$image
+||media.hotnews.ro/media_server1/image-2016-10-6-21335901-0-timbru-arpim.jpg$image
+||media.hotnews.ro/media_server1/image-2017-02-20-21622336-0-buchete-flori.jpg$image
+||nosteam.ro/js/common.lib.js
+||nosteam.ro/js/jquery.min.25-t1.js
+||nosteam.ro/Themes/*alph21$script
+||priceexpert.com/detect.js
+||profitshare.ro/j/jXY
+||reportervirtual.ro/wp-content/plugins/facebook-page-promoter-lightbox-premium/*
+||res3.feedsportal.com/images/
+||romanialibera.ro/images/2banda%20green%20city%20980x50.swf
+||romanialibera.ro/img/banner_280x250_2.gif$image
+||romanialibera.ro/js/adblock.js
+||smartdreamers.ro/embed/jobs/$subdocument
+||startupcafe.ro/images/startupcafe/resurse-img.jpg$image
+||subs.ro/layout/img/head_xs.png
+||terrapops.com^$popup
+||titrari.ro/*.swf
+||turcescu.ro/wp-content/uploads/myfragrancero72890.jpg?v=2
+||vocea.biz/wp-admin/admin-ajax.php
+||web3.protv.ro/assets/protv/widgets/newsletter.swf?
+||zdbc.ro/wp-content/uploads/2018/04/output_0LPAnM.gif$image
+||zdbc.ro/wp-content/uploads/2018/04/output_w1Rl5z.gif$image
+||zdbc.ro/wp-content/uploads/2018/06/Ub_baner-360x600.gif$image
+||ziuaconstanta.ro/images/banners/*
+
+!div rules
+220.ro##DIV#nql_optiuni
+a1.ro##.vulping_articol
+activenews.ro###header > div:nth-of-type(3)
+adevarul.ro###top-video
+adevarul.ro##.categories-bottom
+adevarul.ro##.meta.clearfix
+adevarul.ro##.part.part-left
+adevarul.ro##.tl-content.clearfix
+adevarul.ro##DIV.article-box.alte-stiri.related
+agrointel.ro###randimage
+agrointel.ro###text-318
+agrointel.ro##.banner
+agrointel.ro##DIV[style="text-align:center; width:100%;"]
+antena3.ro###emisiuni
+antena3.ro###footer
+antena3.ro##.listing-stiri.stiri-atasate
+antena3.ro##DIV.spliter.listing-stiri *
+antena3.ro##STYLE + * + * + * > .elements
+automarket.ro###box_alert_container *
+avocatnet.ro###parteneri
+cancan.ro###column_3
+cancan.ro##.caseta_html.w1_1
+cancan.ro##a[href="http://www.parfumeria.ro/"]
+cancan.ro##DIV#top_side *
+cancan.ro##DIV.col_300 *
+cancan.ro##DIV.highslide-container + *
+catavencii.ro##IMG[src="/bnr/volk_larg.gif"]
+clujust.ro###sidebar > .theiaStickySidebar
+daciaclub.ro##.signature
+digi24.ro###slide_main > .stiri-digi24-actualitate-politica.actualitate.content-bar.full:nth-of-type(2)
+digi24.ro##.box.box-contest-word.m-t-c1
+digi24.ro##.nav.nav-pills.nav-stacked
+digi24.ro##.top-branding.m-b-1.text-xs-center > .ad_1200x250.regional_1200x250_top.ad-container
+distanta.ro##DIV[style$="width: 336px; height: 280px;"]
+distanta.ro##DIV[style*="display: block; background-color: white;"]
+evenimentul.ro##TD[width="160"]
+evz.ro##.row.catbottom
+executari.com##.promohide
+gandul.info###bula-ultima-ora
+gandul.info##.ad
+gandul.info##.cross
+gandul.info##DIV[class*="TopCarousel"]
+gsp.ro##DIV.caseta_footer_rss
+hotnews.ro##.parteneri
+hotnews.ro##DIV.stiri_science trackable_box + *
+incont.stirileprotv.ro##.mod.header
+iqads.ro##DIV.bd
+libertatea.ro###floating
+lovendal.ro##.left
+mariustuca.ro###continut
+money.ro##.bd
+money.ro##.gruprcfooter
+nosteam.ro##DIV#stickynote4 > *
+paginademedia.ro##.hidden-xs-down.site-video
+paginademedia.ro##.video-sticky
+price.ro##TABLE#effortTable > TBODY > *:first-child + * *
+profit.ro##.box-readmore
+realitatea.feedsportal.com##DIV.mf-viral + * + * + A:last-child > *
+reno.ro###mediacafe
+republica.ro##.box.box-c2a-login
+ro##DIV#simple-ribbon
+ro##IMG.linked-sig-image
+romanialibera.ro###widgetArticleControlsLeft
+romanialibera.ro###widgetArticleControlsRight
+romanialibera.ro##.container_12.row:nth-of-type(3)
+romanialibera.ro##.container_12.row:nth-of-type(7)
+romanialibera.ro##.image-links
+romanialibera.ro##.overlay
+romanialibera.ro##.widget-associated
+romanialibera.ro##.widget-breadcrumbs
+smartbank.ro##TD[class="color_golden"]
+softpedia.com##table[class='ipbtable'] tr td[id='post-main-0']
+stirileprotv.ro###box_400051071d129964 > .primaPaginaPeScurt
+stirileprotv.ro##[href="http://onelink.to/dhrsfr"]
+stirileprotv.ro##[href="http://onelink.to/dhrsfr"]
+stirileprotv.ro##barUltimeleStiri
+stirileprotv.ro##div#artcontainer > p:nth-last-child(5)
+stirileprotv.ro##div#artcontainer > p:nth-last-child(6)
+stirileprotv.ro##div#stuck > p:nth-last-child(1)
+stirileprotv.ro##div#stuck > p:nth-last-child(2)
+stiripesurse.ro##.giant-modal--fb-like.giant-modal
+subs.ro##DIV[class="rclm_table"]
+subs.ro##IMG[src="/layout/rclm/mynotebook.png"]
+subs.ro##IMG[src="/layout/rclm/vplay.png"]
+tolo.ro###cookie-notice > .cookie-notice-container
+vocea.biz##.clearfix.article__cross-4-col:nth-of-type(2) > .clearfix
+vocea.biz##.clearfix.article__cross-4-col:nth-of-type(5) > .clearfix
+vocea.biz##.clearfix.article__cross-4-col:nth-of-type(6) > .clearfix
+vplowlive.m.ro###myLive
+wall-street.ro##DIV#qra_popup_wrapper *
+zf.ro###bula-ultima-ora

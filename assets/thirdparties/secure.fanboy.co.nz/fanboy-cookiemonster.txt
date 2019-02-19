@@ -1,8 +1,8 @@
 [Adblock Plus 2.0]
-! Checksum: VydCmFpFjZ3zGpiUsWyS7g
-! Version: 201902081232
+! Checksum: uVxcVSfDPYKVgUK5q0bDEA
+! Version: 201902191442
 ! Title: Fanboy's Cookie List
-! Last modified: 08 Feb 2019 12:32 UTC
+! Last modified: 19 Feb 2019 14:42 UTC
 ! Expires: 4 days (update frequency)
 ! Homepage: https://easylist.to/
 ! License: http://creativecommons.org/licenses/by/3.0/
@@ -125,7 +125,9 @@
 /cmp.complete.bundle.js
 /cmp/cmp.js
 /cmp/cmpui-
+/cmp/int_cmp.
 /cmp/privacy_manager?
+/cmp/tmcookie.
 /cmp_consentStorage.
 /cmp_shim.js
 /cmpui-banner-
@@ -428,6 +430,7 @@
 /ena_cookies_
 /eprivacy-cookie.
 /ercookiebar.
+/et_gdpr_
 /eu-cookie-$~script,~stylesheet
 /eu-cookie.
 /eu-cookie/*
@@ -667,6 +670,7 @@ _eu_cookie.
 _eu_cookie_
 _eucookie_compliance_
 _europecookielaw.
+_gdpr_callback_
 _gdpr_consent.
 _js__cookie_functions.
 _logikamentecookielaw/
@@ -1469,6 +1473,7 @@ _site_cookie_
 ###bb_cookies
 ###bbccookies
 ###bbh_gdpr_cookie_info_bar
+###bc-cookie-banner
 ###bcCookies
 ###bc_cookiecontrol
 ###bcb-cookies-notice
@@ -2446,6 +2451,7 @@ _site_cookie_
 ###cookieBox
 ###cookieBoxContainer
 ###cookieBoxWrapper
+###cookieCDkeys
 ###cookieCNIL
 ###cookieCheck
 ###cookieCheck-app
@@ -4262,6 +4268,7 @@ _site_cookie_
 ###enableCookie-cont
 ###enablecookies
 ###enedue_cookieBox
+###enhanced-privacy-popup
 ###ensNotifyBanner
 ###ens_pr_mini.ens_pr_mini
 ###entryCookie:not(body)
@@ -5278,6 +5285,7 @@ _site_cookie_
 ###notice-cookie-policy
 ###notice-cookies
 ###noticeAboutCookies
+###noticePopup
 ###notice_cnil
 ###notice_visitor
 ###notices-cookie-policy-warning
@@ -6500,6 +6508,7 @@ _site_cookie_
 ##.accept_cookie
 ##.accept_cookie_slot
 ##.accept_cookies
+##.accept_cookies-wrapper
 ##.accept_cookies_action
 ##.acceptcookie
 ##.acceptcookies
@@ -6770,6 +6779,7 @@ _site_cookie_
 ##.bb-accept-cookies
 ##.bb-cookie-notice
 ##.bb-header__accept-cookies
+##.bc-cookie-banner
 ##.bc-cookie-disclaimer
 ##.bcOptInOptoutNotifier
 ##.bcee-cookies
@@ -10879,10 +10889,12 @@ _site_cookie_
 ! *** easylist:fanboy-addon/fanboy_cookie_thirdparty.txt ***
 ||admiral.mgr.consensu.org^$third-party
 ||akamaihd.net/cpmt/
+||californiatimes.com/gdpr/
 ||civiccomputing.com^*=cookie$third-party
 ||clickio.mgr.consensu.org^$third-party
 ||clickiocdn.com^$third-party
 ||cmp.network-n.com^
+||cmp.nextday.media^
 ||consensu.org/gdpr/$third-party
 ||consent.subscriptions.archant.co.uk^
 ||consent.truste.com^$third-party
@@ -12260,7 +12272,7 @@ mivoq.it##.check-policy
 frateindovino.eu##.cn-wrapper
 leroymerlin.it##.consent-section
 aeroporto.catania.it,aeroportoditorino.it,botfactory.info,credem.it,dynamicasrl.com,emi.it,giunti.it,inpgi.it,mauroblasi.it,pampers.it,peugeot.it,telepace.it##.cookie
-bottegaverde.it,cerutti.it,dehoniane.it,e-glossa.it,ebayextra.it,esso.it,fluorsidgroup.com,gatorade.it,gogedizioni.it,ilbestiariorivista.it,italotreno.it,lintellettualedissidente.it,radioitalia.it,rivistacontrasti.it,saint-gobain.it,tirrenia.it,tivusat.tv,walliance.eu##.cookies
+bottegaverde.it,cerutti.it,dehoniane.it,e-glossa.it,ebayextra.it,esso.it,fluorsidgroup.com,gatorade.it,gogedizioni.it,ilbestiariorivista.it,italotreno.it,lintellettualedissidente.it,radioitalia.it,rivistacontrasti.it,saint-gobain.it,tirrenia.it,tivu.tv,tivusat.tv,walliance.eu##.cookies
 liujo.com##.cp-banner
 dentisti-italia.it##.di-banner
 spindox.it##.disclaimer-box
@@ -12954,6 +12966,8 @@ ramics-conference.org#@#.nf-form-content
 aklagare.se,boekmeter.nl,gamesmeter.nl,moviemeter.nl,musicmeter.nl,nzherald.co.nz,pokemon.com,shopstyle.com,thenextweb.com#@#.no-cookies
 pieseauto.ro#@#.page-cookies
 account.microsoft.com#@#.privacy-container
+jyllands-posten.dk#@#.qc-cmp-showing
+jyllands-posten.dk#@#.qc-cmp-ui-container
 farmacja.pl,mgr.farm#@#.rodo-modal
 fabrykacukiernika.pl#@#.rodo-popup
 redditinc.com#@#.show-cookie-popup
@@ -12988,6 +13002,7 @@ timeout.com#@#div[data-module="cookie_banner"]
 @@||consent.trustarc.com^$image
 @@||consent.truste.com/notice$script
 @@||cookielawinfo.com^$~third-party
+@@||costa.co.uk/js/libs/cookieconsent.min.js
 @@||eucookiedirective.com^$~third-party
 @@||evbstatic.com^*/cookie_header.js
 @@||evidon.com/sitenotice/evidon-banner.js$domain=etonline.com|popsugar.co.uk

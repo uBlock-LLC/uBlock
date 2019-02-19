@@ -1,8 +1,8 @@
 [Adblock Plus 1.1]
-! Checksum: LrdflTMxs2i0nfFad9RoHg
-! Version: 201902081231
+! Checksum: hS20qvy1OBIETa6C+gVxFQ
+! Version: 201902191521
 ! Title: EasyList Germany
-! Last modified: 08 Feb 2019 12:31 UTC
+! Last modified: 19 Feb 2019 15:21 UTC
 ! Expires: 1 days (update frequency)
 ! Homepage: https://easylist.github.io/
 ! Licence: https://easylist.github.io/pages/licence.html
@@ -1728,6 +1728,7 @@ guterhut.de,hardwareluxx.de,hbf-info.de,rakuten.at,rakuten.de,zalando.de#@#div[i
 ||tarifliste.com/index.php?log=$popup,third-party
 ||teufelchens.xxx/trade_in/$popup,third-party
 ||tuneclub.de^*/lp.pl?$popup
+||vavoo.tv/promo/$popup,third-party
 ||vidonna.de/pop.php$popup,third-party
 ||vodafone.de^*&tsid=$popup,third-party
 !-------------Seitenspezifische Regeln zum Blockieren von Werbung-------------!
@@ -1994,6 +1995,7 @@ guterhut.de,hardwareluxx.de,hbf-info.de,rakuten.at,rakuten.de,zalando.de#@#div[i
 ||cellesche-zeitung.de^*/b4nner/
 ||cellesche-zeitung.de^*/banner/
 ||centertv.de/upload/anzeigen/
+||cgames.de/images/*/metro-countdown-$domain=gamepro.de|gamestar.de
 ||chefkoch-cdn.de^*/partnerlogos/
 ||chefkoch.de/produkte/widget/loader.js
 ||chillmo.com/wp-content/plugins/background-manager/
@@ -2289,6 +2291,8 @@ guterhut.de,hardwareluxx.de,hbf-info.de,rakuten.at,rakuten.de,zalando.de#@#div[i
 ||fail.to/images/dokus_banner.jpg
 ||fail.to^*.php$subdocument
 ||fail4fun.de/layerloop/
+||fairytail-tube.org^*/amzb/
+||fairytail-tube.org^*/amzl/
 ||fake-it.biz/lla2/
 ||fake-it.biz^*/layer.php
 ||falk.de/fr/aservice.php?
@@ -4915,6 +4919,7 @@ allfacebook.de###secondary > #text-4
 allfacebook.de###secondary > #text-7
 scifi-forum.de###sff_header_top
 scdhfk-handball.de###sgsOverlay
+byte.to###shareonline
 xboxfront.de###shopauszug
 nicestthings.com###sidebar > #HTML3
 heisserdraht.net###sidebar > #text-10
@@ -5057,6 +5062,7 @@ mtb-news.de###text-6 > div > div > img
 namibia-hunter.at###text-9.footer-box
 wirtschaftslexikon.gabler.de###textBannerContainer
 fremdwort.de###thgirrennab
+gamepro.de,gamestar.de###thmbnr
 fundanalyzer.de,fundresearch.de###ticker
 vfl-gummersbach.de###ticketmaster
 peeplo.de###tips-share
@@ -5208,6 +5214,7 @@ chip.de##.Teaser__Affiliate
 chip.de##.Teaser__Portal
 eltern-zentrum.de##.Text1[valign="top"]:last-child > .tabberlive:last-child
 adhs-zentrum.de##.Text[width="100%"][valign="top"] + td[valign="top"]:last-child
+t-online.de##.Tgbox--anz
 t-online.de##.Thpx600
 t-online.de##.Tmm > .Tmc4a > .Ttsi
 t-online.de##.Tmm > .toiaiai > .Ttsi > a
@@ -5250,6 +5257,7 @@ games.ch,webfail.at##.adMR
 gevestor.de##.adTop
 skandinavien.eu##.ad_big
 augsburger-allgemeine.de##.ad_load
+fairytail-tube.org##.adb
 t3n.de##.adbContentAd1
 knuddels.de##.adbg
 magistrix.de,wuv.de##.adblock
@@ -5657,6 +5665,7 @@ cinema.de##.fswrapper
 lokalisten.de##.fullBanner
 bild.de,preussenspiegel-online.de,wirtschaftsblatt.at##.fullbanner
 airgamer.de##.fullbanner2
+raidrush.net##.funbox
 phpforum.de##.ga336
 quoka.de##.gad
 sinn-frei.com##.gadline
@@ -5757,6 +5766,7 @@ bild.de##.jetzt_aufnehmen
 kulturmanagement.net##.joboffer_banner_wrapper
 heise.de##.jobtv24
 de.yahoo.com##.js-applet-view-container-main > style + .NavLinks + .Bd-t + .NavLinks
+gamepro.de,gamestar.de##.js-countdown
 aachener-nachrichten.de##.kalaydo-container
 kochbar.de##.kb-has-rectangle
 kochbar.de##.kb-recipe-comment-container > .kb-recipe-comment-right-fix
@@ -5774,6 +5784,7 @@ ichspiele.cc##.leader
 airgamer.de,auto-motor-und-sport.de,billig-flieger-vergleich.de,buffed.de,de.de,gamesaktuell.de,gamestar.de,gamezone.de,meteovista.de,pcgames.de,pcgameshardware.de,spielefilmetechnik.de,spielen.de,technic3d.com,trailerzone.info,videogameszone.de##.leaderboard
 antenne.de,rockantenne.de##.leaderboard-wrapper
 istream.ws##.leaderboard2
+rockpapershotgun.de##.leaderboards
 lkz.de##.left > .content[style="min-height:100px"]
 narutoloads.org##.left-hand-global
 au-ja.de##.leftADB
@@ -6171,6 +6182,7 @@ sinn-frei.com##.text > div[style="margin: 3px 0 1px 0;"]
 adhs-zentrum.de##.text[align="center"][colspan="6"]:first-child:last-child > p[align="center"]:first-child:last-child
 oberberg-aktuell.de##.text_anzeige
 saz-aktuell.com##.textadul
+gload.cc##.textwidget > .toptitelmain
 et-tutorials.de##.textwidget > div[style="background-color: #FFFFFF; color:#000000; "]
 teltarif.de##.tgtLink[style="color:#CCCCCC;margin:10px 0 2px 0"]
 teltarif.de##.tgtLink[style="width:100%;text-align:left;border-spacing:0;margin-bottom:5px"]
@@ -6178,6 +6190,7 @@ heise.de##.themenseite_preisvergleich.meldung__box--right
 dhb.de##.three.columns > #c22 + .pslider
 promipool.de##.timeframe_banner
 t-online.de##.tl_anz-pos1
+gload.cc##.tm-content > .toptitel
 t-online.de##.toi-sh-breaker
 sunshine-live.de##.top
 kleiderkreisel.de##.top-banner
@@ -6415,6 +6428,7 @@ downloadstube.net##a[href^="/download-file.php?type="]
 titanic-magazin.de##a[href^="/fileadmin/core/scripts/link_external.php?url="][target="_blank"] > img
 bild.de##a[href^="/gewinnspiele/movieman/"]
 speedlounge.in##a[href^="/go/"]
+raidrush.net##a[href^="/go/?//www.amazon.de/"]
 speedlounge.in##a[href^="/goto/speedmirror"]
 berlinertageszeitung.de##a[href^="/index.php/component/banners/click/"]
 pctipp.ch##a[href^="/index.php?eID=idgprintad&data="]
@@ -6728,10 +6742,13 @@ hd-world.org##a[href^="http://zip5.de/"]
 livestreamfussball.org##a[href^="http://zolanis.com/landingpage"]
 freenet.de##a[href^="https://ad1.adfarm1.adition.com/redi?sid="]
 hardwareluxx.de##a[href^="https://adclick.g.doubleclick.net/"]
+fairytail-tube.org##a[href^="https://amzn.to/"]
 macwelt.de,pcwelt.de##a[href^="https://aos.prf.hn/click/"]
 4fuckr.com##a[href^="https://bit.ly/"]
+byte.to##a[href^="https://byte.to/linkifier.php"]
 t-online.de##a[href^="https://count.shopping.t-online.de/RE?ID="]
 koeln.de##a[href^="https://ed.koeln.de/ad/"]
+gload.cc##a[href^="https://gload.cc/strip"]
 stadt-bremerhaven.de##a[href^="https://instaffo.com/?utm_source="] > img
 gamepro.de,gamestar.de##a[href^="https://itunes.apple.com/"][href*="&affId="]
 t-online.de##a[href^="https://jobsuche.t-online.de/to/jobs/search?"]
@@ -7584,15 +7601,19 @@ focus.de##.ob_container a[data-redirect^="http://paid.outbrain.com/network/redir
 boote-forum.de,golem.de,jetzt.de,planetsnow.de,prosieben.at,prosieben.ch,prosieben.de,transfermarkt.de,tvspielfilm.de##.plistaList > .itemLinkPET
 plista.com##.plistaList > .plista_widget_belowArticle_item[data-type="pet"]
 ariva.de,boote-forum.de,fanfiktion.de,notebookchat.com,notebookcheck.com,planetsnow.de,prosieben.at,prosieben.ch,prosieben.de,tvspielfilm.de##.plistaList > .plista_widget_underArticle_item[data-type="pet"]
+fitbook.de##.teaser--b > a[href^="https://secure.adnxs.com/"]
 erdbeerlounge.de,giga.de,spieletipps.de,transfermarkt.de##.trc-content-sponsored
 erdbeerlounge.de,giga.de,spieletipps.de,transfermarkt.de##.trc-content-sponsoredUB
-erdbeerlounge.de,giga.de,musikexpress.de,rollingstone.de,spieletipps.de,sportbild.bild.de,stylebook.de,transfermarkt.de,travelbook.de,welt.de##.trc_related_container div[data-item-syndicated="true"]
+erdbeerlounge.de,fitbook.de,giga.de,musikexpress.de,noizz.de,rollingstone.de,spieletipps.de,sportbild.bild.de,stylebook.de,techbook.de,transfermarkt.de,travelbook.de,welt.de##.trc_related_container div[data-item-syndicated="true"]
 @@||computerbild.de^$generichide
+@@||fitbook.de^$generichide
 @@||focus.de^$generichide
+@@||noizz.de^$generichide
 @@||pcwelt.de^$generichide
 @@||sport.de^$generichide
 @@||sportbild.bild.de^$generichide
 @@||stylebook.de^$generichide
+@@||techbook.de^$generichide
 @@||travelbook.de^$generichide
 @@||tvspielfilm.de^$generichide
 @@||welt.de^$generichide
@@ -7614,7 +7635,7 @@ computerbild.de,focus.de,pcwelt.de,sport.de,tvspielfilm.de##a[onmousedown^="this
 @@||360yield.com/adj?$script,domain=girlsgogames.de|jetztspielen.de|spielen.com
 @@||6inserate.ch/images/banner/$image,domain=ameliatantra.jimdo.com
 @@||71iv.nuggad.net/crossdomain.xml$object-subrequest
-@@||a-ssl.ligatus.com/?ids=$script,domain=wetter.de|zeit.de
+@@||a-ssl.ligatus.com/?ids=$script,domain=stern.de|wetter.de|zeit.de
 @@||a.ligatus.com/?ids=$script,domain=wetter.de
 @@||ab-in-den-urlaub.de^*.popunder.js
 @@||ad-emea.doubleclick.net/ad/tonline.app.smartclip/$object-subrequest,domain=iam.t-online.de
@@ -7692,7 +7713,7 @@ computerbild.de,focus.de,pcwelt.de,sport.de,tvspielfilm.de##a[onmousedown^="this
 @@||afcdn.com/world/ads.js$domain=gofeminin.de
 @@||affilinet-inside.de^*/affilinet/$stylesheet
 @@||akamai.net^*/preisspektakel_layer_*.swf?clicktag=$object,domain=rewe.de
-@@||akamaihd.net/live/*/gujAd.js$domain=kochbar.de
+@@||akamaihd.net/live/*/gujAd.js$domain=kochbar.de|wetter.de
 @@||alfred-delp-schule.de/ads_$~third-party
 @@||am-display.com/display-ad/tag-set/$subdocument,domain=hardbase.fm|housetime.fm|techno4ever.fm|technobase.fm
 @@||am-display.com/display-ad/tag/$script,domain=hardbase.fm|housetime.fm|techno4ever.fm|technobase.fm
@@ -8078,7 +8099,7 @@ computerbild.de,focus.de,pcwelt.de,sport.de,tvspielfilm.de##a[onmousedown^="this
 @@||werbung.specials.de^$subdocument,domain=zentralreisen.de
 @@||werkbank.bayern-online.de/oa23/www/delivery/spc.php?zones=$script,domain=bayern-online.de
 @@||werkbank.bayern-online.de/oa23/www/delivery/spcjs.php?id=$script,domain=bayern-online.de
-@@||widget.marktjagd.de/dist/$domain=baywa-baumarkt.de|chip.de|discounto.de|focus.de|hellweg.at|hellweg.de|koeln.de|netmoms.de|offerista.com|sparbaby.de|sparwelt.de|wize.life
+@@||widget.marktjagd.de/dist/$domain=baywa-baumarkt.de|chip.de|discounto.de|focus.de|hellweg.at|hellweg.de|koeln.de|netmoms.de|offerista.com|scondoo.de|sparbaby.de|sparwelt.de|wize.life
 @@||willhaben.apa.net/mmo/logo/advert/$domain=willhaben.at
 @@||windowspro.de^$script,domain=windowspro.de
 @@||wm-druckarena.de/scripts/Werbebanner.
@@ -8107,6 +8128,7 @@ kalender-365.de#@#.adsbygoogle
 @@||bueropartner24.de/out/pictures/generated/category/icon/728_90_$image,~third-party
 @@||campact.de^*_300x250.gif
 @@||ebaystatic.com/aw/pics/im/default_300x250.jpg$domain=millionenklick.web.de
+@@||eltern.de^*_300x250.$image,domain=eltern.de
 @@||files.videovalis.tv/artwork/posterframes/*_300_250_$image
 @@||gardenparc.ch/files/artikelbilder_
 @@||googleusercontent.com^*/300x250.$domain=googlewatchblog.de
@@ -8116,6 +8138,7 @@ kalender-365.de#@#.adsbygoogle
 @@||musikexpress.de/wp-content/uploads/*_musikexpressstyle_adbundle_mediumrectangle_300x250.gif$domain=musikexpress.de
 @@||rollingstone.de/wp-content/uploads/*_musikexpressstyle_adbundle_mediumrectangle_300x250.gif$domain=rollingstone.de
 @@||searchx.ch/img/BannerFreeRegister_728_90.jpg$domain=searchx.ch
+@@||smallapps.stroeerdp.de/podigee/*_300x250.$image,domain=cdn.podigee.com
 @@||social-media-hosting.com^*_120x60.jpg
 @@||teletext.zdf.de/teletext/$subdocument,domain=zdf.de
 @@||welt.de/sites/default/files/rectangle-300x250-newsletter.jpg

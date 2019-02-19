@@ -3,7 +3,7 @@
 # For more information about this list, see: https://pgl.yoyo.org/adservers/
 # ----
 # last updated:   Wed, 23 Jan 2019 15:34:01 GMT
-# entries:        2968
+# entries:        2965
 # format:         hosts (hosts -- in hosts file format)
 # credits:        Peter Lowe - pgl@yoyo.org - https://pgl.yoyo.org/ - https://twitter.com/pgl
 # this URL:       http://pgl.yoyo.org/adservers/serverlist.php?hostformat=hosts&showintro=1&mimetype=plaintext
@@ -11,7 +11,7 @@
 # other formats:  https://pgl.yoyo.org/adservers/formats.php
 # policy:         https://pgl.yoyo.org/adservers/policy.php
 #
-# start date:    Sat, 13 Feb 1999 00:00:00
+# start date:    Wed, 24 Feb 1999 00:00:00
 127.0.0.1 101com.com
 127.0.0.1 101order.com
 127.0.0.1 123found.com
@@ -1228,6 +1228,7 @@
 127.0.0.1 class-act-clicks.com
 127.0.0.1 clearcomb.com
 127.0.0.1 clevernt.com
+127.0.0.1 click.absoluteagency.com
 127.0.0.1 click.fool.com
 127.0.0.1 click.kmindex.ru
 127.0.0.1 click2freemoney.com
@@ -1561,7 +1562,6 @@
 127.0.0.1 farethief.com
 127.0.0.1 farmergoldfish.com
 127.0.0.1 fascinatedfeather.com
-127.0.0.1 fast-adv.it
 127.0.0.1 fastclick.com
 127.0.0.1 fastclick.com.edgesuite.net
 127.0.0.1 fastclick.net
@@ -2170,7 +2170,6 @@
 127.0.0.1 pagerank-ranking.de
 127.0.0.1 pagerank-submitter.de
 127.0.0.1 pagerank4you.com
-127.0.0.1 pageranktop.com
 127.0.0.1 paleleaf.com
 127.0.0.1 paradoxfactor.com
 127.0.0.1 parchedangle.com
@@ -2277,7 +2276,6 @@
 127.0.0.1 pronetadvertising.com
 127.0.0.1 propellerads.com
 127.0.0.1 props.id
-127.0.0.1 proranktracker.com
 127.0.0.1 proton-tm.com
 127.0.0.1 protraffic.com
 127.0.0.1 provalist.info
@@ -2606,7 +2604,6 @@
 127.0.0.1 stoveseashore.com
 127.0.0.1 straightnest.com
 127.0.0.1 straightschool.com
-127.0.0.1 stream4fun.com
 127.0.0.1 stripedburst.com
 127.0.0.1 strivesidewalk.com
 127.0.0.1 structurerod.com
