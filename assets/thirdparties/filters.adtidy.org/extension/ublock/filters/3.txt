@@ -1,9 +1,9 @@
 ![Adblock Plus 2.0]
-! Checksum: neGTSqpUFiC383Ym9AqB4A
+! Checksum: lKPuTfZY+DxMzAHi7KHKtQ
 ! Title: AdGuard Tracking Protection filter
 ! Description: The most comprehensive list of various online counters and web analytics tools. Use this filter if you do not want your actions on the Internet to be tracked.
-! Version: 2.0.5.57
-! TimeUpdated: 2019-02-07T23:30:57+03:00
+! Version: 2.0.5.73
+! TimeUpdated: 2019-02-18T21:31:05+03:00
 ! Expires: 2 days (update frequency)
 ! Homepage: http://adguard.com/filters.html#privacy
 ! License: http://creativecommons.org/licenses/by-sa/3.0/
@@ -23,6 +23,7 @@
 !-------JS----------
 !-------------------
 !
+! facebook.com - removing fbclid tracking parameter
 ! Google Contributor tracking domains
 ! https://github.com/AdguardTeam/AdguardFilters/issues/4253
 ! overclockers.ru - fixing links at the top
@@ -86,10 +87,15 @@ journal-plaza.net##.rightside div.block.bnavi[-ext-has="h3.dtitle:contains(Сч�
 ! Should be uncommented once v2.10 goes live
 ! ||app-measurement.com^
 !
+||trv.upperbooking.com^$third-party
+||trl.upperbooking.com^$third-party
+||getback.ch^$third-party
+||meapk.com^
 ||group-ib.ru^$third-party
 ||vidapi.expepp.de^$third-party
 ||builfico.de^$third-party
 ||s24-analytics.com^
+||checkyourgeo.info^$third-party
 ||targetman.ru^$third-party
 ||adtlgc.com^$third-party
 ||mateti.net^$third-party
@@ -831,7 +837,6 @@ journal-plaza.net##.rightside div.block.bnavi[-ext-has="h3.dtitle:contains(Сч�
 ||cost1action.com^$third-party
 ||count-cnt.ru^$third-party
 ||count.fr^$third-party
-||count.rbc.ru^$third-party
 ||count24.de^$third-party
 ||countar.de^$third-party
 ||countby.com^$third-party
@@ -3320,6 +3325,10 @@ nethunt.com/api/v1/track/email/$image
 ||collection-endpoint-staging.herokuapp.com^
 ! end:
 !
+||pa.tns-ua.com^
+||r.rbc.ru^
+||tcheck.outbrainimg.com^
+||ats.otto.de^
 ||tracker.blutv.com^
 ||metrics.infranken.de^
 ||ophan.theguardian.com^
@@ -4681,6 +4690,7 @@ charlestownwyllie.oaklawnnonantum.com^
 !
 /common/tracking/webtrekk
 /greenoaks.gif?
+/uedata?
 /bbtstats/*
 /px.js?ch=
 /_CPiX/art
@@ -4916,6 +4926,10 @@ _tracking.php?b=
 ! index.ru alternative way of loading (loads index.ru first, then /tnc.js from the same domain, see roem.ru for example)
 /tnc.js?h=
 !
+||blogheim.at/ranking
+||watch32hd.org/tracking
+||watch32hd.org/adblock
+ferra.ru##div[data-widget="plista_widget_belowArticle_nocss"]+div[class^="_"] > svg
 ||kuntv.pw/wau.php
 ||static-cl.xhcdn.com/js/track.min.js
 ||tagm.tchibo.de/ai.aspx
@@ -4935,6 +4949,7 @@ tensaigakkou.ru###custom_html-16
 ||rushlane.com/*/ga-*.js
 ||imwalking.de/servlet/LandmarkServlet?clientId
 ||static1.dmcdn.net/js/cpe/cpeEventTracking.min.js
+||kerch.fm/templates/FM/js/analytic.js
 ||static.canal-plus.net/*/trcking.min.js
 ||d2-apps.net/*/impressions/log
 ||businesswire.com/js/videojs.ga.min.js
@@ -4978,6 +4993,8 @@ tensaigakkou.ru###custom_html-16
 ||growingio.com^$third-party
 ||d.line-cdn.net/*/torimochi.js/*/torimochi.js
 ||d.line-scdn.net/*/torimochi.js/*/torimochi.js
+/counter?$domain=amazon.com|amazon.de|amazon.it|amazon.com.tr
+/batch*$domain=amazon.com|amazon.de|amazon.it
 ||medyaradar.com/Tools/AddHit.aspx?
 ||static.gazeta.pl/info/http/xgemius-min.jsgz
 ||onecount.net/onecount/oc_track/
@@ -5343,7 +5360,6 @@ abp?type=js&session$domain=prosieben.de|sat1.de|kabeleins.de|sixx.de|prosiebenma
 ||kinovau.club/js/analytics.js
 ||kinovau.club/js/s.js
 ||tvigle.ru/track/
-||amazon.de/gp/uedata*adblk
 ||reisen.de/usertracking^
 ||heise.de/avw-bin/ivw/CP^
 ||heise.de/ivw-bin/ivw/CP^
@@ -5644,8 +5660,8 @@ computerbild.de##.articleAdditional > .mehrthema
 ||xtraffstat.com/js/ktr.js
 ||zapcdn.space/zapret.js
 ||patreon.com/api/tracking^
-/index/ping^$domain=atabencot.net|thouth.net|cinebo.net|baymaleti.net|briskgram.net|ad.bdcraft.net|swiftviz.net|ad.sapixmedia.com|activetect.net|brightvar.bid|clearload.bid|restorecosm.bid|bee.anime-loads.org|threadsphere.bid|queuecosm.bid|yoitect.com|skamaker.com|adf.ly|ay.gy|cracksurl.com|tinyium.com|skamason.com|redir2.auto-login-xxx.com|dl.underclassblog.com|special.picons.eu|quainator.com|yoalizer.com|kibuilder.com|kimechanic.com|zo.ee|viahold.com|tinyical.com|mmoity.com|pintient.com|riffhold.com|picocurl.com|bitigee.com|picocurl.com|atomcurve.com|atominik.com|battleate.com|kaitect.com|simizer.com|coginator.com|cogismith.com|twineer.com|yobuilder.com|go.awanpc.me|viwright.com|yabuilder.com|yamechanic.com|kializer.com|yoineer.com
-/callback/*$domain=atabencot.net|thouth.net|cinebo.net|baymaleti.net|briskgram.net|ad.bdcraft.net|swiftviz.net|ad.sapixmedia.com|activetect.net|brightvar.bid|clearload.bid|restorecosm.bid|bee.anime-loads.org|threadsphere.bid|queuecosm.bid|yoitect.com|skamaker.com|adf.ly|ay.gy|cracksurl.com|tinyium.com|skamason.com|redir2.auto-login-xxx.com|dl.underclassblog.com|special.picons.eu|quainator.com|yoalizer.com|kibuilder.com|kimechanic.com|zo.ee|viahold.com|tinyical.com|mmoity.com|pintient.com|riffhold.com|picocurl.com|bitigee.com|picocurl.com|atomcurve.com|atominik.com|battleate.com|kaitect.com|simizer.com|coginator.com|cogismith.com|twineer.com|yobuilder.com|go.awanpc.me|viwright.com|yabuilder.com|yamechanic.com|kializer.com|yoineer.com
+/index/ping^$domain=uclaut.net|atabencot.net|thouth.net|cinebo.net|baymaleti.net|briskgram.net|ad.bdcraft.net|swiftviz.net|ad.sapixmedia.com|activetect.net|brightvar.bid|clearload.bid|restorecosm.bid|bee.anime-loads.org|threadsphere.bid|queuecosm.bid|yoitect.com|skamaker.com|adf.ly|ay.gy|cracksurl.com|tinyium.com|skamason.com|redir2.auto-login-xxx.com|dl.underclassblog.com|special.picons.eu|quainator.com|yoalizer.com|kibuilder.com|kimechanic.com|zo.ee|viahold.com|tinyical.com|mmoity.com|pintient.com|riffhold.com|picocurl.com|bitigee.com|picocurl.com|atomcurve.com|atominik.com|battleate.com|kaitect.com|simizer.com|coginator.com|cogismith.com|twineer.com|yobuilder.com|go.awanpc.me|viwright.com|yabuilder.com|yamechanic.com|kializer.com|yoineer.com
+/callback/*$domain=uclaut.net|atabencot.net|thouth.net|cinebo.net|baymaleti.net|briskgram.net|ad.bdcraft.net|swiftviz.net|ad.sapixmedia.com|activetect.net|brightvar.bid|clearload.bid|restorecosm.bid|bee.anime-loads.org|threadsphere.bid|queuecosm.bid|yoitect.com|skamaker.com|adf.ly|ay.gy|cracksurl.com|tinyium.com|skamason.com|redir2.auto-login-xxx.com|dl.underclassblog.com|special.picons.eu|quainator.com|yoalizer.com|kibuilder.com|kimechanic.com|zo.ee|viahold.com|tinyical.com|mmoity.com|pintient.com|riffhold.com|picocurl.com|bitigee.com|picocurl.com|atomcurve.com|atominik.com|battleate.com|kaitect.com|simizer.com|coginator.com|cogismith.com|twineer.com|yobuilder.com|go.awanpc.me|viwright.com|yabuilder.com|yamechanic.com|kializer.com|yoineer.com
 ||tracking-opi.fonpit.de/tracking/
 ||cdn3.net/pixe/
 ||dig.ultimedia.com^
@@ -5867,7 +5883,6 @@ dreamprogs.net##td[width="88"][height="31"]
 ||amazon.com*/record-impressions?
 ||amazon.com*/recordevent.html?
 ||amazon.com/*/cerberus/log/
-||amazon.com/*/uedata?
 ||amazon.com/empty.gif?
 ||amazon.com/follow/log-metrics^
 ||amazon.com^*/impress.html
@@ -6399,6 +6414,13 @@ link.gmapp*.net$image
 !-------------- Whitelist ------------------------------------------------------!
 !-------------------------------------------------------------------------------!
 !
+! https://github.com/AdguardTeam/AdguardFilters/issues/29768
+@@||googletagmanager.com/gtm.js$domain=besplatka.ua
+! https://forum.adguard.com/index.php?threads/tf1-fr-broken.30944/
+@@||try.abtasty.com/78cb84f9b3158bdce6932109a6d7c7c1.js$domain=tf1.fr
+@@||dcinfos.abtasty.com/geolocAndWeather.php^$domain=tf1.fr
+! https://github.com/AdguardTeam/AdguardFilters/issues/29483
+@@||eddiebauer.com/__ssobj/core.js+ssdomvar.js+generic-adapter.js
 ! https://github.com/AdguardTeam/AdguardFilters/issues/29233
 @@/adrum.js$domain=usbank.com
 ! https://github.com/AdguardTeam/AdguardFilters/issues/29054

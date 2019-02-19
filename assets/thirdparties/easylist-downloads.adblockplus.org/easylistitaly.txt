@@ -1,8 +1,8 @@
 [Adblock Plus 1.1]
-! Checksum: ZOv6QUzxbricIKtuCuxfYQ
-! Version: 201902081231
+! Checksum: H0m8caXyxAdZBx2mM9m6LQ
+! Version: 201902191521
 ! Title: EasyList Italy
-! Last modified: 08 Feb 2019 12:31 UTC
+! Last modified: 19 Feb 2019 15:21 UTC
 ! Expires: 1 days (frequenza di aggiornamento)
 ! Homepage: https://easylist.to/
 ! Licenza: https://easylist.to/pages/licence.html
@@ -2236,6 +2236,7 @@ firenzespettacolo.it###banner_side
 livesicilia.it###banner_skin
 tuttosport.com###banner_square
 notiziediprato.it###banner_strip
+salernonotizie.it###banner_testa
 ilcorrieredabruzzo.it###banner_testata
 ilcorrieredabruzzo.it###banner_testata_1004x114
 ecomotori.net,gruppovideomedia.it,lastampa.it,newsfood.com,primaonline.it,primissima.it,qds.it###banner_top
@@ -2420,6 +2421,8 @@ cronachemaceratesi.it###ligatus_cronachemaceratesi_cronachemaceratesi_smartbox
 telesud3.com###linkamici
 asroma.it###logos
 eurogamer.it###low-leaderboard
+salernonotizie.it###machette_left
+salernonotizie.it###machette_right
 catanzaroinforma.it###mainsponsor
 catanzaroinforma.it###mainsponsorcronaca
 legnanonews.com###makeMeScrollable
@@ -2701,6 +2704,7 @@ famigliacristiana.it##.adv-box
 motori.it##.adv-items
 coratolive.it##.adv-news
 rbe.it##.adv-section
+quattroruote.it##.adv-wrap
 oktennis.it##.adv1
 delleconomia.it##.adv200
 virgilio.it##.advTuning
@@ -2957,6 +2961,7 @@ frasimania.it##.content-banner
 fanpage.it##.content-leaderboard
 macitynet.it##.contentTop
 toro.it##.contentleaderboard
+salernonotizie.it##.contskin
 windowsblogitalia.com##.corrispondenza
 tiscali.it##.dannperdere
 ebay.it,kijiji.it##.dart-banner-slot
@@ -2971,6 +2976,7 @@ quotidiano.net##.discount-block
 lavoratorio.it##.divBoxbanner300x250
 donnamoderna.com##.donnam-sidebar-adv
 ilmeteo.net##.eHotel
+quattroruote.it##.ebay-catalog-box
 gossipetv.com##.ebuzzing_box
 digisesso.com,gorillaporno.com,iltrombatore.com,koalaporno.com,pandasesso.com,ranaporno.com,sessosadomaso.com##.embed1
 digisesso.com,gorillaporno.com,iltrombatore.com,koalaporno.com,pandasesso.com,ranaporno.com,sessosadomaso.com##.embed2
@@ -3369,7 +3375,7 @@ altadefinizione.wiki,italia-film.pro##a[href^="https://bit.ly/"]
 mentelocale.it##a[href^="https://clk.tradedoubler.com/"]
 autobusweb.com,corrieredellacalabria.it,lasposatv.it##a[href^="https://goo.gl/"]
 italia-film.pro##a[href^="https://iptvstreaming.org/"]
-badcomics.it,badgames.it,badtaste.it,badtv.it,beppegrillo.it,comingsoon.it,consigli.it,eurogamer.it,everyeye.it,frasicelebri.it,giardiniblog.it,gizchina.it,greenme.it,hdblog.it,hwupgrade.it,mangaforever.net,ridble.com,rifaidate.it,spaziogames.it,surface-phone.it##a[href^="https://www.amazon."][href*="tag="]
+badcomics.it,badgames.it,badtaste.it,badtv.it,beppegrillo.it,comingsoon.it,consigli.it,eurogamer.it,everyeye.it,frasicelebri.it,game-experience.it,giardiniblog.it,gizchina.it,greenme.it,hdblog.it,hwupgrade.it,mangaforever.net,ridble.com,rifaidate.it,spaziogames.it,surface-phone.it##a[href^="https://www.amazon."][href*="tag="]
 traderlink.it##a[style="display: block; width: 100%; height: 1080px; filter:alpha(opacity=0); -moz-opacity: 0; opacity: 0; background-color: rgb(255, 255, 255);"]
 notebookcheck.it##div[id][class] > div[id] > img:first-child
 eurostreaming.watch##div[style="    position: relative;\a width: 468px;\a height: 60px;\a border: none !important;\a background: none;\a margin: auto;\a clear: both;"]
@@ -3763,7 +3769,7 @@ clubalfa.it##td[width="310"][height="255"]
 @@||google.com/adsense/search/ads.js$domain=zoover.ch|zoover.it
 @@||ilfattoquotidiano.it/wp-content/themes/ilfatto/thumb/*_pubblicita_*.jpg
 @@||ilparking-moto.it/images/flag/gif/ad.gif
-@@||imasdk.googleapis.com/js/sdkloader/ima3.js$domain=agi.it|liveksoft.tv|movieplayer.it|multiplayer.it|radiofreccia.it|radiozeta.it|video.repubblica.it|vvvvid.it
+@@||imasdk.googleapis.com/js/sdkloader/ima3.js$domain=agi.it|auto.it|corrieredellosport.it|guerinsportivo.it|inmoto.it|liveksoft.tv|movieplayer.it|multiplayer.it|radiofreccia.it|radiozeta.it|tuttosport.com|video.repubblica.it|vvvvid.it
 @@||impit.tradedoubler.com/imp?$subdocument,domain=iphoneitalia.com
 @@||js.neodatagroup.com/uploads/js/rds.js$domain=rds.it
 @@||js49.adagionet.com/uploads/js/sipra.js$domain=rai.it|rai.tv|rainews.it

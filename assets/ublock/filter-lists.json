@@ -44,12 +44,6 @@
         "group": "ads",
         "homeURL": "https://easylist-downloads.adblockplus.org/easylist.txt"
         },
-    "easylist-downloads.adblockplus.org/exceptionrules.txt": {
-        "off": true,
-        "title": "Acceptable Ads",
-        "group": "ads",
-        "homeURL": "https://easylist-downloads.adblockplus.org/exceptionrules.txt"
-        },
     "abp-filters-anti-cv/english.txt": {
         "title": "ABP Anti-Circumvention Filter List",
         "group": "ads",
@@ -92,7 +86,6 @@
         "homeURL": "https://easylist-downloads.adblockplus.org/easylistitaly.txt"
         },
     "easylist-downloads.adblockplus.org/easyprivacy.txt": {
-        "off": true,
         "title": "EasyPrivacy",
         "group": "privacy",
         "homeURL": "https://easylist-downloads.adblockplus.org/easyprivacy.txt"
@@ -176,7 +169,6 @@
         "homeURL": ""
         },
     "mirror1.malwaredomains.com/files/justdomains": {
-        "off": true,
         "title": "Malware domains",
         "group": "malware",
         "homeURL": "https://mirror1.malwaredomains.com/files/justdomains"
@@ -302,7 +294,6 @@
         "homeURL": ""
         },
     "www.malwaredomainlist.com/hostslist/hosts.txt": {
-        "off": true,
         "title": "Malware Domain List",
         "group": "malware",
         "homeURL": "http://www.malwaredomainlist.com/hostslist/hosts.txt"

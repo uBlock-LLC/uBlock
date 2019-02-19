@@ -8,7 +8,7 @@
 # Please forward any additions, corrections or comments by email to
 # hosts@someonewhocares.org
 
-# Last updated: Thu, 07 Feb 2019 at 06:30:26 GMT
+# Last updated: Tue, 19 Feb 2019 at 10:44:01 GMT
 
 # Use this file to prevent your computer from connecting to selected
 # internet hosts. This is an easy and effective way to protect you from 
@@ -1822,6 +1822,7 @@ ff02::3		ip6-allhosts
 127.0.0.1 trcko.com
 127.0.0.1 trc.taboolasyndication.com
 127.0.0.1 treasuredata.com
+127.0.0.1 trk.cachemetracking.com
 127.0.0.1 trk.kissmetrics.com
 127.0.0.1 trkrpoint.com
 127.0.0.1 trk.tidaltv.com
@@ -2260,6 +2261,7 @@ ff02::3		ip6-allhosts
 127.0.0.1 c.webwise.net
 127.0.0.1 c.webwise.org
 127.0.0.1 d2o9ozfswytaqz.cloudfront.net
+127.0.0.1 dailynewstonight.com
 127.0.0.1 dbios.org
 127.0.0.1 dcproxy1.thrunet.com
 127.0.0.1 definitial.info
@@ -2283,6 +2285,7 @@ ff02::3		ip6-allhosts
 127.0.0.1 east.05tz2e9.com
 127.0.0.1 efreedom.net
 127.0.0.1 e-kasa.w8w.pl
+127.0.0.1 emergingupdates.com
 127.0.0.1 en.likefever.org			# Facebook trojan
 127.0.0.1 enterprise.telesat.com.co
 127.0.0.1 enteryouremail.net
@@ -3077,6 +3080,7 @@ ff02::3		ip6-allhosts
 127.0.0.1 www.zfn5wua2d1.online
 127.0.0.1 www.zoominnovate.online
 127.0.0.1 xbasfbno.info
+127.0.0.1 xen-media.com
 127.0.0.1 xfotosx01.fromru.su
 127.0.0.1 xn--oogle-wmc.com
 127.0.0.1 xponlinescanner.com
@@ -4365,6 +4369,7 @@ ff02::3		ip6-allhosts
 127.0.0.1 a-ads.com
 127.0.0.1 a.adstome.com
 127.0.0.1 aads.treehugger.com
+127.0.0.1 a.adtng.com
 127.0.0.1 aams1.aim4media.com
 127.0.0.1 aan.amazon.com
 127.0.0.1 aa-nb.marketgid.com
@@ -6784,6 +6789,7 @@ ff02::3		ip6-allhosts
 127.0.0.1 api.sagent.io
 127.0.0.1 api.shoppingminds.net
 127.0.0.1 api.taboola.com
+127.0.0.1 api.uprivaladserver.net
 127.0.0.1 api.viglink.com
 127.0.0.1 ap.lijit.com
 127.0.0.1 apopt.hbmediapro.com
@@ -7591,12 +7597,14 @@ ff02::3		ip6-allhosts
 127.0.0.1 clk.atdmt.com
 127.0.0.1 clk.cloudyisland.com
 127.0.0.1 clk.tradedoubler.com
+127.0.0.1 clktrk.com
 127.0.0.1 clkuk.tradedoubler.com
 127.0.0.1 c.lomadee.com
 127.0.0.1 closeoutproductsreview.com
 127.0.0.1 cloudadservers.com
 127.0.0.1 cloudcrown.com
 127.0.0.1 c.l.qq.com
+127.0.0.1 cltrkr.com
 127.0.0.1 clubwinnerz.com
 127.0.0.1 cluster3.adultadworld.com
 127.0.0.1 cluster.adultadworld.com
@@ -7912,6 +7920,7 @@ ff02::3		ip6-allhosts
 127.0.0.1 dinoadserver2.roka.net
 127.0.0.1 dinsalgsvagt.adservinginternational.com
 127.0.0.1 directleads.com
+127.0.0.1 directoffers.go2cloud.org
 127.0.0.1 directpowerrewards.com
 127.0.0.1 directrev.cloudapp.net
 127.0.0.1 dirtyrhino.com
@@ -9065,6 +9074,7 @@ ff02::3		ip6-allhosts
 127.0.0.1 livingnet.adtech.de
 127.0.0.1 ll.atdmt.com
 127.0.0.1 l.linkpulse.com
+127.0.0.1 lmadvertising.engine.adglare.net
 127.0.0.1 lmqh.ecoencomputer.com
 127.0.0.1 lnads.osdn.com
 127.0.0.1 load.exelator.com
@@ -11037,6 +11047,7 @@ ff02::3		ip6-allhosts
 127.0.0.1 tracking.keywordmax.com
 127.0.0.1 tracking.trackmobistore.com
 127.0.0.1 tracking.trksrv.com
+127.0.0.1 tracking.truthfinder.com
 127.0.0.1 tracking.veoxa.com
 127.0.0.1 track.omgpl.com
 127.0.0.1 track.roularta.adhese.com

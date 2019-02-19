@@ -6,10 +6,10 @@
 ! Licencijos url: http://www.gnu.org/licenses/gpl-3.0.txt
 ! Homepage: http://margevicius.lt/easylist_lithuania/
 ! Facebook: https://www.facebook.com/easylistlithuania/
-! Paskutinis atnaujinimas: 2019-02-06
+! Paskutinis atnaujinimas: 2019-02-14
 ! Expires: 7 days (update frequency)
 
-delfi.lt##iframe[id="alio_block"]
+lrytas.lt##div[data-id="19522"]
 ###delfi-front-right-column
 ##.reklamos_nuorodos
 ##.reklamos_tarpas
@@ -24,7 +24,6 @@ delfi.lt##iframe[id="alio_block"]
 ##a[href="http://igrovoi-klub.org/fair-land"]
 -baneris-
 /PopBox.js
-/^https:\/\/g\d\.dcdn\.lt\/images\/[0-9a-z_\-\=\$\@\*\?\.]*\/[0-9a-z_\-\=\$\@\*\?\.]+$/$image
 /baneriai/*
 /baneris.
 /baneris_
@@ -107,7 +106,6 @@ delfi.lt##iframe[id="alio_block"]
 @@||banners.adnet.lt/i/euro_1_490x270_3.swf
 @@||banners.adnet.lt/i/euro_game_1.js
 @@||cosmopolitan.lt^$generichide
-@@||delfi.lt^$generichide
 @@||dujuirangoskaina.lt^$document
 @@||entitlements.jwplayer.com/*.json
 @@||eurobasket.lt$generichide
@@ -285,13 +283,14 @@ danguje.lt##A[href^="/component/banners/click/"] > IMG
 danielius.net##DIV[style="width: 80%; font-size: 12px; padding: 5px; border: 1px dashed #CCF5CC; background: #F0FCF0; margin: 0 auto;"]
 day.lt##[style="line-height: 25px; margin: 15px 8px 2px auto;"]
 degalines.orlenlietuva.lt##.addsBoxFirst
+delfi.lt##iframe[id="alio_block"]
 delfi.lt##iframe[src*="alio.lt/posPages.html"]
 delfi.lt##iframe[src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="]
-delfi.lt#?#:-abp-properties(/background-image: url\("https:\/\/g\d\.dcdn\.lt\/images\/[a-z_A-Z_0-9].*"\)/)
-delfi.lt#?#div:-abp-has(img[style*="position: absolute; left: 50%; -webkit-transform: translateX(-50%)"])
-delfi.lt#@##wallpaper-link-container
-delfi.lt#@##wallpaper-sitehat
-delfi.lt#@#.delfi-ads-block
+delfi.lt#?#:-abp-properties(width: 300)
+delfi.lt#?#div:-abp-has(:-abp-properties(cursor: pointer;)
+delfi.lt#?#div:-abp-has(:-abp-properties(left: 50%;))
+delfi.lt#?#img[src*="dcdn.lt/images"][style="margin-left=0"]
+delfi.lt#?#img[src*="dcdn.lt/images/"]:-abp-properties(width:1200; height:500)
 democ.eu###uzdanga
 democ.eu##.fanai
 depiliacija.eu###products_page_container > *
@@ -489,20 +488,10 @@ lrt.lt##.Scrolling_banner
 lrt.lt##TD[height="118"]
 lrvalstybe.lt##.left_banners
 lrvalstybe.lt##.right_banners
-lrytas.lt###ad_995x100
-lrytas.lt###ad_incomm_10
-lrytas.lt###blockAside__top
-lrytas.lt###fabPost
-lrytas.lt###wallpaper
-lrytas.lt##.ad.filled
-lrytas.lt##.ad_incom
-lrytas.lt##.ads.fab
-lrytas.lt##.article__aside
-lrytas.lt##.block__aside
-lrytas.lt##div[class="adv_feed"]
-lrytas.lt##div[class="block__asideInner nosticky"]
-lrytas.lt##div[class="block__horizontalAd block__horizontalAdVirs"]
-lrytas.lt##div[id="div_680x120_po_TOP1"]
+lrytas.lt##div[class*="layout"]>div[class*="left"]>div[style="width: 584px; height: 522px; display: none;"]
+lrytas.lt##div[data-id="19528"]
+lrytas.lt##iframe[style="height: 522px; margin: 0px; border-width: 0px; padding: 0px; width: 584px;"]
+lrytas.lt#?#div[layout*="layout-second"]>div[data-id="19539"]
 lrytas.lt#@#.afs_ads
 lttv.us##A[href="http://www.filmux.us"]
 lttv.us/images/300x100_5.gif
@@ -790,7 +779,6 @@ zurnalai.lt##IMG[alt="Informacija ir pagalba telefonu 1588"]
 ||15minlt.adocean.pl/files/x/*.mp4
 ||195.82.146.52/top-rq/Kozhedub.swf?
 ||4ride.lt/media/wysiwyg/Blog/unnamed.png
-||a1.lrytas.lt^
 ||adart.hostin.lt/banners/
 ||adbox.lt^$third-party
 ||adclick.lt^$third-party

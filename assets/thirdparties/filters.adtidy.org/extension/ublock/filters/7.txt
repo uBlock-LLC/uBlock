@@ -1,9 +1,9 @@
 ![Adblock Plus 2.0]
-! Checksum: 84fwAiFx414waEMnyqjtng
+! Checksum: iKJmQfmV5z0Jx26u4TUpmg
 ! Title: AdGuard Japanese filter
 ! Description: Filter that enables ad blocking on websites in Japanese language.
-! Version: 2.0.1.75
-! TimeUpdated: 2019-02-05T20:31:17+03:00
+! Version: 2.0.1.77
+! TimeUpdated: 2019-02-13T20:25:46+03:00
 ! Expires: 2 days (update frequency)
 ! Homepage: http://adguard.com/filters.html#japanese
 ! License: http://creativecommons.org/licenses/by-sa/3.0/
@@ -321,6 +321,18 @@
 !--- Fuck fuckAdBlock CSS ---
 ronron-blog.com,wpteq.org,d-navi004.com,gagetmatome.com,h5games.success-corp.co.jp#$#.pub_300x250.pub_300x250m.pub_728x90.text-ad.textAd.text_ad.text_ads.text-ads.text-ad-links {display:block!important;}
 !
+!--- antiblock.org g207---
+@@||cowboy.blog.jp^$generichide
+@@||eikaiwamastery.blogspot.com^$generichide
+@@||halchim.jp^$generichide
+@@||gtoys.blog48.fc2.com^$generichide
+@@||akb48gnittimatome.com^$generichide
+@@||omutulove.blog.fc2.com^$generichide
+@@||omutulove.seesaa.net^$generichide
+@@||kamikiyuki.hatenablog.com^$generichide
+@@||wakudan.seesaa.net^$generichide
+!
+!
 ! https://github.com/AdguardTeam/AdguardFilters/issues/28910
 ! https://github.com/AdguardTeam/AdguardFilters/issues/27939
 @@||wpteq.org/wp-content/plugins/wp-adblock-dedect/js/dedect.js
@@ -410,29 +422,6 @@ socom.yokohama#@#.an-sponsored
 !+ PLATFORM(ext_ff, ext_opera, ios, ext_android_cb, ext_ublock)
 @@||kyukyoku-matome.com^$generichide
 nasubiblog.com,kyukyoku-matome.com##.widget_pc_ad
-! https://github.com/AdguardTeam/AdguardFilters/issues/23304
-! https://github.com/AdguardTeam/AdguardFilters/issues/9091
-! https://github.com/AdguardTeam/AdguardFilters/issues/9081
-! https://github.com/AdguardTeam/AdguardFilters/issues/9084
-! https://github.com/AdguardTeam/AdguardFilters/issues/9079
-! https://github.com/AdguardTeam/AdguardFilters/issues/9078
-! https://github.com/AdguardTeam/AdguardFilters/issues/9080
-!+ PLATFORM(ext_ff, ext_opera, ios, ext_android_cb, ext_ublock)
-@@||eikaiwamastery.blogspot.com^$generichide
-!+ PLATFORM(ext_ff, ext_opera, ios, ext_android_cb, ext_ublock)
-@@||halchim.jp^$generichide
-!+ PLATFORM(ext_ff, ext_opera, ios, ext_android_cb, ext_ublock)
-@@||gtoys.blog48.fc2.com^$generichide
-!+ PLATFORM(ext_ff, ext_opera, ios, ext_android_cb, ext_ublock)
-@@||akb48gnittimatome.com^$generichide
-!+ PLATFORM(ext_ff, ext_opera, ios, ext_android_cb, ext_ublock)
-@@||omutulove.blog.fc2.com^$generichide
-!+ PLATFORM(ext_ff, ext_opera, ios, ext_android_cb, ext_ublock)
-@@||omutulove.seesaa.net^$generichide
-!+ PLATFORM(ext_ff, ext_opera, ios, ext_android_cb, ext_ublock)
-@@||kamikiyuki.hatenablog.com^$generichide
-!+ PLATFORM(ext_ff, ext_opera, ios, ext_android_cb, ext_ublock)
-@@||wakudan.seesaa.net^$generichide
 ! https://github.com/AdguardTeam/AdguardFilters/issues/9068
 @@||mushinavi.com^$generichide
 ! https://github.com/AdguardTeam/AdguardFilters/issues/9057
@@ -654,6 +643,7 @@ _ds_adtag_
 !
 ! Section contains rules for specific websites
 !
+||cowboy.blog.jp/main/rss*.html
 matome.naver.jp###yads_pc_overlay
 ||free-video-movie.com/link
 hostlove.com###ad_fix
@@ -664,6 +654,7 @@ channel-jk.com##.blogroll_wrapper
 channel-jk.com##.blogroll_wrapper_kizisita
 ||js.blozoo.info/js/rsstool/blogparts.js
 hosyusokuhou.jp##div.abox
+vippers.jp##a[href^="https://track.affiliate-b.com"]
 kirari-media.net##div[id][style="height:250px; width:300px;"]
 huyosoku.com###header-feed
 huyosoku.com###pickup-feed

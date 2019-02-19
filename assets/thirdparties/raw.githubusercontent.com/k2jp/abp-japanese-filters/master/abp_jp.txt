@@ -2,9 +2,9 @@
 ! Homepage: https://github.com/k2jp/abp-japanese-filters/
 ! Title: ABP Japanese filters (ONLY FOR Japanese and experienced users: READ Support Policy)
 ! Expires: 6 hours
-! Version: 201902062109
+! Version: 201902170353
 !
-! Last modified: 2019-02-06 21:09 JST(UTC+0900)
+! Last modified: 2019-02-17 03:53 JST(UTC+0900)
 ! Change log: https://github.com/k2jp/abp-japanese-filters/wiki/FilterChangeLog
 ! Code license: GNU GPL v3: http://www.gnu.org/licenses/gpl.html
 ! Content license: Creative Commons BY-NC-SA 4.0 http://creativecommons.org/licenses/by-nc-sa/4.0/
@@ -144,6 +144,8 @@
 @@//player.ooyala.com^
 ! Loosen a promotion image blocking criterion on a shopping site because it looked too ugly... Dec 15, 2011
 @@/promotion/*$domain=shopping.yahoo.co.jp
+! False positives with harmless pings used for alive monitoring, reported at [Issues #30](https://github.com/k2jp/abp-japanese-filters/issues/30), Feb 17, 2019
+@@||127.0.0.1:*/ping$domain=folding.stanford.edu
 ! False positives with a combined stylesheet used with the ^ads^ filter, and a combined JavaScript used with -ads^ filter, reported via Issue Report, Oct 3, 2014
 @@||abc.com/*.css?*#assets=*,$stylesheet
 @@||abc.com/*.js?*#assets=*,$script
@@ -271,6 +273,8 @@
 @@||twimg.com/insights/images/analytics-$domain=analytics.twitter.com
 ! False positives with the existing -analytics^, at analytics.twitter.com audience view, Nov 13, 2015
 @@||twimg.com/macaw-analytics/$domain=analytics.twitter.com
+! False positives with Report User function at twitter.com, reported at [Issue #43](https://github.com/k2jp/abp-japanese-filters/issues/43), Feb 17, 2019
+@@||twitter.com/i/safety/$domain=twitter.com
 ! False positives with XHR used with ^analytics. filter, at analytics.twitter.com, Aug 29, 2014
 @@||analytics.twitter.com^$xmlhttprequest,domain=analytics.twitter.com
 ! False positives with |http:*^ad- filter, Mar 20, 2014
@@ -500,10 +504,10 @@
 |http:*-ad-$popup
 |https:*-ad-
 |https:*-ad-$popup
-|http:*-ad.
-|http:*-ad.$popup
-|https:*-ad.
-|https:*-ad.$popup
+|http:*-ad.$domain=~tri-ad.global
+|http:*-ad.$popup,domain=~tri-ad.global
+|https:*-ad.$domain=~tri-ad.global
+|https:*-ad.$popup,domain=~tri-ad.global
 |http:*-ad^
 |http:*-ad^$popup
 |https:*-ad^

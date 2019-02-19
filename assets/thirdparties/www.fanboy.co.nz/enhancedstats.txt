@@ -1,7 +1,7 @@
 [Adblock Plus 2.0]
-! Checksum: Kzz+BQoe1W6BKoKZCacRgQ
+! Checksum: I/+ZeEAxCYwfj7UkcKmk5Q
 ! Title: Fanboy's Enhanced Tracking List
-! Updated: 8 Feb 2019
+! Updated: 16 Feb 2019
 ! Expires: 5 days
 ! License: http://creativecommons.org/licenses/by/3.0/
 ! Homepage: http://www.fanboy.co.nz/
@@ -373,7 +373,7 @@ _wtInit.js
 ||privateinternetaccess.com/pages/buy-vpn/$document
 ||windscribe.com/?affid=$document
 ! popads tracking
-/favicon.ico$image,third-party,domain=~ebay.com|~github.com|~stackexchange.com|~stackoverflow.com|~askubuntu.com|~reddit.com|~4chan.org|~twitter.com|~live.com|~espn.com
+/favicon.ico$image,third-party,domain=~ebay.com|~go.com|~github.com|~stackexchange.com|~stackoverflow.com|~askubuntu.com|~reddit.com|~4chan.org|~twitter.com|~live.com|~espn.com
 ! push notifications test filter
 ##.open.pushModal
 !
@@ -1137,8 +1137,6 @@ stream.cr###iFrameResizer0
 dailybreeze.com,sbsun.com,santacruzsentinel.com,siliconvalley.com,chicoer.com,times-standard.com,presstelegram.com,montereyherald.com,thecannabist.co,berksmontnews.com,saratogian.com,oneidadispatch.com,timesherald.com,news-herald.com,thereporteronline.com,morningjournal.com,mainlinemedianews.com,buffzone.com,fortmorgantimes.com,broomfieldenterprise.com,akronnewsreporter.com,troyrecord.com,brushnewstribune.com,buckslocalnews.com,ukiahdailyjournal.com,macombdaily.com,burlington-record.com,whittierdailynews.com,canoncitydailyrecord.com,lamarledger.com,thecannifornian.com,denverpost.com,orovillemr.com,sourcenewspapers.com,mendocinobeacon.com,record-bee.com,advocate-news.com,dailycamera.com,willitsnews.com,redbluffdailynews.com,coloradodaily.com,eptrail.com,impactousa.com,whatdoyouwannado.com,gazettes.com,paradisepost.com,voicenews.com,redwoodtimes.com,phoenixvillenews.com,bostonherald.com,themorningsun.com,pe.com,pvnews.com,ocregister.com,tbrnews.com,eastbaytimes.com,thereporter.com,cnweekly.com,longmontweekly.com,coloradohometownweekly.com,nashobavalleyvoice.com,thevalleydispatch.com,pressandguide.com,theoaklandpress.com,timesheraldonline.com,montgomerynews.com,sentinelandenterprise.com,goanddomichigan.com,miprepzone.com,pottsmerc.com,trentonian.com,delconewsnetwork.com,thenewsherald.com,thenewsherald.com,twincities.com,allaroundphilly.com,southjerseylocalnews.com,dailyfreeman.com,pennypincherpa.com,delcotimes.com,dailylocal.com,southernchestercountyweeklies.com#@#.adsbox
 dailybreeze.com,sbsun.com,santacruzsentinel.com,siliconvalley.com,chicoer.com,times-standard.com,presstelegram.com,montereyherald.com,thecannabist.co,berksmontnews.com,saratogian.com,oneidadispatch.com,timesherald.com,news-herald.com,thereporteronline.com,morningjournal.com,mainlinemedianews.com,buffzone.com,fortmorgantimes.com,broomfieldenterprise.com,akronnewsreporter.com,troyrecord.com,brushnewstribune.com,buckslocalnews.com,ukiahdailyjournal.com,macombdaily.com,burlington-record.com,whittierdailynews.com,canoncitydailyrecord.com,lamarledger.com,thecannifornian.com,denverpost.com,orovillemr.com,sourcenewspapers.com,mendocinobeacon.com,record-bee.com,advocate-news.com,dailycamera.com,willitsnews.com,redbluffdailynews.com,coloradodaily.com,eptrail.com,impactousa.com,whatdoyouwannado.com,gazettes.com,paradisepost.com,voicenews.com,redwoodtimes.com,phoenixvillenews.com,bostonherald.com,themorningsun.com,pe.com,pvnews.com,ocregister.com,tbrnews.com,eastbaytimes.com,thereporter.com,cnweekly.com,longmontweekly.com,coloradohometownweekly.com,nashobavalleyvoice.com,thevalleydispatch.com,pressandguide.com,theoaklandpress.com,timesheraldonline.com,montgomerynews.com,sentinelandenterprise.com,goanddomichigan.com,miprepzone.com,pottsmerc.com,trentonian.com,delconewsnetwork.com,thenewsherald.com,thenewsherald.com,twincities.com,allaroundphilly.com,southjerseylocalnews.com,dailyfreeman.com,pennypincherpa.com,delcotimes.com,dailylocal.com,southernchestercountyweeklies.com#@#.dfp-ad
 ||core.windows.net/connext/prod/data/$xmlhttprequest
-! reuters.com
-@@||reutersmedia.net/resources/r/adcontrol/$image,domain=reuters.com
 ! eskago.pl
 eskago.pl###mpc_cookie_intro
 !todaysparent.com
