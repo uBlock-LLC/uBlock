@@ -192,7 +192,7 @@
 µBlock.getAvailableLists = function(callback) {
     var availableLists = {};
     var relocationMap = {};
-
+    var locationOfAA = 'assets/thirdparties/easylist-downloads.adblockplus.org/exceptionrules.txt';
     var fixLocation = function(location) {
         // https://github.com/uBlockAdmin/uBlock/issues/418
         // We now support built-in external filter lists
@@ -206,6 +206,9 @@
     var onSelectedListsLoaded = function(store) {
         var µb = µBlock;
         var lists = store.remoteBlacklists;
+        if(lists.hasOwnProperty(locationOfAA) && µb.versionUpdateTo13) {
+            delete lists[locationOfAA];
+        } 
         var locations = Object.keys(lists);
         var location, availableEntry, storedEntry;
         var off;
@@ -273,7 +276,6 @@
             }
             availableLists[location] = entry;
         }
-        let locationOfAA = 'assets/thirdparties/easylist-downloads.adblockplus.org/exceptionrules.txt';
         if(availableLists.hasOwnProperty(locationOfAA) !== false) {
             availableLists[locationOfAA].off = µb.turnOffAA;
         }

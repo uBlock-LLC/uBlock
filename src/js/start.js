@@ -206,7 +206,7 @@ var onInstalled = function() {
     var onVersionRead = function(store) {
         
         var lastVersion = store.extensionLastVersion || '0.0.0.0';
-    
+
         var firstInstall = lastVersion === '0.0.0.0';
         
         var onDataReceived = function(data) {
@@ -220,6 +220,9 @@ var onInstalled = function() {
         }
 
         if(!firstInstall) {
+            if(lastVersion == "0.9.5.12" || (lastVersion == "0.9.5.13" && vAPI.browserInfo.flavor == "Firefox")) {
+                µb.versionUpdateTo13 = true;
+            }
             return;    
         } else {
             µb.turnOffAA = false;
