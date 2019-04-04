@@ -448,7 +448,8 @@
             if(proceduremask != "") {
                 hval |= proceduremask;
             }
-        return hval.toString(36);
+        //return hval.toString(36);
+        return hval;
     };
     
     /******************************************************************************/
@@ -525,6 +526,8 @@
     
         // hostname, entity-based filters
         this.hostnameFilters = {};
+        this.hostnameFilterDataView = new this.hostnameFilterDataViewWrapper();
+        this.hostnameFilterByteLength = 0;
         this.entityFilters = {};
     };
     
@@ -534,7 +537,109 @@
     // Detect and report invalid CSS selectors.
     
     FilterContainer.prototype.div = document.createElement('div');
-    
+    /*
+        I took an idea from the technique used here: 
+        https://github.com/cliqz-oss/adblocker/blob/master/src/engine/reverse-index.ts
+    */
+    FilterContainer.prototype.hostnameFilterDataViewWrapper = function() {
+        this.objView;
+        this.tokenBucket;
+        this.tokenIndex = {};
+        this.lru = new µb.LRUCache(16); 
+    }
+    FilterContainer.prototype.hostnameFilterDataViewWrapper.prototype = {
+        pushToBuffer: function(hostnameFilters, bufferLength) {
+            let hostCssOffset = new Map();
+            let computedIdSet = new Map();
+            let tokenLength = {};
+            let totalTokens = 0;
+            let totalHostnames = 0;
+            let tokenBucketIndex = 0;
+            let additionalBufferSpace = 50;
+            this.objView = new µb.dataView(bufferLength);
+            for (var token in hostnameFilters) {
+                totalTokens++;
+                tokenLength[token] = hostnameFilters[token].size;
+                if(hostCssOffset[token] === undefined) {
+                    hostCssOffset[token] = new Map();
+                } 
+                let ob = this.objView;
+                hostnameFilters[token].forEach(function(value, key, map) {
+                    totalHostnames++;
+                    let computeId = µb.computeSelectorsId(value);
+                    let cssOffset = computedIdSet.get(computeId);
+                    if(cssOffset === undefined) {
+                        cssOffset = ob.getPos();
+                        computedIdSet.set(computeId, cssOffset);
+                        let cssString;
+                        if(Array.isArray(value))
+                            cssString = value.join('\n');
+                        else 
+                            cssString = value;
+                            ob.pushUTF8(cssString);
+                    }
+                    hostCssOffset[token].set(key, cssOffset);
+                });
+            }
+            this.objView.buffer = this.objView.buffer.slice(0, this.objView.pos + (((totalTokens * 2) + (totalHostnames * 2)) * 4) + additionalBufferSpace);
+            let tokenBucketSize = totalTokens * 2;
+            this.tokenBucket = this.objView.getUint32ArrayView((totalTokens * 2) + (totalHostnames * 2));
+            for (var token in hostnameFilters) {
+                this.tokenIndex[token] = tokenBucketIndex; 
+                this.tokenBucket[tokenBucketIndex++] = token;
+                this.tokenBucket[tokenBucketIndex++] = tokenLength[token];
+                let tb = this.tokenBucket;
+                hostnameFilters[token].forEach(function(value, key, map) {
+                    tb[tokenBucketIndex++] = key;
+                    tb[tokenBucketIndex++] = hostCssOffset[token].get(key); 
+                });
+            }
+        },
+        retrieve: function(hosthashes, tokenHash, out) {
+            let loop;
+            let str = this.lru.get(tokenHash);
+            if(str != undefined) {
+                if(hosthashes.indexOf(str.k) != -1) {
+                    out.push(...str.v);
+                }
+            } else {
+                loop = this.tokenIndex[tokenHash];
+                if(loop !== undefined) {  
+                    loop++;
+                    let hostLen = this.tokenBucket[loop];
+                    let next = loop + 1;
+                    let ln = next + (hostLen * 2);
+                    while(next < ln) {
+                        let hostHash = this.tokenBucket[next];
+                        if(hosthashes.includes(hostHash)) {                  
+                            let cssOffset = this.tokenBucket[next + 1];
+                            this.objView.setPos(cssOffset);
+                            let cssDataString = this.objView.getUTF8();
+                            out.push(...cssDataString.split('\n'));
+                            this.lru.set(tokenHash,{'k': hostHash,'v':cssDataString.split('\n')});
+                            break;
+                        }
+                        next += 2;
+                    }
+                }
+            }
+        },
+        toSelfie: function() {
+            return JSON.stringify({ 
+                "buffer": Array.from(this.objView.buffer),
+                "tokenBucket": {"offset": this.tokenBucket.byteOffset, "length": this.tokenBucket.length},
+                "tokenIndex": this.tokenIndex                                    
+            });
+        },
+        fromSelfie: function(serializeObj) {
+            let arr = JSON.parse(serializeObj);
+            this.objView = new µb.dataView(arr["buffer"].length);
+            this.objView.buffer.set(arr["buffer"]);
+            this.tokenBucket = new Uint32Array(this.objView.buffer.buffer, arr["tokenBucket"].offset, arr["tokenBucket"].length);
+            this.tokenIndex = arr["tokenIndex"];
+        }
+    }
+   
     // Not all browsers support `Element.matches`:
     // http://caniuse.com/#feat=matchesselector
     
@@ -692,7 +797,7 @@
         let hash;
         let domain = this.µburi.domainFromHostname(hostname);
         if ( domain === '' ) {
-            hash = unhide === 0 ? this.type0NoDomainHash : this.type1NoDomainHash;
+            hash = unhide === 0 ? makeHash(0, this.type0NoDomainHash, this.domainHashMask) : makeHash(0, this.type1NoDomainHash, this.domainHashMask);
         } else {
             hash = abpSelectorRegexp.test(parsed.suffix) ? makeHash(unhide, domain, this.domainHashMask, this.procedureMask) : makeHash(unhide, domain, this.domainHashMask);
         }
@@ -713,6 +818,9 @@
             return;
         }
         var line, fields, filter, bucket;
+        const BUCKET_TOKEN_SIZE = 8; //Size of Token Hash [4 bytes] inside TokenBucket + Size of Token's hostnames length [4 bytes] inside TokenBucket 
+        const BUCKET_HOST_SIZE = 12; //Size of Token's Hashname Hash [4 bytes] inside TokenBucket + Size of Hostname's Css Length Offset [4 bytes] inside TokenBucket + Size of Hostname's Css Length inside CssBucket [2 bytes] + Size of Css Length [2 bytes] inside CssBucket
+        const BUCKET_SEPARATOR_SIZE = 1; //Size of separator '\n'
 
         for(let i = 0; i < text.length; i++) {
             
@@ -726,14 +834,25 @@
             this.duplicateBuster[line] = true;
             // h	ir	twitter.com	.promoted-tweet
             if ( fields[0] === 'h' ) {
-                bucket = this.hostnameFilters[fields[1]];
-                if ( bucket === undefined ) {
-                    this.hostnameFilters[fields[1]] = new FilterHostname(fields[3], fields[2]);
-                } else if ( bucket instanceof FilterHostnamesSelectors) {
-                    bucket.add(fields[2], fields[3]);
+                let hshash = µb.tokenHash(fields[2]);
+                if(this.hostnameFilters[fields[1]] === undefined) {
+                    this.hostnameFilters[fields[1]] = new Map();
+                    this.hostnameFilters[fields[1]].set(hshash,[fields[3]])
+                    this.hostnameFilterByteLength += BUCKET_TOKEN_SIZE + BUCKET_HOST_SIZE;
                 } else {
-                    this.hostnameFilters[fields[1]] = bucket.add(fields[2], fields[3]);
+                    let selectors = this.hostnameFilters[fields[1]].get(hshash);
+                    if ( selectors === undefined ) { 
+                        this.hostnameFilters[fields[1]].set(hshash, fields[3]);
+                        this.hostnameFilterByteLength += BUCKET_HOST_SIZE;
+                    } else if ( typeof selectors === 'string' ) { 
+                        this.hostnameFilters[fields[1]].set(hshash, [ selectors, fields[3] ]);
+                        this.hostnameFilterByteLength += BUCKET_SEPARATOR_SIZE;
+                    } else {
+                        selectors.push(fields[3]);
+                        this.hostnameFilterByteLength += BUCKET_SEPARATOR_SIZE;
+                    }
                 }
+                this.hostnameFilterByteLength += fields[3].length; //Size of Css Data inside CssBucket
                 continue;
             }
     
@@ -805,6 +924,8 @@
     /******************************************************************************/
     
     FilterContainer.prototype.freeze = function() {
+        this.hostnameFilterDataView.pushToBuffer(this.hostnameFilters, this.hostnameFilterByteLength);
+        this.hostnameFilters = {};
         this.duplicateBuster = {};
     
         if ( this.highHighGenericHide !== '' ) {
@@ -831,7 +952,7 @@
         return {
             acceptedCount: this.acceptedCount,
             duplicateCount: this.duplicateCount,
-            hostnameSpecificFilters: stringify(this.hostnameFilters),
+            hostnameFilterDataView: this.hostnameFilterDataView.toSelfie(),
             entitySpecificFilters: this.entityFilters,
             lowGenericHide: {"lg": Array.from(this.lowGenericHide.lg), "lgm": Array.from(this.lowGenericHide.lgm)},
             highLowGenericHide: this.highLowGenericHide,
@@ -874,10 +995,10 @@
             }
             return categoriesDict;
         }
-    
+        
         this.acceptedCount = selfie.acceptedCount;
         this.duplicateCount = selfie.duplicateCount;
-        this.hostnameFilters = filterFromSelfie(selfie.hostnameSpecificFilters);
+        this.hostnameFilterDataView.fromSelfie(selfie.hostnameFilterDataView);
         this.entityFilters = selfie.entitySpecificFilters;
         this.lowGenericHide = {"lg": new Set(selfie.lowGenericHide.lg),"lgm": new Map(selfie.lowGenericHide.lgm)};
         this.highLowGenericHide = selfie.highLowGenericHide;
@@ -1060,7 +1181,7 @@
         if ( !request.locationURL ) {
             return;
         }
-    
+        
         //quickProfiler.start('FilterContainer.retrieve()');
     
         var hostname = µb.URI.hostnameFromURI(request.locationURL);
@@ -1086,15 +1207,15 @@
             return r;
         }
         var hash, bucket;
+        let hosthashes = µb.getHostnameHashesFromLabelsBackward(hostname, domain);
+
         hash = makeHash(0, domain, this.domainHashMask);
-        if ( bucket = this.hostnameFilters[hash] ) {
-            bucket.retrieve(hostname, r.cosmeticHide);
-        }
+        this.hostnameFilterDataView.retrieve(hosthashes, hash, r.cosmeticHide);
+
         // https://github.com/uBlockAdmin/uBlock/issues/188
         // Special bucket for those filters without a valid domain name as per PSL
-        if ( bucket = this.hostnameFilters[this.type0NoDomainHash] ) {
-            bucket.retrieve(hostname, r.cosmeticHide);
-        }
+        hash = makeHash(0, this.type0NoDomainHash, this.domainHashMask);
+        this.hostnameFilterDataView.retrieve(hosthashes, hash, r.cosmeticHide);
     
         // entity filter buckets are always plain js array
         if ( bucket = this.entityFilters[r.entity] ) {
@@ -1103,23 +1224,18 @@
         // No entity exceptions as of now
     
         hash = makeHash(1, domain, this.domainHashMask);
-        if ( bucket = this.hostnameFilters[hash] ) {
-            bucket.retrieve(hostname, r.cosmeticDonthide);
-        }
+        this.hostnameFilterDataView.retrieve(hosthashes, hash, r.cosmeticDonthide);
         
         hash = makeHash(0, domain, this.domainHashMask, this.procedureMask);
-        if ( bucket = this.hostnameFilters[hash] ) {
-            bucket.retrieve(hostname, r.procedureHide);
-        }
+        this.hostnameFilterDataView.retrieve(hosthashes, hash, r.procedureHide);
         if(request.procedureSelectorsOnly) {
             return r.procedureHide;
         }
     
         // https://github.com/uBlockAdmin/uBlock/issues/188
         // Special bucket for those filters without a valid domain name as per PSL
-        if ( bucket = this.hostnameFilters[this.type1NoDomainHash] ) {
-            bucket.retrieve(hostname, r.cosmeticDonthide);
-        }
+        hash = makeHash(0, this.type1NoDomainHash, this.domainHashMask);
+        this.hostnameFilterDataView.retrieve(hosthashes, hash, r.cosmeticDonthide);
     
         this.retrieveFromSelectorCache(hostname, 'cosmetic', r.cosmeticHide);
         this.retrieveFromSelectorCache(hostname, 'net', r.netHide);

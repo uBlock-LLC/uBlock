@@ -91,8 +91,8 @@ return {
 
     // read-only
     systemSettings: {
-        compiledMagic: 'eopszukpsabe',
-        selfieMagic: 'menhiasrsabe'
+        compiledMagic: 'eopszukpsddd',
+        selfieMagic: 'menhiasrsddd'
     },
     restoreBackupSettings: {
         lastRestoreFile: '',
@@ -147,8 +147,7 @@ return {
 
     // so that I don't have to care for last comma
     dummy: 0,
-    turnOffAA: true,
-    versionUpdateTo13: false
+    turnOffAA: true
 };
 
 /******************************************************************************/

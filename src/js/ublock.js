@@ -439,6 +439,252 @@ https://github.com/darkskyapp/string-hash/blob/master/index.js
     };
 })();
 
+/*
+    The code below is taken from here: https://github.com/sindresorhus/quick-lru/blob/master/index.js
+    Author: https://github.com/sindresorhus
+    benchmark: https://github.com/dominictarr/bench-lru
+*/
+µBlock.LRUCache = function(maxSize) {
+    this.maxSize = maxSize;
+    this.cache = new Map();
+    this.oldCache = new Map();
+    this._size = 0;
+};
+µBlock.LRUCache.prototype = {
+    _set: function(key, value) {
+        this.cache.set(key, value);
+        this._size++;
+    
+        if (this._size >= this.maxSize) {
+            this._size = 0;
+            this.oldCache = this.cache;
+            this.cache = new Map();
+        }
+    },
+    get: function(key) {
+        if (this.cache.has(key)) {
+            return this.cache.get(key);
+        }
+    
+        if (this.oldCache.has(key)) {
+            const value = this.oldCache.get(key);
+            this._set(key, value);
+            return value;
+        }
+    },
+    set: function(key, value) {
+        if (this.cache.has(key)) {
+            this.cache.set(key, value);
+        } else {
+            this._set(key, value);
+        }
+
+        return this;
+    },
+    has: function(key){
+        return this.cache.has(key) || this.oldCache.has(key);
+    },
+    peek: function(key){
+        if (this.cache.has(key)) {
+            return this.cache.get(key);
+        }
+    
+        if (this.oldCache.has(key)) {
+            return this.oldCache.get(key);
+        }
+    },
+    delete: function(key) {
+        const deleted = this.cache.delete(key);
+        if (deleted) {
+            this._size--;
+        }
+        return this.oldCache.delete(key) || deleted;
+    },
+    clear: function() {
+        this.cache.clear();
+        this.oldCache.clear();
+        this._size = 0;
+    },
+    keys: function* (){
+        for (const [key] of this) {
+            yield key;
+        }
+    },
+    values: function* (){
+        for (const [, value] of this) {
+            yield value;
+        }
+    },
+    [Symbol.iterator]: function* (){
+        for (const item of this.cache) {
+            yield item;
+        }
+    
+        for (const item of this.oldCache) {
+            const [key] = item;
+            if (!this.cache.has(key)) {
+                yield item;
+            }
+        }
+    }
+};
+
+/*  
+    The code below is taken from here: https://github.com/cliqz-oss/adblocker/blob/master/src/data-view.ts
+    License: https://github.com/cliqz-oss/adblocker/blob/master/LICENSE
+*/
+µBlock.dataView = function(length) {
+    this.pos = 0;
+    this.buffer = new Uint8Array(length);
+    this.reHasUnicode = /[^\x00-\x7F]/;
+    this.puny_encoded = 1 << 15;
+}
+µBlock.dataView.prototype = {
+    getPos: function() {
+        return this.pos;
+    },
+    seekZero: function() {
+        this.pos = 0;
+    },
+    setByte: function(pos, byte) {
+        this.buffer[pos] = byte;
+    },
+    getUint8: function() {
+        return this.buffer[this.pos++];
+    },
+    align: function(alignement) {
+        this.pos =
+            this.pos % alignement === 0
+            ? this.pos
+            : Math.floor(this.pos / alignement) * alignement + alignement;
+    },
+    pushUint8: function(uint8) {
+        this.buffer[this.pos++] = uint8;
+    },
+    pushUint32: function(uint32) {
+        this.buffer[this.pos++] = uint32 >>> 24;
+        this.buffer[this.pos++] = uint32 >>> 16;
+        this.buffer[this.pos++] = uint32 >>> 8;
+        this.buffer[this.pos++] = uint32;
+    },
+    pushUint32Array: function(arr) {
+        this.pushUint32(arr.length);
+        for (let i = 0; i < arr.length; i += 1) {
+            this.pushUint32(arr[i]);
+        }
+    },
+    pushUTF8: function(raw) {
+        let str = raw;
+        if ( this.reHasUnicode.test(raw) ) {
+            str = punycode.encode(raw);
+            this.pushUint16(this.setBit(str.length, this.puny_encoded));
+        } else {
+            this.pushUint16(str.length);
+        }
+        for (let i = 0; i < str.length; i += 1) {
+            this.buffer[this.pos++] = str.charCodeAt(i);
+        }
+    },
+    slice: function() {
+        this.checkSize();
+        return this.buffer.slice(0, this.pos);
+    },
+    checkSize: function() {
+        if (this.pos !== 0 && this.pos > this.buffer.byteLength) {
+            throw new Error(
+            `StaticDataView too small: ${this.buffer.byteLength}, but required ${this.pos - 1} bytes`,
+            );
+        }
+    },
+    setPos: function(pos){
+        this.pos = pos;
+    },
+    getUTF8: function() {
+        const lengthAndMask = this.getUint16();
+        const byteLength = this.clearBit(lengthAndMask, this.puny_encoded);
+        const punyEncoded = this.getBit(lengthAndMask, this.puny_encoded);
+        this.pos += byteLength;
+        const str = String.fromCharCode.apply(
+        null,
+        this.buffer.subarray(this.pos - byteLength, this.pos),
+        );
+        if (punyEncoded) {
+            return punycode.decode(str);
+        }
+        return str;
+    },
+    getUint32ArrayView: function(desiredSize) {
+        this.align(4);
+        const view = new Uint32Array(
+        this.buffer.buffer,
+        this.pos + this.buffer.byteOffset,
+        desiredSize,
+        );
+        this.pos += desiredSize * 4;
+        return view;
+    },
+    getUint16: function() {
+        return ((this.buffer[this.pos++] << 8) | this.buffer[this.pos++]) >>> 0;
+    },
+    pushUint16: function(uint16) {
+        this.buffer[this.pos++] = uint16 >>> 8;
+        this.buffer[this.pos++] = uint16;
+    },
+    setBit: function(n, mask) {
+        return n | mask;
+    },
+    getBit: function(n, mask) {
+        return !!(n & mask);
+    },
+    clearBit: function(n, mask) {
+        return n & ~mask;
+    }
+}
+/*
+    The code below is taken from here: https://github.com/cliqz-oss/adblocker/blob/32397857de8c439fb4c961f12d7e17c750b3fc98/src/filters/cosmetic.ts#L114
+    License: https://github.com/cliqz-oss/adblocker/blob/master/LICENSE
+*/
+µBlock.computeSelectorsId = function(selectors) {
+    let hash = (5408 * 33);
+    for(let i = 0; i < selectors.length; i++) {
+      for (let j = 0; j < selectors[i].length; j += 1) {
+        hash = (hash * 33) ^ selectors[i].charCodeAt(j);
+      }
+    }
+   return hash >>> 0;
+}
+/*
+    The code below is taken from here: https://github.com/cliqz-oss/adblocker/blob/32397857de8c439fb4c961f12d7e17c750b3fc98/src/filters/cosmetic.ts#L51
+    License: https://github.com/cliqz-oss/adblocker/blob/master/LICENSE
+*/
+µBlock.getHostnameHashesFromLabelsBackward = function(hostname, domain) {
+    if(hostname == domain && hostname.indexOf('www.') !== -1) {
+        domain = hostname.slice(hostname.indexOf('.') + 1);
+    }
+    return µBlock.getHashesFromLabelsBackward(hostname, hostname.length, hostname.length - domain.length);
+}
+/*
+    The code below is taken from here: https://github.com/cliqz-oss/adblocker/blob/32397857de8c439fb4c961f12d7e17c750b3fc98/src/filters/cosmetic.ts#L16
+    License: https://github.com/cliqz-oss/adblocker/blob/master/LICENSE
+*/
+µBlock.getHashesFromLabelsBackward = function(hostname, end, startOfDomain) {
+    const hashes = [];
+    let hash = 5381;
+  
+    // Compute hash backward, label per label
+    for (let i = end - 1; i >= 0; i -= 1) {
+      // Process label
+      if (hostname[i] === '.' && i < startOfDomain) {
+        hashes.push(hash >>> 0);
+      }
+  
+      // Update hash
+      hash = (hash * 33) ^ hostname.charCodeAt(i);
+    }
+  
+    hashes.push(hash >>> 0);
+    return hashes;
+}
 µBlock.logCosmeticFilters = (function() {
     var tabIdToTimerMap = {};
 

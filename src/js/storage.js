@@ -206,9 +206,6 @@
     var onSelectedListsLoaded = function(store) {
         var µb = µBlock;
         var lists = store.remoteBlacklists;
-        if(lists.hasOwnProperty(locationOfAA) && µb.versionUpdateTo13) {
-            delete lists[locationOfAA];
-        } 
         var locations = Object.keys(lists);
         var location, availableEntry, storedEntry;
         var off;
