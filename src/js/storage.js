@@ -163,6 +163,10 @@
         var compiledFilters = µb.compileFilters(filters);
         var snfe = µb.staticNetFilteringEngine;
         var cfe = µb.cosmeticFilteringEngine;
+        if(compiledFilters.get("c").length > 0) {
+            cfe.appendHostnameFilters(compiledFilters.get("c"));
+            compiledFilters.set("c", []);
+        }
         var acceptedCount = snfe.acceptedCount + cfe.acceptedCount;
         var duplicateCount = snfe.duplicateCount + cfe.duplicateCount;
         µb.applyCompiledFilters(compiledFilters);
@@ -664,7 +668,6 @@
         magic: this.systemSettings.selfieMagic,
         publicSuffixList: publicSuffixList.toSelfie(),
         filterLists: this.remoteBlacklists,
-        domainList: this.domainHolder.toSelfie(),
         staticNetFilteringEngine: this.staticNetFilteringEngine.toSelfie(),
         cosmeticFilteringEngine: this.cosmeticFilteringEngine.toSelfie()
     };

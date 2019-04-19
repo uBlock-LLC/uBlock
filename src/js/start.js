@@ -107,7 +107,6 @@ var onSelfieReady = function(selfie) {
     }
     //console.log('start.js/onSelfieReady: selfie looks good');
     µb.remoteBlacklists = selfie.filterLists;
-    µb.domainHolder.fromSelfie(selfie.domainList); 
     µb.staticNetFilteringEngine.fromSelfie(selfie.staticNetFilteringEngine);
     µb.cosmeticFilteringEngine.fromSelfie(selfie.cosmeticFilteringEngine);
     return true;

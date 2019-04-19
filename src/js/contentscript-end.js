@@ -1306,8 +1306,8 @@ var uBlockCollapser = (function() {
     } else {
         var localMessager = vAPI.messaging.channel('contentscript-start.js');
         var proceduresHandler = function(details) {
-            if(details.procedureHide.length > 0) {
-                vAPI.hideProcedureFilters = details.procedureHide;
+            if(details.length > 0) {
+                vAPI.hideProcedureFilters = details;
                 vAPI.proceduralCosmeticFiltering.applyPatterns(vAPI.hideProcedureFilters);
             }
             localMessager.close();

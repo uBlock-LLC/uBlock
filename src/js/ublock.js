@@ -342,103 +342,6 @@ https://github.com/darkskyapp/string-hash/blob/master/index.js
 };
 
 /******************************************************************************/
-
-µBlock.domainHolder = (function() {
-    var domains = [];
-    var parseOptHostnames = function(raw) {
-        let ihostnames = [];
-        let notHostnames = []
-        let hostnames = raw.split('|');
-        let hostname;
-        for ( let i = 0; i < hostnames.length; i++ ) {
-            hostname = hostnames[i];
-            if ( hostname.charAt(0) === '~' ) {
-                notHostnames.push(hostname.slice(1));
-            } else {
-                ihostnames.push(hostname);
-            }
-        }
-        return [ihostnames, notHostnames];
-    };
-
-    var FilterDomain = function(domainList) {
-       this.domainList = domainList;
-    }
-    FilterDomain.prototype.toString = function() {
-        return '$domain='+ this.domainList;
-    };
-    FilterDomain.prototype.match = function(pageHostnameRegister) {
-        let [hostnames , notHostnames] =  parseOptHostnames(this.domainList);
-        return (
-                (hostnames.length == 0 ? true : hostnames.some(hostname => pageHostnameRegister.slice(-hostname.length) === hostname)) &&
-                (notHostnames.some(hostname => pageHostnameRegister.slice(-hostname.length) === hostname) === false)
-               );
-    }
-    FilterDomain.prototype.toSelfie = function() {
-        return this.domainList;
-    }
-    FilterDomain.fromSelfie = function(domainList) {
-        return FilterDomain(domainList);
-    }
-    FilterDomain.prototype.toJSON = function() {
-        return this.toSelfie();
-    } 
-
-    var getIndex = function(domainStr) {
-        let objHostname;   
-        var finddomain = function(element) {
-            return element.domainList === this;
-        }
-        let index = domains.findIndex(finddomain, domainStr);
-        if(index != -1) {
-            return index;
-        } else {
-            domains.push(new FilterDomain(domainStr));
-            return domains.findIndex(finddomain, domainStr);
-        }
-    }
-    var reset = function(){
-        domains.length = 0;
-    }
-    var getData = function(index) {
-        return domains[index];
-    }
-    var match = function(index, hostname) { 
-       let objFilterDomain =  domains[index];
-       if(objFilterDomain === undefined) {
-           console.error("match: missing Index: " + index);
-           return false;
-       }
-       return objFilterDomain.match(hostname);
-    }
-    var toSelfie = function() {
-        return JSON.stringify(domains);
-    }
-    var fromSelfie = function(domainslst) {
-        let arr = JSON.parse(domainslst);
-        arr.forEach(function(value, key) {
-            domains[key] = new FilterDomain(value);
-        });
-    }
-    var toString = function(index) {
-        let objFilterDomain =  domains[index];
-        if(objFilterDomain === undefined) {
-            console.error("toString: missing Index: " + index);
-            return '';
-        } 
-        return objFilterDomain.toString();
-    }
-    return {
-        "getIndex": getIndex,
-         "getData": getData,
-           "match": match,
-        "toString": toString,
-        "toSelfie": toSelfie,
-      "fromSelfie": fromSelfie,
-           "reset": reset
-    };
-})();
-
 /*
     The code below is taken from here: https://github.com/sindresorhus/quick-lru/blob/master/index.js
     Author: https://github.com/sindresorhus
@@ -657,33 +560,63 @@ https://github.com/darkskyapp/string-hash/blob/master/index.js
     The code below is taken from here: https://github.com/cliqz-oss/adblocker/blob/32397857de8c439fb4c961f12d7e17c750b3fc98/src/filters/cosmetic.ts#L51
     License: https://github.com/cliqz-oss/adblocker/blob/master/LICENSE
 */
-µBlock.getHostnameHashesFromLabelsBackward = function(hostname, domain) {
+µBlock.getHostnameHashesFromLabelsBackward = function(hostname, domain, hashesOnly = true) {
     if(hostname == domain && hostname.indexOf('www.') !== -1) {
         domain = hostname.slice(hostname.indexOf('.') + 1);
     }
-    return µBlock.getHashesFromLabelsBackward(hostname, hostname.length, hostname.length - domain.length);
+    return µBlock.getDomainHashesFromBackward(hostname, hostname.length, hostname.length - domain.length, hashesOnly); 
 }
+
 /*
     The code below is taken from here: https://github.com/cliqz-oss/adblocker/blob/32397857de8c439fb4c961f12d7e17c750b3fc98/src/filters/cosmetic.ts#L16
     License: https://github.com/cliqz-oss/adblocker/blob/master/LICENSE
 */
-µBlock.getHashesFromLabelsBackward = function(hostname, end, startOfDomain) {
-    const hashes = [];
+µBlock.getDomainHashesFromBackward = function(hostname, end, startOfDomain, hashesOnly) {
+    const hashes = new Map();
     let hash = 5381;
   
     // Compute hash backward, label per label
     for (let i = end - 1; i >= 0; i -= 1) {
       // Process label
       if (hostname[i] === '.' && i < startOfDomain) {
-        hashes.push(hash >>> 0);
+        hashes.set(hash >>> 0,hostname.slice(-(end - i - 1)));
       }
-  
+      
       // Update hash
       hash = (hash * 33) ^ hostname.charCodeAt(i);
     }
+    hashes.set(hash >>> 0, hostname);
+
+    if(hashesOnly) {
+        return [ ...hashes.keys() ];
+    } else {
+        return hashes;
+    }
+}
+/*
+    The code below is taken from here: https://github.com/cliqz-oss/adblocker/blob/675755584a2c9b45f66ab26e7683f513e1253b01/src/utils.ts#L225
+    License: https://github.com/cliqz-oss/adblocker/blob/master/LICENSE
+*/
+µBlock.binSearch = function(arr, elt) {
+    if (arr.length === 0) {
+      return -1;
+    }
   
-    hashes.push(hash >>> 0);
-    return hashes;
+    let low = 0;
+    let high = arr.length - 1;
+  
+    while (low <= high) {
+      const mid = (low + high) >>> 1;
+      const midVal = arr[mid];
+      if (midVal < elt) {
+        low = mid + 1;
+      } else if (midVal > elt) {
+        high = mid - 1;
+      } else {
+        return mid;
+      }
+    }
+    return -1;
 }
 µBlock.logCosmeticFilters = (function() {
     var tabIdToTimerMap = {};
@@ -705,64 +638,6 @@ https://github.com/darkskyapp/string-hash/blob/master/index.js
 
     return injectAsync;
 })();
-
-µBlock.rewriteEngine = (function (){
-    
-    var parseResult = function(result) {
-		let rewrite = '';
-		let pos = result.indexOf('$');
-        let text = result.slice(0, pos);
-    	if ( pos !== -1 ) {
-          	rewrite = result.slice(pos + 1).slice(8);
-    	}
-    	return [text,rewrite];
-	}
-	
-	var convertTextToRexExp = function (text){
-		// remove multiple wildcards
-        if (text.length >= 2 && text[0] == "/" && text[text.length - 1] == "/") {
-            text = text.substr(1, text.length - 2);
-        } else {
-            text = text.replace(/\*+/g, "*");
-
-            text = text
-                // remove anchors following separator placeholder
-                .replace(/\^\|$/, "^")
-                // escape special symbols
-                .replace(/\W/g, "\\$&")
-                // replace wildcards by .*
-                .replace(/\\\*/g, ".*")
-                // process separator placeholders (all ANSI characters but alphanumeric
-                // characters and _%.-)
-                .replace(/\\\^/g, "(?:[\\x00-\\x24\\x26-\\x2C\\x2F\\x3A-\\x40\\x5B-\\x5E\\x60\\x7B-\\x7F]|$)")
-                // process extended anchor at expression start
-                .replace(/^\\\|\\\|/, "^[\\w\\-]+:\\/+(?!\\/)(?:[^\\/]+\\.)?")
-                // process anchor at expression start
-                .replace(/^\\\|/, "^")
-                // process anchor at expression end
-                .replace(/\\\|$/, "$");
-        }
-        let regexp = new RegExp(text,false ? "" : "i");
-        return regexp;
-	}
-	
-	var rewriteUrl = function(url,result) {
-		let [text,rewrite] = parseResult(result);
-        let regexp = convertTextToRexExp(text);
-        try
-        {
-            let rewrittenUrl = new URL(url.replace(regexp, rewrite), url);
-            if (rewrittenUrl.origin == new URL(url).origin)
-                return rewrittenUrl.href;
-            }
-        catch (e)
-        {
-        }
-        return url;
-    }
-   return {rewriteUrl : rewriteUrl};
-})();
-
 /*
     The below code is borrowed from:
     https://github.com/gorhill/uBlock/blob/13f2b6b86ff00827650ee2e70ea5f4779845ce4a/src/js/scriptlet-filtering.js#L61

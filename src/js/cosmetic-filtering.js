@@ -51,141 +51,6 @@
     //   lindaikeji.blogspot.com##a > img[height="600"]
     //   japantimes.co.jp##table[align="right"][width="250"]
     //   mobilephonetalk.com##[align="center"] > b > a[href^="http://tinyurl.com/"]
-    
-    /*
-      I took the idea to store specific filters from here:
-      
-      Commits: 
-      https://github.com/gorhill/uBlock/blob/8a616bcafb8c5143f76b5ff4b0d94a78c11786b2/src/js/cosmetic-filtering.js#L64
-      https://github.com/gorhill/uBlock/blob/8a616bcafb8c5143f76b5ff4b0d94a78c11786b2/src/js/cosmetic-filtering.js#L110
-      https://github.com/gorhill/uBlock/blob/8a616bcafb8c5143f76b5ff4b0d94a78c11786b2/src/js/cosmetic-filtering.js#L156
-
-      Author: https://github.com/gorhill
-      
-      License is GPL3: https://github.com/gorhill/uBlock/blob/master/README.md
-    */
-
-    let FilterHostnamesSelectors = function(mapping){
-        this.hs = new Map(mapping);
-    }
-    FilterHostnamesSelectors.prototype.add = function(hostname, selector) {
-        let selectors = this.hs.get(hostname);
-        if ( selectors === undefined ) {
-            this.hs.set(hostname, selector);
-        } else if ( typeof selectors === 'string' ) {
-            this.hs.set(hostname, [ selectors, selector ]);
-        } else {
-            selectors.push(selector);
-        }
-    }
-    FilterHostnamesSelectors.prototype.retrieve = function(hostname, out) {
-        this.hs.forEach(function(value, key) {
-            if ( hostname.slice(-key.length) === key ) {
-                let selectors = value;
-                if ( typeof selectors === 'string' ) {
-                    out.push(selectors);
-                }
-                else {
-                    out.push(...selectors);
-                }
-            }
-        });
-    };
-    FilterHostnamesSelectors.prototype.fid = 'hmm';
-    
-    FilterHostnamesSelectors.prototype.toSelfie = function() {
-        return JSON.stringify(Array.from(this.hs));
-    };
-    FilterHostnamesSelectors.fromSelfie = function(s) {
-        let f = new FilterHostnamesSelectors();
-        let o = JSON.parse(s);
-        f.hs = new Map(o);
-        return f;
-    };
-    FilterHostnamesSelectors.prototype.toJSON = function() {
-        return {[this.fid]: this.toSelfie()};
-    } 
-    
-    /*************************************************************/
-    
-    let FilterHostnameSeletors = function(hostname, selectors) {
-        this.hostname = hostname;
-        this.selectors = selectors;
-    }
-    FilterHostnameSeletors.prototype.add = function(hostname, selector) {
-        if(this.hostname == hostname){
-            this.selectors.push(selector);
-            return this;
-        } else {
-            return new FilterHostnamesSelectors([[this.hostname,this.selectors],[hostname, selector]]);
-        }
-    }
-    FilterHostnameSeletors.prototype.retrieve = function(hostname, out) {
-        if ( hostname.slice(-this.hostname.length) === this.hostname ) {
-            out.push(...this.selectors);
-        }
-    };
-    
-    FilterHostnameSeletors.prototype.fid = 'hm';
-    
-    FilterHostnameSeletors.prototype.toSelfie = function() {
-        let str = this.selectors.map(
-            function(x){
-                return encode(x);
-            }
-        )
-        return JSON.stringify(str) + '\t' + this.hostname;
-    };
-    
-    FilterHostnameSeletors.fromSelfie = function(s) {
-        let opts =  s.split('\t');
-        let selectors = JSON.parse(opts[0]).map(
-            function(x) {
-                return decode(x);
-            }
-        )
-        return new FilterHostnameSeletors(opts[1], selectors);
-    };
-    FilterHostnameSeletors.prototype.toJSON = function() {
-        return {[this.fid]: this.toSelfie()};
-    } 
-    
-    /*************************************************************/
-    
-    let FilterHostname = function(s, hostname) {
-        this.s = s;
-        this.hostname = hostname;
-    };
-    
-    FilterHostname.prototype.add = function(hostname, selector) {
-        if ( hostname === this.hostname ) {
-            return new FilterHostnameSeletors(this.hostname,[ this.s, selector ]);
-        } 
-        else {
-            return new FilterHostnamesSelectors([[this.hostname, this.s],[ hostname, selector ]]);
-        }
-    }
-    
-    FilterHostname.prototype.retrieve = function(hostname, out) {
-        if ( hostname.slice(-this.hostname.length) === this.hostname ) {
-            out.push(this.s);
-        }
-    };
-    
-    FilterHostname.prototype.fid = 'h';
-    
-    FilterHostname.prototype.toSelfie = function() {
-        return encode(this.s) + '\t' + this.hostname;
-    };
-    
-    FilterHostname.fromSelfie = function(s) {
-        let pos = s.indexOf('\t');
-        return new FilterHostname(decode(s.slice(0, pos)), s.slice(pos + 1));
-    };
-    FilterHostname.prototype.toJSON = function() {
-        return {[this.fid]:this.toSelfie()};
-    };
-    
     /******************************************************************************/
     
     // Any selector specific to an entity
@@ -470,6 +335,10 @@
     // Generic filters can only be enforced once the main document is loaded.
     // Specific filers can be enforced before the main document is loaded.
     
+    const BUCKET_TOKEN_SIZE = 8; //Size of Token Hash [4 bytes] inside TokenBucket + Size of Token's hostnames length [4 bytes] inside TokenBucket 
+    const BUCKET_HOST_SIZE = 12; //Size of Token's Hashname Hash [4 bytes] inside TokenBucket + Size of Hostname's Css Length Offset [4 bytes] inside TokenBucket + Size of Hostname's Css Length inside CssBucket [2 bytes] + Size of Css Length [2 bytes] inside CssBucket
+    const BUCKET_SEPARATOR_SIZE = 1; //Size of separator '\n'
+
     let FilterContainer = function() {
         this.domainHashMask = (1 << 10) - 1; // 10 bits
         this.genericHashMask = (1 << 15) - 1; // 15 bits
@@ -582,7 +451,6 @@
                 });
             }
             this.objView.buffer = this.objView.buffer.slice(0, this.objView.pos + (((totalTokens * 2) + (totalHostnames * 2)) * 4) + additionalBufferSpace);
-            let tokenBucketSize = totalTokens * 2;
             this.tokenBucket = this.objView.getUint32ArrayView((totalTokens * 2) + (totalHostnames * 2));
             for (var token in hostnameFilters) {
                 this.tokenIndex[token] = tokenBucketIndex; 
@@ -617,7 +485,6 @@
                             let cssDataString = this.objView.getUTF8();
                             out.push(...cssDataString.split('\n'));
                             this.lru.set(tokenHash,{'k': hostHash,'v':cssDataString.split('\n')});
-                            break;
                         }
                         next += 2;
                     }
@@ -637,6 +504,35 @@
             this.objView.buffer.set(arr["buffer"]);
             this.tokenBucket = new Uint32Array(this.objView.buffer.buffer, arr["tokenBucket"].offset, arr["tokenBucket"].length);
             this.tokenIndex = arr["tokenIndex"];
+        },
+        rebuildHostnameFilters: function() {
+            let hostnameFilters = {};
+            let loop = 0;
+            let hn;
+            let selector;
+            let entry;
+
+            while(loop < this.tokenBucket.length) {
+                let tokenHash = this.tokenBucket[loop];
+                if(hostnameFilters[tokenHash] === undefined) {
+                    hostnameFilters[tokenHash] = new Map();
+                }
+                entry = hostnameFilters[tokenHash];
+                loop++;
+                let hostLen = this.tokenBucket[loop];
+                let next = loop + 1;
+                let ln = next + (hostLen * 2);
+                while(next < ln) {
+                    let hostHash = this.tokenBucket[next];
+                    let cssOffset = this.tokenBucket[next + 1];
+                    this.objView.setPos(cssOffset);
+                    let selectors = this.objView.getUTF8().split('\n');
+                    entry.set(hostHash, selectors);
+                    next += 2;
+                }
+                loop += (this.tokenBucket[loop] * 2) + 1;
+            }
+            return hostnameFilters; 
         }
     }
    
@@ -801,7 +697,8 @@
         } else {
             hash = abpSelectorRegexp.test(parsed.suffix) ? makeHash(unhide, domain, this.domainHashMask, this.procedureMask) : makeHash(unhide, domain, this.domainHashMask);
         }
-        out.push(['h', hash, hostname, parsed.suffix]);
+        let hshash = µb.tokenHash(hostname);
+        out.push(['h', hash, hshash, parsed.suffix]);
     };
     
     /******************************************************************************/
@@ -810,17 +707,42 @@
         let entity = hostname.slice(0, -2);
         out.push(['e',entity, parsed.suffix]);
     };
-    
+
+    FilterContainer.prototype.appendHostnameFilters = function(compiledFilters) {
+        this.hostnameFilters = this.hostnameFilterDataView.rebuildHostnameFilters();
+        let fc = this;
+        compiledFilters.forEach(function(fields) {
+            fc.addHostnameFilters(fields);
+        });
+        this.hostnameFilterDataView = new this.hostnameFilterDataViewWrapper();
+    }
     /******************************************************************************/
-    
+    FilterContainer.prototype.addHostnameFilters = function(fields) {
+        let hshash = fields[2];
+        if(this.hostnameFilters[fields[1]] === undefined) {
+            this.hostnameFilters[fields[1]] = new Map();
+            this.hostnameFilters[fields[1]].set(hshash,[fields[3]]);
+            this.hostnameFilterByteLength += BUCKET_TOKEN_SIZE + BUCKET_HOST_SIZE;
+        } else {
+            let selectors = this.hostnameFilters[fields[1]].get(hshash);
+            if ( selectors === undefined ) { 
+                this.hostnameFilters[fields[1]].set(hshash, fields[3]);
+                this.hostnameFilterByteLength += BUCKET_HOST_SIZE;
+            } else if ( typeof selectors === 'string' ) { 
+                this.hostnameFilters[fields[1]].set(hshash, [ selectors, fields[3] ]);
+                this.hostnameFilterByteLength += BUCKET_SEPARATOR_SIZE;
+            } else {
+                selectors.push(fields[3]);
+                this.hostnameFilterByteLength += BUCKET_SEPARATOR_SIZE;
+            }
+        }
+        this.hostnameFilterByteLength += fields[3].length; //Size of Css Data inside CssBucket
+    }
     FilterContainer.prototype.fromCompiledContent = function(text, skip) {
        if ( skip ) {
             return;
         }
         var line, fields, filter, bucket;
-        const BUCKET_TOKEN_SIZE = 8; //Size of Token Hash [4 bytes] inside TokenBucket + Size of Token's hostnames length [4 bytes] inside TokenBucket 
-        const BUCKET_HOST_SIZE = 12; //Size of Token's Hashname Hash [4 bytes] inside TokenBucket + Size of Hostname's Css Length Offset [4 bytes] inside TokenBucket + Size of Hostname's Css Length inside CssBucket [2 bytes] + Size of Css Length [2 bytes] inside CssBucket
-        const BUCKET_SEPARATOR_SIZE = 1; //Size of separator '\n'
 
         for(let i = 0; i < text.length; i++) {
             
@@ -834,25 +756,7 @@
             this.duplicateBuster[line] = true;
             // h	ir	twitter.com	.promoted-tweet
             if ( fields[0] === 'h' ) {
-                let hshash = µb.tokenHash(fields[2]);
-                if(this.hostnameFilters[fields[1]] === undefined) {
-                    this.hostnameFilters[fields[1]] = new Map();
-                    this.hostnameFilters[fields[1]].set(hshash,[fields[3]])
-                    this.hostnameFilterByteLength += BUCKET_TOKEN_SIZE + BUCKET_HOST_SIZE;
-                } else {
-                    let selectors = this.hostnameFilters[fields[1]].get(hshash);
-                    if ( selectors === undefined ) { 
-                        this.hostnameFilters[fields[1]].set(hshash, fields[3]);
-                        this.hostnameFilterByteLength += BUCKET_HOST_SIZE;
-                    } else if ( typeof selectors === 'string' ) { 
-                        this.hostnameFilters[fields[1]].set(hshash, [ selectors, fields[3] ]);
-                        this.hostnameFilterByteLength += BUCKET_SEPARATOR_SIZE;
-                    } else {
-                        selectors.push(fields[3]);
-                        this.hostnameFilterByteLength += BUCKET_SEPARATOR_SIZE;
-                    }
-                }
-                this.hostnameFilterByteLength += fields[3].length; //Size of Css Data inside CssBucket
+                this.addHostnameFilters(fields);
                 continue;
             }
     
@@ -924,7 +828,8 @@
     /******************************************************************************/
     
     FilterContainer.prototype.freeze = function() {
-        this.hostnameFilterDataView.pushToBuffer(this.hostnameFilters, this.hostnameFilterByteLength);
+        if(Object.entries(this.hostnameFilters).length > 0)
+            this.hostnameFilterDataView.pushToBuffer(this.hostnameFilters, this.hostnameFilterByteLength);
         this.hostnameFilters = {};
         this.duplicateBuster = {};
     
@@ -941,14 +846,6 @@
     /******************************************************************************/
     
     FilterContainer.prototype.toSelfie = function() {
-
-        let stringify = function(hostnameFilters) {
-            let arr = [];
-            for (const [key, value] of Object.entries(hostnameFilters)) {
-                arr.push({[key]: JSON.stringify(value)});
-              }
-            return JSON.stringify(arr);
-        }
         return {
             acceptedCount: this.acceptedCount,
             duplicateCount: this.duplicateCount,
@@ -965,37 +862,9 @@
         };
     };
     
-    FilterContainer.factories = {
-             'h': FilterHostname,
-           'hmm': FilterHostnamesSelectors,
-           'hm' : FilterHostnameSeletors
-    };
     /******************************************************************************/
     
     FilterContainer.prototype.fromSelfie = function(selfie) {
-       
-    
-        var filterFromSelfie = function(s) {
-    
-            function getSelfie(tokenEntries) {
-                let selfie;
-                for(let prop in tokenEntries) {
-                  var item = tokenEntries[prop];
-                  selfie = FilterContainer.factories[prop].fromSelfie(item);
-                }
-                return selfie;
-            }
-
-            let categories = JSON.parse(s);
-            let categoriesDict = {}; 
-            for(let item of categories) { 
-                for (const [key, value] of Object.entries(item)) { 
-                    categoriesDict[key] = getSelfie(JSON.parse(value));
-                }
-            }
-            return categoriesDict;
-        }
-        
         this.acceptedCount = selfie.acceptedCount;
         this.duplicateCount = selfie.duplicateCount;
         this.hostnameFilterDataView.fromSelfie(selfie.hostnameFilterDataView);
