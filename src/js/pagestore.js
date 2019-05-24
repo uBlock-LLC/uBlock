@@ -251,6 +251,7 @@ FrameStore.prototype.init = function(rootHostname, frameURL) {
     this.pageURL = frameURL;
     this.pageHostname = µburi.hostnameFromURI(frameURL);
     this.pageDomain = µburi.domainFromHostname(this.pageHostname) || this.pageHostname;
+    this.pageHostnameHashes = µb.getHostnameHashesFromLabelsBackward(this.pageHostname, this.pageDomain, false);
     return this;
 };
 
@@ -440,6 +441,7 @@ PageStore.prototype.createContextFromPage = function() {
     var context = new µb.tabContextManager.createContext(this.tabId);
     context.pageHostname = context.rootHostname;
     context.pageDomain = context.rootDomain;
+    context.pageHostnameHashes = context.rootHostnameHashes;
     return context;
 };
 
@@ -449,9 +451,11 @@ PageStore.prototype.createContextFromFrameId = function(frameId) {
         var frameStore = this.frames[frameId];
         context.pageHostname = frameStore.pageHostname;
         context.pageDomain = frameStore.pageDomain;
+        context.pageHostnameHashes = frameStore.pageHostnameHashes;
     } else {
         context.pageHostname = context.rootHostname;
         context.pageDomain = context.rootDomain;
+        context.pageHostnameHashes = context.rootHostnameHashes;
     }
     return context;
 };
@@ -460,6 +464,7 @@ PageStore.prototype.createContextFromFrameHostname = function(frameHostname) {
     var context = new µb.tabContextManager.createContext(this.tabId);
     context.pageHostname = frameHostname;
     context.pageDomain = µb.URI.domainFromHostname(frameHostname) || frameHostname;
+    context.pageHostnameHashes = µb.getHostnameHashesFromLabelsBackward(context.pageHostname, context.pageDomain, false);
     return context;
 };
 

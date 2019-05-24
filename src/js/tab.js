@@ -145,6 +145,7 @@ housekeep itself.
         this.normalURL =
         this.rootHostname =
         this.rootDomain = '';
+        this.rootHostnameHashes = new Map();
         this.timer = null;
         this.onTabCallback = null;
         this.onTimerCallback = null;
@@ -201,6 +202,7 @@ housekeep itself.
             this.normalURL = µb.normalizePageURL(this.tabId, this.rawURL);
             this.rootHostname = µb.URI.hostnameFromURI(this.normalURL);
             this.rootDomain = µb.URI.domainFromHostname(this.rootHostname);
+            this.rootHostnameHashes = µb.getHostnameHashesFromLabelsBackward(this.rootHostname, this.rootDomain, false);
         }
     };
 
@@ -340,6 +342,7 @@ housekeep itself.
         entry.normalURL = µb.normalizePageURL(entry.tabId);
         entry.rootHostname = µb.URI.hostnameFromURI(entry.normalURL);
         entry.rootDomain = µb.URI.domainFromHostname(entry.rootHostname);
+        entry.rootHostnameHashes = µb.getHostnameHashesFromLabelsBackward(entry.rootHostname, entry.rootDomain, false);
     })();
 
     // Context object, typically to be used to feed filtering engines.
@@ -347,6 +350,7 @@ housekeep itself.
         var tabContext = lookup(tabId);
         this.rootHostname = tabContext.rootHostname;
         this.rootDomain = tabContext.rootDomain;
+        this.rootHostnameHashes = tabContext.rootHostnameHashes;
         this.pageHostname = 
         this.pageDomain =
         this.requestURL =
@@ -459,17 +463,21 @@ vAPI.tabs.onPopup = function(details) {
     var µburi = µb.URI;
     var openerHostname = µburi.hostnameFromURI(openerURL);
     var openerDomain = µburi.domainFromHostname(openerHostname);
-
+    let pageHostnameHashes = µb.getHostnameHashesFromLabelsBackward(openerHostname, openerDomain, false);
     var targetURL = details.targetURL;
-
+    let requestHostname = µb.URI.hostnameFromURI(targetURL);
+    let requestDomain =  µburi.domainFromHostname(requestHostname);
+    
     var context = {
         pageHostname: openerHostname,
         pageDomain: openerDomain,
         rootHostname: openerHostname,
         rootDomain: openerDomain,
         requestURL: targetURL,
-        requestHostname: µb.URI.hostnameFromURI(targetURL),
-        requestType: 'popup'
+        requestHostname: requestHostname,
+        requestDomain: requestDomain,
+        requestType: 'popup',
+        pageHostnameHashes: pageHostnameHashes
     };
 
     var result = '';

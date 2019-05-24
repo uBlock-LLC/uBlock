@@ -477,6 +477,7 @@ var filterRequests = function(pageStore, details) {
         request = requests[i];
         context.requestURL = vAPI.punycodeURL(request.url);
         context.requestHostname = µburi.hostnameFromURI(request.url);
+        context.requestDomain = µburi.domainFromHostname(context.requestHostname);
         context.requestType = tagNameToRequestTypeMap[request.tagName];
         if ( isBlockResult(pageStore.filterRequest(context)) ) {
             request.collapse = true;
