@@ -89,6 +89,7 @@ var onBeforeRequest = function(details) {
     var requestURL = details.url;
     requestContext.requestURL = requestURL;
     requestContext.requestHostname = details.hostname;
+    requestContext.requestDomain = µb.URI.domainFromHostname(requestContext.requestHostname);
     requestContext.requestType = requestType;
 
     var result = pageStore.filterRequest(requestContext);
@@ -149,6 +150,7 @@ var onBeforeRootFrameRequest = function(details) {
         pageDomain: requestDomain,
         requestURL: requestURL,
         requestHostname: requestHostname,
+        requestDomain: requestDomain,
         requestType: 'main_frame'
     };
 
@@ -218,6 +220,7 @@ var onBeforeBehindTheSceneRequest = function(details) {
     var context = pageStore.createContextFromPage();
     context.requestURL = details.url;
     context.requestHostname = details.hostname;
+    context.requestDomain = µb.URI.domainFromHostname(context.requestHostname);
     context.requestType = details.type;
 
     // Blocking behind-the-scene requests can break a lot of stuff: prevent
@@ -273,6 +276,7 @@ var onHeadersReceived = function(details) {
     var context = pageStore.createContextFromFrameId(details.parentFrameId);
     context.requestURL = details.url;
     context.requestHostname = details.hostname;
+    context.requestDomain = µb.URI.domainFromHostname(context.requestHostname);
     context.requestType = 'inline-script';
     µb.staticNetFilteringEngine.cspSubsets = new Map();
     var result = pageStore.filterRequestNoCache(context);
@@ -325,6 +329,7 @@ var onRootFrameHeadersReceived = function(details) {
     var context = pageStore.createContextFromPage();
     context.requestURL = requestURL;
     context.requestHostname = requestHostname;
+    context.requestDomain = µb.URI.domainFromHostname(context.requestHostname);
     context.requestType = 'inline-script';
 
     µb.staticNetFilteringEngine.cspSubsets = new Map();

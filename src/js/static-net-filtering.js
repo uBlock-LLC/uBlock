@@ -164,6 +164,15 @@
         //console.debug('µBlock.staticNetFilteringEngine: created RegExp("%s")', reStr);
         return new RegExp(reStr);
     };
+    const isValidRegEx = function(s) {
+        var isValid = true;
+        try {
+            new RegExp(s);
+        } catch(e) {
+            isValid = false;
+        }
+        return isValid;
+    };
     
     /*******************************************************************************
     
@@ -339,8 +348,11 @@
             return hash >>> 0;
         },
         match: function(details, hostnameOnlyFilter) {
-            let hostnamesView = new Uint32Array(this.objView.buffer.buffer, details['+'].offset, details['+'].length);
-            let notHostnamesView = new Uint32Array(this.objView.buffer.buffer, details['-'].offset, details['-'].length);
+            let hostnamesView, notHostnamesView;
+            if(details['+'].length > 0)
+                hostnamesView = new Uint32Array(this.objView.buffer.buffer, details['+'].offset, details['+'].length);
+            if(details['-'].length > 0)
+                notHostnamesView = new Uint32Array(this.objView.buffer.buffer, details['-'].offset, details['-'].length);
             let hostHashes;
             let blnStatus = false;
             let matchHostname = '';
@@ -349,7 +361,7 @@
             } else {
                 hostHashes = pageHostnameHashes;
             }
-            if(hostnamesView.length == 0) {
+            if(details['+'].length == 0) {
                 blnStatus = true;
             } else {
                 Array.from(hostHashes).some(function(element) {
@@ -362,9 +374,9 @@
                     }
                 });
             }
-            if(blnStatus)
+            if(blnStatus && details['-'].length > 0)
                 blnStatus = (blnStatus && (Array.from(hostHashes).some(element => µb.binSearch(notHostnamesView, element[0]) !== -1) === false));
-
+            
             return blnStatus +'|'+ matchHostname;
         }
     };
@@ -404,13 +416,38 @@
     };
     /******************************************************************************/
     
+    var FilterPair = function(f0, f1) {
+        this.f0 = f0;
+        this.f1 = f1;
+    }
+    FilterPair.prototype.match = function(url, tokenBeg) {
+        return this.f0.match(url, tokenBeg) === true  && this.f1.match();
+    }
+    FilterPair.fid = FilterPair.prototype.fid = 'fp';
+
+    FilterPair.prototype.toString = function() {
+        return this.f0.toString() + "," + this.f1.toString();
+    };
+    FilterPair.prototype.toSelfie = function() {
+        return [this.f0.fid, this.f0.toSelfie(), this.f1.toSelfie()];
+    };
+    FilterPair.fromSelfie = function(s) {
+        let factory = FilterContainer.factories[s[0]];
+        const f0 = factory.fromSelfie(s[1]);
+        const f1 = FilterDomain.fromSelfie(s[2]);
+        return new FilterPair(f0, f1);
+    };
+    FilterPair.prototype.toJSON = function() {
+        return {[this.fid]: this.toSelfie()};
+    } 
+
     var FilterPlain = function(s, tokenBeg) {
         this.s = s;
         this.tokenBeg = tokenBeg;
     };
     
     FilterPlain.prototype.match = function(url, tokenBeg) {
-        return url.substr(tokenBeg - this.tokenBeg, this.s.length) === this.s;
+        return url.startsWith(this.s, tokenBeg - this.tokenBeg);
     };
     
     FilterPlain.fid = FilterPlain.prototype.fid = 'a';
@@ -442,7 +479,7 @@
     };
     
     FilterPlainPrefix0.prototype.match = function(url, tokenBeg) {
-        return url.substr(tokenBeg, this.s.length) === this.s;
+        return url.startsWith(this.s, tokenBeg);
     };
     
     FilterPlainPrefix0.fid = FilterPlainPrefix0.prototype.fid = '0a';
@@ -471,7 +508,7 @@
     };
     
     FilterPlainPrefix1.prototype.match = function(url, tokenBeg) {
-        return url.substr(tokenBeg - 1, this.s.length) === this.s;
+       return url.startsWith(this.s, tokenBeg - 1);
     };
     
     FilterPlainPrefix1.fid = FilterPlainPrefix1.prototype.fid = '1a';
@@ -501,7 +538,7 @@
     };
     
     FilterPlainLeftAnchored.prototype.match = function(url) { 
-        return url.slice(0, this.s.length) === this.s;
+        return url.startsWith(this.s);
     };
     
     FilterPlainLeftAnchored.fid = FilterPlainLeftAnchored.prototype.fid = '|a';
@@ -530,7 +567,7 @@
        this.s = s;
     };
     FilterPlainRightAnchored.prototype.match = function(url) {
-        return url.slice(-this.s.length) === this.s;
+        return url.endsWith(this.s);
     };
     
     FilterPlainRightAnchored.fid = FilterPlainRightAnchored.prototype.fid = 'a|';
@@ -564,7 +601,7 @@
         this.s = s; 
     };
     FilterPlainHnAnchored.prototype.match = function(url, tokenBeg) {
-        if ( url.substr(tokenBeg, this.s.length) !== this.s ) {
+        if ( !url.startsWith(this.s, tokenBeg) ) {
             return false;
         }
         // Valid only if hostname-valid characters to the left of token
@@ -837,30 +874,15 @@
         let filters = this.filters;
         let n = filters.length;
         for ( let i = 0; i < n; i++ ) {
-            if(Array.isArray(filters[i])) {
-                let f0 = filters[i][0];
-                let f1 = filters[i][1];
-                if(f0.fid.indexOf('h') === -1 && skipGenericBlocking) {
-                    continue;
+            if(filters[i].fid.indexOf('h') === -1 && skipGenericBlocking) {
+                continue;
+            }
+            if ( filters[i].match(url, tokenBeg) !== false) { 
+                this.f = filters[i];
+                if ( i >= this.vip ) {
+                    this.promote(i);
                 }
-                if ( f0.match(url, tokenBeg) !== false && f1.match()) {
-                    this.f = filters[i];
-                    if ( i >= this.vip ) {
-                        this.promote(i);
-                    }
-                    return true;
-                }
-            } else {
-                if(filters[i].fid.indexOf('h') === -1 && skipGenericBlocking) {
-                    continue;
-                }
-                if ( filters[i].match(url, tokenBeg) !== false) { 
-                    this.f = filters[i];
-                    if ( i >= this.vip ) {
-                        this.promote(i);
-                    }
-                    return true;
-                }
+                return true;
             }
         }
         return false;
@@ -870,11 +892,7 @@
     
     FilterBucket.prototype.toString = function() {
         if ( this.f !== null ) {
-            if(Array.isArray(this.f)) {
-                return this.f[0].toString() + this.f[1].toString();
-            } else {
-                return this.f.toString();
-            }
+            return this.f.toString();
         }
         return '';
     };
@@ -882,12 +900,7 @@
     FilterBucket.prototype.toSelfie = function() {
         let str = this.filters.map(
             function(x) {
-                if(Array.isArray(x)) {
-                    return [{[x[0].fid]:x[0].toSelfie()}, {[x[1].fid]:x[1].toSelfie()}]
-                }
-                else {
-                    return {[x.fid]:x.toSelfie()}
-                }
+                return {[x.fid]:x.toSelfie()}
             }   
         );
         return JSON.stringify(str);
@@ -900,21 +913,11 @@
         for(let key in o) {
             let item = o[key];
             let prop, value;
-            if(Array.isArray(item)) {
-                let arrF = [];
-                for(let p in item) {
-                    prop = Object.keys(item[p])[0];
-                    value = Object.values(item[p])[0];
-                    arrF.push(FilterContainer.factories[prop].fromSelfie(value));
-                }
-                arr.push(arrF);
-            } else {
-                prop = Object.keys(item)[0];
-                value = Object.values(item)[0];
-                let filter = FilterContainer.factories[prop].fromSelfie(value);
-                arr.push(filter);
-            }
-          }
+            prop = Object.keys(item)[0];
+            value = Object.values(item)[0];
+            let filter = FilterContainer.factories[prop].fromSelfie(value);
+            arr.push(filter);
+        }
         f.filters = arr;
         return f;
     };
@@ -1203,6 +1206,9 @@
         if ( s.charAt(0) === '/' && s.slice(-1) === '/' && s.length > 2 ) {
             this.isRegex = true;
             this.f = s.slice(1, -1);
+            if (!isValidRegEx(this.f) ) {
+                this.unsupported = true;
+             }
             return this;
         }
     
@@ -1276,6 +1282,7 @@
     
     var badTokens = {
         'com': true,
+        'google': true,
         'http': true,
         'https': true,
         'icon': true,
@@ -1319,7 +1326,7 @@
     
     FilterParser.prototype.makeToken = function() {
         if ( this.isRegex ) {
-            this.token = '*';
+            this.token = µb.tokenHash('*r');
             return;
         }
     
@@ -1328,9 +1335,17 @@
         // https://github.com/uBlockAdmin/uBlock/issues/1038
         // Match any URL.
         if ( s === '*' ) {
-            this.token = '*';
+            this.token = µb.tokenHash('*'); 
             return;
         }
+        else if(s == "https://") {
+            this.token = µb.tokenHash('https://'); 
+            return;
+        }
+        else if(s == "http://") {
+            this.token = µb.tokenHash('http://'); 
+            return;
+        } 
     
         let matches;
     
@@ -1348,7 +1363,7 @@
     
         matches = findFirstGoodToken(s);
         if ( matches === null || matches[0].length === 0 ) {
-            this.token = '*';
+            this.token = µb.tokenHash('~'); 
             return;
         }
         this.tokenBeg = matches.index;
@@ -1371,6 +1386,12 @@
     
     var FilterContainer = function() {
         this.reAnyToken = /[%0-9a-z]+/g;
+        this.httpsTokenHash = µb.tokenHash('https://'); 
+        this.httpTokenHash = µb.tokenHash('http://'); 
+        this.anyMatchTokenHash = µb.tokenHash('*'); 
+        this.noTokenHash = µb.tokenHash('~'); 
+        this.regexTokenHash = µb.tokenHash('*r'); 
+        this.dotTokenHash = µb.tokenHash('.');
         this.tokens = [];
         this.filterParser = new FilterParser();
         this.reset();
@@ -1389,8 +1410,8 @@
         this.blockFilterCount = 0;
         this.duplicateCount = 0;
         this.duplicateBuster = {};
-        this.categories = Object.create(null);
-        this.cspFilters = Object.create(null);
+        this.categories = new Map();
+        this.cspFilters = new Map();
         this.filterParser.reset();
         this.filterCounts = {};
         this.cspSubsets = new Map();
@@ -1404,11 +1425,11 @@
         this.filterParser.reset();
         this.frozen = true;
         let pushToBuffer = false;
-        for(let category in this.categories) {
-            let notHostnames = [];
-            if(this.categories[category]['.'] !== undefined && this.categories[category]['.'].hasOwnProperty('dict')) {
-                let details = objDataView.pushToBuffer(Array.from(this.categories[category]['.'].dict), notHostnames, Array.from(this.categories[category]['.'].dict));
-                this.categories[category]['.'] = FilterDomain.fromSelfie(JSON.stringify(details) + '\t' + true);
+        for ( const [ bits, bucket ] of this.categories ) {
+           let notHostnames = [];
+           if(bucket.has(this.dotTokenHash) && bucket.get(this.dotTokenHash).hasOwnProperty('dict')) {
+                let details = objDataView.pushToBuffer(Array.from(bucket.get(this.dotTokenHash).dict), notHostnames, Array.from(bucket.get(this.dotTokenHash).dict));
+                bucket.set(this.dotTokenHash, FilterDomain.fromSelfie(JSON.stringify(details) + '\t' + true));
                 pushToBuffer = true;
             }
         }
@@ -1433,12 +1454,26 @@
          '_': FilterGeneric,
        '||_': FilterGenericHnAnchored,
          'd': FilterDomain,
-        'fc': FilterCSP
+        'fc': FilterCSP,
+        'fp': FilterPair
     };
     
     /******************************************************************************/
     
     FilterContainer.prototype.toSelfie = function() {
+
+        const categoriesToSelfie = function(categories) {
+            const selfie = [];
+            for ( const [ bits, bucket ] of categories ) {
+                const tokens = [];
+                for ( const [ tokenhash, filter ] of bucket ) {
+                    tokens.push([ tokenhash, filter.toJSON() ]);
+                }
+                selfie.push([ bits, tokens ]);
+            }
+            return selfie;
+        };
+
         return {
             processedFilterCount: this.processedFilterCount,
             acceptedCount: this.acceptedCount,
@@ -1447,8 +1482,8 @@
             blockFilterCount: this.blockFilterCount,
             duplicateCount: this.duplicateCount,
             hostnameFilterDataView: objDataView.toSelfie(),
-            categories: JSON.stringify(this.categories), 
-            cspFilters: JSON.stringify(this.cspFilters) 
+            categories: categoriesToSelfie(this.categories), 
+            cspFilters: categoriesToSelfie(this.cspFilters) 
         };
     };
     
@@ -1463,44 +1498,28 @@
         this.blockFilterCount = selfie.blockFilterCount;
         this.duplicateCount = selfie.duplicateCount;
         var fc = this;
-        var filterFromSelfie = function(s) {
-    
-            function getSelfie(tokenEntries) {
-                let selfie;
-                
-                for(let prop in tokenEntries) {
-                  var item = tokenEntries[prop];
-                  selfie = FilterContainer.factories[prop].fromSelfie(item);
-                }
-                return selfie;
+
+        const getSelfie = function(tokenEntries) {
+            let selfie;
+            for(let prop in tokenEntries) {
+              var item = tokenEntries[prop];
+              selfie = FilterContainer.factories[prop].fromSelfie(item);
             }
-    
-            var categories = JSON.parse(s);
-    
-            var categoriesDict = {}; 
-    
-            for(let category in categories) {
-                
-                if(typeof categoriesDict[category] == "undefined" )
-                    categoriesDict[category] = Object.create(null);
-                
-                let categoryItem = categories[category];
-    
-                for(let token in categoryItem) {
-                
-                if(typeof categoriesDict[category][token] == "undefined" )
-                    categoriesDict[category][token] = Object.create(null);
-                
-                    if(Array.isArray(categoryItem[token])) { 
-                        categoriesDict[category][token] = [getSelfie(categoryItem[token][0]), getSelfie(categoryItem[token][1])]; 
-                    }
-                    else {
-                        categoriesDict[category][token] = getSelfie(categoryItem[token]);
-                    }
-                };
-            }
-            return categoriesDict;
+            return selfie;
         }
+
+        const filterFromSelfie = function(scategories) {
+            var categories = new Map(); 
+            for ( const [ bits, bucket ] of scategories) {
+                const tokens = new Map();
+                for ( const [ tokenhash, filter ] of bucket ) {
+                    tokens.set(tokenhash, getSelfie(filter));
+                }
+                categories.set(bits, tokens);
+            } 
+            return categories;
+        }
+
         objDataView.fromSelfie(selfie.hostnameFilterDataView);
         this.categories = filterFromSelfie(selfie.categories);
         this.cspFilters = filterFromSelfie(selfie.cspFilters);
@@ -1576,14 +1595,14 @@
     
         let type = parsed.types;
         if ( type === 0 ) {
-            out.push([this.makeCategoryKey(keyShard), '.', parsed.f]);
+            out.push([keyShard, this.dotTokenHash, parsed.f]);
             return true;
         }
     
         let bitOffset = 1;
         do {
             if ( type & 1 ) {
-                out.push([this.makeCategoryKey(keyShard | (bitOffset << 4)), '.', parsed.f]);
+                out.push([keyShard | (bitOffset << 4), this.dotTokenHash, parsed.f]);
             }
             bitOffset += 1;
             type >>>= 1;
@@ -1622,7 +1641,8 @@
     FilterContainer.prototype.compileToAtomicFilter = function(filterClass, parsed, party, out, hostname) {
         let bits = parsed.action | parsed.important | party;
         let type = parsed.types;
-        let obj = {};
+        let obj = {}, domains;
+        obj.blnDomainSpecific = this.isDomainSpecific(parsed);
         obj.compiled = filterClass.compile(parsed, hostname);
         
         if(parsed.dataStr != "") {
@@ -1631,25 +1651,50 @@
         
         if(parsed.domainList != "") {
             obj.domains = parsed.domainList;
+            domains = obj.domains.split('|');
         }
-        
+
         if ( type === 0 ) {
-            out.push([this.makeCategoryKey(bits), parsed.token, filterClass.fid, JSON.stringify(obj)]);
+            if(obj.blnDomainSpecific) {
+                for ( const hn of domains ) {
+                    if(hn !== "") {
+                        obj.domains = hn;
+                        out.push([bits, parsed.token, filterClass.fid, JSON.stringify(obj)]);
+                    }
+                }
+            } else {
+                out.push([bits, parsed.token, filterClass.fid, JSON.stringify(obj)]);
+            }
             return;
         }
         var bitOffset = 1;
         do {
             if ( type & 1 ) {
-                out.push([this.makeCategoryKey(bits | (bitOffset << 4)), parsed.token, filterClass.fid, JSON.stringify(obj)]);
+
+                if(obj.blnDomainSpecific) {
+                    for ( const hn of domains ) {
+                        if(hn !== "") {
+                            obj.domains = hn;
+                            out.push([bits | (bitOffset << 4), parsed.token, filterClass.fid, JSON.stringify(obj)]);
+                        }
+                    }
+                } else {
+                    out.push([bits | (bitOffset << 4), parsed.token, filterClass.fid, JSON.stringify(obj)]);
+                }   
             }
             bitOffset += 1;
             type >>>= 1;
         } while ( type !== 0 );
     };
-    
+
+    FilterContainer.prototype.isDomainSpecific = function(parsed) {
+        return  (parsed.token == this.noTokenHash || parsed.token == this.anyMatchTokenHash || parsed.token == this.httpTokenHash || parsed.token == this.httpsTokenHash) &&
+                parsed.domainList != undefined && 
+                parsed.domainList.indexOf('~') === -1 &&
+                parsed.dataStr == "";    
+    }
     /******************************************************************************/
-    
-    
+   
     FilterContainer.prototype.fromCompiledContent = function(text) {
         
         let bucket, entry, factory, filter;
@@ -1666,6 +1711,8 @@
     
             let blnCspMatch = false;
             
+            if(fields.length == 4) fields[3] = JSON.parse(fields[3]);
+
             if(fields.length > 2) {
                 if(line.indexOf("\"csp\":") !== -1) {
                     blnCspMatch = true;
@@ -1673,24 +1720,29 @@
             }
     
             if(blnCspMatch) {
-                bucket = this.cspFilters[fields[0]];
+                bucket = this.cspFilters.get(fields[0]);  
                 if ( bucket === undefined ) {
-                    bucket = this.cspFilters[fields[0]] = Object.create(null);
+                    bucket = new Map();
+                    this.cspFilters.set(fields[0], bucket);
                 }
             }
             else {
-                bucket = this.categories[fields[0]];
+                if(fields.length == 4 && fields[3].blnDomainSpecific) {
+                    fields[1] = µb.tokenHash(fields[3].domains);
+                } 
+                bucket = this.categories.get(fields[0]);
                 if ( bucket === undefined ) {
-                    bucket = this.categories[fields[0]] = Object.create(null);
+                    bucket = new Map();
+                    this.categories.set(fields[0], bucket);
                 }
             }
             
-            entry = bucket[fields[1]];
+            entry = bucket.get(fields[1]);
             
-            if ( fields[1] === '.' ) {
-                
+            if ( fields[1] === this.dotTokenHash ) {
                 if ( entry === undefined ) {
-                    entry = bucket['.'] = new FilterHostnameDict();
+                    entry = new FilterHostnameDict();
+                    bucket.set(this.dotTokenHash, entry);
                 }
                 let hshash = µb.tokenHash(fields[2]);
                 if ( entry.add(hshash) === false ) {
@@ -1707,14 +1759,13 @@
             this.duplicateBuster[line] = true;
     
             factory = FilterContainer.factories[fields[2]];
-           
-            fields[3] = JSON.parse(fields[3]);
             
             if(fields[3].domains != undefined) {
                 let [hostnames , notHostnames, allHostnames] = objDataView.parseOptHostnames(fields[3].domains);
                 let details = objDataView.pushToBuffer(hostnames, notHostnames, allHostnames);
-                filter = [factory.fromSelfie(fields[3].compiled), FilterDomain.fromSelfie(JSON.stringify(details) + '\t' + false)];
-            } else {
+                filter = FilterPair.fromSelfie([fields[2], fields[3].compiled, JSON.stringify(details) + '\t' + false]);
+            } 
+            else {
                 filter = factory.fromSelfie(fields[3].compiled);
             }
             
@@ -1726,14 +1777,17 @@
             }
             
             if ( entry === undefined ) {
-                bucket[fields[1]] = filter;
+                bucket.set(fields[1], filter);
                 continue;
             }
             if ( entry.fid === '[]' ) {
                 entry.add(filter);
                 continue;
             }
-            bucket[fields[1]] = new FilterBucket(entry, filter);
+            bucket.set(
+                fields[1],
+                new FilterBucket(entry, filter)
+            );
         }
         return true;
     };
@@ -1751,28 +1805,36 @@
         let matches, tokenEntry;
         re.lastIndex = 0;
         let i = 0;
-        while ( matches = re.exec(url) ) {
+        const addToken = function (token, beg) {
             tokenEntry = tokens[i];
             if ( tokenEntry === undefined ) {
                 tokenEntry = tokens[i] = new TokenEntry();
             }
-            tokenEntry.beg = matches.index;
-            tokenEntry.token = µb.tokenHash(matches[0]);
+            if(beg !== undefined) tokenEntry.beg = beg;
+            tokenEntry.token = token;
             i += 1;
-    
+        }
+        
+        for (let element of Array.from(pageHostnameHashes.keys())) {
+            addToken(element);
+        }
+        
+        while ( matches = re.exec(url) ) {
+            addToken(µb.tokenHash(matches[0]), matches.index);
             // https://github.com/uBlockAdmin/uBlock/issues/1118
             // Crazy case... but I guess we have to expect the worst...
             if ( i === 2048 ) {
                 break;
             }
         }
-    
-        // Sentinel
-        tokenEntry = tokens[i];
-        if ( tokenEntry === undefined ) {
-            tokenEntry = tokens[i] = new TokenEntry();
+        addToken(this.noTokenHash);
+        addToken(this.anyMatchTokenHash);
+        if ( url.startsWith('https://') ) {
+            addToken(this.httpsTokenHash);
+        } else if ( url.startsWith('http://') ) {
+            addToken(this.httpTokenHash);
         }
-        tokenEntry.token = '';
+        addToken('');
     };
     
     /******************************************************************************/
@@ -1780,7 +1842,7 @@
     FilterContainer.prototype.matchTokens = function(bucket, url) {
        
         // Hostname-only filters
-        let f = bucket['.'];
+        let f = bucket.get(this.dotTokenHash);
         if ( f !== undefined && !skipGenericBlocking && f.match() !== false) {
             return f;
         }
@@ -1794,39 +1856,20 @@
             if ( token === '' ) {
                 break;
             }
-            f = bucket[token];
+            f = bucket.get(token);
             
-            if(Array.isArray(f)) {
-                let f0 = f[0];
-                let f1 = f[1];
-                if(f0 !== undefined && f0.fid.indexOf('h') === -1 && f0.fid != "[]" && skipGenericBlocking) {
-                    continue;
-                }
-                if ( f0 !== undefined && f0.match(url, tokenEntry.beg) !== false &&  f1.match()) {
-                    return f;
-                }
-            } else {
-                if(f !== undefined && f.fid.indexOf('h') === -1 && f.fid != "[]" && skipGenericBlocking) {
-                    continue;
-                }
-                if ( f !== undefined && f.match(url, tokenEntry.beg) !== false ) {
-                    return f;
-                }
+            if(f !== undefined && f.fid.indexOf('h') === -1 && f.fid != "[]" && skipGenericBlocking) {
+                continue;
+            }
+            if ( f !== undefined && f.match(url, tokenEntry.beg) !== false ) {
+                return f;
             }
         }
     
         // Regex-based filters
-        f = bucket['*'];
-        if(f !== undefined && Array.isArray(f)) {
-            let f0 = f[0];
-            let f1 = f[1];
-            if (f0.match(url) !== false && f1.match()) {
-                return f;
-            }
-        } else {
-            if ( f !== undefined && f.match(url) !== false ) {
-                return f;
-            }
+        f = bucket.get(this.regexTokenHash);
+        if ( f !== undefined && f.match(url) !== false ) {
+            return f;
         }
         
         return false;
@@ -1843,17 +1886,13 @@
     FilterContainer.prototype.matchStringExactType = function(context, requestURL, requestType) {
         let url = requestURL.toLowerCase();
     
-        // These registers will be used by various filters
         pageHostnameRegister = context.pageHostname || '';
-        pageDomainRegister = µb.URI.domainFromHostname(pageHostnameRegister) || pageHostnameRegister;
-        pageHostnameHashes = µb.getHostnameHashesFromLabelsBackward(pageHostnameRegister, pageDomainRegister, false);
-
-        requestHostnameRegister = decode(encode(µb.URI.hostnameFromURI(requestURL).trim()));
-        requestDomainRegister = µb.URI.domainFromHostname(requestHostnameRegister) || requestHostnameRegister;
+        pageDomainRegister = context.pageDomain || pageHostnameRegister;
+        pageHostnameHashes = context.pageHostnameHashes || '';
+        requestHostnameRegister = context.requestHostname;
+        requestDomainRegister = context.requestDomain;
         requestHostnameHashes = µb.getHostnameHashesFromLabelsBackward(requestHostnameRegister, requestDomainRegister, false);
-
-        skipGenericBlocking = context.skipGenericBlocking;
-    
+       
         let party = isFirstParty(context.pageDomain, requestHostnameRegister) ? FirstParty : ThirdParty;
     
         // Be prepared to support unknown types
@@ -1861,71 +1900,37 @@
         if ( type === 0 ) {
             return '';
         }
-    
-        let categories = this.categories;
-        let bf = false, bucket;
-    
         // Tokenize only once
         this.tokenize(url);
-    
-        // https://github.com/uBlockAdmin/uBlock/issues/139
-        // Test against important block filters
-        if ( bucket = categories[this.makeCategoryKey(BlockAnyParty | Important | type)] ) {
-            bf = this.matchTokens(bucket, url);
-            if ( bf !== false ) {
-                return Array.isArray(bf) ? 'sb:' + bf[0].toString() + '$important' + bf[1].toString() : 'sb:' + bf.toString() + '$important';
-            }
-        }
-        if ( bucket = categories[this.makeCategoryKey(BlockAction | Important | type | party)] ) {
-            bf = this.matchTokens(bucket, url);
-            if ( bf !== false ) {
-                return Array.isArray(bf) ? 'sb:' + bf[0].toString() + '$important' + bf[1].toString() : 'sb:' + bf.toString() + '$important';
-            }
-        }
-    
-        // Test against block filters
-        if ( bucket = categories[this.makeCategoryKey(BlockAnyParty | type)] ) {
-            bf = this.matchTokens(bucket, url);
-        }
-        if ( bf === false ) {
-            if ( bucket = categories[this.makeCategoryKey(BlockAction | type | party)] ) {
-                bf = this.matchTokens(bucket, url);
-            }
-        }
-        // If there is no block filter, no need to test against allow filters
-        if ( bf === false ) {
-            return '';
-        }
-    
-        skipGenericBlocking = false;
-        // Test against allow filters
-        let af;
-        if ( bucket = categories[this.makeCategoryKey(AllowAnyParty | type)] ) {
-            af = this.matchTokens(bucket, url);
-            if ( af !== false ) {
-                return Array.isArray(af) ? 'sa:' + af[0].toString() + af[1].toString() : 'sa:' + af.toString();
-            }
-        }
-        if ( bucket = categories[this.makeCategoryKey(AllowAction | type | party)] ) {
-            af = this.matchTokens(bucket, url);
-            if ( af !== false ) {
-                return Array.isArray(af) ? 'sa:' + af[0].toString() + af[1].toString() : 'sa:' + af.toString();
-            }
-        }
-        return Array.isArray(bf) ? 'sb:' + bf[0].toString() + bf[1].toString() : 'sb:' + bf.toString();
+
+        let categoryKeysMap = new Map([ 
+                                        ["important", [
+                                                        BlockAnyParty | Important | type, 
+                                                        BlockAction | Important | type | party
+                                                    ]
+                                        ],
+                                        ["blocked", [
+                                                        BlockAnyParty | type, 
+                                                        BlockAction | type | party
+                                                    ]
+                                        ],
+                                        ["allowed", [
+                                                        AllowAnyParty | type, 
+                                                        AllowAction | type | party
+                                                    ]
+                                        ]
+                                    ]);
+
+        return this.match(url, categoryKeysMap, context);
     };
     
-    FilterContainer.prototype.matchStringExceptionOnlyRule = function(url,requestType) {
+    FilterContainer.prototype.matchStringExceptionOnlyRule = function(url, requestType) {
         pageHostnameRegister = µb.URI.hostnameFromURI(url) || '';
         pageDomainRegister = µb.URI.domainFromHostname(pageHostnameRegister) || pageHostnameRegister;
         pageHostnameHashes = µb.getHostnameHashesFromLabelsBackward(pageHostnameRegister, pageDomainRegister, false);
-
         requestHostnameRegister = µb.URI.hostnameFromURI(url);
         requestDomainRegister = µb.URI.domainFromHostname(requestHostnameRegister) || requestHostnameRegister;
         requestHostnameHashes = µb.getHostnameHashesFromLabelsBackward(requestHostnameRegister, requestDomainRegister, false);
-        let categories = this.categories;
-        let af = false,bf = false, bucket;
-        skipGenericBlocking = false;
         let party = FirstParty;
         
         let type = typeNameToTypeValue[requestType] || 0;
@@ -1933,26 +1938,21 @@
             return '';
         }
         this.tokenize(url);
-    
-        if ( bucket = categories[this.makeCategoryKey(BlockAction | AnyParty | type | Important)] ) {
-            bf = this.matchTokens(bucket, url);
-            if ( bf !== false ) {
-                return Array.isArray(bf) ? 'sb:' + bf[0].toString() + bf[1].toString() : 'sb:' + bf.toString();
-            }
-        }
-        if ( bucket = categories[this.makeCategoryKey(AllowAnyParty | type)] ) {
-            af = this.matchTokens(bucket, url);
-            if ( af !== false ) {
-                return Array.isArray(af) ? 'sa:' + af[0].toString() + af[1].toString() : 'sa:' + af.toString();
-            }
-        }
-        if ( bucket = categories[this.makeCategoryKey(AllowAction | type | party)] ) {
-            af = this.matchTokens(bucket, url);
-            if ( af !== false ) {
-                return Array.isArray(af) ? 'sa:' + af[0].toString() + af[1].toString() : 'sa:' + af.toString();
-            }
-        }
-        return '';
+
+        let categoryKeysMap = new Map([ 
+                                        ["important", [
+                                                        BlockAction | AnyParty | type | Important
+                                                    ]
+                                        ],
+                                        ["allowed", [
+                                                        AllowAnyParty | type, 
+                                                        AllowAction | type | party
+                                                    ]
+                                        ]
+                                    ]);
+        let context = {};
+        context.skipGenericBlocking = false;
+        return this.match(url, categoryKeysMap, context);
     };
     FilterContainer.prototype.matchCspRules = function(bucket, url,out) {
         this.tokenize(url);
@@ -1967,36 +1967,44 @@
             if ( token === '' ) {
                 break;
             }
-            f = bucket[token];
+            f = bucket.get(token);
             if(f !== undefined && f.fid.indexOf('h') === -1 && f.fid != "[]" && skipGenericBlocking) {
                 continue;
             }
             if ( f !== undefined && f.match(url, tokenEntry.beg) !== false ) {
-                out.set(f.dataStr,f);
+                if(f.fid == "[]")
+                    out.set(f.f.dataStr,f.f);
+                else
+                    out.set(f.dataStr,f); 
             }
         }
-        f = bucket['*'];
+        f = bucket.get(this.regexTokenHash);
         if ( f !== undefined && f.match(url) !== false ) {
-            out.set(f.f.dataStr,f.f);
+            if(f.fid == "[]")
+                out.set(f.f.dataStr,f.f);
+            else
+                out.set(f.dataStr,f); 
         }
     };
     
     FilterContainer.prototype.matchAndFetchCspData = function(context) {
         pageHostnameRegister = context.pageHostname || '';
-        pageDomainRegister = µb.URI.domainFromHostname(pageHostnameRegister) || pageHostnameRegister;
-        pageHostnameHashes = µb.getHostnameHashesFromLabelsBackward(pageHostnameRegister, pageDomainRegister, false);
+        pageDomainRegister = context.pageDomain || pageHostnameRegister;
+        pageHostnameHashes = context.pageHostnameHashes || '';
         requestHostnameRegister = context.requestHostname;
-        requestDomainRegister = µb.URI.domainFromHostname(requestHostnameRegister) || requestHostnameRegister;
+        requestDomainRegister = context.requestDomain; 
         requestHostnameHashes = µb.getHostnameHashesFromLabelsBackward(requestHostnameRegister, requestDomainRegister, false);
-        let bucket;
+        let bucket, categoryKey;
         let type = typeNameToTypeValue["csp"];
         let toBlockCSP = new Map();
         let toAllowCSP = new Map();
     
-        if ( bucket = this.cspFilters[this.makeCategoryKey(BlockAnyParty | type)] ) {
+        categoryKey = BlockAnyParty | type;    
+        if ( bucket = this.cspFilters.get(categoryKey) ) {
             this.matchCspRules(bucket, context.requestURL, toBlockCSP);
         }
-        if ( bucket = this.cspFilters[this.makeCategoryKey(AllowAnyParty | type)] ) {
+        categoryKey = AllowAnyParty | type;  
+        if ( bucket = this.cspFilters.get(categoryKey) ) {
             this.matchCspRules(bucket, context.requestURL, toAllowCSP);
         }   
     
@@ -2019,6 +2027,39 @@
     }
     /******************************************************************************/
     
+    FilterContainer.prototype.match = function(url, categoryKeysMap, context) {
+
+        let bucket, bf = false, tf;
+        skipGenericBlocking = context.skipGenericBlocking;
+
+        for (let [key, categoryKeys] of Array.from(categoryKeysMap)) { 
+
+            if(key == "allowed" && bf === false && categoryKeysMap.has("blocked")) {
+                return '';
+            } else if(key == "allowed" && bf !== false && categoryKeysMap.has("blocked")) {
+                tf = bf;
+            }
+            else if(key == "allowed") {
+                skipGenericBlocking = false;
+            }
+        
+            for (let i = 0; i < categoryKeys.length; i++) { 
+                if ( bucket = this.categories.get(categoryKeys[i]) ) {
+                    bf = this.matchTokens(bucket, url);
+                    if ( bf !== false && key == "important") {
+                        return 'sb:' + bf.toString() + '$important';
+                    }
+                    else if( bf !== false && key == "allowed") {
+                        return 'sa:' + bf.toString();
+                    } else if(bf !== false) {
+                        break;
+                    }
+                }
+            }
+        }     
+        if(tf === undefined) return '';                               
+        return 'sb:' + tf.toString();
+    }
     FilterContainer.prototype.matchString = function(context) {
         // https://github.com/uBlockAdmin/uBlock/issues/519
         // Use exact type match for anything beyond `other`
@@ -2033,7 +2074,7 @@
         //     `match-case` option not supported, but then, I saw only one
         //     occurrence of it in all the supported lists (bulgaria list).
         let url = context.requestURL.toLowerCase();
-       
+
         // The logic here is simple:
         //
         // block = !whitelisted &&  blacklisted
@@ -2058,109 +2099,41 @@
     
         // These registers will be used by various filters
         pageHostnameRegister = context.pageHostname || '';
-        pageDomainRegister = µb.URI.domainFromHostname(pageHostnameRegister) || pageHostnameRegister;
-        pageHostnameHashes = µb.getHostnameHashesFromLabelsBackward(pageHostnameRegister, pageDomainRegister, false);
+        pageDomainRegister = context.pageDomain || pageHostnameRegister;
+        pageHostnameHashes = context.pageHostnameHashes || '';
         requestHostnameRegister = context.requestHostname;
-        requestDomainRegister = µb.URI.domainFromHostname(requestHostnameRegister) || requestHostnameRegister;
+        requestDomainRegister = context.requestDomain; 
         requestHostnameHashes = µb.getHostnameHashesFromLabelsBackward(requestHostnameRegister, requestDomainRegister, false);
-        skipGenericBlocking = context.skipGenericBlocking;
     
         let party = isFirstParty(context.pageDomain, context.requestHostname) ? FirstParty : ThirdParty;
-        let filterClasses = this.categories;
-        let bucket;
         
         // Tokenize only once
         this.tokenize(url);
         
-        let bf = false;
-    
-        // https://github.com/uBlockAdmin/uBlock/issues/139
-        // Test against important block filters.
-        // The purpose of the `important` option is to reverse the order of
-        // evaluation. Normally, it is "evaluate block then evaluate allow", with
-        // the `important` property it is "evaluate allow then evaluate block".
-        if ( bucket = filterClasses[this.makeCategoryKey(BlockAnyTypeAnyParty | Important)] ) {
-            bf = this.matchTokens(bucket, url);
-            if ( bf !== false ) {
-                return Array.isArray(bf) ? 'sb:' + bf[0].toString() + '$important' + bf[1].toString() : 'sb:' + bf.toString() + '$important';
-            }
-        }
-        if ( bucket = filterClasses[this.makeCategoryKey(BlockAnyType | Important | party)] ) {
-            bf = this.matchTokens(bucket, url);
-            if ( bf !== false ) {
-                return Array.isArray(bf) ? 'sb:' + bf[0].toString() + '$important' + bf[1].toString() : 'sb:' + bf.toString() + '$important';
-            }
-        }
-        if ( bucket = filterClasses[this.makeCategoryKey(BlockAnyParty | Important | type)] ) {
-            bf = this.matchTokens(bucket, url);
-            if ( bf !== false ) {
-                return Array.isArray(bf) ? 'sb:' + bf[0].toString() + '$important' + bf[1].toString() : 'sb:' + bf.toString() + '$important';
-            }
-        }
-        if ( bucket = filterClasses[this.makeCategoryKey(BlockAction | Important | type | party)] ) {
-            bf = this.matchTokens(bucket, url);
-            if ( bf !== false ) {
-                return Array.isArray(bf) ? 'sb:' + bf[0].toString() + '$important' + bf[1].toString() : 'sb:' + bf.toString() + '$important';
-            }
-        }
-    
-        // Test against block filters
-        if ( bf === false ) {
-            if ( bucket = filterClasses[this.makeCategoryKey(BlockAnyTypeAnyParty)] ) {
-                bf = this.matchTokens(bucket, url);
-            }
-        }
-        if ( bf === false ) {
-            if ( bucket = filterClasses[this.makeCategoryKey(BlockAnyType | party)] ) {
-                bf = this.matchTokens(bucket, url);
-            }
-        }
-        if ( bf === false ) {
-            if ( bucket = filterClasses[this.makeCategoryKey(BlockAnyParty | type)] ) {
-                bf = this.matchTokens(bucket, url);
-            }
-        }
-        if ( bf === false ) {
-            if ( bucket = filterClasses[this.makeCategoryKey(BlockAction | type | party)] ) {
-                bf = this.matchTokens(bucket, url);
-            }
-        }
-    
-        // If there is no block filter, no need to test against allow filters
-        if ( bf === false ) {
-            return '';
-        }
-    
-        // Test against allow filters
-        let af;
-        skipGenericBlocking = false;
-    
-        if ( bucket = filterClasses[this.makeCategoryKey(AllowAnyTypeAnyParty)] ) {
-            af = this.matchTokens(bucket, url);
-            if ( af !== false ) {
-                return Array.isArray(af) ? 'sa:' + af[0].toString() + af[1].toString() : 'sa:' + af.toString();
-            }
-        }
-        if ( bucket = filterClasses[this.makeCategoryKey(AllowAnyType | party)] ) {
-            af = this.matchTokens(bucket, url);
-            if ( af !== false ) {
-                return Array.isArray(af) ? 'sa:' + af[0].toString() + af[1].toString() : 'sa:' + af.toString();
-            }
-        }
-        if ( bucket = filterClasses[this.makeCategoryKey(AllowAnyParty | type)] ) {
-            af = this.matchTokens(bucket, url);
-            if ( af !== false ) {
-                return Array.isArray(af) ? 'sa:' + af[0].toString() + af[1].toString() : 'sa:' + af.toString();
-            }
-        }
-        if ( bucket = filterClasses[this.makeCategoryKey(AllowAction | type | party)] ) {
-            af = this.matchTokens(bucket, url);
-            if ( af !== false ) {
-                return Array.isArray(af) ? 'sa:' + af[0].toString() + af[1].toString() : 'sa:' + af.toString();
-            }
-        }
-
-        return Array.isArray(bf) ? 'sb:' + bf[0].toString() + bf[1].toString() : 'sb:' + bf.toString();
+        let categoryKeysMap = new Map([ 
+                                        ["important", [
+                                                        BlockAnyTypeAnyParty | Important, 
+                                                        BlockAnyType | Important | party,
+                                                        BlockAnyParty | Important | type,
+                                                        BlockAction | Important | type | party
+                                                    ]
+                                        ],
+                                        ["blocked", [
+                                                        BlockAnyTypeAnyParty, 
+                                                        BlockAnyType | party,
+                                                        BlockAnyParty | type,
+                                                        BlockAction | type | party
+                                                    ]
+                                        ],
+                                        ["allowed", [
+                                                        AllowAnyTypeAnyParty, 
+                                                        AllowAnyType | party,
+                                                        AllowAnyParty | type,
+                                                        AllowAction | type | party
+                                                    ]
+                                        ]
+                                    ]);
+        return this.match(url, categoryKeysMap, context);
     };
     
     /******************************************************************************/
