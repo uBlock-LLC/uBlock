@@ -6,10 +6,10 @@
 ! Licencijos url: http://www.gnu.org/licenses/gpl-3.0.txt
 ! Homepage: http://margevicius.lt/easylist_lithuania/
 ! Facebook: https://www.facebook.com/easylistlithuania/
-! Paskutinis atnaujinimas: 2019-02-14
+! Paskutinis atnaujinimas: 2019-02-27
 ! Expires: 7 days (update frequency)
 
-lrytas.lt##div[data-id="19522"]
+laisvaslaikrastis.lt###aside-right
 ###delfi-front-right-column
 ##.reklamos_nuorodos
 ##.reklamos_tarpas
@@ -106,6 +106,7 @@ lrytas.lt##div[data-id="19522"]
 @@||banners.adnet.lt/i/euro_1_490x270_3.swf
 @@||banners.adnet.lt/i/euro_game_1.js
 @@||cosmopolitan.lt^$generichide
+@@||delfi.lt^$generichide
 @@||dujuirangoskaina.lt^$document
 @@||entitlements.jwplayer.com/*.json
 @@||eurobasket.lt$generichide
@@ -286,11 +287,6 @@ degalines.orlenlietuva.lt##.addsBoxFirst
 delfi.lt##iframe[id="alio_block"]
 delfi.lt##iframe[src*="alio.lt/posPages.html"]
 delfi.lt##iframe[src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="]
-delfi.lt#?#:-abp-properties(width: 300)
-delfi.lt#?#div:-abp-has(:-abp-properties(cursor: pointer;)
-delfi.lt#?#div:-abp-has(:-abp-properties(left: 50%;))
-delfi.lt#?#img[src*="dcdn.lt/images"][style="margin-left=0"]
-delfi.lt#?#img[src*="dcdn.lt/images/"]:-abp-properties(width:1200; height:500)
 democ.eu###uzdanga
 democ.eu##.fanai
 depiliacija.eu###products_page_container > *
@@ -489,6 +485,7 @@ lrt.lt##TD[height="118"]
 lrvalstybe.lt##.left_banners
 lrvalstybe.lt##.right_banners
 lrytas.lt##div[class*="layout"]>div[class*="left"]>div[style="width: 584px; height: 522px; display: none;"]
+lrytas.lt##div[data-id="19522"]
 lrytas.lt##div[data-id="19528"]
 lrytas.lt##iframe[style="height: 522px; margin: 0px; border-width: 0px; padding: 0px; width: 584px;"]
 lrytas.lt#?#div[layout*="layout-second"]>div[data-id="19539"]
@@ -1072,6 +1069,7 @@ zurnalai.lt##IMG[alt="Informacija ir pagalba telefonu 1588"]
 ||l2j.lt/ads/
 ||l2r.xz.lt/l2rbanners/
 ||l2servers.com/promo
+||laisvaslaikrastis.lt/images/reklaminiai/
 ||laisvaslaikrastis.lt/laikrascio%20baneris.swf
 ||lapes.lt/banners/
 ||lavinantys.lt/shop/out/oxbaseshop/html/2/images

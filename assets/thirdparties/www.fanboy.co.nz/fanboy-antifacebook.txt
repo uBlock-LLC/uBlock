@@ -1,8 +1,8 @@
 [Adblock Plus 2.0]
-! Checksum: 4MYH9lkE+S6iLOi+FOtfeg
+! Checksum: ZBvenziZwZ5KdcngxkerzA
 ! Title: Anti-Facebook List
-! Updated: 19 May 2018
-! Expires: 6 days
+! Updated: 24 Feb 2019
+! Expires: 9 days
 ! License: http://creativecommons.org/licenses/by/3.0/
 ! Homepage: http://www.fanboy.co.nz/
 ! Reporting Issues: https://github.com/ryanbr/fanboy-adblock/issues
@@ -87,7 +87,7 @@
 ! Problematic sites
 !
 @@||connect.facebook.com^*/audiencenetworkprebid.js$script,domain=screenrant.com
-@@||connect.facebook.net^$script,domain=abc.go.com|adultswim.com|contv.com|damnyouautocorrect.com|embedly.com|fitbit.com|instagram.com|interviewmagazine.com|noovo.ca|pogo.com|reddit.com|salon.com|sci2.tv|southpark.cc.com|southpark.de|upi.com
+@@||connect.facebook.net^$script,domain=tinder.com|abc.go.com|adultswim.com|contv.com|damnyouautocorrect.com|embedly.com|fitbit.com|instagram.com|interviewmagazine.com|noovo.ca|pogo.com|reddit.com|salon.com|sci2.tv|southpark.cc.com|southpark.de|upi.com
 @@||google.com/js/plusone.js$domain=abcnews.go.com|watch.nba.com
 @@||graph.facebook.com^$xmlhttprequest,domain=theguardian.com
 @@||staticxx.facebook.com/connect/$domain=embedly.com

@@ -1,9 +1,9 @@
 [Adblock Plus 2.0]
-! Checksum: wMpmYIDRjvl/J/2itYd5og
-! Version: 201902191523
+! Checksum: xjmmemvuxIyUtpjkS56hiQ
+! Version: 201906210622
 ! Title: EasyList Dutch
 ! Description: Dutch supplement for the Easylist filters
-! Last modified: 19 Feb 2019 15:23 UTC
+! Last modified: 21 Jun 2019 06:22 UTC
 ! Expires: 4 days (update frequency)
 ! Homepage: https://easylist.adblockplus.org/
 ! Licence: https://easylist-downloads.adblockplus.org/COPYING
@@ -30,7 +30,7 @@
 /advertentieblokje120x20.
 /advertentieblokje300x20.
 /advertenties.
-/advertenties/*
+/advertenties/*$domain=~oldtimernederland.nl
 /bannerlookup.
 /big_reclames/*
 /bolcom-partnerprogramma-wordpress-plugin/*

@@ -1,9 +1,10 @@
 [Adblock Plus 1.1]
-! Checksum: JVvv3umt2mwNrLBPUqJ3Ug
+! Checksum: /MmL6dZPXvANlxK41jNcEQ
 ! Title: Fanboy's Swedish
-! Updated: 19 Feb 2017
+! Updated: 8 Feb 2019
 ! License: http://creativecommons.org/licenses/by/3.0/
 ! Homepage: http://www.fanboy.co.nz/
+! Expires: 90 days
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!! Officially unsupported !!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
