@@ -1,9 +1,9 @@
 ![Adblock Plus 2.0]
-! Checksum: iKJmQfmV5z0Jx26u4TUpmg
+! Checksum: 7LydAGipnDud+a1Y3cx4rA
 ! Title: AdGuard Japanese filter
 ! Description: Filter that enables ad blocking on websites in Japanese language.
-! Version: 2.0.1.77
-! TimeUpdated: 2019-02-13T20:25:46+03:00
+! Version: 2.0.1.95
+! TimeUpdated: 2019-06-18T15:03:14+03:00
 ! Expires: 2 days (update frequency)
 ! Homepage: http://adguard.com/filters.html#japanese
 ! License: http://creativecommons.org/licenses/by-sa/3.0/
@@ -13,7 +13,54 @@
 !---------------------------------------------------------------------------!
 ! JS API START
 !
-! Experimental
+! AG_removeCookie
+! Examples: AG_removeCookie('/REGEX/') or AG_removeCookie('part of the cookie name')
+!
+!
+! AG_defineProperty
+! See https://github.com/AdguardTeam/deep-override
+!
+!
+! AG_abortOnPropertyWrite(property, debug)
+! Aborts execution of a script when it attempts to write the specified property.
+! Based on AG_defineProperty (https://github.com/AdguardTeam/deep-override)
+!
+! Examples:
+! AG_abortOnPropertyWrite('String.fromCharCode');
+!
+! @param property property or properties chain
+! @param debug optional, if true - we will print warning when script is aborted.
+!
+!
+! AG_abortOnPropertyRead(property, debug)
+! Aborts execution of a script when it attempts to read the specified property.
+! Based on AG_defineProperty (https://github.com/AdguardTeam/deep-override)
+!
+! Examples:
+! AG_abortOnPropertyRead('String.fromCharCode');
+!
+! @param property property or properties chain
+! @param debug optional, if true - we will print warning when script is aborted.
+!
+!
+! AG_abortInlineScript(regex, property, debug)
+! Aborts execution of an inline script when it attempts to access the specified property
+! AND content of the <script> element matches specified regular expression.
+! Based on AG_defineProperty (https://github.com/AdguardTeam/deep-override)
+!
+! Examples:
+! AG_abortInlineScript(/zfgloadedpopup|zfgloadedpushopt/, 'String.fromCharCode');
+!
+! @param regex regular expression that the inline script contents must match
+! @param property property or properties chain
+! @param debug optional, if true - we will print warning when script is aborted.
+!
+!
+! AG_setConstant('property.chain', 'true') // defines boolean (true), same for false;
+! AG_setConstant('property.chain', '123') // defines Number 123;
+! AG_setConstant('property.chain', 'noopFunc') // defines function(){};
+! AG_setConstant('property.chain', 'trueFunc') // defines function(){return true};
+! AG_setConstant('property.chain', 'falseFunc') // defines function(){return false};
 !
 ! JS API FINISH
 !---------------------------------------------------------------------------!
@@ -38,6 +85,9 @@
 ||yads.yahoo.co.jp^
 ||yads.yjtag.yahoo.co.jp^
 ||yjaxc.yahoo.co.jp^
+!
+! Supership.jp (also mobile ads)
+||socdm.com^
 !
 ! Shinobi.jp
 ||adm.shinobi.jp^
@@ -81,6 +131,7 @@
 ! Eimg.jp
 ||adingo.jp.eimg.jp^
 !
+||aaacompany.net^$third-party
 ||ad.adpon.jp^$third-party
 ||sdqoi2d.com^$third-party
 ||v4dwkcv.com^$third-party
@@ -185,7 +236,6 @@
 ||67.43.170.16/ad/$third-party
 ||9vad.com^$third-party
 ||a-pagerank.net^$third-party
-||ab.auone-net.jp^$third-party
 ||ac8.i2i.jp^
 ||accesstrade.net^$third-party
 ||agilemedia.jp^
@@ -293,7 +343,6 @@
 ||aag.yahooapis.jp^$third-party
 ||entrypoint.search.yahooapis.jp^$third-party
 ||siteanalytics.jp^$third-party
-||socdm.com^
 ||sundayomg.blogspot.com^$image,~image,popup
 ||tag.nifty.com^
 ||thatsping.jp^$third-party
@@ -333,6 +382,13 @@ ronron-blog.com,wpteq.org,d-navi004.com,gagetmatome.com,h5games.success-corp.co.
 @@||wakudan.seesaa.net^$generichide
 !
 !
+! https://github.com/AdguardTeam/AdguardFilters/issues/34365
+fe-siken.com#$#.adsbygoogle { remove: true; }
+! https://github.com/AdguardTeam/AdguardFilters/issues/33968
+!+ PLATFORM(ext_ff, ext_opera, ios, ext_android_cb, ext_safari, ext_ublock)
+@@||xn--f9jh4f4b4993b66s.tokyo^$generichide
+!+ PLATFORM(ext_ff, ext_opera, ios, ext_android_cb, ext_safari, ext_ublock)
+@@||xn--f9jh4f4b4993b66s.tokyo/wp-content/*.png#
 ! https://github.com/AdguardTeam/AdguardFilters/issues/28910
 ! https://github.com/AdguardTeam/AdguardFilters/issues/27939
 @@||wpteq.org/wp-content/plugins/wp-adblock-dedect/js/dedect.js
@@ -459,6 +515,7 @@ mindhack2ch.com##.article-post-bottom > .rss-article:has(> .rss-article-item)
 !
 melos.media##.x1_article > .x1_articleArea[-ext-has='div.x1_siteTitle:contains([PR])']
 repeat-drama.info##.side_inner > .box:contains(スポンサーリンク)
+momon-ga.com##.repo-title:has(> strong)
 !---------------------------------------------------------------------------!
 !-------------- General element hiding rules -------------------------------!
 !---------------------------------------------------------------------------!
@@ -551,6 +608,11 @@ repeat-drama.info##.side_inner > .box:contains(スポンサーリンク)
 !-------CSS---------
 !-------------------
 !
+! https://github.com/AdguardTeam/AdguardFilters/issues/34774
+blog.esuteru.com#$#.siteContent { margin-top: 0!important; }
+blog.esuteru.com#$#.siteRanking-main { margin-left: 0!important; }
+! https://github.com/AdguardTeam/AdguardFilters/issues/26823
+hostlove.com#$##index_nav > h1 { padding-top: 30px!important; }
 ! https://github.com/AdguardTeam/AdguardFilters/issues/23925
 appllio.com#$#body > #page-upper { min-height: 0!important; }
 ! https://github.com/AdguardTeam/AdguardFilters/issues/23113
@@ -643,6 +705,17 @@ _ds_adtag_
 !
 ! Section contains rules for specific websites
 !
+news-us.org##.adspc
+news-us.org##.ps-300-250
+news-us.org##div[itemtype="https://schema.org/WPAdBlock"]
+blog.esuteru.com##a.jackFix
+blog.esuteru.com##.ad-aside > a[target="_blank"]
+blog.esuteru.com##.ad-siteRanking
+blog.esuteru.com##.article-main .rss.clearfix
+shopping.yahoo.co.jp##.mdNorthBuyee
+javmix.tv##.__isboostOverContent
+top.togeko.net##a[href^="https://book.dmm.co.jp"]
+||top.togeko.net/*/randomad*.js
 ||cowboy.blog.jp/main/rss*.html
 matome.naver.jp###yads_pc_overlay
 ||free-video-movie.com/link
@@ -668,6 +741,7 @@ mindhack2ch.com##.ad
 ||mv-mindhack2ch.up.seesaa.net/common/image_feed.js
 localplace.jp###bannerList
 karapaia.com##.ads
+hoikuen-ranking.com##.banner
 oricon.co.jp##aside.top-inline-banner
 oricon.co.jp##aside.block-header-banner
 .info/*/*/*/*/$domain=avgle.com
@@ -821,7 +895,6 @@ bakufu.jp###prBox
 ||momon-ga.com/pickup3.html
 momon-ga.com###main-inner > .rss2
 momon-ga.com###main-inner > .rss3
-momon-ga.com##.repo-title:has(> strong)
 momon-ga.com###article-contents > .post-footer
 momon-ga.com##.container-inner > section[id^="comments-"] ~ div[style*="margin-bottom"]:not([id]):not([class])
 ||livelog.biz^$domain=momon-ga.com

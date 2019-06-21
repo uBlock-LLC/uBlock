@@ -2,9 +2,9 @@
 ! Homepage: https://github.com/k2jp/abp-japanese-filters/
 ! Title: ABP Japanese filters (ONLY FOR Japanese and experienced users: READ Support Policy)
 ! Expires: 6 hours
-! Version: 201902170353
+! Version: 201906192138
 !
-! Last modified: 2019-02-17 03:53 JST(UTC+0900)
+! Last modified: 2019-06-19 21:38 JST(UTC+0900)
 ! Change log: https://github.com/k2jp/abp-japanese-filters/wiki/FilterChangeLog
 ! Code license: GNU GPL v3: http://www.gnu.org/licenses/gpl.html
 ! Content license: Creative Commons BY-NC-SA 4.0 http://creativecommons.org/licenses/by-nc-sa/4.0/
@@ -27,6 +27,8 @@
 @@/static/coffee/compiled/modules/clean/analytics-vflrGf3Yu.$script,domain=dropbox.com
 ! False positives with theme css by adaptivethemes.com, Jun 11, 2012
 @@_Ad/css/theme/
+! False positives on NHK movie pages with the existing .analytics. filter, reported via ISSUE REPORT by Adblock Plus, Apr 22, 2019
+@@||analytics.edgekey.net/html5/$domain=nhk.or.jp
 ! False positives with Ameblo skin named "colors_ad" or "ad_viva-cutieblog", reported via Issue Report, Jan 12, 2012, Dec 29, 2011, Apr 11, 2014
 @@||ameba.jp/p_skin/
 ! autoblog(AOL) sucks! It requires some trackings to render correctly, reported twice by Issue Report
@@ -54,7 +56,7 @@
 ! A filter -ads^ causes a false positive with a [http://translate.google.com/translate/static/kcpbtI_-aDs/css/desktop_ltr.css css stylesheet] at translate.google.com and translate.google.co.jp, reported by @dullneko, July 18, 2012
 @@||translate.google.*/translate/static/*-aDs/css/*.$stylesheet
 ! False positives with the existing |https:*?ip=$third-party filter at YouTube embedded pages, reported by Issue Report, Aug 17, 2015
-@@||googlevideo.com/videoplayback?ip=
+@@||googlevideo.com/videoplayback?ip=$domain=youtube.com
 ! False positives with the existing |https:*?*&ip=$third-party filter at YouTube and embedded pages, reported by baq via blog comment
 ! Simplified for gaming.youtube.com and limited the domain for better performance, Nov 13, 2015
 @@||googlevideo.com^*?*&ip=$domain=youtube.com
@@ -600,6 +602,10 @@
 -adcombo.
 -adcombo^
 -adcombo_
+-adformat-
+-adformat.
+-adformat^
+-adformat_
 -adframe-
 -adframe-$document
 -adframe.
@@ -636,6 +642,10 @@
 -adlink.
 -adlink^
 -adlink_
+-adplace-
+-adplace.
+-adplace^
+-adplace_
 -adplus-
 -adplus.
 -adplus^
@@ -1353,6 +1363,10 @@
 .adcombo.
 .adcombo^
 .adcombo_
+.adformat-
+.adformat.
+.adformat^
+.adformat_
 .adframe-
 .adframe-$document
 .adframe.
@@ -1390,6 +1404,10 @@
 .adlink.
 .adlink^
 .adlink_
+.adplace-
+.adplace.
+.adplace^
+.adplace_
 .adplus-
 .adplus.
 .adplus^
@@ -2452,6 +2470,7 @@
 /direct?placement_id=
 /direct?placement_id=$popup
 /dmm.$script
+/dmx^$domain=dailymotion.com
 /do2icnk.
 /docodoco?
 /e?type^$third-party
@@ -2566,6 +2585,7 @@
 /jwd^$script
 /jwd_$script
 /jwpsrv.$script
+/kameleoon.$script,third-party
 /kanasoku/9-
 /kanasoku*/at_side.
 /kanasoku/Live.
@@ -2654,6 +2674,8 @@
 /OneSignalSDK.$script
 ! this cause javascript to stop: /oo/$domain=zai.diamond.jp
 /opt_content.js^$script,third-party
+/optout/get^*&key=*&t=$third-party
+/optout/set^*&key=*&t=$third-party
 ! Commented out the duplicated filter with ?bidid=$document, May 31, 2017
 ! /out?bidid=$document
 /overtureAd.
@@ -2816,7 +2838,8 @@
 /snare.js
 /sOmni.
 /social.$script,domain=gizmodo.jp|kotaku.jp|lifehacker.jp
-/spacer.*?$image,object,subdocument
+! Too ambitious, Mar 06, 2019
+! /spacer.*?$image,object,subdocument
 /srv/delivery.
 /server/delivery/*
 /server/delivery/*$popup
@@ -2935,6 +2958,7 @@
 /yie/ld/*
 /yieldbot.$third-party
 /yim.$object,script,subdocument
+/yql?$domain=yahoo.co.jp|yahoo.com
 /ystat.
 /ywa.$script
 /z.php?id=$document
@@ -3392,6 +3416,10 @@
 ^adfarm9.
 ^adfarm9^
 ^adfarm9_
+^adformat-
+^adformat.
+^adformat^
+^adformat_
 ^adframe-
 ^adframe-$document
 ^adframe.
@@ -3572,6 +3600,10 @@
 ^adPixel.
 ^adPixel^
 ^adPixel_
+^adplace-
+^adplace.
+^adplace^
+^adplace_
 ^adPlayer-
 ^adPlayer.
 ^adPlayer^
@@ -4226,10 +4258,18 @@
 ^beacons.
 ^beacons^
 ^beacons_
+^beaconType-
+^beaconType.
+^beaconType^
+^beaconType_
 ^become-$third-party
 ^become.$third-party
 ^become^$third-party
 ^become_$third-party
+^bidder-$third-party
+^bidder.$third-party
+^bidder^$third-party
+^bidder_$third-party
 ^blockadblock-$domain=~github.com
 ^blockadblock.$domain=~github.com
 ^blockadblock^$domain=~github.com
@@ -5013,6 +5053,10 @@
 ^mutual_link^$object,script,subdocument
 ^mutual_link_$object,script,subdocument
 ^MyAffiliatesID^$popup
+^nanovisor-
+^nanovisor.
+^nanovisor^
+^nanovisor_
 ^nativendo-
 ^nativendo.
 ^nativendo^
@@ -5342,6 +5386,10 @@
 ^surveys.$third-party
 ^surveys^$third-party
 ^surveys_$third-party
+^tagging-$third-party
+^tagging.$third-party
+^tagging^$third-party
+^tagging_$third-party
 ^tblb-$third-party
 ^tblb.$third-party
 ^tblb^$third-party
@@ -5438,6 +5486,14 @@
 ^vast.$object-subrequest,script,websocket,xmlhttprequest
 ^vast^$object-subrequest,script,websocket,xmlhttprequest
 ^vast_$object-subrequest,script,websocket,xmlhttprequest
+^videoad-
+^videoad.
+^videoad^
+^videoad_
+^videoads-
+^videoads.
+^videoads^
+^videoads_
 ^voluum-
 ^voluum-$document
 ^voluum.$domain=~voluum.com
@@ -5598,6 +5654,10 @@ _adcombo-
 _adcombo.
 _adcombo^
 _adcombo_
+_adformat-
+_adformat.
+_adformat^
+_adformat_
 _adframe-
 _adframe-$document
 _adframe.
@@ -5634,6 +5694,10 @@ _adlink-
 _adlink.
 _adlink^
 _adlink_
+_adplace-
+_adplace.
+_adplace^
+_adplace_
 _AdPlugin-
 _AdPlugin.
 _AdPlugin^
@@ -6377,16 +6441,21 @@ _yahooads_
 ://campaign9.
 ://click.$document
 ://click.$popup
+://click.$third-party
 ://clicks.$document
 ://clicks.$popup
+://clicks.$third-party
 ://clickeu.$popup
 ://clk.$popup
+://clk.$third-party
 ://creative.
 ://creative.$document
 ://creative.$popup
+://creative.$third-party
 ://creatives.
 ://creatives.$document
 ://creatives.$popup
+://creatives.$third-party
 ://d.*/l/load.js^$script,third-party
 ://d.*/r/rd.html^$document
 ://delivery.$third-party
@@ -7015,6 +7084,7 @@ _yahooads_
 ||adorika.$popup
 ||adorika.$third-party
 ||adotic.com^$third-party
+||adotmob.com^
 ||adotube.com^$third-party
 ||adpath.net^$third-party
 ||adpdx.com^
@@ -7039,6 +7109,7 @@ _yahooads_
 ||adrocketmedia.com^
 ||adroll.com^$third-party
 ||adrotator.$popup
+||adrs.me^
 ||ads2rtb.com^
 ||ads2srv.com^
 ||adsafe.fr^
@@ -7264,6 +7335,7 @@ _yahooads_
 ||ntvimg-a.akamaihd.net^
 ||serviceama-a.akamaihd.net^
 ||razorweb-a.akamaihd.net^
+||media-analytics.akamaized.net^
 ||akibablog.net/lilbox/
 ||akmega.ru^
 ||aknod.com^$third-party
@@ -7483,6 +7555,7 @@ _yahooads_
 ||atdmt.com^$third-party
 ||atemda.com^
 ||atgsvcs.com^
+||aticdn.net^
 ||atinternet.com^$third-party
 ||ationnet.co.kr^$third-party
 ||ationnet.com^$third-party
@@ -7668,6 +7741,7 @@ _yahooads_
 ||blozoo.$third-party
 ||blue-cloud.net^$third-party
 ||bluecava.com^$third-party
+||blueconic.net^
 ||bluekai.com^$third-party
 ||bluelithium.com^
 ||bluetrackmedia.com^$popup
@@ -7713,8 +7787,6 @@ _yahooads_
 ||brazzers.com^$third-party
 ||brealtime.com^$third-party
 ||breedac.com^
-! Note: Probably, blocking the whole domain is too strict, Apr 29, 2012
-||brightcove.$third-party
 ||brightcove.com/1pix.
 ||brightonclick.com^
 ||brilig.com^$third-party
@@ -7793,6 +7865,7 @@ _yahooads_
 ||cbsinteractive.com/plugins/adp/
 ||cdn-image.com^
 ||1524001641.rsc.cdn77.org^
+||cdnads.com^
 ||cdnbd.
 ||cdnbf.net^$third-party
 ||cdneurope.com^
@@ -7834,6 +7907,8 @@ _yahooads_
 ||chercher-un-credit.com^
 ||chercher.org^
 ||chestyry.com^
+||chidsimp.com^
+||chidsimp.com^$document
 ||chie8oo.com^
 ||log.china.cn^
 ||chitika.com^$third-party
@@ -7902,7 +7977,8 @@ _yahooads_
 ||np7beacon.cloudapp.net^
 ||cloudcdnru.com^
 ||cloudcnd.com^
-||ajax.cloudflare.com^
+! False positive with harmless scripts reported at [Issue 40](https://github.com/k2jp/abp-japanese-filters/issues/40) , Feb 21, 2019
+! ||ajax.cloudflare.com^
 ||cloudflare.solutions^
 ||cloudfront.net^$popup
 ||cloudfront.net/js/reach.$script
@@ -8167,14 +8243,15 @@ _yahooads_
 ||dafferes.com^
 ||daffices.com^
 ||dafficha.com^
-||dailymotion.com*/masscast/
-||dailymotion.com/behavior/
-||dailymotion.com/history/
+||dailymotion.com*/masscast/$domain=dailymotion.com
+||dailymotion.com/behavior/$domain=dailymotion.com
+||dailymotion.com/history/$domain=dailymotion.com
 ! Commented out duplicated filters [https://github.com/k2jp/abp-japanese-filters/issues/9 reported] by [https://github.com/SMed79 SMed79], Jun 20, 2015
-! ||dailymotion.com/logger/
-||dailymotion.com/sense/
-||dailymotion.com/track/
-||sense.dailymotion.com^
+! ||dailymotion.com/logger/$domain=dailymotion.com
+||dailymotion.com/sense/$domain=dailymotion.com
+||dailymotion.com/track/$domain=dailymotion.com
+||dmxleo.dailymotion.com^$domain=dailymotion.com
+||sense.dailymotion.com^$domain=dailymotion.com
 ||dailyprofitmethod.org$popup
 ||dailyvideorewards.com^$popup
 ||actracer.daiwahouse.co.jp^
@@ -8296,6 +8373,7 @@ _yahooads_
 ||dmpcounter.com^
 ||dmtracker.com^$third-party
 ||dmtry.com^
+||dmxleo.com^
 ||dn888.com^
 ||dnpdmp.jp^$third-party
 ||docodoco.jp^$third-party
@@ -8434,6 +8512,7 @@ _yahooads_
 ||eloqua.com^$third-party
 ||email-cadeaux.com^
 ||email-match.com^$third-party
+||email-weightwatchers.com^
 ||embed.ly^$third-party
 ||embedly.com^
 ||emea.pub^
@@ -8543,6 +8622,7 @@ _yahooads_
 ||facdn.com^
 ||facebook.com/ai.php?
 ||facebook.com/plugins/recommendations.
+||an.facebook.com^
 ||facebookofsex.com^$third-party
 ||faciles-rencontres.com^
 ||fairfax.com.au^$third-party
@@ -8551,6 +8631,7 @@ _yahooads_
 ||fastclick.net^
 ||fastdiscountz.com^$third-party
 ||fastestjs.info^
+||fastly-insights.com^
 ||fastpic.ru^$third-party
 ||fastsearcher.ru^
 ||faststarter.ru^
@@ -8588,6 +8669,7 @@ _yahooads_
 ||fedrobi.ru^
 ||feedjit.com^$third-party
 ||feedsweep.com^$third-party
+||feedvertizus.com^
 ||feljack.com^
 ||fetchback.com^$third-party
 ||fetish-sexe.biz^
@@ -8864,6 +8946,7 @@ _yahooads_
 ||hananokai.tv^
 ||adcreative.hangame.co.jp^
 ||hannist.com^
+||hanstrackr.com^$third-party
 ||happymail.co.jp^$third-party
 ||hardsextubepremium.com^$third-party
 ||hareljann.com^
@@ -8880,6 +8963,7 @@ _yahooads_
 ||hdstreamerjs.info^
 ||hdvidcodecs.com^
 ||heapanalytics.com^$third-party
+||hearstnp.com^
 ||heatsync.com^$third-party
 ||heavy-r.com^$popup
 ||hebdotop.com^$third-party
@@ -9003,6 +9087,7 @@ _yahooads_
 ||icontent.us^
 ||icqadvert.org^$third-party
 ||ictowaz.ru^
+||id5-sync.com^
 ||idcfcloud.com^*/pageviews?$third-party
 ||ideaxidea.com/*_banner.
 ||idee-malins-du-net.com^
@@ -9096,6 +9181,7 @@ _yahooads_
 ||incmd06.com^
 ||inctivee.com^
 ||indeed.com^$third-party
+||indexww.com^
 ||inditazione.com^
 ||industrybrains.com^$third-party
 ||inedomedia.com^$third-party
@@ -9296,6 +9382,7 @@ _yahooads_
 ||img.kakaku.com/images/*/set/bn_$image,object,subdocument
 ||notice.kakaku.com^
 ||kaktuz.com^$third-party
+||kameleoon.com^$third-party
 ||kan3.info^
 ||kanaloco.jp/common/img/common/yondoku*.$image
 ||kantan-access.com^$third-party
@@ -9593,6 +9680,7 @@ _yahooads_
 ||mach10.fr^
 ||macpath.net^
 ||macpath.net^$popup
+||macromill.com^$third-party
 ||macsoft.jp/img/Banner1/
 ||macsoft.jp/img/af/
 ||mag2.com/js/osusume.$script
@@ -9675,6 +9763,7 @@ _yahooads_
 ||mediarich.ru^
 ||mediarich.us^$third-party
 ||mediarich.ws^$third-party
+||mediarithmics.com^$third-party
 ||mediashakers.com^$third-party
 ||mediateas.com^
 ||mediatraffic.com.ua^$third-party
@@ -9781,6 +9870,7 @@ _yahooads_
 ||mobatory.com^
 ||mobbober.com^
 ||mobbobr.com^
+||mobiclean.xyz^
 ||mobicont.com^
 ||mobicow.com^$third-party
 ||mobidealer.$third-party
@@ -9945,6 +10035,7 @@ _yahooads_
 ||nanoadbite.com^
 ||nanoadexchange.com^
 ||nanoadexchange.com^$popup
+||nanovisor.io^
 ||nasads.com^
 ||nasecure.com^
 ||nastydollars.com^$third-party
@@ -9961,6 +10052,7 @@ _yahooads_
 ||neomion.com^
 ||nepalon.com^
 ||nervora.net^
+||nesmotrinamenya.ru^
 ||net-tool.net^
 ||netaatoz.jp/rss
 ||netaffiliation.$third-party
@@ -10116,6 +10208,7 @@ _yahooads_
 ||files.nyaa.se^$image,domain=nyaa.se
 ! Commented out a YouTube HTML5 false positive filter, reported as Issue 22. 2011-08-09
 ! ||o-o.preferred.
+||oath.com^$third-party
 ||obnale.ru^
 ||obtenir-de-l-argent.com^
 ||obvdjs.info^
@@ -10203,6 +10296,7 @@ _yahooads_
 ||optplay.com^$third-party
 ||orange-park.jp^$third-party
 ||orangeads.fr^
+||orca-pass.net^$third-party
 ||oret.jp^$third-party
 ||osa.pl^
 ! ||ads.osdn.jp^
@@ -10410,8 +10504,10 @@ _yahooads_
 ||proligtb.com^
 ||proncar.ru^
 ||proparm.jp^
+||propellerclick.com^
 ||propellerpops.com^
 ||propermediadeals.com^
+||proxistore.com^$third-party
 ||prpops.com^
 ||prscripts.com^
 ||prwidgets.com^
@@ -10438,6 +10534,7 @@ _yahooads_
 ||pureadexchange.com^$popup
 ||pus2011.com^
 ||push7.jp^$third-party
+||pushmejs.com^
 ||pussycash.com^$third-party
 ||putags.com^
 ||pwbjgo7q6y.com^
@@ -10675,6 +10772,7 @@ _yahooads_
 ||rtbsystem.com^$third-party
 ||rtbtraf.com^
 ||rtk.io^$third-party
+||rtmark.net^$third-party
 ||rtoaster.jp^
 ||ru4.com^$third-party
 ||rubiconadnet.com^
@@ -10732,6 +10830,7 @@ _yahooads_
 ||scour.com/services/getLocation/
 ||scribblelive.$third-party
 ||sd1.fr^
+||sdad.guru^
 ||aa.sdo.com^
 ||aagw.sdo.com^
 ||se-draguer.com^
@@ -11095,6 +11194,7 @@ _yahooads_
 ||striete.com^
 ||stringenfolie.com^
 ||sublimeskinz.com^$third-party
+||sugabit.net^
 ||sumapo.org^
 ||sumome.com^$third-party
 ||sumorobo.net^$popup
@@ -11147,6 +11247,7 @@ _yahooads_
 ||tafla.ru^
 ! Third-party redirecting scripts, reported at http://labs.sucuri.net/?note=2015-08-31 , Sep 01, 2015
 ||tag-cloud-generator.com^
+||tagcommander.com^
 ||takealldir.ru^
 ||takensparks.com^$third-party
 ||tanzuki.net^
@@ -11576,6 +11677,7 @@ _yahooads_
 ||voluum*.com^
 ||voluum*.com^$document
 ||voluumtrk.com^
+||votetoda.com^
 ||votre-aide-pret.com^
 ||votre-devis-credit.com^
 ||voyeurparadize.com^
@@ -11781,12 +11883,21 @@ _yahooads_
 ||yahoo.*/b?
 ||yahoo.*/c?
 ||yahoo.*/gb.gif?
+||yahoo.*/p.gif?$domain=yahoo.co.jp|yahoo.com
 ||yahoo.*/images/rt.
 ||yahoo.*/images/rt_
 ||yahoo.*/js/geov2.$script
 ||yahoo.*/js/no.$script
 ||yahoo.*/js/sq.$script
 ||yahoo.*/mc/md.$subdocument
+||yahoo.co.jp/_td-$domain=yahoo.co.jp
+||yahoo.co.jp/_td.$domain=yahoo.co.jp
+||yahoo.co.jp/_td^$domain=yahoo.co.jp
+||yahoo.co.jp/_td_$domain=yahoo.co.jp
+||yahoo.com/_td-$domain=yahoo.com
+||yahoo.com/_td.$domain=yahoo.com
+||yahoo.com/_td^$domain=yahoo.com
+||yahoo.com/_td_$domain=yahoo.com
 ||amp.yahoo.
 ||analytics.yahoo.$third-party
 ! Commented out duplicated filters [https://github.com/k2jp/abp-japanese-filters/issues/9 reported] by [https://github.com/SMed79 SMed79], Jun 20, 2015
@@ -11826,6 +11937,7 @@ _yahooads_
 ||rdsig.yahoo.$image,object,subdocument
 ||rtb.pclick.secure.yahoo.
 ||tomlin.yahoo.
+||udc.yahoo.$domain=yahoo.co.jp|yahoo.com
 ||ybp.yahoo.
 ||ybx.yahoo.
 ||yeas.yahoo.
@@ -11863,38 +11975,39 @@ _yahooads_
 ||yieldtraffic.com^
 ||yieldtraffic.com^$popup
 ||yigao.com^$third-party
-||yimg.*/bdv/
+||yimg.*/bdv/$domain=yahoo.co.jp|yahoo.com
 ||yimg.*/images/*/campaign/$domain=yahoo.co.jp|yahoo.com
 ||yimg.*/images/*/point$domain=yahoo.co.jp|yahoo.com
-||yimg.*/images/*/pr/
-||yimg.*/images/account/sp/*/reg/ccc/
+||yimg.*/images/*/pr/$domain=yahoo.co.jp|yahoo.com
+||yimg.*/images/account/sp/*/reg/ccc/$domain=yahoo.co.jp|yahoo.com
 ! Commented out duplicated filters [https://github.com/k2jp/abp-japanese-filters/issues/9 reported] by [https://github.com/SMed79 SMed79], Jun 20, 2015
-! ||yimg.*/images/analytics/
+! ||yimg.*/images/analytics/$domain=yahoo.co.jp|yahoo.com
 ! Moved to the Paranoid subscription to avoid a false positive blocking loading comments on each news at headlines.yahoo.co.jp. I think this is a tight-coupled bug because the filter is correctly blocking beacons or loggings. YAHOO JAPAN is essentially responsible for fixing it, May 16, 2015
-! ||yimg.*/images/ds/
-||yimg.*/images/listing/
-||yimg.*/images/market/
-||yimg.*/images/news/newsSearch/
+! ||yimg.*/images/ds/$domain=yahoo.co.jp|yahoo.com
+||yimg.*/images/listing/$domain=yahoo.co.jp|yahoo.com
+||yimg.*/images/market/$domain=yahoo.co.jp|yahoo.com
+||yimg.*/images/news/newsSearch/$domain=yahoo.co.jp|yahoo.com
 ! Commented out a filter for beacon generator to avoid ReferenceError: YAHOO is not defined @ http://i.yimg.jp/lib/news/ult_1_1-min.js:1 , Jan 17, 2014
 ! Even though this filter is commented out, the beacon server ybx.yahoo.co.jp is still blocked ;-)
-! ||yimg.*/images/rapid/
-||yimg.*/images/settlecomtd/yjbfp/
-||yimg.*/images/ycd/
+! ||yimg.*/images/rapid/$domain=yahoo.co.jp|yahoo.com
+||yimg.*/images/settlecomtd/yjbfp/$domain=yahoo.co.jp|yahoo.com
+||yimg.*/images/ycd/$domain=yahoo.co.jp|yahoo.com
 ||yimg.*/images/yjcard/$domain=yahoo.co.jp|yahoo.com
-||yimg.*/js/geov*.$script
-||yimg.*/lib/*/cs_$script
-||yimg.*/lib/*/bc_$script
-||yimg.*/lib/3pm/$script
-||yimg.*/lib/bc/$script
-||yimg.com/cv/
-||yimg.com/iv/
-||yimg.com/qb/
-||yimg.com/rq/
-||yimg.jp/cv/
-||yimg.jp/iv/
-||yimg.jp/qb/
-||yimg.jp/rq/
-! ||ads.yimg.
+||yimg.*/js/geov*.$script,domain=yahoo.co.jp|yahoo.com
+||yimg.*/lib/*/cs_$script,domain=yahoo.co.jp|yahoo.com
+||yimg.*/lib/*/bc_$script,domain=yahoo.co.jp|yahoo.com
+||yimg.*/lib/*/sda/$script,domain=yahoo.co.jp|yahoo.com
+||yimg.*/lib/3pm/$script,domain=yahoo.co.jp|yahoo.com
+||yimg.*/lib/bc/$script,domain=yahoo.co.jp|yahoo.com
+||yimg.com/cv/$domain=yahoo.com
+||yimg.com/iv/$domain=yahoo.com
+||yimg.com/qb/$domain=yahoo.com
+||yimg.com/rq/$domain=yahoo.com
+||yimg.jp/cv/$domain=yahoo.co.jp
+||yimg.jp/iv/$domain=yahoo.co.jp
+||yimg.jp/qb/$domain=yahoo.co.jp
+||yimg.jp/rq/$domain=yahoo.co.jp
+! ||ads.yimg.$domain=yahoo.co.jp|yahoo.com
 ||yiqiwin.com^$third-party
 ||yldbt.com^
 ||yldmgrimg.net^
@@ -11911,13 +12024,17 @@ _yahooads_
 ||youradexchange.com^$popup
 ||youradexchange.com^$third-party
 ||youradslab.com^
+||yourfirstcheapshop.com^$third-party
 ||yourjavascript.com^$third-party
 ||youtopry.com^
-||youtube.com/get_video?
-||youtube.com/ptracking?
-||youtube.com/set_awesome?
-||s.youtube.com^
-||s2.youtube.com^
+||youtube.com/api/stats/$domain=youtube.com
+||youtube.com/get_midroll_info^$domain=youtube.com
+||youtube.com/get_video?$domain=youtube.com
+||youtube.com/ptracking?$domain=youtube.com
+||youtube.com/set_awesome?$domain=youtube.com
+||youtube.com/youtubei/$domain=youtube.com
+||s.youtube.com^$domain=youtube.com
+||s2.youtube.com^$domain=youtube.com
 ||youwatchtab.com^
 ||youwatchtab.com^$popup
 !False Positives with dammy 1x1 placeholders for css spriting
@@ -11969,6 +12086,7 @@ _yahooads_
 ||zimg.jp^
 ||zinzimo.info^$third-party
 ||ziyu.net^$third-party
+||zmctrack.net^
 ||zn0s.com^
 ||znews.su^$third-party
 ||zog.link^

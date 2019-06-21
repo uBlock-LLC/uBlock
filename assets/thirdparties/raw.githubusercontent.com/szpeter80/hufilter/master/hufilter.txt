@@ -1,19 +1,17 @@
 [Adblock Plus 2.0]
 !##################### 0000-header.txt ##################### 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-! Homepage: https://github.com/szpeter80/hufilter/wiki
+! Homepage: https://github.com/hufilter/hufilter/wiki
 ! Licence: CC-BY, see http://creativecommons.org/licenses/by/4.0/
 ! Title: hufilter
 ! Expires: 16 hours
-! Version: 201812260842
-! Checksum: yTidALKVNJNDf1lNk+Reug
+! Version: 201906071056
+! Checksum: riOTfKwwYST6r20bhHYNog
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! Magyar Adblock Plus szurolista
 ! 
-! Eszreveteleket az Adblock Plus beepitett bejelentojevel lehet jelezni, vagy a Github-on.
-! Karbantarto: Szabo Peter ( hufilter.adblock!gmail.com )
-!
-! Honlap: https://github.com/szpeter80/hufilter/wiki
+! Eszreveteleket a Github Issue Tracker-eben lehet bejelenteni.
+! Karbantarto: Hufilter kozremukodok ( hufilter@github )
 !
 ! A szuresi iranyelvek, felhasznalasi feltetelek a fenti honlapon /
 ! About filter policy and usage terms please see the homepage above
@@ -58,12 +56,29 @@ index.hu##A[id="closeWindow"]
 index.hu##[class*="ad-container"]
 index.hu##[class="glr_advert"]
 index.hu##[class="docWriteAdverticum"]
+index.hu##.nm_header
+index.hu##.nm_widget__wrapper
+index.hu##.nm_sponsored__wrapper
+index.hu##.nm_mini__wrapper
+index.hu##.nm_mini
+index.hu##.nm_supported__wrapper
+index.hu##.nm_supported
 forum.index.hu##TABLE[id="site_header"]
 forum.index.hu###rightcoltd
 forum.index.hu##[id="ot2015"]
 index.hu,velvet.hu,totalcar.hu##.travelo-box
 index.hu,velvet.hu,totalcar.hu##.shopline-box
+# GH#139
+#index.hu,velvet.hu,totalcar.hu##.keplink
 index.hu,velvet.hu##.flash-fullscreen-wrapper
+index.hu##.keretes_szeles
+index.hu##._iph_brk
+index.hu###ad_null_position
+index.hu##.ad_container
+index.hu##.cikk-vegi-ajanlo-reklamok
+index.hu##.cikk-vegi-ajanlo-reklamok-container
+index.hu###also_bannerek
+index.hu###index_shopline
 !
 velvet.hu##DIV[id="ads"]
 velvet.hu##DIV[id*="microsite"]
@@ -122,6 +137,18 @@ hvg.hu##.sidebar-ajanlat.clear.articlebox
 hvg.hu##.panelgap > .rubicon-fix.jobbhasab.adsense-placeholder
 hvg.hu##.article-jobline-sidebar-doboz
 hvg.hu##.panelgap > .caption
+hvg.hu###webpushSelctorFormId
+hvg.hu##.hvg_push
+hvg.hu##.article-menu.panelgap
+hvg.hu##.block-ms-box2
+hvg.hu##.articlebox.clear.sidebar-ajanlat
+hvg.hu##.adsense-placeholder.jobbhasab.rubicon-fix
+hvg.hu##.adtype-l-ribbon
+hvg.hu##.article-jobline-sidebar-doboz
+hvg.hu##.article-otherelements-container content
+hvg.hu##.selectWidget
+hvg.hu##.article-jobline-sidebar-doboz
+hvg.hu##.jobline-palyakezdo-feed
 !
 vg.hu##DIV[class*="-ad"]
 vg.hu##DIV[class*="hirdetes"]
@@ -272,6 +299,9 @@ blog.hu##[class="box widget_html ad"]
 blog.hu##DIV[id="taft"]
 blog.hu##[class="living-earth"]
 blog.hu##[id*="cp_popup"]
+blog.hu##.meropixel-hide
+||blog.hu/ad/*
+||blog.hu/*/ad/*
 !
 csajoknak.com###rstbox_2
 !
@@ -307,6 +337,7 @@ automenedzser.hu##DIV[class="adcloud"]
 ||portfolio.hu/img/partner/*
 portfolio.hu##DIV[id*="adocean"]
 portfolio.hu##DIV[id*="banner"]
+portfolio.hu###mymodal2
 !
 holtankoljak.hu##EMBED
 holtankoljak.hu##DIV[class*="banner"]
@@ -432,6 +463,7 @@ es.hu##IFRAME
 hasznaltauto.hu##[class*="Advert"]
 hasznaltauto.hu##DIV[id="superbox"]
 hasznaltauto.hu###player
+hasznaltauto.hu###CybotCookiebotDialog
 !
 myvip.com##DIV[class*="etarget"]
 myvip.com##DIV[class*="banner"]
@@ -754,6 +786,9 @@ vezess.hu##[id*="Banner"]
 vezess.hu##[class*="szponzor"]
 vezess.hu##[class*="Hirdetes"]
 vezess.hu##[class*="advert "]
+vezess.hu###best-cars-layer
+vezess.hu###backdrop
+vezess.hu###beta-message-invite
 !
 eduline.hu##[id*="_ad"]
 eduline.hu##[id*="ad_"]
@@ -902,8 +937,11 @@ hir.ma##[id="text-html-widget-6"]
 444.hu##[class*="banner"]
 444.hu##DIV[class="b-image-highlight b-image-highlight-article"]
 444.hu##[class="ad"]
-444.hu##[class="d36-top"]
 444.hu##[id*="-banner-"]
+444.hu##.text-center
+444.hu##.d36-top
+||444.hu##.ease-modal
+444.hu##.donation
 !
 ||888.hu^*/autoalkatreszek24$image
 !
@@ -940,6 +978,12 @@ vilagunk.hu##[style="z-index: 999999; background: rgba(0, 0, 0, 0.901961); displ
 !
 ||libri.hu/export/prodBann/
 ||libri.hu/html/images/skin/
+||libri.hu###skin-right
+||libri.hu###skin-left
+||libri.hu##.discount.clearfix.nonLpk
+||libri.hu###current_promotions_block
+||libri.hu##.box-general.clearfix
+||libri.hu##.fullwidth.current_promotions_block
 !
 ||femcafe.hu/*/spike_ad/*
 ||femcafe.hu/*/sponsoration/*
@@ -1118,8 +1162,8 @@ fototrend.hu##[href="https://www.barion.com/hu/vasarlok/arak-vasarloknak/"]
 https://fototrend.hu/design/hatter.jpg
 fototrend.hu##.foot-logos.col-md
 !
-prohardver.hu,mobilarena.hu,itcafe.hu,gamepod.hu,logout.hu,hardverapro.hu##.spleft
-prohardver.hu,mobilarena.hu,itcafe.hu,gamepod.hu,logout.hu,hardverapro.hu##.spright
+prohardver.hu,itcafe.hu,gamepod.hu,logout.hu,hardverapro.hu##.spleft
+prohardver.hu,itcafe.hu,gamepod.hu,logout.hu,hardverapro.hu##.spright
 prohardver.hu,mobilarena.hu,itcafe.hu,gamepod.hu,logout.hu,hardverapro.hu##body > style
 /dl/cnt/\d{4}-\d{2}/\d{4}//$domain=prohardver.hu|mobilarena.hu|itcafe.hu|gamepod.hu|logout.hu|hardverapro.hu,image
 prohardver.hu,mobilarena.hu,itcafe.hu,gamepod.hu,logout.hu##div[class*="xabre-responsive"]:not([class*="-980px-139px"])
@@ -1156,7 +1200,75 @@ koponyeg.hu###vshu-box
 menetrendek.hu##.articles
 menetrendek.hu##.proposer
 menetrendek.hu##.read_vs
-!##################### END 0100-websites.txt ##################### 
+!
+! DijNet fallback ads
+||dijnet.hu/ekonto/images/news/*
+||dijnet.hu/ekonto/images/szolg_logo/hu/adomany_logo.jpg
+||dijnet.hu/ekonto/images/szolg_logo/adomany_logo.jpg
+!
+bookline.hu###background
+bookline.hu###bg-advert
+bookline.hu###ws-module
+!
+merce.hu##.mrc-bnr-plchldr
+merce.hu##[class^="banner"]
+merce.hu##.cookie-bar
+!
+kiszamolo.hu###spu-103927
+kiszamolo.hu##.spu-box.spu-centered.spu-total-
+!
+elemzeskozpont.hu##.underlay
+elemzeskozpont.hu##.block-ouibounce-exit-modal
+elemzeskozpont.hu##.sidebar
+elemzeskozpont.hu##.region-highlighted
+elemzeskozpont.hu##.node-buttons
+elemzeskozpont.hu##.block-block
+elemzeskozpont.hu##.rtecenter
+!
+grundoajandek.hu###jqi-subfade
+grundoajandek.hu##.jqi-subfade
+grundoajandek.hu###jqi-sub
+grundoajandek.hu##.jqi-sub
+!
+mlzphoto.hu##.cim-reklam
+mlzphoto.hu###custom_html-3
+mlzphoto.hu##.widget_text.widget.widget_custom_html
+!
+!!! issue#149  budapestbank.hu##.container
+budapestbank.hu###header_cookie_container
+online.budapestbank.hu##.campaign-item
+online.budapestbank.hu##[id^="ext-gen"]
+online.budapestbank.hu##.ext-el-mask-banner
+!
+||magyar-elektronika.hu/images/banners/*
+!
+! Gemius tracking
+||gemius.hu
+||gemius.pl
+*/traffic.js
+*/traffic.min.js
+!
+! Optimonk
+###optimonk-iframe-container-campaign-12
+##.optimonk-iframe-container
+##.optimonk-middle
+###optimonk-overlay-campaign-12
+##.optimonk-container
+||cdn-dynamic.optimonk.com*
+!
+! Árukereső
+arukereso.hu##.brandbox
+!
+! MÁV Stop
+mavcsoport.hu###cboxOverlay
+mavcsoport.hu###colorbox
+!
+! Piac és Profit
+piacesprofit.hu##.inner
+!
+! Prog.hu & tsa.
+prog.hu,pcforum.hu###subscribepopuppanelalign
+prog.hu,pcforum.hu##.slidein.popup.closeablenotification.scripted!##################### END 0100-websites.txt ##################### 
 !##################### 0200-singlerules.txt ##################### 
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -1176,8 +1288,11 @@ astronet.hu##[class*="ads-"]
 ateceged.hu##[class="ad"]
 autobazar.eu##DIV[class="button-ads"]
 autopro.hu##[class*="banner"]
+autoszektor.hu##.view-banner-blokkok
+autoszektor.hu###article-2
 babanet.hu##[class*="hirdetes"]
 babaszoba.hu##[class*="advert"]
+bebiztositva.hu##.widget_media_image
 betegvagyok.hu##[id*="banner"]
 bonuszbrigad.hu##[id="popup_landing_container"]
 bookline.hu##[class*="advert"]
@@ -1228,6 +1343,7 @@ hiros.hu##[class="banner_widget"]
 hirposta.hu##[id*="banner"]
 hirtv.hu##[class*="-ad-container"]
 hoc.hu##P[class*="banner"]
+hogyan.org##.widget.widget_text
 hogyankell.hu##[id^="advert"]
 hotdog.hu##DIV[id="tetszett"]
 hrportal.hu##[class*="banner"]
@@ -1273,6 +1389,7 @@ mmonline.hu##[class*="banner"]
 mno.hu##[class*="box ajanlo"]
 motorrevu.hu##[class*="hirdetes"]
 mozinezo.hu##[id="header"]
+mozishop.hu##.om-holder
 mult-kor.hu##[class^="ui-dialog"]
 multiplay.hu##[id*="banner"]
 myvip.com##[id*="banner"]
@@ -1319,6 +1436,7 @@ sztarklikk.hu##[class="banner"]
 telefonkonyv.hu##[class*=" adH"]
 telekom.hu##DIV[class="ads"]
 teltlanyok.com##[id^="adchange"]
+terhesferfi.hu##div.banner
 titkosrandi.hu##DIV[class="skybanner"]
 tlap.hu##[id*="_bnr"]
 torte-net.hu##DIV[id="hirdetes"]
@@ -1331,6 +1449,7 @@ tvgo.hu##[class="banner"]
 tvn.hu/tvn/kepek/xpoker.hu/
 utajovobe.eu##[class="bannergroup"]
 valasz.hu##[class*="banner"]
+valaszonline.hu##.hird-cont
 videoklinika.hu##DIV[id*="Banner"]
 vidget.hu##[class*="banner"]
 vilaglato.info##.state-fb-pop-up
@@ -1428,6 +1547,9 @@ zene.hu##DIV[class="etarget"]
 ##[id^="aswift_"]
 ##[name*="google_ads"]
 ##div[class="canvasRecommended"]
+##div[data-campaign-name^="ads"]
+##.hirdetes
+##.hirdetes-linkek
 !
 /gemius.js^
 /gemius.min.js^

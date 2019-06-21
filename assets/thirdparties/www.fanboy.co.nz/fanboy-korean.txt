@@ -1,8 +1,9 @@
 [Adblock Plus 1.1]
-! Checksum: byq1i1yOLxyDT/4zJxYCNw
+! Checksum: ZdvEM+uHeU6h9iKlgzaLAg
 ! Title: Fanboy's Korean
 ! License: http://creativecommons.org/licenses/by/3.0/
 ! Homepage: http://www.fanboy.co.nz/
+! Expires: 90 days
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!! Officially unsupported !!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
