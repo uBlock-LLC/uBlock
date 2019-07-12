@@ -1,534 +1,534 @@
 {
-  "extName":{
-    "message":"uBlock",
-    "description":"extension name."
-  },
-  "extShortDesc":{
-    "message":"Eindelijk, een efficiënte adblocker. Gebruikt weinig processorkracht of geheugen.",
-    "description":"this will be in the chrome web store: must be 132 characters or less"
-  },
-  "dashboardName":{
-    "message":"uBlock — Dashboard",
-    "description":"English: uBlock — Dashboard"
-  },
-  "settingsPageName":{
-    "message":"Instellingen",
-    "description":"appears as tab name in dashboard"
-  },
-  "3pPageName":{
-    "message":"Filters van derden",
-    "description":"appears as tab name in dashboard"
-  },
-  "1pPageName":{
-    "message":"Mijn filters",
-    "description":"appears as tab name in dashboard"
-  },
-  "rulesPageName":{
-    "message":"Mijn regels",
-    "description":"appears as tab name in dashboard"
-  },
-  "whitelistPageName":{
-    "message":"Whitelist",
-    "description":"appears as tab name in dashboard"
-  },
-  "statsPageName":{
-    "message":"uBlock — Log van netwerkverzoeken",
-    "description":"Title for the network request log window"
-  },
-  "aboutPageName":{
-    "message":"Over",
-    "description":"appears as tab name in dashboard"
-  },
-  "popupPowerSwitchInfo":{
-    "message":"Klikken: uBlock voor deze website in-\/uitschakelen.\n\nCtrl+klikken: uBlock enkel voor deze pagina uitschakelen.",
-    "description":"English: Click: disable\/enable uBlock for this site.\n\nCtrl+click: disable uBlock only on this page."
-  },
-  "popupBlockedRequestPrompt":{
-    "message":"geblokkeerde verzoeken",
-    "description":"English: requests blocked"
-  },
-  "popupBlockedOnThisPagePrompt":{
-    "message":"op deze pagina",
-    "description":"English: on this page"
-  },
-  "popupBlockedStats":{
-    "message":"{{count}} of {{percent}}%",
-    "description":"Example: 15 or 13%"
-  },
-  "popupBlockedSinceInstallPrompt":{
-    "message":"sinds installatie",
-    "description":"English: since install"
-  },
-  "popupOr":{
-    "message":"of",
-    "description":"English: or"
-  },
-  "popupTipDashboard":{
-    "message":"Klik om het dashboard te openen",
-    "description":"English: Click to open the dashboard"
-  },
-  "popupTipPicker":{
-    "message":"Elementkiesmodus openen",
-    "description":"English: Enter element picker mode"
-  },
-  "popupTipLog":{
-    "message":"Naar verzoekenlogboek gaan",
-    "description":"English: Go to request log"
-  },
-  "popupTipNoPopups":{
-    "message":"Geen pop-ups voor deze website",
-    "description":"English: No popups for this site"
-  },
-  "popupTipNoStrictBlocking":{
-    "message":"Geen strikte blokkering voor deze website",
-    "description":"English: No strict blocking for this site"
-  },
-  "popupAnyRulePrompt":{
-    "message":"alles",
-    "description":""
-  },
-  "popupImageRulePrompt":{
-    "message":"afbeeldingen",
-    "description":""
-  },
-  "popup3pAnyRulePrompt":{
-    "message":"van derden",
-    "description":""
-  },
-  "popupInlineScriptRulePrompt":{
-    "message":"inline scripts",
-    "description":""
-  },
-  "popup1pScriptRulePrompt":{
-    "message":"scripts van de sites zelf",
-    "description":""
-  },
-  "popup3pScriptRulePrompt":{
-    "message":"scripts van derden",
-    "description":""
-  },
-  "popup3pFrameRulePrompt":{
-    "message":"frames van derden",
-    "description":""
-  },
-  "popupHitDomainCountPrompt":{
-    "message":"verbonden domeinen",
-    "description":"appears in popup"
-  },
-  "popupHitDomainCount":{
-    "message":"{{count}} van de {{total}}",
-    "description":"appears in popup"
-  },
-  "pickerCreate":{
-    "message":"Maken",
-    "description":"English: Create"
-  },
-  "pickerPick":{
-    "message":"Kiezen",
-    "description":"English: Pick"
-  },
-  "pickerQuit":{
-    "message":"Sluiten",
-    "description":"English: Quit"
-  },
-  "pickerNetFilters":{
-    "message":"Netfilters",
-    "description":"English: Net filters"
-  },
-  "pickerCosmeticFilters":{
-    "message":"Cosmetische filters",
-    "description":"English: Cosmetic filters"
-  },
-  "pickerCosmeticFiltersHint":{
-    "message":"Klik, Ctrl-klik",
-    "description":"English: Click, Ctrl-click"
-  },
-  "pickerContextMenuEntry":{
-    "message":"Element blokkeren",
-    "description":"English: Block element"
-  },
-  "settingsCollapseBlockedPrompt":{
-    "message":"Tijdelijke aanduidingen van geblokkeerde elementen verbergen",
-    "description":"English: Hide placeholders of blocked elements"
-  },
-  "settingsIconBadgePrompt":{
-    "message":"Het aantal geblokkeerde aanvragen op het icoon tonen",
-    "description":"English: Show the number of blocked requests on the icon"
-  },
-  "settingsContextMenuPrompt":{
-    "message":"Waar mogelijk van het contextmenu gebruik maken",
-    "description":"English: Make use of context menu where appropriate"
-  },
-  "settingsAdvancedUserPrompt":{
-    "message":"Ik ben een ervaren gebruiker (<a href='https:\/\/github.com\/uBlockAdmin\/uBlock\/wiki\/Advanced-Mode'>Lees dit eerst<\/a>)",
-    "description":"English: "
-  },
-  "settingsAllowUserStats":{
-    "message":"Allow uBlock to collect anonymous ping and usage data.",
-    "description":"English: Allow uBlock to collect anonymous ping and usage data."
-  },
-  "settingsExperimentalPrompt":{
-    "message":"Experimentele functies inschakelen (<a href='https:\/\/github.com\/uBlockAdmin\/uBlock\/wiki\/Experimental-features'>Over<\/a>)",
-    "description":"English: Enable experimental features"
-  },
-  "settingsStorageUsed":{
-    "message":"Gebruikte opslagruimte: {{value}} bytes",
-    "description":"English: Storage used: {{}} bytes"
-  },
-  "settingsLastRestorePrompt":{
-    "message":"Laatste herstel:",
-    "description":"English: Last restore:"
-  },
-  "settingsLastBackupPrompt":{
-    "message":"Laatste back-up:",
-    "description":"English: Last backup:"
-  },
-  "3pListsOfBlockedHostsPrompt":{
-    "message":"{{netFilterCount}} netwerkfilters ＋ {{cosmeticFilterCount}} cosmetische filters van:",
-    "description":"English: {{netFilterCount}} network filters ＋ {{cosmeticFilterCount}} cosmetic filters from:"
-  },
-  "3pListsOfBlockedHostsPerListStats":{
-    "message":"{{used}} gebruik van {{total}}",
-    "description":"English: {{used}} used out of {{total}}"
-  },
-  "3pAutoUpdatePrompt1":{
-    "message":"Filterlijsten automatisch updaten.",
-    "description":"English: Auto-update filter lists."
-  },
-  "3pUpdateNow":{
-    "message":"Nu updaten",
-    "description":"English: Update now"
-  },
-  "3pPurgeAll":{
-    "message":"Alle caches legen",
-    "description":"English: Purge all caches"
-  },
-  "3pParseAllABPHideFiltersPrompt1":{
-    "message":"Cosmetische filters inlezen en toepassen.",
-    "description":"English: Parse and enforce Adblock+ element hiding filters."
-  },
-  "3pParseAllABPHideFiltersInfo":{
-    "message":"<p>Deze optie schakelt het inlezen en toepassen van <a href=\"https:\/\/adblockplus.org\/en\/faq_internal#elemhide\">Adblock Plus-compatibele &ldquo;element hiding&rdquo; filters<\/a> in. Deze filters zijn puur cosmetisch: ze verbergen elementen in de webpagina die visueel storend kunnen zijn en kunnen dus niet geblokkeerd worden door de op netverzoeken gebaseerde filterengine.<\/p><p>Het inschakelen van deze functie verhoogt het geheugengebruik van <i>uBlock<\/i>.<\/p>",
-    "description":"English: see English messages.json"
-  },
-  "3pListsOfBlockedHostsHeader":{
-    "message":"Lijst van geblokkeerde hosts",
-    "description":"English: Lists of blocked hosts"
-  },
-  "3pApplyChanges":{
-    "message":"Veranderingen toepassen",
-    "description":"English: Apply changes"
-  },
-  "3pGroupAds":{
-    "message":"Advertenties",
-    "description":"English: Ads"
-  },
-  "3pGroupPrivacy":{
-    "message":"Privacy",
-    "description":"English: Privacy"
-  },
-  "3pGroupMalware":{
-    "message":"Malwaredomeinen",
-    "description":"English: Malware domains"
-  },
-  "3pGroupSocial":{
-    "message":"Sociaal",
-    "description":"English: Social"
-  },
-  "3pGroupMultipurpose":{
-    "message":"Multifunctioneel",
-    "description":"English: Multipurpose"
-  },
-  "3pGroupRegions":{
-    "message":"Gebieden, talen",
-    "description":"English: Regions, languages"
-  },
-  "3pGroupCustom":{
-    "message":"Aangepast",
-    "description":"English: Custom"
-  },
-  "3pExternalListsHint":{
-    "message":"Eén URL per regel. Regels beginnend met &lsquo;!&rsquo; worden genegeerd. Ongeldige URL's worden stilletjes genegeerd.",
-    "description":"English: One URL per line. Lines prefixed with &lsquo;!&rsquo; will be ignored. Invalid URLs will be silently ignored."
-  },
-  "3pExternalListsApply":{
-    "message":"Toepassen",
-    "description":"English: Parse"
-  },
-  "3pExternalListPurge":{
-    "message":"cache legen",
-    "description":"English: purge cache"
-  },
-  "3pExternalListNew":{
-    "message":"nieuwe versie beschikbaar",
-    "description":"English: new version available"
-  },
-  "3pExternalListObsolete":{
-    "message":"verouderd",
-    "description":"English: outdated"
-  },
-  "3pLastUpdate":{
-    "message":"Laatste update: {{ago}}",
-    "description":"English: Last update: {{ago}}, where 'ago' will be replaced with something like '2 days ago'"
-  },
-  "1pFormatHint":{
-    "message":"Eén filter per regel. Een filter kan een gewone hostnaam of een Adblock Plus-compatibele filter zijn. Regels beginnend met &lsquo;!&rsquo; worden genegeerd.",
-    "description":"English: One filter per line. A filter can be a plain hostname, or an Adblock Plus-compatible filter. Lines prefixed with &lsquo;!&rsquo; will be ignored."
-  },
-  "1pImport":{
-    "message":"Importeren en toevoegen",
-    "description":"English: Import and append"
-  },
-  "1pExport":{
-    "message":"Exporteren",
-    "description":"English: Export"
-  },
-  "1pExportFilename":{
-    "message":"mijn-ublock-statische-filters_{{datetime}}.txt",
-    "description":"English: my-ublock-static-filters_{{datetime}}.txt"
-  },
-  "1pApplyChanges":{
-    "message":"Veranderingen toepassen",
-    "description":"English: Apply changes"
-  },
-  "rulesPermanentHeader":{
-    "message":"Permanente regels",
-    "description":"header"
-  },
-  "rulesTemporaryHeader":{
-    "message":"Tijdelijke regels",
-    "description":"header"
-  },
-  "rulesRevert":{
-    "message":"Terugzetten",
-    "description":"This will remove all temporary rules"
-  },
-  "rulesCommit":{
-    "message":"Toepassen",
-    "description":"This will persist temporary rules"
-  },
-  "rulesEdit":{
-    "message":"Bewerken",
-    "description":"Will enable manual-edit mode (textarea)"
-  },
-  "rulesEditSave":{
-    "message":"Opslaan",
-    "description":"Will save manually-edited content and exit manual-edit mode"
-  },
-  "rulesEditDiscard":{
-    "message":"Annuleren",
-    "description":"Will discard manually-edited content and exit manual-edit mode"
-  },
-  "rulesImport":{
-    "message":"Uit bestand importeren...",
-    "description":""
-  },
-  "rulesExport":{
-    "message":"Naar bestand exporteren",
-    "description":""
-  },
-  "rulesDefaultFileName":{
-    "message":"mijn-ublock-dynamische-regels_{{datetime}}.txt",
-    "description":"default file name to use"
-  },
-  "rulesHint":{
-    "message":"Lijst van jouw dynamische filterregels.",
-    "description":"English: List of your dynamic filtering rules."
-  },
-  "rulesFormatHint":{
-    "message":"Regelsyntax: <code>bron bestemming type actie<\/code> (<a href='https:\/\/github.com\/uBlockAdmin\/uBlock\/wiki\/Dynamic-filtering:-rule-syntax'>volledige documentatie<\/a>).",
-    "description":"English: dynamic rule syntax and full documentation."
-  },
-  "whitelistPrompt":{
-    "message":"Je lijst van hostnamen waarop uBlock uitgeschakeld is. Eén per regel ingeven. Ongeldige hostnamen worden stilletjes genegeerd.",
-    "description":"English: Your list of host names for which uBlock will be disabled. One host name per line. Invalid host names will be silently ignored."
-  },
-  "whitelistImport":{
-    "message":"Importeren en toevoegen",
-    "description":"English: Import and append"
-  },
-  "whitelistExport":{
-    "message":"Exporteren",
-    "description":"English: Export"
-  },
-  "whitelistExportFilename":{
-    "message":"mijn-ublock-whitelist_{{datetime}}.txt",
-    "description":"English: my-ublock-whitelist_{{datetime}}.txt"
-  },
-  "whitelistApply":{
-    "message":"Veranderingen toepassen",
-    "description":"English: Apply changes"
-  },
-  "logNetRequestsPrompt":{
-    "message":"Het loggen van netwerkverzoeken inschakelen",
-    "description":"English: Enable the logging of network requests"
-  },
-  "logNetRequestsHelp":{
-    "message":"Indien je wilt kan je de details van netwerkverzoeken bekijken door deze optie in te schakelen. Het loggen van netwerkverzoeken vraagt meer geheugen. Deze optie is standaard uitgeschakeld omdat de meeste gebruikers dit niet gebruiken.",
-    "description":"English: see _locales\/en\/messages.log"
-  },
-  "logBlockedRequestsHeader":{
-    "message":"Geblokkeerde verzoeken",
-    "description":"English: Blocked requests"
-  },
-  "logAllowedRequestsHeader":{
-    "message":"Toegelaten verzoeken",
-    "description":"English: Allowed requests"
-  },
-  "logRequestsHeaderType":{
-    "message":"Type",
-    "description":"English: Type"
-  },
-  "logRequestsHeaderDomain":{
-    "message":"Domein",
-    "description":"English: Domain"
-  },
-  "logRequestsHeaderURL":{
-    "message":"URL",
-    "description":"English: URL"
-  },
-  "logRequestsHeaderFilter":{
-    "message":"Filter",
-    "description":"English: Filter"
-  },
-  "logBlockedRequestsEmpty":{
-    "message":"Voor deze pagina zijn geen geblokkeerde verzoeken gelogd",
-    "description":"English: No blocked requests logged for this page"
-  },
-  "logAllowedRequestsEmpty":{
-    "message":"Voor deze pagina zijn geen toegelaten verzoeken gelogd",
-    "description":"English: No non-blocked requests logged for this page"
-  },
-  "logBehindTheScene":{
-    "message":"Achter de schermen",
-    "description":"Pretty name for behind-the-scene network requests"
-  },
-  "logFilterPrompt":{
-    "message":"logboekitems filteren",
-    "description":"English: filter log entries"
-  },
-  "logMaxEntriesTip":{
-    "message":"Maximum aantal logboekitems",
-    "description":"Tooltip informaing that the input field is to set the maximum number of entries in the log"
-  },
-  "aboutChangelog":{
-    "message":"Veranderingenlogboek",
-    "description":"English: Change log"
-  },
-  "aboutWiki":{
-    "message":"Wiki",
-    "description":"English: project' wiki on Github"
-  },
-  "aboutCode":{
-    "message":"Broncode (GPLv3)",
-    "description":"English: Source code (GPLv3)"
-  },
-  "aboutContributors":{
-    "message":"Bijdragers",
-    "description":"English: Contributors"
-  },
-  "aboutBackupDataButton":{
-    "message":"Naar bestand back-uppen",
-    "description":"English: Backup to file"
-  },
-  "aboutBackupFilename":{
-    "message":"mijn-ublock-backup_{{datetime}}.txt",
-    "description":"English: my-ublock-backup_{{datetime}}.txt"
-  },
-  "aboutRestoreDataButton":{
-    "message":"Uit bestand herstellen...",
-    "description":"English: Restore from file..."
-  },
-  "aboutResetDataButton":{
-    "message":"Naar de standaardinstellingen herstellen...",
-    "description":"English: Reset to default settings..."
-  },
-  "aboutRestoreDataConfirm":{
-    "message":"Al je instellingen zullen worden overschreven met de back-upgegevens van {{time}} en uBlock zal worden herstart.\n\nWeet u zeker dat u alle bestaande instellingen wil overschrijven met de back-upgegevens?",
-    "description":"Message asking user to confirm restore"
-  },
-  "aboutRestoreDataError":{
-    "message":"De gegevens konden niet worden gelezen of zijn ongeldig",
-    "description":"Message to display when an error occurred during restore"
-  },
-  "aboutResetDataConfirm":{
-    "message":"Al je instellingen zullen worden verwijderd, waarna uBlock zich herstart.\n\nInstellingen toch herstellen naar de standaardwaarden?",
-    "description":"Message asking user to confirm reset"
-  },
-  "errorCantConnectTo":{
-    "message":"Kan niet verbinden met {{url}}",
-    "description":"English: Network error: unable to connect to {{url}}"
-  },
-  "subscriberConfirm":{
-    "message":"uBlock: De volgende URL aan je aangepaste filterlijsten toevoegen?\n\nTitel: \"{{title}}\"\nURL: {{url}}",
-    "description":"English: The message seen by the user to confirm subscription to a ABP filter list"
-  },
-  "elapsedOneMinuteAgo":{
-    "message":"één minuut geleden",
-    "description":"English: a minute ago"
-  },
-  "elapsedManyMinutesAgo":{
-    "message":"{{value}} minuten geleden",
-    "description":"English: {{value}} minutes ago"
-  },
-  "elapsedOneHourAgo":{
-    "message":"één uur geleden",
-    "description":"English: an hour ago"
-  },
-  "elapsedManyHoursAgo":{
-    "message":"{{value}} uren geleden",
-    "description":"English: {{value}} hours ago"
-  },
-  "elapsedOneDayAgo":{
-    "message":"één dag geleden",
-    "description":"English: a day ago"
-  },
-  "elapsedManyDaysAgo":{
-    "message":"{{value}} dagen geleden",
-    "description":"English: {{value}} days ago"
-  },
-  "showDashboardButton":{
-    "message":"Toon Dashboard",
-    "description":"Firefox\/Fennec-specific: Show Dashboard"
-  },
-  "showNetworkLogButton":{
-    "message":"Toon netwerkverzoeken-logboek",
-    "description":"Firefox\/Fennec-specific: Show Network Request Log"
-  },
-  "fennecMenuItemBlockingOff":{
-    "message":"uitgeschakeld",
-    "description":"Firefox-specific: appears as 'uBlock (off)'"
-  },
-  "docblockedPrompt1":{
-    "message":"uBlock heeft het laden van de volgende pagina voorkomen:",
-    "description":"English: uBlock has prevented the following page from loading:"
-  },
-  "docblockedPrompt2":{
-    "message":"Vanwege het volgende filter",
-    "description":"English: Because of the following filter"
-  },
-  "docblockedBack":{
-    "message":"Teruggaan",
-    "description":"English: Go back"
-  },
-  "docblockedClose":{
-    "message":"Venster sluiten",
-    "description":"English: Close this window"
-  },
-  "docblockedProceed":{
-    "message":"Strikte blokkering uitschakelen voor {{hostname}}",
-    "description":"English: Disable strict blocking for {{hostname}} ..."
-  },
-  "docblockedDisableTemporary":{
-    "message":"Tijdelijk",
-    "description":"English: Temporarily"
-  },
-  "docblockedDisablePermanent":{
-    "message":"Permanent",
-    "description":"English: Permanently"
-  },
-  "dummy":{
-    "message":"This entry must be the last one",
-    "description":"so we dont need to deal with comma for last entry"
+  "extName": {
+    "message": "uBlock",
+    "description": "extension name."
+  },
+  "extShortDesc": {
+    "message": "Eindelijk, een efficiënte adblocker. Gebruikt weinig processorkracht of geheugen.",
+    "description": "this will be in the chrome web store: must be 132 characters or less"
+  },
+  "dashboardName": {
+    "message": "uBlock — Dashboard",
+    "description": "English: uBlock — Dashboard"
+  },
+  "settingsPageName": {
+    "message": "Instellingen",
+    "description": "appears as tab name in dashboard"
+  },
+  "3pPageName": {
+    "message": "Filters van derden",
+    "description": "appears as tab name in dashboard"
+  },
+  "1pPageName": {
+    "message": "Mijn filters",
+    "description": "appears as tab name in dashboard"
+  },
+  "rulesPageName": {
+    "message": "Mijn regels",
+    "description": "appears as tab name in dashboard"
+  },
+  "whitelistPageName": {
+    "message": "Whitelist",
+    "description": "appears as tab name in dashboard"
+  },
+  "statsPageName": {
+    "message": "uBlock — Log van netwerkverzoeken",
+    "description": "Title for the network request log window"
+  },
+  "aboutPageName": {
+    "message": "Over",
+    "description": "appears as tab name in dashboard"
+  },
+  "popupPowerSwitchInfo": {
+    "message": "Klikken: uBlock voor deze website in-\/uitschakelen.\n\nCtrl+klikken: uBlock enkel voor deze pagina uitschakelen.",
+    "description": "English: Click: disable\/enable uBlock for this site.\n\nCtrl+click: disable uBlock only on this page."
+  },
+  "popupBlockedRequestPrompt": {
+    "message": "geblokkeerde verzoeken",
+    "description": "English: requests blocked"
+  },
+  "popupBlockedOnThisPagePrompt": {
+    "message": "op deze pagina",
+    "description": "English: on this page"
+  },
+  "popupBlockedStats": {
+    "message": "{{count}} of {{percent}}%",
+    "description": "Example: 15 or 13%"
+  },
+  "popupBlockedSinceInstallPrompt": {
+    "message": "sinds installatie",
+    "description": "English: since install"
+  },
+  "popupOr": {
+    "message": "of",
+    "description": "English: or"
+  },
+  "popupTipDashboard": {
+    "message": "Klik om het dashboard te openen",
+    "description": "English: Click to open the dashboard"
+  },
+  "popupTipPicker": {
+    "message": "Elementkiesmodus openen",
+    "description": "English: Enter element picker mode"
+  },
+  "popupTipLog": {
+    "message": "Naar verzoekenlogboek gaan",
+    "description": "English: Go to request log"
+  },
+  "popupTipNoPopups": {
+    "message": "Geen pop-ups voor deze website",
+    "description": "English: No popups for this site"
+  },
+  "popupTipNoStrictBlocking": {
+    "message": "Geen strikte blokkering voor deze website",
+    "description": "English: No strict blocking for this site"
+  },
+  "popupAnyRulePrompt": {
+    "message": "alles",
+    "description": ""
+  },
+  "popupImageRulePrompt": {
+    "message": "afbeeldingen",
+    "description": ""
+  },
+  "popup3pAnyRulePrompt": {
+    "message": "van derden",
+    "description": ""
+  },
+  "popupInlineScriptRulePrompt": {
+    "message": "inline scripts",
+    "description": ""
+  },
+  "popup1pScriptRulePrompt": {
+    "message": "scripts van de sites zelf",
+    "description": ""
+  },
+  "popup3pScriptRulePrompt": {
+    "message": "scripts van derden",
+    "description": ""
+  },
+  "popup3pFrameRulePrompt": {
+    "message": "frames van derden",
+    "description": ""
+  },
+  "popupHitDomainCountPrompt": {
+    "message": "verbonden domeinen",
+    "description": "appears in popup"
+  },
+  "popupHitDomainCount": {
+    "message": "{{count}} van de {{total}}",
+    "description": "appears in popup"
+  },
+  "pickerCreate": {
+    "message": "Maken",
+    "description": "English: Create"
+  },
+  "pickerPick": {
+    "message": "Kiezen",
+    "description": "English: Pick"
+  },
+  "pickerQuit": {
+    "message": "Sluiten",
+    "description": "English: Quit"
+  },
+  "pickerNetFilters": {
+    "message": "Netfilters",
+    "description": "English: Net filters"
+  },
+  "pickerCosmeticFilters": {
+    "message": "Cosmetische filters",
+    "description": "English: Cosmetic filters"
+  },
+  "pickerCosmeticFiltersHint": {
+    "message": "Klik, Ctrl-klik",
+    "description": "English: Click, Ctrl-click"
+  },
+  "pickerContextMenuEntry": {
+    "message": "Element blokkeren",
+    "description": "English: Block element"
+  },
+  "settingsCollapseBlockedPrompt": {
+    "message": "Tijdelijke aanduidingen van geblokkeerde elementen verbergen",
+    "description": "English: Hide placeholders of blocked elements"
+  },
+  "settingsIconBadgePrompt": {
+    "message": "Het aantal geblokkeerde aanvragen op het icoon tonen",
+    "description": "English: Show the number of blocked requests on the icon"
+  },
+  "settingsContextMenuPrompt": {
+    "message": "Waar mogelijk van het contextmenu gebruik maken",
+    "description": "English: Make use of context menu where appropriate"
+  },
+  "settingsAdvancedUserPrompt": {
+    "message": "Ik ben een ervaren gebruiker (<a href='https:\/\/github.com\/uBlockAdmin\/uBlock\/wiki\/Advanced-Mode'>Lees dit eerst<\/a>)",
+    "description": "English: "
+  },
+  "settingsAllowUserStats": {
+    "message": "Sta uBlock toe om anonieme ping- en gebruiksdata te verzamelen.",
+    "description": "English: Allow uBlock to collect anonymous ping and usage data."
+  },
+  "settingsExperimentalPrompt": {
+    "message": "Experimentele functies inschakelen (<a href='https:\/\/github.com\/uBlockAdmin\/uBlock\/wiki\/Experimental-features'>Over<\/a>)",
+    "description": "English: Enable experimental features"
+  },
+  "settingsStorageUsed": {
+    "message": "Gebruikte opslagruimte: {{value}} bytes",
+    "description": "English: Storage used: {{}} bytes"
+  },
+  "settingsLastRestorePrompt": {
+    "message": "Laatste herstel:",
+    "description": "English: Last restore:"
+  },
+  "settingsLastBackupPrompt": {
+    "message": "Laatste back-up:",
+    "description": "English: Last backup:"
+  },
+  "3pListsOfBlockedHostsPrompt": {
+    "message": "{{netFilterCount}} netwerkfilters ＋ {{cosmeticFilterCount}} cosmetische filters van:",
+    "description": "English: {{netFilterCount}} network filters ＋ {{cosmeticFilterCount}} cosmetic filters from:"
+  },
+  "3pListsOfBlockedHostsPerListStats": {
+    "message": "{{used}} gebruik van {{total}}",
+    "description": "English: {{used}} used out of {{total}}"
+  },
+  "3pAutoUpdatePrompt1": {
+    "message": "Filterlijsten automatisch updaten.",
+    "description": "English: Auto-update filter lists."
+  },
+  "3pUpdateNow": {
+    "message": "Nu updaten",
+    "description": "English: Update now"
+  },
+  "3pPurgeAll": {
+    "message": "Alle caches legen",
+    "description": "English: Purge all caches"
+  },
+  "3pParseAllABPHideFiltersPrompt1": {
+    "message": "Cosmetische filters inlezen en toepassen.",
+    "description": "English: Parse and enforce Adblock+ element hiding filters."
+  },
+  "3pParseAllABPHideFiltersInfo": {
+    "message": "<p>Deze optie schakelt het inlezen en toepassen van <a href=\"https:\/\/adblockplus.org\/en\/faq_internal#elemhide\">Adblock Plus-compatibele &ldquo;element hiding&rdquo; filters<\/a> in. Deze filters zijn puur cosmetisch: ze verbergen elementen in de webpagina die visueel storend kunnen zijn en kunnen dus niet geblokkeerd worden door de op netverzoeken gebaseerde filterengine.<\/p><p>Het inschakelen van deze functie verhoogt het geheugengebruik van <i>uBlock<\/i>.<\/p>",
+    "description": "English: see English messages.json"
+  },
+  "3pListsOfBlockedHostsHeader": {
+    "message": "Lijst van geblokkeerde hosts",
+    "description": "English: Lists of blocked hosts"
+  },
+  "3pApplyChanges": {
+    "message": "Veranderingen toepassen",
+    "description": "English: Apply changes"
+  },
+  "3pGroupAds": {
+    "message": "Advertenties",
+    "description": "English: Ads"
+  },
+  "3pGroupPrivacy": {
+    "message": "Privacy",
+    "description": "English: Privacy"
+  },
+  "3pGroupMalware": {
+    "message": "Malwaredomeinen",
+    "description": "English: Malware domains"
+  },
+  "3pGroupSocial": {
+    "message": "Sociaal",
+    "description": "English: Social"
+  },
+  "3pGroupMultipurpose": {
+    "message": "Multifunctioneel",
+    "description": "English: Multipurpose"
+  },
+  "3pGroupRegions": {
+    "message": "Gebieden, talen",
+    "description": "English: Regions, languages"
+  },
+  "3pGroupCustom": {
+    "message": "Aangepast",
+    "description": "English: Custom"
+  },
+  "3pExternalListsHint": {
+    "message": "Eén URL per regel. Regels beginnend met &lsquo;!&rsquo; worden genegeerd. Ongeldige URL's worden stilletjes genegeerd.",
+    "description": "English: One URL per line. Lines prefixed with &lsquo;!&rsquo; will be ignored. Invalid URLs will be silently ignored."
+  },
+  "3pExternalListsApply": {
+    "message": "Toepassen",
+    "description": "English: Parse"
+  },
+  "3pExternalListPurge": {
+    "message": "cache legen",
+    "description": "English: purge cache"
+  },
+  "3pExternalListNew": {
+    "message": "nieuwe versie beschikbaar",
+    "description": "English: new version available"
+  },
+  "3pExternalListObsolete": {
+    "message": "verouderd",
+    "description": "English: outdated"
+  },
+  "3pLastUpdate": {
+    "message": "Laatste update: {{ago}}",
+    "description": "English: Last update: {{ago}}, where 'ago' will be replaced with something like '2 days ago'"
+  },
+  "1pFormatHint": {
+    "message": "Eén filter per regel. Een filter kan een gewone hostnaam of een Adblock Plus-compatibele filter zijn. Regels beginnend met &lsquo;!&rsquo; worden genegeerd.",
+    "description": "English: One filter per line. A filter can be a plain hostname, or an Adblock Plus-compatible filter. Lines prefixed with &lsquo;!&rsquo; will be ignored."
+  },
+  "1pImport": {
+    "message": "Importeren en toevoegen",
+    "description": "English: Import and append"
+  },
+  "1pExport": {
+    "message": "Exporteren",
+    "description": "English: Export"
+  },
+  "1pExportFilename": {
+    "message": "mijn-ublock-statische-filters_{{datetime}}.txt",
+    "description": "English: my-ublock-static-filters_{{datetime}}.txt"
+  },
+  "1pApplyChanges": {
+    "message": "Veranderingen toepassen",
+    "description": "English: Apply changes"
+  },
+  "rulesPermanentHeader": {
+    "message": "Permanente regels",
+    "description": "header"
+  },
+  "rulesTemporaryHeader": {
+    "message": "Tijdelijke regels",
+    "description": "header"
+  },
+  "rulesRevert": {
+    "message": "Terugzetten",
+    "description": "This will remove all temporary rules"
+  },
+  "rulesCommit": {
+    "message": "Toepassen",
+    "description": "This will persist temporary rules"
+  },
+  "rulesEdit": {
+    "message": "Bewerken",
+    "description": "Will enable manual-edit mode (textarea)"
+  },
+  "rulesEditSave": {
+    "message": "Opslaan",
+    "description": "Will save manually-edited content and exit manual-edit mode"
+  },
+  "rulesEditDiscard": {
+    "message": "Annuleren",
+    "description": "Will discard manually-edited content and exit manual-edit mode"
+  },
+  "rulesImport": {
+    "message": "Uit bestand importeren...",
+    "description": ""
+  },
+  "rulesExport": {
+    "message": "Naar bestand exporteren",
+    "description": ""
+  },
+  "rulesDefaultFileName": {
+    "message": "mijn-ublock-dynamische-regels_{{datetime}}.txt",
+    "description": "default file name to use"
+  },
+  "rulesHint": {
+    "message": "Lijst van jouw dynamische filterregels.",
+    "description": "English: This is only relevant if you have Advanced User mode enabled. List of your dynamic filtering rules."
+  },
+  "rulesFormatHint": {
+    "message": "Regelsyntax: <code>bron bestemming type actie<\/code> (<a href='https:\/\/github.com\/uBlockAdmin\/uBlock\/wiki\/Dynamic-filtering:-rule-syntax'>volledige documentatie<\/a>).",
+    "description": "English: dynamic rule syntax and full documentation."
+  },
+  "whitelistPrompt": {
+    "message": "Je lijst van hostnamen waarop uBlock uitgeschakeld is. Eén per regel ingeven. Ongeldige hostnamen worden stilletjes genegeerd.",
+    "description": "English: Your list of host names for which uBlock will be disabled. One host name per line. Invalid host names will be silently ignored."
+  },
+  "whitelistImport": {
+    "message": "Importeren en toevoegen",
+    "description": "English: Import and append"
+  },
+  "whitelistExport": {
+    "message": "Exporteren",
+    "description": "English: Export"
+  },
+  "whitelistExportFilename": {
+    "message": "mijn-ublock-whitelist_{{datetime}}.txt",
+    "description": "English: my-ublock-whitelist_{{datetime}}.txt"
+  },
+  "whitelistApply": {
+    "message": "Veranderingen toepassen",
+    "description": "English: Apply changes"
+  },
+  "logNetRequestsPrompt": {
+    "message": "Het loggen van netwerkverzoeken inschakelen",
+    "description": "English: Enable the logging of network requests"
+  },
+  "logNetRequestsHelp": {
+    "message": "Indien je wilt kan je de details van netwerkverzoeken bekijken door deze optie in te schakelen. Het loggen van netwerkverzoeken vraagt meer geheugen. Deze optie is standaard uitgeschakeld omdat de meeste gebruikers dit niet gebruiken.",
+    "description": "English: see _locales\/en\/messages.log"
+  },
+  "logBlockedRequestsHeader": {
+    "message": "Geblokkeerde verzoeken",
+    "description": "English: Blocked requests"
+  },
+  "logAllowedRequestsHeader": {
+    "message": "Toegelaten verzoeken",
+    "description": "English: Allowed requests"
+  },
+  "logRequestsHeaderType": {
+    "message": "Type",
+    "description": "English: Type"
+  },
+  "logRequestsHeaderDomain": {
+    "message": "Domein",
+    "description": "English: Domain"
+  },
+  "logRequestsHeaderURL": {
+    "message": "URL",
+    "description": "English: URL"
+  },
+  "logRequestsHeaderFilter": {
+    "message": "Filter",
+    "description": "English: Filter"
+  },
+  "logBlockedRequestsEmpty": {
+    "message": "Voor deze pagina zijn geen geblokkeerde verzoeken gelogd",
+    "description": "English: No blocked requests logged for this page"
+  },
+  "logAllowedRequestsEmpty": {
+    "message": "Voor deze pagina zijn geen toegelaten verzoeken gelogd",
+    "description": "English: No non-blocked requests logged for this page"
+  },
+  "logBehindTheScene": {
+    "message": "Achter de schermen",
+    "description": "Pretty name for behind-the-scene network requests"
+  },
+  "logFilterPrompt": {
+    "message": "logboekitems filteren",
+    "description": "English: filter log entries"
+  },
+  "logMaxEntriesTip": {
+    "message": "Maximum aantal logboekitems",
+    "description": "Tooltip informaing that the input field is to set the maximum number of entries in the log"
+  },
+  "aboutChangelog": {
+    "message": "Veranderingenlogboek",
+    "description": "English: Change log"
+  },
+  "aboutWiki": {
+    "message": "Wiki",
+    "description": "English: project' wiki on Github"
+  },
+  "aboutCode": {
+    "message": "Broncode (GPLv3)",
+    "description": "English: Source code (GPLv3)"
+  },
+  "aboutContributors": {
+    "message": "Bijdragers",
+    "description": "English: Contributors"
+  },
+  "aboutBackupDataButton": {
+    "message": "Naar bestand back-uppen",
+    "description": "English: Backup to file"
+  },
+  "aboutBackupFilename": {
+    "message": "mijn-ublock-backup_{{datetime}}.txt",
+    "description": "English: my-ublock-backup_{{datetime}}.txt"
+  },
+  "aboutRestoreDataButton": {
+    "message": "Uit bestand herstellen...",
+    "description": "English: Restore from file..."
+  },
+  "aboutResetDataButton": {
+    "message": "Naar de standaardinstellingen herstellen...",
+    "description": "English: Reset to default settings..."
+  },
+  "aboutRestoreDataConfirm": {
+    "message": "Al je instellingen zullen worden overschreven met de back-upgegevens van {{time}} en uBlock zal worden herstart.\n\nWeet u zeker dat u alle bestaande instellingen wil overschrijven met de back-upgegevens?",
+    "description": "Message asking user to confirm restore"
+  },
+  "aboutRestoreDataError": {
+    "message": "De gegevens konden niet worden gelezen of zijn ongeldig",
+    "description": "Message to display when an error occurred during restore"
+  },
+  "aboutResetDataConfirm": {
+    "message": "Al je instellingen zullen worden verwijderd, waarna uBlock zich herstart.\n\nInstellingen toch herstellen naar de standaardwaarden?",
+    "description": "Message asking user to confirm reset"
+  },
+  "errorCantConnectTo": {
+    "message": "Kan niet verbinden met {{url}}",
+    "description": "English: Network error: unable to connect to {{url}}"
+  },
+  "subscriberConfirm": {
+    "message": "uBlock: De volgende URL aan je aangepaste filterlijsten toevoegen?\n\nTitel: \"{{title}}\"\nURL: {{url}}",
+    "description": "English: The message seen by the user to confirm subscription to a ABP filter list"
+  },
+  "elapsedOneMinuteAgo": {
+    "message": "één minuut geleden",
+    "description": "English: a minute ago"
+  },
+  "elapsedManyMinutesAgo": {
+    "message": "{{value}} minuten geleden",
+    "description": "English: {{value}} minutes ago"
+  },
+  "elapsedOneHourAgo": {
+    "message": "één uur geleden",
+    "description": "English: an hour ago"
+  },
+  "elapsedManyHoursAgo": {
+    "message": "{{value}} uren geleden",
+    "description": "English: {{value}} hours ago"
+  },
+  "elapsedOneDayAgo": {
+    "message": "één dag geleden",
+    "description": "English: a day ago"
+  },
+  "elapsedManyDaysAgo": {
+    "message": "{{value}} dagen geleden",
+    "description": "English: {{value}} days ago"
+  },
+  "showDashboardButton": {
+    "message": "Toon Dashboard",
+    "description": "Firefox\/Fennec-specific: Show Dashboard"
+  },
+  "showNetworkLogButton": {
+    "message": "Toon netwerkverzoeken-logboek",
+    "description": "Firefox\/Fennec-specific: Show Network Request Log"
+  },
+  "fennecMenuItemBlockingOff": {
+    "message": "uitgeschakeld",
+    "description": "Firefox-specific: appears as 'uBlock (off)'"
+  },
+  "docblockedPrompt1": {
+    "message": "uBlock heeft het laden van de volgende pagina voorkomen:",
+    "description": "English: uBlock has prevented the following page from loading:"
+  },
+  "docblockedPrompt2": {
+    "message": "Vanwege het volgende filter",
+    "description": "English: Because of the following filter"
+  },
+  "docblockedBack": {
+    "message": "Teruggaan",
+    "description": "English: Go back"
+  },
+  "docblockedClose": {
+    "message": "Venster sluiten",
+    "description": "English: Close this window"
+  },
+  "docblockedProceed": {
+    "message": "Strikte blokkering uitschakelen voor {{hostname}}",
+    "description": "English: Disable strict blocking for {{hostname}} ..."
+  },
+  "docblockedDisableTemporary": {
+    "message": "Tijdelijk",
+    "description": "English: Temporarily"
+  },
+  "docblockedDisablePermanent": {
+    "message": "Permanent",
+    "description": "English: Permanently"
+  },
+  "dummy": {
+    "message": "This entry must be the last one",
+    "description": "so we dont need to deal with comma for last entry"
   }
 }

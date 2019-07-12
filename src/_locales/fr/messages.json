@@ -1,534 +1,534 @@
 {
-  "extName":{
-    "message":"uBlock",
-    "description":"extension name."
-  },
-  "extShortDesc":{
-    "message":"Voici un bloqueur de nuisances efficace, qui ne sollicitera pas outre mesure votre processeur et votre mémoire vive.",
-    "description":"this will be in the chrome web store: must be 132 characters or less"
-  },
-  "dashboardName":{
-    "message":"uBlock — Tableau de bord",
-    "description":"English: uBlock — Dashboard"
-  },
-  "settingsPageName":{
-    "message":"Paramètres",
-    "description":"appears as tab name in dashboard"
-  },
-  "3pPageName":{
-    "message":"Listes de filtres",
-    "description":"appears as tab name in dashboard"
-  },
-  "1pPageName":{
-    "message":"Mes filtres",
-    "description":"appears as tab name in dashboard"
-  },
-  "rulesPageName":{
-    "message":"Mes règles",
-    "description":"appears as tab name in dashboard"
-  },
-  "whitelistPageName":{
-    "message":"Liste blanche",
-    "description":"appears as tab name in dashboard"
-  },
-  "statsPageName":{
-    "message":"uBlock — Journal des requêtes réseau",
-    "description":"Title for the network request log window"
-  },
-  "aboutPageName":{
-    "message":"À propos",
-    "description":"appears as tab name in dashboard"
-  },
-  "popupPowerSwitchInfo":{
-    "message":"Cliquez pour désactiver\/activer uBlock pour le site courant\n\nCtrl+cliquez pour désactiver uBlock sur cette page uniquement",
-    "description":"English: Click: disable\/enable uBlock for this site.\n\nCtrl+click: disable uBlock only on this page."
-  },
-  "popupBlockedRequestPrompt":{
-    "message":"Requêtes bloquées",
-    "description":"English: requests blocked"
-  },
-  "popupBlockedOnThisPagePrompt":{
-    "message":"sur cette page :",
-    "description":"English: on this page"
-  },
-  "popupBlockedStats":{
-    "message":"{{count}}, soit {{percent}}%",
-    "description":"Example: 15 or 13%"
-  },
-  "popupBlockedSinceInstallPrompt":{
-    "message":"depuis toujours :",
-    "description":"English: since install"
-  },
-  "popupOr":{
-    "message":"soit",
-    "description":"English: or"
-  },
-  "popupTipDashboard":{
-    "message":"Cliquez pour accéder au tableau de bord",
-    "description":"English: Click to open the dashboard"
-  },
-  "popupTipPicker":{
-    "message":"Aller au sélecteur d'élément",
-    "description":"English: Enter element picker mode"
-  },
-  "popupTipLog":{
-    "message":"Aller au journal des requêtes",
-    "description":"English: Go to request log"
-  },
-  "popupTipNoPopups":{
-    "message":"Interdire les fenêtres pop-ups pour ce site",
-    "description":"English: No popups for this site"
-  },
-  "popupTipNoStrictBlocking":{
-    "message":"Ne pas employer le blocage strict pour ce site",
-    "description":"English: No strict blocking for this site"
-  },
-  "popupAnyRulePrompt":{
-    "message":"Tout",
-    "description":""
-  },
-  "popupImageRulePrompt":{
-    "message":"Images",
-    "description":""
-  },
-  "popup3pAnyRulePrompt":{
-    "message":"Tierce-partie",
-    "description":""
-  },
-  "popupInlineScriptRulePrompt":{
-    "message":"Scripts embarqués",
-    "description":""
-  },
-  "popup1pScriptRulePrompt":{
-    "message":"Scripts du domaine de la page",
-    "description":""
-  },
-  "popup3pScriptRulePrompt":{
-    "message":"Scripts de tierce-partie",
-    "description":""
-  },
-  "popup3pFrameRulePrompt":{
-    "message":"Cadres de tierce-partie",
-    "description":""
-  },
-  "popupHitDomainCountPrompt":{
-    "message":"Domaines connectés",
-    "description":"appears in popup"
-  },
-  "popupHitDomainCount":{
-    "message":"{{count}} sur un total de {{total}}",
-    "description":"appears in popup"
-  },
-  "pickerCreate":{
-    "message":"Créer",
-    "description":"English: Create"
-  },
-  "pickerPick":{
-    "message":"Cibler",
-    "description":"English: Pick"
-  },
-  "pickerQuit":{
-    "message":"Quitter",
-    "description":"English: Quit"
-  },
-  "pickerNetFilters":{
-    "message":"Filtres de réseau",
-    "description":"English: Net filters"
-  },
-  "pickerCosmeticFilters":{
-    "message":"Filtres esthétiques",
-    "description":"English: Cosmetic filters"
-  },
-  "pickerCosmeticFiltersHint":{
-    "message":"Clic, Ctrl-clic",
-    "description":"English: Click, Ctrl-click"
-  },
-  "pickerContextMenuEntry":{
-    "message":"Bloquer cet élément",
-    "description":"English: Block element"
-  },
-  "settingsCollapseBlockedPrompt":{
-    "message":"Cacher les espaces réservés aux éléments bloqués",
-    "description":"English: Hide placeholders of blocked elements"
-  },
-  "settingsIconBadgePrompt":{
-    "message":"Afficher le nombre de requêtes bloquées sur l'icône",
-    "description":"English: Show the number of blocked requests on the icon"
-  },
-  "settingsContextMenuPrompt":{
-    "message":"Utiliser le menu contextuel si possible",
-    "description":"English: Make use of context menu where appropriate"
-  },
-  "settingsAdvancedUserPrompt":{
-    "message":"Je suis un utilisateur expérimenté (<a href='https:\/\/github.com\/uBlockAdmin\/uBlock\/wiki\/Advanced-Mode'>À lire<\/a>)",
-    "description":"English: "
-  },
-  "settingsAllowUserStats":{
-    "message":"Allow uBlock to collect anonymous ping and usage data.",
-    "description":"English: Allow uBlock to collect anonymous ping and usage data."
-  },
-  "settingsExperimentalPrompt":{
-    "message":"Activer les fonctionnalités expérimentales (<a href='https:\/\/github.com\/uBlockAdmin\/uBlock\/wiki\/Experimental-features'>En savoir plus<\/a>)",
-    "description":"English: Enable experimental features"
-  },
-  "settingsStorageUsed":{
-    "message":"Stockage utilisé : {{value}} octet(s)",
-    "description":"English: Storage used: {{}} bytes"
-  },
-  "settingsLastRestorePrompt":{
-    "message":"Date de la dernière restauration :",
-    "description":"English: Last restore:"
-  },
-  "settingsLastBackupPrompt":{
-    "message":"Date de la dernière sauvegarde :",
-    "description":"English: Last backup:"
-  },
-  "3pListsOfBlockedHostsPrompt":{
-    "message":"{{netFilterCount}} filtre(s) réseau et {{cosmeticFilterCount}} filtre(s) esthétique(s) actuellement en action :",
-    "description":"English: {{netFilterCount}} network filters ＋ {{cosmeticFilterCount}} cosmetic filters from:"
-  },
-  "3pListsOfBlockedHostsPerListStats":{
-    "message":"{{used}} utilisé(s) sur un total de {{total}}",
-    "description":"English: {{used}} used out of {{total}}"
-  },
-  "3pAutoUpdatePrompt1":{
-    "message":"Mise à jour automatique des listes de filtres",
-    "description":"English: Auto-update filter lists."
-  },
-  "3pUpdateNow":{
-    "message":"Mettre à jour maintenant",
-    "description":"English: Update now"
-  },
-  "3pPurgeAll":{
-    "message":"Vider tous les caches",
-    "description":"English: Purge all caches"
-  },
-  "3pParseAllABPHideFiltersPrompt1":{
-    "message":"Utiliser en plus les règles esthétiques",
-    "description":"English: Parse and enforce Adblock+ element hiding filters."
-  },
-  "3pParseAllABPHideFiltersInfo":{
-    "message":"<p>Cette option permet de prendre en charge les filtres Adblock Plus de type <a href=\"https:\/\/adblockplus.org\/en\/faq_internal#elemhide\">&ldquo;element hiding&rdquo;<\/a>. Ces filtres ont principalement un impact visuel, servant à dissimuler des éléments nuisibles d'une page Web et qui ne sont pas blocables par le filtrage standard.<\/p><p>L'activation de cette fonctionnalité augmente l'empreinte mémoire de <i>uBlock<\/i><\/p>",
-    "description":"English: see English messages.json"
-  },
-  "3pListsOfBlockedHostsHeader":{
-    "message":"Listes prédéfinies d'hôtes à bloquer",
-    "description":"English: Lists of blocked hosts"
-  },
-  "3pApplyChanges":{
-    "message":"Appliquer",
-    "description":"English: Apply changes"
-  },
-  "3pGroupAds":{
-    "message":"Publicités",
-    "description":"English: Ads"
-  },
-  "3pGroupPrivacy":{
-    "message":"Confidentialité",
-    "description":"English: Privacy"
-  },
-  "3pGroupMalware":{
-    "message":"Domaines malveillants",
-    "description":"English: Malware domains"
-  },
-  "3pGroupSocial":{
-    "message":"Réseaux sociaux",
-    "description":"English: Social"
-  },
-  "3pGroupMultipurpose":{
-    "message":"Tout usage",
-    "description":"English: Multipurpose"
-  },
-  "3pGroupRegions":{
-    "message":"Régions, langages",
-    "description":"English: Regions, languages"
-  },
-  "3pGroupCustom":{
-    "message":"Vos propres listes",
-    "description":"English: Custom"
-  },
-  "3pExternalListsHint":{
-    "message":"Une adresse Web par ligne. Les lignes débutant par un &lsquo;!&rsquo; seront ignorées. Les adresses Web invalides seront ignorées sans avertissement.",
-    "description":"English: One URL per line. Lines prefixed with &lsquo;!&rsquo; will be ignored. Invalid URLs will be silently ignored."
-  },
-  "3pExternalListsApply":{
-    "message":"Appliquer",
-    "description":"English: Parse"
-  },
-  "3pExternalListPurge":{
-    "message":"Vider le cache",
-    "description":"English: purge cache"
-  },
-  "3pExternalListNew":{
-    "message":"Nouvelle version disponible",
-    "description":"English: new version available"
-  },
-  "3pExternalListObsolete":{
-    "message":"Potentiellement obsolète",
-    "description":"English: outdated"
-  },
-  "3pLastUpdate":{
-    "message":"Dernière mise à jour effectuée : {{ago}}",
-    "description":"English: Last update: {{ago}}, where 'ago' will be replaced with something like '2 days ago'"
-  },
-  "1pFormatHint":{
-    "message":"Une règle par ligne. Une règle peut être un simple nom d'hôte, ou encore un filtre respectant la syntaxe des filtres Adblock Plus. Les lignes débutant par &lsquo;!&rsquo; seront ignorées.",
-    "description":"English: One filter per line. A filter can be a plain hostname, or an Adblock Plus-compatible filter. Lines prefixed with &lsquo;!&rsquo; will be ignored."
-  },
-  "1pImport":{
-    "message":"Importer",
-    "description":"English: Import and append"
-  },
-  "1pExport":{
-    "message":"Exporter",
-    "description":"English: Export"
-  },
-  "1pExportFilename":{
-    "message":"mes-filtres-personnalises-ublock-{{datetime}}.txt",
-    "description":"English: my-ublock-static-filters_{{datetime}}.txt"
-  },
-  "1pApplyChanges":{
-    "message":"Appliquer",
-    "description":"English: Apply changes"
-  },
-  "rulesPermanentHeader":{
-    "message":"Règles permanentes",
-    "description":"header"
-  },
-  "rulesTemporaryHeader":{
-    "message":"Règles temporaires",
-    "description":"header"
-  },
-  "rulesRevert":{
-    "message":"Rétablir",
-    "description":"This will remove all temporary rules"
-  },
-  "rulesCommit":{
-    "message":"Appliquer",
-    "description":"This will persist temporary rules"
-  },
-  "rulesEdit":{
-    "message":"Éditer",
-    "description":"Will enable manual-edit mode (textarea)"
-  },
-  "rulesEditSave":{
-    "message":"Enregistrer",
-    "description":"Will save manually-edited content and exit manual-edit mode"
-  },
-  "rulesEditDiscard":{
-    "message":"Annuler",
-    "description":"Will discard manually-edited content and exit manual-edit mode"
-  },
-  "rulesImport":{
-    "message":"Importer à partir du fichier",
-    "description":""
-  },
-  "rulesExport":{
-    "message":"Exporter vers un fichier",
-    "description":""
-  },
-  "rulesDefaultFileName":{
-    "message":"mes-regles-dynamiques-ublock-{{datetime}}.txt",
-    "description":"default file name to use"
-  },
-  "rulesHint":{
-    "message":"Liste de vos règles de filtrage dynamique",
-    "description":"English: List of your dynamic filtering rules."
-  },
-  "rulesFormatHint":{
-    "message":"Syntaxe des règles : <code>source destination type action<\/code> (<a href='https:\/\/github.com\/uBlockAdmin\/uBlock\/wiki\/Dynamic-filtering:-rule-syntax'>Documentation complète en Anglais<\/a>)",
-    "description":"English: dynamic rule syntax and full documentation."
-  },
-  "whitelistPrompt":{
-    "message":"Ici se trouve votre liste d'hôtes à autoriser. Un nom d'hôte par ligne. Les noms d'hôte invalides seront ignorés et vous n'en serez pas averti(e).",
-    "description":"English: Your list of host names for which uBlock will be disabled. One host name per line. Invalid host names will be silently ignored."
-  },
-  "whitelistImport":{
-    "message":"Importer",
-    "description":"English: Import and append"
-  },
-  "whitelistExport":{
-    "message":"Exporter",
-    "description":"English: Export"
-  },
-  "whitelistExportFilename":{
-    "message":"ma-liste-blanche-ublock-{{datetime}}.txt",
-    "description":"English: my-ublock-whitelist_{{datetime}}.txt"
-  },
-  "whitelistApply":{
-    "message":"Appliquer",
-    "description":"English: Apply changes"
-  },
-  "logNetRequestsPrompt":{
-    "message":"Activer la journalisation des requêtes réseau",
-    "description":"English: Enable the logging of network requests"
-  },
-  "logNetRequestsHelp":{
-    "message":"Vous pouvez inspecter les détails des requêtes en activant cette option. La journalisation des requêtes augmente l'empreinte mémoire utilisée par uBlock. Puisque bon nombre d'utilisateurs n'utiliseront jamais cette fonctionnalité, elle est désactivée par défaut.",
-    "description":"English: see _locales\/en\/messages.log"
-  },
-  "logBlockedRequestsHeader":{
-    "message":"Requêtes bloquées",
-    "description":"English: Blocked requests"
-  },
-  "logAllowedRequestsHeader":{
-    "message":"Requêtes autorisées",
-    "description":"English: Allowed requests"
-  },
-  "logRequestsHeaderType":{
-    "message":"Type",
-    "description":"English: Type"
-  },
-  "logRequestsHeaderDomain":{
-    "message":"Domaine",
-    "description":"English: Domain"
-  },
-  "logRequestsHeaderURL":{
-    "message":"URL",
-    "description":"English: URL"
-  },
-  "logRequestsHeaderFilter":{
-    "message":"Filtre",
-    "description":"English: Filter"
-  },
-  "logBlockedRequestsEmpty":{
-    "message":"Aucune requête bloquée sur cette page n'a été consignée dans le journal",
-    "description":"English: No blocked requests logged for this page"
-  },
-  "logAllowedRequestsEmpty":{
-    "message":"Aucune requête non-bloquée sur cette page n'a été consignée dans le journal",
-    "description":"English: No non-blocked requests logged for this page"
-  },
-  "logBehindTheScene":{
-    "message":"Requêtes en coulisses",
-    "description":"Pretty name for behind-the-scene network requests"
-  },
-  "logFilterPrompt":{
-    "message":"Filtrer les entrées du journal",
-    "description":"English: filter log entries"
-  },
-  "logMaxEntriesTip":{
-    "message":"Nombre maximum d'entrées à conserver dans le journal",
-    "description":"Tooltip informaing that the input field is to set the maximum number of entries in the log"
-  },
-  "aboutChangelog":{
-    "message":"Journal des changements (en Anglais)",
-    "description":"English: Change log"
-  },
-  "aboutWiki":{
-    "message":"Documentation (en Anglais)",
-    "description":"English: project' wiki on Github"
-  },
-  "aboutCode":{
-    "message":"Code Source (Licence GPLv3, en Anglais)",
-    "description":"English: Source code (GPLv3)"
-  },
-  "aboutContributors":{
-    "message":"Contributeurs",
-    "description":"English: Contributors"
-  },
-  "aboutBackupDataButton":{
-    "message":"Exporter vers un fichier",
-    "description":"English: Backup to file"
-  },
-  "aboutBackupFilename":{
-    "message":"ma-sauvegarde-des-donnees-ublock-{{datetime}}.txt",
-    "description":"English: my-ublock-backup_{{datetime}}.txt"
-  },
-  "aboutRestoreDataButton":{
-    "message":"Importer depuis un fichier",
-    "description":"English: Restore from file..."
-  },
-  "aboutResetDataButton":{
-    "message":"Paramètres par défaut",
-    "description":"English: Reset to default settings..."
-  },
-  "aboutRestoreDataConfirm":{
-    "message":"Vos paramètres seront remplacés par les données sauvegardées le {{time}}, puis uBlock redémarrera.\n\nProcéder à l'importation ?",
-    "description":"Message asking user to confirm restore"
-  },
-  "aboutRestoreDataError":{
-    "message":"Les données ne peuvent être lues ou sont invalides",
-    "description":"Message to display when an error occurred during restore"
-  },
-  "aboutResetDataConfirm":{
-    "message":"Vos paramètres seront effacés, puis uBlock redémarrera.\n\nProcéder à la réinitialisation des paramètres ?",
-    "description":"Message asking user to confirm reset"
-  },
-  "errorCantConnectTo":{
-    "message":"Ne peut se connecter sur {{url}}",
-    "description":"English: Network error: unable to connect to {{url}}"
-  },
-  "subscriberConfirm":{
-    "message":"uBlock : Ajouter la ressource Web suivante à votre sélection de listes de filtrage ?\n\nTitre : \"{{title}}\"\nURL : {{url}}",
-    "description":"English: The message seen by the user to confirm subscription to a ABP filter list"
-  },
-  "elapsedOneMinuteAgo":{
-    "message":"Il y a une minute",
-    "description":"English: a minute ago"
-  },
-  "elapsedManyMinutesAgo":{
-    "message":"Il y a {{value}} minutes",
-    "description":"English: {{value}} minutes ago"
-  },
-  "elapsedOneHourAgo":{
-    "message":"Il y a une heure",
-    "description":"English: an hour ago"
-  },
-  "elapsedManyHoursAgo":{
-    "message":"Il y a {{value}} heures",
-    "description":"English: {{value}} hours ago"
-  },
-  "elapsedOneDayAgo":{
-    "message":"Il y a un jour",
-    "description":"English: a day ago"
-  },
-  "elapsedManyDaysAgo":{
-    "message":"Il y a {{value}} jours",
-    "description":"English: {{value}} days ago"
-  },
-  "showDashboardButton":{
-    "message":"Afficher le Tableau de bord",
-    "description":"Firefox\/Fennec-specific: Show Dashboard"
-  },
-  "showNetworkLogButton":{
-    "message":"Afficher le Journal des requêtes réseau",
-    "description":"Firefox\/Fennec-specific: Show Network Request Log"
-  },
-  "fennecMenuItemBlockingOff":{
-    "message":"Arrêt",
-    "description":"Firefox-specific: appears as 'uBlock (off)'"
-  },
-  "docblockedPrompt1":{
-    "message":"uBlock a empêché le chargement de la page suivante :",
-    "description":"English: uBlock has prevented the following page from loading:"
-  },
-  "docblockedPrompt2":{
-    "message":"À cause du filtre suivant :",
-    "description":"English: Because of the following filter"
-  },
-  "docblockedBack":{
-    "message":"Retour",
-    "description":"English: Go back"
-  },
-  "docblockedClose":{
-    "message":"Fermer cette fenêtre",
-    "description":"English: Close this window"
-  },
-  "docblockedProceed":{
-    "message":"Désactiver le blocage strict du domaine {{hostname}}",
-    "description":"English: Disable strict blocking for {{hostname}} ..."
-  },
-  "docblockedDisableTemporary":{
-    "message":"De manière temporaire",
-    "description":"English: Temporarily"
-  },
-  "docblockedDisablePermanent":{
-    "message":"De manière définitive",
-    "description":"English: Permanently"
-  },
-  "dummy":{
-    "message":"This entry must be the last one",
-    "description":"so we dont need to deal with comma for last entry"
+  "extName": {
+    "message": "uBlock",
+    "description": "extension name."
+  },
+  "extShortDesc": {
+    "message": "Voici un bloqueur de nuisances efficace, qui ne sollicitera pas outre mesure votre processeur et votre mémoire vive.",
+    "description": "this will be in the chrome web store: must be 132 characters or less"
+  },
+  "dashboardName": {
+    "message": "uBlock — Tableau de bord",
+    "description": "English: uBlock — Dashboard"
+  },
+  "settingsPageName": {
+    "message": "Paramètres",
+    "description": "appears as tab name in dashboard"
+  },
+  "3pPageName": {
+    "message": "Listes de filtres",
+    "description": "appears as tab name in dashboard"
+  },
+  "1pPageName": {
+    "message": "Mes filtres",
+    "description": "appears as tab name in dashboard"
+  },
+  "rulesPageName": {
+    "message": "Mes règles",
+    "description": "appears as tab name in dashboard"
+  },
+  "whitelistPageName": {
+    "message": "Liste blanche",
+    "description": "appears as tab name in dashboard"
+  },
+  "statsPageName": {
+    "message": "uBlock — Journal des requêtes réseau",
+    "description": "Title for the network request log window"
+  },
+  "aboutPageName": {
+    "message": "À propos",
+    "description": "appears as tab name in dashboard"
+  },
+  "popupPowerSwitchInfo": {
+    "message": "Cliquez pour désactiver\/activer uBlock pour le site courant\n\nCtrl+cliquez pour désactiver uBlock sur cette page uniquement",
+    "description": "English: Click: disable\/enable uBlock for this site.\n\nCtrl+click: disable uBlock only on this page."
+  },
+  "popupBlockedRequestPrompt": {
+    "message": "Requêtes bloquées",
+    "description": "English: requests blocked"
+  },
+  "popupBlockedOnThisPagePrompt": {
+    "message": "sur cette page :",
+    "description": "English: on this page"
+  },
+  "popupBlockedStats": {
+    "message": "{{count}}, soit {{percent}}%",
+    "description": "Example: 15 or 13%"
+  },
+  "popupBlockedSinceInstallPrompt": {
+    "message": "depuis toujours :",
+    "description": "English: since install"
+  },
+  "popupOr": {
+    "message": "soit",
+    "description": "English: or"
+  },
+  "popupTipDashboard": {
+    "message": "Cliquez pour accéder au tableau de bord",
+    "description": "English: Click to open the dashboard"
+  },
+  "popupTipPicker": {
+    "message": "Aller au sélecteur d'élément",
+    "description": "English: Enter element picker mode"
+  },
+  "popupTipLog": {
+    "message": "Aller au journal des requêtes",
+    "description": "English: Go to request log"
+  },
+  "popupTipNoPopups": {
+    "message": "Aucun pop-up pour ce site",
+    "description": "English: No popups for this site"
+  },
+  "popupTipNoStrictBlocking": {
+    "message": "Pas de blocage strict pour ce site",
+    "description": "English: No strict blocking for this site"
+  },
+  "popupAnyRulePrompt": {
+    "message": "Tout",
+    "description": ""
+  },
+  "popupImageRulePrompt": {
+    "message": "Images",
+    "description": ""
+  },
+  "popup3pAnyRulePrompt": {
+    "message": "Tiers",
+    "description": ""
+  },
+  "popupInlineScriptRulePrompt": {
+    "message": "scripts embarqués",
+    "description": ""
+  },
+  "popup1pScriptRulePrompt": {
+    "message": "scripts développeur",
+    "description": ""
+  },
+  "popup3pScriptRulePrompt": {
+    "message": "scripts tiers",
+    "description": ""
+  },
+  "popup3pFrameRulePrompt": {
+    "message": "cadres tiers",
+    "description": ""
+  },
+  "popupHitDomainCountPrompt": {
+    "message": "Domaines connectés",
+    "description": "appears in popup"
+  },
+  "popupHitDomainCount": {
+    "message": "{{count}} sur un total de {{total}}",
+    "description": "appears in popup"
+  },
+  "pickerCreate": {
+    "message": "Créer",
+    "description": "English: Create"
+  },
+  "pickerPick": {
+    "message": "Cibler",
+    "description": "English: Pick"
+  },
+  "pickerQuit": {
+    "message": "Quitter",
+    "description": "English: Quit"
+  },
+  "pickerNetFilters": {
+    "message": "Filtres de réseau",
+    "description": "English: Net filters"
+  },
+  "pickerCosmeticFilters": {
+    "message": "Filtres esthétiques",
+    "description": "English: Cosmetic filters"
+  },
+  "pickerCosmeticFiltersHint": {
+    "message": "Clic, Ctrl-clic",
+    "description": "English: Click, Ctrl-click"
+  },
+  "pickerContextMenuEntry": {
+    "message": "Bloquer cet élément",
+    "description": "English: Block element"
+  },
+  "settingsCollapseBlockedPrompt": {
+    "message": "Cacher les espaces réservés aux éléments bloqués",
+    "description": "English: Hide placeholders of blocked elements"
+  },
+  "settingsIconBadgePrompt": {
+    "message": "Afficher le nombre de requêtes bloquées sur l'icône",
+    "description": "English: Show the number of blocked requests on the icon"
+  },
+  "settingsContextMenuPrompt": {
+    "message": "Utiliser le menu contextuel si possible",
+    "description": "English: Make use of context menu where appropriate"
+  },
+  "settingsAdvancedUserPrompt": {
+    "message": "Je suis un utilisateur expérimenté (<a href='https:\/\/github.com\/uBlockAdmin\/uBlock\/wiki\/Advanced-Mode'>À lire<\/a>)",
+    "description": "English: "
+  },
+  "settingsAllowUserStats": {
+    "message": "Permettre à uBlock de récupérer des données ping et d'utilisation anonymes.",
+    "description": "English: Allow uBlock to collect anonymous ping and usage data."
+  },
+  "settingsExperimentalPrompt": {
+    "message": "Activer les fonctionnalités expérimentales (<a href='https:\/\/github.com\/uBlockAdmin\/uBlock\/wiki\/Experimental-features'>En savoir plus<\/a>)",
+    "description": "English: Enable experimental features"
+  },
+  "settingsStorageUsed": {
+    "message": "Stockage utilisé : {{value}} octet(s)",
+    "description": "English: Storage used: {{}} bytes"
+  },
+  "settingsLastRestorePrompt": {
+    "message": "Date de la dernière restauration :",
+    "description": "English: Last restore:"
+  },
+  "settingsLastBackupPrompt": {
+    "message": "Date de la dernière sauvegarde :",
+    "description": "English: Last backup:"
+  },
+  "3pListsOfBlockedHostsPrompt": {
+    "message": "{{netFilterCount}} filtre(s) réseau et {{cosmeticFilterCount}} filtre(s) esthétique(s) actuellement en action :",
+    "description": "English: {{netFilterCount}} network filters ＋ {{cosmeticFilterCount}} cosmetic filters from:"
+  },
+  "3pListsOfBlockedHostsPerListStats": {
+    "message": "{{used}} utilisé(s) sur un total de {{total}}",
+    "description": "English: {{used}} used out of {{total}}"
+  },
+  "3pAutoUpdatePrompt1": {
+    "message": "Mise à jour automatique des listes de filtres",
+    "description": "English: Auto-update filter lists."
+  },
+  "3pUpdateNow": {
+    "message": "Mettre à jour maintenant",
+    "description": "English: Update now"
+  },
+  "3pPurgeAll": {
+    "message": "Vider tous les caches",
+    "description": "English: Purge all caches"
+  },
+  "3pParseAllABPHideFiltersPrompt1": {
+    "message": "Utiliser en plus les règles esthétiques",
+    "description": "English: Parse and enforce Adblock+ element hiding filters."
+  },
+  "3pParseAllABPHideFiltersInfo": {
+    "message": "<p>Cette option permet de prendre en charge les filtres Adblock Plus de type <a href=\"https:\/\/adblockplus.org\/en\/faq_internal#elemhide\">&ldquo;element hiding&rdquo;<\/a>. Ces filtres ont principalement un impact visuel, servant à dissimuler des éléments nuisibles d'une page Web et qui ne sont pas blocables par le filtrage standard.<\/p><p>L'activation de cette fonctionnalité augmente l'empreinte mémoire de <i>uBlock<\/i><\/p>",
+    "description": "English: see English messages.json"
+  },
+  "3pListsOfBlockedHostsHeader": {
+    "message": "Listes prédéfinies d'hôtes à bloquer",
+    "description": "English: Lists of blocked hosts"
+  },
+  "3pApplyChanges": {
+    "message": "Appliquer",
+    "description": "English: Apply changes"
+  },
+  "3pGroupAds": {
+    "message": "Publicités",
+    "description": "English: Ads"
+  },
+  "3pGroupPrivacy": {
+    "message": "Confidentialité",
+    "description": "English: Privacy"
+  },
+  "3pGroupMalware": {
+    "message": "Domaines malveillants",
+    "description": "English: Malware domains"
+  },
+  "3pGroupSocial": {
+    "message": "Réseaux sociaux",
+    "description": "English: Social"
+  },
+  "3pGroupMultipurpose": {
+    "message": "Tout usage",
+    "description": "English: Multipurpose"
+  },
+  "3pGroupRegions": {
+    "message": "Régions, langages",
+    "description": "English: Regions, languages"
+  },
+  "3pGroupCustom": {
+    "message": "Vos propres listes",
+    "description": "English: Custom"
+  },
+  "3pExternalListsHint": {
+    "message": "Une adresse Web par ligne. Les lignes débutant par un &lsquo;!&rsquo; seront ignorées. Les adresses Web invalides seront ignorées sans avertissement.",
+    "description": "English: One URL per line. Lines prefixed with &lsquo;!&rsquo; will be ignored. Invalid URLs will be silently ignored."
+  },
+  "3pExternalListsApply": {
+    "message": "Appliquer",
+    "description": "English: Parse"
+  },
+  "3pExternalListPurge": {
+    "message": "Vider le cache",
+    "description": "English: purge cache"
+  },
+  "3pExternalListNew": {
+    "message": "Nouvelle version disponible",
+    "description": "English: new version available"
+  },
+  "3pExternalListObsolete": {
+    "message": "Potentiellement obsolète",
+    "description": "English: outdated"
+  },
+  "3pLastUpdate": {
+    "message": "Dernière mise à jour effectuée : {{ago}}",
+    "description": "English: Last update: {{ago}}, where 'ago' will be replaced with something like '2 days ago'"
+  },
+  "1pFormatHint": {
+    "message": "Une règle par ligne. Une règle peut être un simple nom d'hôte, ou encore un filtre respectant la syntaxe des filtres Adblock Plus. Les lignes débutant par &lsquo;!&rsquo; seront ignorées.",
+    "description": "English: One filter per line. A filter can be a plain hostname, or an Adblock Plus-compatible filter. Lines prefixed with &lsquo;!&rsquo; will be ignored."
+  },
+  "1pImport": {
+    "message": "Importer",
+    "description": "English: Import and append"
+  },
+  "1pExport": {
+    "message": "Exporter",
+    "description": "English: Export"
+  },
+  "1pExportFilename": {
+    "message": "mes-filtres-personnalises-ublock-{{datetime}}.txt",
+    "description": "English: my-ublock-static-filters_{{datetime}}.txt"
+  },
+  "1pApplyChanges": {
+    "message": "Appliquer",
+    "description": "English: Apply changes"
+  },
+  "rulesPermanentHeader": {
+    "message": "Règles permanentes",
+    "description": "header"
+  },
+  "rulesTemporaryHeader": {
+    "message": "Règles temporaires",
+    "description": "header"
+  },
+  "rulesRevert": {
+    "message": "Rétablir",
+    "description": "This will remove all temporary rules"
+  },
+  "rulesCommit": {
+    "message": "Appliquer",
+    "description": "This will persist temporary rules"
+  },
+  "rulesEdit": {
+    "message": "Éditer",
+    "description": "Will enable manual-edit mode (textarea)"
+  },
+  "rulesEditSave": {
+    "message": "Enregistrer",
+    "description": "Will save manually-edited content and exit manual-edit mode"
+  },
+  "rulesEditDiscard": {
+    "message": "Annuler",
+    "description": "Will discard manually-edited content and exit manual-edit mode"
+  },
+  "rulesImport": {
+    "message": "Importer à partir du fichier",
+    "description": ""
+  },
+  "rulesExport": {
+    "message": "Exporter vers un fichier",
+    "description": ""
+  },
+  "rulesDefaultFileName": {
+    "message": "mes-regles-dynamiques-ublock-{{datetime}}.txt",
+    "description": "default file name to use"
+  },
+  "rulesHint": {
+    "message": "Liste de vos règles de filtrage dynamique",
+    "description": "English: This is only relevant if you have Advanced User mode enabled. List of your dynamic filtering rules."
+  },
+  "rulesFormatHint": {
+    "message": "Syntaxe des règles : <code>source destination type action<\/code> (<a href='https:\/\/github.com\/uBlockAdmin\/uBlock\/wiki\/Dynamic-filtering:-rule-syntax'>Documentation complète en Anglais<\/a>)",
+    "description": "English: dynamic rule syntax and full documentation."
+  },
+  "whitelistPrompt": {
+    "message": "Ici se trouve votre liste d'hôtes à autoriser. Un nom d'hôte par ligne. Les noms d'hôte invalides seront ignorés et vous n'en serez pas averti(e).",
+    "description": "English: Your list of host names for which uBlock will be disabled. One host name per line. Invalid host names will be silently ignored."
+  },
+  "whitelistImport": {
+    "message": "Importer",
+    "description": "English: Import and append"
+  },
+  "whitelistExport": {
+    "message": "Exporter",
+    "description": "English: Export"
+  },
+  "whitelistExportFilename": {
+    "message": "ma-liste-blanche-ublock-{{datetime}}.txt",
+    "description": "English: my-ublock-whitelist_{{datetime}}.txt"
+  },
+  "whitelistApply": {
+    "message": "Appliquer",
+    "description": "English: Apply changes"
+  },
+  "logNetRequestsPrompt": {
+    "message": "Activer la journalisation des requêtes réseau",
+    "description": "English: Enable the logging of network requests"
+  },
+  "logNetRequestsHelp": {
+    "message": "Vous pouvez inspecter les détails des requêtes en activant cette option. La journalisation des requêtes augmente l'empreinte mémoire utilisée par uBlock. Puisque bon nombre d'utilisateurs n'utiliseront jamais cette fonctionnalité, elle est désactivée par défaut.",
+    "description": "English: see _locales\/en\/messages.log"
+  },
+  "logBlockedRequestsHeader": {
+    "message": "Requêtes bloquées",
+    "description": "English: Blocked requests"
+  },
+  "logAllowedRequestsHeader": {
+    "message": "Requêtes autorisées",
+    "description": "English: Allowed requests"
+  },
+  "logRequestsHeaderType": {
+    "message": "Type",
+    "description": "English: Type"
+  },
+  "logRequestsHeaderDomain": {
+    "message": "Domaine",
+    "description": "English: Domain"
+  },
+  "logRequestsHeaderURL": {
+    "message": "URL",
+    "description": "English: URL"
+  },
+  "logRequestsHeaderFilter": {
+    "message": "Filtre",
+    "description": "English: Filter"
+  },
+  "logBlockedRequestsEmpty": {
+    "message": "Aucune requête bloquée sur cette page n'a été consignée dans le journal",
+    "description": "English: No blocked requests logged for this page"
+  },
+  "logAllowedRequestsEmpty": {
+    "message": "Aucune requête non-bloquée sur cette page n'a été consignée dans le journal",
+    "description": "English: No non-blocked requests logged for this page"
+  },
+  "logBehindTheScene": {
+    "message": "Requêtes en coulisses",
+    "description": "Pretty name for behind-the-scene network requests"
+  },
+  "logFilterPrompt": {
+    "message": "Filtrer les entrées du journal",
+    "description": "English: filter log entries"
+  },
+  "logMaxEntriesTip": {
+    "message": "Nombre maximum d'entrées à conserver dans le journal",
+    "description": "Tooltip informaing that the input field is to set the maximum number of entries in the log"
+  },
+  "aboutChangelog": {
+    "message": "Journal des changements (en Anglais)",
+    "description": "English: Change log"
+  },
+  "aboutWiki": {
+    "message": "Documentation (en Anglais)",
+    "description": "English: project' wiki on Github"
+  },
+  "aboutCode": {
+    "message": "Code Source (Licence GPLv3, en Anglais)",
+    "description": "English: Source code (GPLv3)"
+  },
+  "aboutContributors": {
+    "message": "Contributeurs",
+    "description": "English: Contributors"
+  },
+  "aboutBackupDataButton": {
+    "message": "Exporter vers un fichier",
+    "description": "English: Backup to file"
+  },
+  "aboutBackupFilename": {
+    "message": "ma-sauvegarde-des-donnees-ublock-{{datetime}}.txt",
+    "description": "English: my-ublock-backup_{{datetime}}.txt"
+  },
+  "aboutRestoreDataButton": {
+    "message": "Importer depuis un fichier",
+    "description": "English: Restore from file..."
+  },
+  "aboutResetDataButton": {
+    "message": "Paramètres par défaut",
+    "description": "English: Reset to default settings..."
+  },
+  "aboutRestoreDataConfirm": {
+    "message": "Vos paramètres seront remplacés par les données sauvegardées le {{time}}, puis uBlock redémarrera.\n\nProcéder à l'importation ?",
+    "description": "Message asking user to confirm restore"
+  },
+  "aboutRestoreDataError": {
+    "message": "Les données ne peuvent être lues ou sont invalides",
+    "description": "Message to display when an error occurred during restore"
+  },
+  "aboutResetDataConfirm": {
+    "message": "Vos paramètres seront effacés, puis uBlock redémarrera.\n\nProcéder à la réinitialisation des paramètres ?",
+    "description": "Message asking user to confirm reset"
+  },
+  "errorCantConnectTo": {
+    "message": "Ne peut se connecter sur {{url}}",
+    "description": "English: Network error: unable to connect to {{url}}"
+  },
+  "subscriberConfirm": {
+    "message": "uBlock : Ajouter la ressource Web suivante à votre sélection de listes de filtrage ?\n\nTitre : \"{{title}}\"\nURL : {{url}}",
+    "description": "English: The message seen by the user to confirm subscription to a ABP filter list"
+  },
+  "elapsedOneMinuteAgo": {
+    "message": "Il y a une minute",
+    "description": "English: a minute ago"
+  },
+  "elapsedManyMinutesAgo": {
+    "message": "Il y a {{value}} minutes",
+    "description": "English: {{value}} minutes ago"
+  },
+  "elapsedOneHourAgo": {
+    "message": "Il y a une heure",
+    "description": "English: an hour ago"
+  },
+  "elapsedManyHoursAgo": {
+    "message": "Il y a {{value}} heures",
+    "description": "English: {{value}} hours ago"
+  },
+  "elapsedOneDayAgo": {
+    "message": "Il y a un jour",
+    "description": "English: a day ago"
+  },
+  "elapsedManyDaysAgo": {
+    "message": "Il y a {{value}} jours",
+    "description": "English: {{value}} days ago"
+  },
+  "showDashboardButton": {
+    "message": "Afficher le Tableau de bord",
+    "description": "Firefox\/Fennec-specific: Show Dashboard"
+  },
+  "showNetworkLogButton": {
+    "message": "Afficher le Journal des requêtes réseau",
+    "description": "Firefox\/Fennec-specific: Show Network Request Log"
+  },
+  "fennecMenuItemBlockingOff": {
+    "message": "Arrêt",
+    "description": "Firefox-specific: appears as 'uBlock (off)'"
+  },
+  "docblockedPrompt1": {
+    "message": "uBlock a empêché le chargement de la page suivante :",
+    "description": "English: uBlock has prevented the following page from loading:"
+  },
+  "docblockedPrompt2": {
+    "message": "À cause du filtre suivant :",
+    "description": "English: Because of the following filter"
+  },
+  "docblockedBack": {
+    "message": "Retour",
+    "description": "English: Go back"
+  },
+  "docblockedClose": {
+    "message": "Fermer cette fenêtre",
+    "description": "English: Close this window"
+  },
+  "docblockedProceed": {
+    "message": "Désactiver le blocage strict pour {{hostname}}",
+    "description": "English: Disable strict blocking for {{hostname}} ..."
+  },
+  "docblockedDisableTemporary": {
+    "message": "Temporairement",
+    "description": "English: Temporarily"
+  },
+  "docblockedDisablePermanent": {
+    "message": "Définitivement",
+    "description": "English: Permanently"
+  },
+  "dummy": {
+    "message": "This entry must be the last one",
+    "description": "so we dont need to deal with comma for last entry"
   }
 }
