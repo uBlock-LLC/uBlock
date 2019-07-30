@@ -398,17 +398,29 @@ vAPI.tabs.onNavigation = function(details) {
     context.requestURL = vAPI.punycodeURL(details.url);
     context.requestHostname = µburi.hostnameFromURI(details.url);
     context.requestDomain = µburi.domainFromHostname(context.requestHostname);
-    context.requestType = 'webrtc';
     
+    if (pageStore !== null && pageStore.getNetFilteringSwitch()) {
+        context.requestType = 'snippet';
+        const request = {
+            locationURL: context.requestURL,
+            pageURL: context.requestURL,
+            procedureSelectorsOnly: false
+        };
+        var options = {
+            skipCosmeticFiltering: false                    
+        };
+        µb.cosmeticFilteringEngine.injectNow(details, request, context, options);
+    }
+
     // Blocking behind-the-scene requests can break a lot of stuff: prevent
     // browser updates, prevent extension updates, prevent extensions from
     // working properly, etc.
     // So we filter if and only if the "advanced user" mode is selected
-    
+    context.requestType = 'webrtc';
     var result = '';
     result = pageStore.filterRequestNoCache(context);
     if ( !µb.isAllowResult(result) ) {
-        µb.scriptlets.injectNow(context,details);
+        µb.scriptlets.injectNow(context, details, "nowebrtc");
         pageStore.logRequest(context, result);
         µb.logger.writeOne(details.tabId, context, result);
     }
