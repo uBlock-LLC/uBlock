@@ -39,6 +39,7 @@
     var encode = JSON.stringify;
     var decode = JSON.parse;
     const abpSelectorRegexp = /:-abp-([\w-]+)\(/i;
+    const supportedSnippet = new Set(["abort-current-inline-script", "abort-on-property-write", "abort-on-property-read"]); 
     
     /******************************************************************************/
     
@@ -65,7 +66,7 @@
         this.hostnames = [];
         this.invalid = false;
         this.cosmetic = true;
-        this.reParser = /^\s*([^#]*)(##|#@#|#\?#)(.+)\s*$/;
+        this.reParser = /^\s*([^#]*)(##|#\$#|#@#|#\?#)(.+)\s*$/; 
     };
     
     /******************************************************************************/
@@ -77,6 +78,7 @@
         this.hostnames.length = 0;
         this.invalid = false;
         this.cosmetic = true;
+        this.type = '';
         return this;
     };
     
@@ -111,8 +113,15 @@
         if ( this.suffix.charAt(1) === '[' && this.suffix.slice(2, 9) === 'href^="' ) {
             this.suffix = this.suffix.slice(1);
         }
-    
-        this.unhide = matches[2].charAt(1) === '@' ? 1 : 0;
+        this.type = matches[2].charAt(1); 
+        if(this.type == "$") {
+            let m = /([^\s]+)/.exec(this.suffix);
+            if(!supportedSnippet.has(m[0])) {
+                this.invalid = true;
+                return this;
+            }
+        }
+        this.unhide = this.type === '@' ? 1 : 0;
         if ( pos !== 0 ) {
             this.hostnames = s.slice(0, pos).split(/\s*,\s*/);
         }
@@ -395,8 +404,8 @@
     
         // hostname, entity-based filters
         this.hostnameFilters = {};
-        this.hostnameFilterDataView = new this.hostnameFilterDataViewWrapper();
-        this.hostnameFilterByteLength = 0;
+        this.hostnameFilterDataView = {}; 
+        this.hostnameFilterByteLength = {}; 
         this.entityFilters = {};
     };
     
@@ -451,7 +460,14 @@
                 });
             }
             this.objView.buffer = this.objView.buffer.slice(0, this.objView.pos + (((totalTokens * 2) + (totalHostnames * 2)) * 4) + additionalBufferSpace);
-            this.tokenBucket = this.objView.getUint32ArrayView((totalTokens * 2) + (totalHostnames * 2));
+            let buflen = (totalTokens * 2) + (totalHostnames * 2);
+            let alignVal = this.align(4);
+            if((this.objView.buffer.length - alignVal) < (buflen * 4)) {
+                let len;
+                len = alignVal + (buflen * 4) + additionalBufferSpace;
+                this.growBuffer(len);
+            }
+            this.tokenBucket = this.objView.getUint32ArrayView(buflen);
             for (var token in hostnameFilters) {
                 this.tokenIndex[token] = tokenBucketIndex; 
                 this.tokenBucket[tokenBucketIndex++] = token;
@@ -463,12 +479,30 @@
                 });
             }
         },
+        align: function(alignement) {
+           return this.objView.pos % alignement === 0
+                ? this.objView.pos
+                : Math.floor(this.objView.pos / alignement) * alignement + alignement;
+        },
+        growBuffer: function(bufferLength) {
+            const newBuffer = new Uint8Array(bufferLength);
+            newBuffer.set(this.objView.buffer);
+            this.objView.buffer = newBuffer;
+        },
         retrieve: function(hosthashes, tokenHash, out) {
             let loop;
             let str = this.lru.get(tokenHash);
             if(str != undefined) {
-                if(hosthashes.indexOf(str.k) != -1) {
-                    out.push(...str.v);
+                if(Array.isArray(str)) {
+                    str.forEach(function(element) {
+                        if(hosthashes.indexOf(element.k) != -1) {
+                            out.push(...element.v);
+                        }
+                    });
+                } else {
+                    if(hosthashes.indexOf(str.k) != -1) {
+                        out.push(...str.v);
+                    }
                 }
             } else {
                 loop = this.tokenIndex[tokenHash];
@@ -484,7 +518,14 @@
                             this.objView.setPos(cssOffset);
                             let cssDataString = this.objView.getUTF8();
                             out.push(...cssDataString.split('\n'));
-                            this.lru.set(tokenHash,{'k': hostHash,'v':cssDataString.split('\n')});
+                            let cacheData = this.lru.get(tokenHash);
+                            if ( cacheData === undefined ) { 
+                                this.lru.set(tokenHash, {'k': hostHash,'v':cssDataString.split('\n')});
+                            } else if ( typeof cacheData === 'object' ) { 
+                                this.lru.set(tokenHash, [ cacheData, {'k': hostHash,'v':cssDataString.split('\n')} ]);
+                            } else {
+                                cacheData.push({'k': hostHash,'v':cssDataString.split('\n')});
+                            }
                         }
                         next += 2;
                     }
@@ -511,6 +552,7 @@
             let hn;
             let selector;
             let entry;
+            let hostnameFilterByteLength = this.objView.buffer.length;
 
             while(loop < this.tokenBucket.length) {
                 let tokenHash = this.tokenBucket[loop];
@@ -532,7 +574,7 @@
                 }
                 loop += (this.tokenBucket[loop] * 2) + 1;
             }
-            return hostnameFilters; 
+            return [hostnameFilters, hostnameFilterByteLength]; 
         }
     }
    
@@ -574,7 +616,12 @@
             return true;
         }
         
-        let isValid = abpSelectorRegexp.test(parsed.suffix) ? true : this.isValidSelector(parsed.suffix); 
+        let isValid;
+        if(this.parser.type != "$") { 
+            isValid = abpSelectorRegexp.test(parsed.suffix) ? true : this.isValidSelector(parsed.suffix); 
+        } else {
+            isValid = true;
+        }
         // For hostname- or entity-based filters, class- or id-based selectors are
         // still the most common, and can easily be tested using a plain regex.
         if (
@@ -698,45 +745,66 @@
             hash = abpSelectorRegexp.test(parsed.suffix) ? makeHash(unhide, domain, this.domainHashMask, this.procedureMask) : makeHash(unhide, domain, this.domainHashMask);
         }
         let hshash = µb.tokenHash(hostname);
-        out.push(['h', hash, hshash, parsed.suffix]);
+        if(parsed.type != "$") 
+            out.push(['h', hash, hshash, parsed.suffix]);
+        else
+            out.push(['hs', hash, hshash, parsed.suffix]);
     };
     
     /******************************************************************************/
     
     FilterContainer.prototype.compileEntitySelector = function(hostname, parsed, out) {
         let entity = hostname.slice(0, -2);
-        out.push(['e',entity, parsed.suffix]);
+        if(parsed.type != "$") 
+            out.push(['e', entity, parsed.suffix]);
+        else    
+            out.push(['es', entity, parsed.suffix]);
     };
 
     FilterContainer.prototype.appendHostnameFilters = function(compiledFilters) {
-        this.hostnameFilters = this.hostnameFilterDataView.rebuildHostnameFilters();
+        //https://github.com/uBlock-LLC/uBlock/issues/1810
+        for(let key in this.hostnameFilterDataView) {
+            [this.hostnameFilters[key], this.hostnameFilterByteLength[key]] = this.hostnameFilterDataView[key].rebuildHostnameFilters();
+        }
         let fc = this;
+        let flag;
         compiledFilters.forEach(function(fields) {
-            fc.addHostnameFilters(fields);
+            if(fields[0] == "hs")
+                flag = "script";
+            else
+                flag = "css";
+            fc.addHostnameFilters(fields, flag);
         });
-        this.hostnameFilterDataView = new this.hostnameFilterDataViewWrapper();
+        this.hostnameFilterDataView = {};
     }
     /******************************************************************************/
-    FilterContainer.prototype.addHostnameFilters = function(fields) {
+    FilterContainer.prototype.addHostnameFilters = function(fields, flag) {
         let hshash = fields[2];
-        if(this.hostnameFilters[fields[1]] === undefined) {
-            this.hostnameFilters[fields[1]] = new Map();
-            this.hostnameFilters[fields[1]].set(hshash,[fields[3]]);
-            this.hostnameFilterByteLength += BUCKET_TOKEN_SIZE + BUCKET_HOST_SIZE;
+        if(!this.hostnameFilters.hasOwnProperty(flag)) {
+            this.hostnameFilters[flag] = {};
+            Object.defineProperty(this.hostnameFilterByteLength,flag, {                   
+                  value: 0,
+                  writable: true
+            });
+        }
+        if(this.hostnameFilters[flag][fields[1]] === undefined) {
+            this.hostnameFilters[flag][fields[1]] = new Map();
+            this.hostnameFilters[flag][fields[1]].set(hshash,[fields[3]]);
+            this.hostnameFilterByteLength[flag] += BUCKET_TOKEN_SIZE + BUCKET_HOST_SIZE;
         } else {
-            let selectors = this.hostnameFilters[fields[1]].get(hshash);
+            let selectors = this.hostnameFilters[flag][fields[1]].get(hshash);
             if ( selectors === undefined ) { 
-                this.hostnameFilters[fields[1]].set(hshash, fields[3]);
-                this.hostnameFilterByteLength += BUCKET_HOST_SIZE;
+                this.hostnameFilters[flag][fields[1]].set(hshash, fields[3]);
+                this.hostnameFilterByteLength[flag] += BUCKET_HOST_SIZE;
             } else if ( typeof selectors === 'string' ) { 
-                this.hostnameFilters[fields[1]].set(hshash, [ selectors, fields[3] ]);
-                this.hostnameFilterByteLength += BUCKET_SEPARATOR_SIZE;
+                this.hostnameFilters[flag][fields[1]].set(hshash, [ selectors, fields[3] ]);
+                this.hostnameFilterByteLength[flag] += BUCKET_SEPARATOR_SIZE;
             } else {
                 selectors.push(fields[3]);
-                this.hostnameFilterByteLength += BUCKET_SEPARATOR_SIZE;
+                this.hostnameFilterByteLength[flag] += BUCKET_SEPARATOR_SIZE;
             }
         }
-        this.hostnameFilterByteLength += fields[3].length; //Size of Css Data inside CssBucket
+        this.hostnameFilterByteLength[flag] += fields[3].length; //Size of Css Data inside CssBucket
     }
     FilterContainer.prototype.fromCompiledContent = function(text, skip) {
        if ( skip ) {
@@ -755,8 +823,13 @@
             }
             this.duplicateBuster[line] = true;
             // h	ir	twitter.com	.promoted-tweet
-            if ( fields[0] === 'h' ) {
-                this.addHostnameFilters(fields);
+            if ( fields[0] === 'h' || fields[0] === 'hs' ) { 
+                let flag;
+                if(fields[0] == "hs")
+                    flag = "script";
+                else
+                    flag = "css";
+                this.addHostnameFilters(fields, flag);
                 continue;
             }
     
@@ -783,10 +856,20 @@
             }
     
             // entity	selector
-            if ( fields[0] === 'e' ) {
-                bucket = this.entityFilters[fields[1]];
+            if ( fields[0] === 'e' || fields[0] === 'es' ) {
+
+                let flag;
+                if(fields[0] == "hs")
+                    flag = "script";
+                else
+                    flag = "css";
+                
+                if(!this.entityFilters.hasOwnProperty(flag)) 
+                    this.entityFilters[flag] = {};
+
+                bucket = this.entityFilters[flag][fields[1]];
                 if ( bucket === undefined ) {
-                    this.entityFilters[fields[1]] = [fields[2]];
+                    this.entityFilters[flag][fields[1]] = [fields[2]];
                 } else {
                     bucket.push(fields[2]);
                 }
@@ -828,8 +911,12 @@
     /******************************************************************************/
     
     FilterContainer.prototype.freeze = function() {
-        if(Object.entries(this.hostnameFilters).length > 0)
-            this.hostnameFilterDataView.pushToBuffer(this.hostnameFilters, this.hostnameFilterByteLength);
+        for(let flag in this.hostnameFilters) {
+            this.hostnameFilterDataView[flag] = {};
+            this.hostnameFilterDataView[flag] = new this.hostnameFilterDataViewWrapper();
+            if(Object.entries(this.hostnameFilters[flag]).length > 0)
+                this.hostnameFilterDataView[flag].pushToBuffer(this.hostnameFilters[flag], this.hostnameFilterByteLength[flag]);
+        }
         this.hostnameFilters = {};
         this.duplicateBuster = {};
     
@@ -846,10 +933,14 @@
     /******************************************************************************/
     
     FilterContainer.prototype.toSelfie = function() {
+        let hf = {};
+        for(let flag in this.hostnameFilterDataView) {
+            hf[flag] = this.hostnameFilterDataView[flag].toSelfie();
+        }
         return {
             acceptedCount: this.acceptedCount,
             duplicateCount: this.duplicateCount,
-            hostnameFilterDataView: this.hostnameFilterDataView.toSelfie(),
+            hostnameFilterDataView: hf,
             entitySpecificFilters: this.entityFilters,
             lowGenericHide: {"lg": Array.from(this.lowGenericHide.lg), "lgm": Array.from(this.lowGenericHide.lgm)},
             highLowGenericHide: this.highLowGenericHide,
@@ -867,7 +958,10 @@
     FilterContainer.prototype.fromSelfie = function(selfie) {
         this.acceptedCount = selfie.acceptedCount;
         this.duplicateCount = selfie.duplicateCount;
-        this.hostnameFilterDataView.fromSelfie(selfie.hostnameFilterDataView);
+        for(let flag in selfie.hostnameFilterDataView) {
+            this.hostnameFilterDataView[flag] = new this.hostnameFilterDataViewWrapper();
+            this.hostnameFilterDataView[flag].fromSelfie(selfie.hostnameFilterDataView[flag]);
+        }
         this.entityFilters = selfie.entitySpecificFilters;
         this.lowGenericHide = {"lg": new Set(selfie.lowGenericHide.lg),"lgm": new Map(selfie.lowGenericHide.lgm)};
         this.highLowGenericHide = selfie.highLowGenericHide;
@@ -1044,9 +1138,24 @@
         return r;
     };
     
+    FilterContainer.prototype.injectNow = function(details, request, context, options) {
+        let r = µb.cosmeticFilteringEngine.retrieveDomainSelectors(request, options, 'script');
+        for(let i=0; i < r.cosmeticHide.length; i++) {
+            r.cosmeticHide[i].split(";").forEach(function(element) {
+                if(element != "") {
+                    let args = element.trim().split(/\s/);
+                    let snippet = args.shift();
+                    if(supportedSnippet.has(snippet)) {
+                        µb.scriptlets.injectNow(context, details, snippet, args);
+                    }
+                }
+            });
+            µb.logger.writeOne(details.tabId, context, 'sb:' + context.requestHostname + "#$#" + r.cosmeticHide[i]);
+        }
+    };
     /******************************************************************************/
     
-    FilterContainer.prototype.retrieveDomainSelectors = function(request,options) {
+    FilterContainer.prototype.retrieveDomainSelectors = function(request, options, flag = 'css') {
         if ( !request.locationURL ) {
             return;
         }
@@ -1078,25 +1187,36 @@
         var hash, bucket;
         let hosthashes = µb.getHostnameHashesFromLabelsBackward(hostname, domain);
 
+        // entity filter buckets are always plain js array
+        if(this.entityFilters.hasOwnProperty(flag)) {
+            if ( bucket = this.entityFilters[flag][r.entity] ) {
+                r.cosmeticHide = r.cosmeticHide.concat(bucket);
+            }
+        }
+
+        if(!this.hostnameFilterDataView.hasOwnProperty(flag)) {
+            return r;
+        }
+
         hash = makeHash(0, domain, this.domainHashMask);
-        this.hostnameFilterDataView.retrieve(hosthashes, hash, r.cosmeticHide);
+        this.hostnameFilterDataView[flag].retrieve(hosthashes, hash, r.cosmeticHide);
 
         // https://github.com/uBlockAdmin/uBlock/issues/188
         // Special bucket for those filters without a valid domain name as per PSL
         hash = makeHash(0, this.type0NoDomainHash, this.domainHashMask);
-        this.hostnameFilterDataView.retrieve(hosthashes, hash, r.cosmeticHide);
+        this.hostnameFilterDataView[flag].retrieve(hosthashes, hash, r.cosmeticHide);
     
-        // entity filter buckets are always plain js array
-        if ( bucket = this.entityFilters[r.entity] ) {
-            r.cosmeticHide = r.cosmeticHide.concat(bucket);
+        if(flag == 'script') {
+            return r;    
         }
+       
         // No entity exceptions as of now
-    
         hash = makeHash(1, domain, this.domainHashMask);
-        this.hostnameFilterDataView.retrieve(hosthashes, hash, r.cosmeticDonthide);
+        this.hostnameFilterDataView[flag].retrieve(hosthashes, hash, r.cosmeticDonthide);
         
         hash = makeHash(0, domain, this.domainHashMask, this.procedureMask);
-        this.hostnameFilterDataView.retrieve(hosthashes, hash, r.procedureHide);
+        this.hostnameFilterDataView[flag].retrieve(hosthashes, hash, r.procedureHide);
+
         if(request.procedureSelectorsOnly) {
             return r.procedureHide;
         }
@@ -1104,8 +1224,7 @@
         // https://github.com/uBlockAdmin/uBlock/issues/188
         // Special bucket for those filters without a valid domain name as per PSL
         hash = makeHash(0, this.type1NoDomainHash, this.domainHashMask);
-        this.hostnameFilterDataView.retrieve(hosthashes, hash, r.cosmeticDonthide);
-    
+        this.hostnameFilterDataView[flag].retrieve(hosthashes, hash, r.cosmeticDonthide);
         this.retrieveFromSelectorCache(hostname, 'cosmetic', r.cosmeticHide);
         this.retrieveFromSelectorCache(hostname, 'net', r.netHide);
     

@@ -752,10 +752,23 @@ https://github.com/darkskyapp/string-hash/blob/master/index.js
 
 µBlock.scriptlets = (function(){
     var µb = µBlock;
-    let injectNow = function(context,details) {
-        var onDataReceived = function(response){
+
+    let injectNow = function(context, details, snippet, args) {
+        let replaceParams = function(scriptlets, args) {
+            const reParams = /(\{\{(\d)\}\})+/g;
+            reParams.lastIndex = 0;
+            let matches;
+            while ( matches = reParams.exec(scriptlets)) {
+                scriptlets = scriptlets.replace(matches[0], args[matches[2] - 1]);
+            }
+            return scriptlets;
+        }
+        var onDataReceived = function(response) {
             if(response.content != "") {
                 var scriptlets = response.content;
+                if(args !== undefined && Array.isArray(args) && args.length > 0)
+                    scriptlets = replaceParams(scriptlets, args);
+
                 let code = µb.contentscriptCode.assemble(context.pageHostname, scriptlets);
                 vAPI.tabs.injectScript(
                     details.tabId,
@@ -768,7 +781,7 @@ https://github.com/darkskyapp/string-hash/blob/master/index.js
                 ); 
             }
         }
-        µb.assets.get('assets/scriptlets/nowebrtc.js', onDataReceived);
+        µb.assets.get('assets/scriptlets/'+ snippet + '.js', onDataReceived);
     }
     return {
         injectNow:injectNow
