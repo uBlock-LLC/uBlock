@@ -1,9 +1,9 @@
 ![Adblock Plus 2.0]
-! Checksum: 7LydAGipnDud+a1Y3cx4rA
+! Checksum: cEsb8qCuYxEMKfQIt5c4iw
 ! Title: AdGuard Japanese filter
 ! Description: Filter that enables ad blocking on websites in Japanese language.
-! Version: 2.0.1.95
-! TimeUpdated: 2019-06-18T15:03:14+03:00
+! Version: 2.0.2.14
+! TimeUpdated: 2019-08-20T00:02:37+03:00
 ! Expires: 2 days (update frequency)
 ! Homepage: http://adguard.com/filters.html#japanese
 ! License: http://creativecommons.org/licenses/by-sa/3.0/
@@ -102,7 +102,7 @@
 ||affiliate.rakuten.co.jp^$third-party
 ||afl.rakuten.co.jp^
 ||ias.rakuten.co.jp^
-||rd.rakuten.co.jp^
+||rd.rakuten.co.jp^$third-party
 ||ranking.rakuten.co.jp^
 !
 ! Nikkeibp.co.jp
@@ -131,6 +131,8 @@
 ! Eimg.jp
 ||adingo.jp.eimg.jp^
 !
+||speee-ad.akamaized.net^$third-party
+||candy.smv.to^$third-party
 ||aaacompany.net^$third-party
 ||ad.adpon.jp^$third-party
 ||sdqoi2d.com^$third-party
@@ -366,11 +368,9 @@
 !
 ! These rules are against all kinds of ad blocking reinjection/circumvention scripts
 !
-!--- Fuck fuckAdBlock JS ---
-!--- Fuck fuckAdBlock CSS ---
-ronron-blog.com,wpteq.org,d-navi004.com,gagetmatome.com,h5games.success-corp.co.jp#$#.pub_300x250.pub_300x250m.pub_728x90.text-ad.textAd.text_ad.text_ads.text-ads.text-ad-links {display:block!important;}
-!
 !--- antiblock.org g207---
+@@||jpidols.tv^$generichide
+@@||jpidols.tv/wp-content/uploads/*.png#
 @@||cowboy.blog.jp^$generichide
 @@||eikaiwamastery.blogspot.com^$generichide
 @@||halchim.jp^$generichide
@@ -382,8 +382,12 @@ ronron-blog.com,wpteq.org,d-navi004.com,gagetmatome.com,h5games.success-corp.co.
 @@||wakudan.seesaa.net^$generichide
 !
 !
+! https://github.com/AdguardTeam/AdguardFilters/issues/35930
+! https://github.com/AdguardTeam/AdguardFilters/issues/36696
+itpassportsiken.com#$?#.adsbygoogle { remove: true; }
+! https://github.com/AdguardTeam/AdguardFilters/issues/35721
 ! https://github.com/AdguardTeam/AdguardFilters/issues/34365
-fe-siken.com#$#.adsbygoogle { remove: true; }
+fe-siken.com#$?#.adsbygoogle { remove: true; }
 ! https://github.com/AdguardTeam/AdguardFilters/issues/33968
 !+ PLATFORM(ext_ff, ext_opera, ios, ext_android_cb, ext_safari, ext_ublock)
 @@||xn--f9jh4f4b4993b66s.tokyo^$generichide
@@ -513,6 +517,7 @@ mindhack2ch.com##.article-body > .ad:has(> .adsbygoogle)
 mindhack2ch.com##.article-body > .rss:has(> script)
 mindhack2ch.com##.article-post-bottom > .rss-article:has(> .rss-article-item)
 !
+nijinchu.com#?#article > div.entry_content > h3:contains(おすすめ商品)
 melos.media##.x1_article > .x1_articleArea[-ext-has='div.x1_siteTitle:contains([PR])']
 repeat-drama.info##.side_inner > .box:contains(スポンサーリンク)
 momon-ga.com##.repo-title:has(> strong)
@@ -669,7 +674,6 @@ iza.ne.jp#$#.sideFixedWrapper { position: relative!important; }
 /analysis2.
 /banana/600x
 /banimg/*
-/banner/banner_
 /beacon.php3?
 /beacon.php?
 /clicktrack/*
@@ -705,6 +709,27 @@ _ds_adtag_
 !
 ! Section contains rules for specific websites
 !
+! /banner/banner_ - if it is necessary, make this rule domain specific
+||vipsister23.com/vipsister.html
+yomiuri.co.jp###rt_popup_overlay_yolyp_popup
+yomiuri.co.jp###yolyp_popup
+nijinchu.com##div[class*="adv"]
+||cdn.exaf.jp/dmm/js^$domain=nijinchu.com
+vipsister23.com###share2
+av.movie##div[class*="-banner"]
+av.movie##[class$="-ads"]
+av.movie##a[href^="https://theporndude.com/"]
+85cc.net##a[href*="mm786.com/"]
+85cc.net##.menu > a.item[target="_blank"]
+creive.me###sidebar1 > .add > #custom_html-2
+sojson.com##div[class^="pl0 pr0 banner"]
+mudainodocument.com##a[href^="https://recott.me/"]
+ibbs.info##.ad_data
+embed.share-videos.se###ad_html
+smv.to##.pc_content_tt_adsterra
+smv.to##div[style^="width:900px;"][style*="height: 250px;"]
+smv.to##.ad_movieupdown
+blog.esuteru.com,jin115.com###gStickyAd
 news-us.org##.adspc
 news-us.org##.ps-300-250
 news-us.org##div[itemtype="https://schema.org/WPAdBlock"]
@@ -713,6 +738,8 @@ blog.esuteru.com##.ad-aside > a[target="_blank"]
 blog.esuteru.com##.ad-siteRanking
 blog.esuteru.com##.article-main .rss.clearfix
 shopping.yahoo.co.jp##.mdNorthBuyee
+||macotakara.jp/banaer/
+macotakara.jp##iframe[src^="http://ad.jp.ap.valuecommerce.com"]
 javmix.tv##.__isboostOverContent
 top.togeko.net##a[href^="https://book.dmm.co.jp"]
 ||top.togeko.net/*/randomad*.js
@@ -1307,6 +1334,7 @@ yahoo.co.jp##ul[class^="sponsor"]
 ||zenback.jp^*/tracking.html
 !
 !
+! https://github.com/AdguardTeam/AdguardFilters/issues/35721
 ! https://github.com/AdguardTeam/AdguardFilters/issues/28910
 ! https://github.com/AdguardTeam/AdguardFilters/issues/20703
 ! https://github.com/AdguardTeam/AdguardFilters/issues/20116

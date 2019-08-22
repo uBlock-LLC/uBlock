@@ -1,7 +1,7 @@
 [Adblock Plus 2.0]
 ! Homepage: http://adblock.sk
 ! Title: Easylist Czech and Slovak filter list
-! Last change: 16/06/2019
+! Last change: 02/07/2019
 ! List maintainers: tomasko126, Aslanex, vobruba-martin, Moskoe, Fanboy
 ! GitHub repository: https://github.com/tomasko126/easylistczechandslovak
 ! GitHub contributors: https://github.com/tomasko126/easylistczechandslovak/graphs/contributors
@@ -54,8 +54,10 @@ _clickthru.swf?
 !
 /templates/drbna/javascripts/modal.js^$domain=budejckadrbna.cz|brnenskadrbna.cz|olomouckadrbna.cz|libereckadrbna.cz|drbna.cz|jihlavskadrbna.cz
 ||*.war-forum.net/images/sh/
+||1gr.cz/js/uni/oldback/logo.png$script,domain=idnes.cz
 ||1.im.cz/ad/$image
 ||1.im.cz/ad/gemius.js
+||a.blesk.cz^
 ||a.csfd.cz^
 ||a.denik.cz^
 ||abecedaher.cz/index_banner_
@@ -237,6 +239,7 @@ _clickthru.swf?
 ||campaigns.caroda.io^$third-party
 ||chartbeat.com^$third-party
 ||chartbeat.net^$third-party
+||chrek.stdout.cz^$third-party
 ||d.vvbox.cz^$third-party
 ||d.wedosas.net^$third-party
 ||data.itiscali.cz^$third-party
@@ -244,6 +247,7 @@ _clickthru.swf?
 ||dot.idot.cz^$third-party
 ||ecigareta.eu^$third-party
 ||fastshare.cz^$third-party
+||graphics.stdout.cz/b:commercial$third-party
 ||heureka.cz^$third-party
 ||ibillboard.com^$third-party
 ||idvert.cz^$third-party
@@ -261,6 +265,7 @@ _clickthru.swf?
 ||pizzamodena.cz^$third-party
 ||potenza.cz^$third-party
 ||productads.cz^$third-party
+||r.i0.cz^$third-party
 ||reklamy.s3.amazonaws.com^$third-party
 ||rival.cz^$third-party
 ||salesmanago.pl^$third-party
@@ -294,7 +299,7 @@ _clickthru.swf?
 @@||opti.cz/wp-content/uploads/*/reklama_*.jpg$image
 @@||optika-opti.cz/wp-content/uploads/*/reklama_*.jpg$image
 @@||pise.cz^$generichide
-@@||static.cz.prg.cmestatic.com/static/cz/shared/js/dfp.js$xmlhttprequest,domain=nova.cz
+@@||static.cz.prg.cmestatic.com/static/cz/shared/js/advert.js$domain=nova.cz
 @@||reklama-*.cz
 @@||www.top-reklama.sk^$~third-party
 @@||warforum.cz/ads.js
@@ -309,7 +314,7 @@ sluzebnik.cz#@##adverts
 !
 ! ---------- Slovak Whitelisted blocking rules ------------ !
 !
-@@||bombuj.eu^$generichide
+@@||bombuj.tv^$generichide
 @@||img.aaaauto.eu/thumb/
 @@||topserialy.to^$generichide
 @@||topserialy.to/js/advertisements.js
@@ -319,6 +324,7 @@ sluzebnik.cz#@##adverts
 !
 dobre-recepty.sk#@##ad_skin
 komentare.sme.sk#@#.share-box
+centrumpravnejpomoci.sk#@#.wp_bannerize
 !
 ! ---------- Czech and Slovak Generic element hiding rules ---------- !
 !
@@ -452,6 +458,7 @@ diit.cz,cdr.cz##div.block-jobs-link
 dotekomanie.cz##div#highlitesAds
 dpp.cz,playzone.cz,serialzone.cz###top-banner
 e15.cz##.gallery-advertisement
+e15.cz###topSite
 e-mostecko.cz###g-top-bannery
 echo24.cz##.relama-caption
 edna.cz##.adsense
@@ -499,6 +506,8 @@ idnes.cz##div[id^="hyper"]
 idnes.cz##[class*="r-main"]
 idos.idnes.cz##div.advert-leader-board-container
 in-pocasi.cz##.banner
+info.cz##.gallery-advertisement
+info.cz###topSite
 itnetwork.cz##div.ad-730
 jaknaletenky.cz###social
 kaloricketabulky.cz##.bannLead
@@ -640,8 +649,8 @@ best4you.sk##a[href="http://www.Onlinefilmy.eu"]
 best4you.sk##a[href="http://www.movieportal.eu"]
 best4you.sk##div[style="font-size:20px; font-family:Arial Black, Arial; color:#FF0000; font-weight:bold"]
 bmwklub.sk##div[id^="ad"]
-bombuj.eu##[id*="rekl"]
-bombuj.eu###ad_banner
+bombuj.tv##[id*="rekl"]
+bombuj.tv###ad_banner
 centrum.sk##.banner
 centrum.sk##.h2.grad2.kupons_games
 cucaj.sk###interContainer
@@ -661,6 +670,7 @@ mail.zoznam.sk###box3
 michalovskespravy.sk###footer
 michalovskespravy.sk###headerSlideContent1
 michalovskespravy.sk###ocko
+modnipeklo.cz##[class*="r-main"]
 modrykonik.sk###mk-branding-0
 mojevideo.sk###brnd
 narodnablockovaloteria.tipos.sk###banners
@@ -702,15 +712,8 @@ dotekomanie.cz#?#div.box:-abp-contains(/^reklama/i)
 lupa.cz,root.cz#?#div.article--content:-abp-has(div.design-advert)
 pctuning.tyden.cz#?#div.moduletable:-abp-has(div[style*="reklama-bg"])
 pctuning.tyden.cz#?#div.moduletable:-abp-has(div[id^="AdTrack"])
-search.seznam.cz,clanky.seznam.cz#?#div.Layout--left > div:-abp-has(> div:not([class*="Result"]):not([class*="Hint"]))
+search.seznam.cz,clanky.seznam.cz#?#.Result:not(:-abp-has([class^="Result"]))
 search.seznam.cz,clanky.seznam.cz#?#div.Layout--left > div:-abp-has(div.ZboziCategory)
-
-! Filters below are not compatible with uBlock Origin (has its own version in `filters_ublock.txt`)
-csfd.cz#$#abort-current-inline-script $ completeAdsObject
-idnes.cz,novinky.cz,aktualne.cz,aktuality.sk,info.cz,reflex.cz,zive.cz,mobilmania.cz,e15.cz,tiscali.cz,blesk.cz,ahaonline.cz,extra.cz,super.cz,auto.cz,maminka.cz,autorevue.cz,lupa.cz,vareni.cz,osobnosti.cz,sport.cz,lidovky.cz,karaoketexty.cz,iprima.cz,hnonline.sk,kupi.cz,kinobox.cz,cnews.cz,onetv.cz,zeny.cz#$#abort-current-inline-script Math.random adb
-onlajny.com#$#abort-current-inline-script $ PartnerRedirectAction
-titulky.com#$#abort-current-inline-script adblfetected
-
 !
 ! ---------- uBlock Extended filters ---------- !
 !
