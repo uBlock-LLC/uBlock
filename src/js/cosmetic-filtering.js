@@ -40,6 +40,10 @@
     var decode = JSON.parse;
     const abpSelectorRegexp = /:-abp-([\w-]+)\(/i;
     const supportedSnippet = new Set(["abort-current-inline-script", "abort-on-property-write", "abort-on-property-read"]); 
+    const reAdguardExtCssSyntax = /(?:\[-ext-|:)(has|contains)/; 
+    const reAdguardExtCssSyntaxParser = /(?:\[-ext-|:)(has|contains)/g; 
+    const reAdguardCssSyntax = /.+?\s*\{.*\}\s*$/; 
+
     
     /******************************************************************************/
     
@@ -79,11 +83,45 @@
         this.invalid = false;
         this.cosmetic = true;
         this.type = '';
+        this.adGuardToABPMap = new Map([  
+            [ '[-ext-has',      ["[", "]", [2, -2], ":-abp-has"] ],
+            [ ':has',           ["(", ")", [1, -1], ":-abp-has"] ],
+            [ '[-ext-contains', ["[", "]", [2, -2], ":-abp-contains"] ],
+            [ ':contains',      ["(", ")", [1, -1], ":-abp-contains"] ]
+        ]);
+        this.extended = false; 
         return this;
     };
     
     /******************************************************************************/
-    
+    FilterParser.prototype.convertAdGuardRule = function(str) { 
+        let matches;
+        while ( (matches = reAdguardExtCssSyntaxParser.exec(str)) !== null ) {
+            let pos = matches.index;
+            let m = matches[0];
+            if(pos !== -1) {
+                let counter = 0;
+                let lastPos = 0;
+                for(let i = pos; i < str.length; i++) {
+                    if(str[i] == this.adGuardToABPMap.get(m)[0])
+                        counter++;
+                    else if(str[i] == this.adGuardToABPMap.get(m)[1]) {
+                        counter--;
+                        if(counter == 0) {
+                            lastPos = i;
+                            break;
+                        }
+                    }
+                }
+                if(lastPos != 0) {
+                    str = str.slice(0, pos) + this.adGuardToABPMap.get(m)[3] + "(" + str.slice(pos, lastPos + 1).replace(m,"").slice(this.adGuardToABPMap.get(m)[2][0], this.adGuardToABPMap.get(m)[2][1]) + ")" + str.slice(lastPos + 1) ;
+                } else {
+                    //console.log("Couldn't found matching end bracket.")
+                }
+            }
+        }
+        return str;
+    }
     FilterParser.prototype.parse = function(s) {
         // important!
         this.reset();
@@ -114,11 +152,20 @@
             this.suffix = this.suffix.slice(1);
         }
         this.type = matches[2].charAt(1); 
-        if(this.type == "$") {
-            let m = /([^\s]+)/.exec(this.suffix);
-            if(!supportedSnippet.has(m[0])) {
-                this.invalid = true;
-                return this;
+        if(reAdguardExtCssSyntax.test(this.suffix)) { 
+            this.suffix = this.convertAdGuardRule(this.suffix);
+        }
+        
+        if(this.type == "$") { 
+            if(reAdguardCssSyntax.test(this.suffix)) {
+                this.extended = false;
+            } else {
+                let m = /([^\s]+)/.exec(this.suffix);
+                if(!supportedSnippet.has(m[0])) {
+                    this.invalid = true;
+                    return this;
+                }
+                this.extended = true;
             }
         }
         this.unhide = this.type === '@' ? 1 : 0;
@@ -387,17 +434,13 @@
         };
     
         // [alt="..."], [title="..."]
-        this.highLowGenericHide = {};
-        this.highLowGenericHideCount = 0;
+        this.highLowGenericHide = new Set();
     
         // a[href^="http..."]
-        this.highMediumGenericHide = {};
-        this.highMediumGenericHideCount = 0;
+        this.highMediumGenericHide = new Set();
     
         // everything else
-        this.highHighGenericHideArray = [];
-        this.highHighGenericHide = '';
-        this.highHighGenericHideCount = 0;
+        this.highHighGenericHide = new Set();
     
         // generic exception filters
         this.genericDonthide = [];
@@ -598,7 +641,17 @@
     }
     
     /******************************************************************************/
-    
+    const isValidStyle = function(css) { 
+        if (css.indexOf('\\') !== -1 || css.indexOf("url(") !== -1) {
+            return false;
+        }
+        let div = document.createElement('div');
+        div.style.cssText = css;
+        if ( div.style.cssText === '' ) { return false; }
+        div.style.cssText = '';
+        return true;
+    };
+
     FilterContainer.prototype.compile = function(s, out) {
         let parsed = this.parser.parse(s);
         
@@ -617,10 +670,14 @@
         }
         
         let isValid;
-        if(this.parser.type != "$") { 
-            isValid = abpSelectorRegexp.test(parsed.suffix) ? true : this.isValidSelector(parsed.suffix); 
-        } else {
+        if(this.parser.type == "$" && this.parser.extended) { 
             isValid = true;
+        } else if(this.parser.type == "$" && !this.parser.extended) {
+            let matches = /.+?\s*\{(.*)\}\s*$/.exec(parsed.suffix);
+            isValid = isValidStyle(matches[1].trim());
+        }
+        else {
+            isValid = abpSelectorRegexp.test(parsed.suffix) ? true : this.isValidSelector(parsed.suffix); 
         }
         // For hostname- or entity-based filters, class- or id-based selectors are
         // still the most common, and can easily be tested using a plain regex.
@@ -690,7 +747,7 @@
             }
             return;
         }
-    
+        
         // ["title"] and ["alt"] will go in high-low generic bin.
         if ( this.reHighLow.test(selector) ) {
             if ( this.isValidSelector(selector) ) {
@@ -707,7 +764,7 @@
             }
             return;
         }
-    
+        
         // All else
         if ( this.isValidSelector(selector) ) {
             out.push(['hhg0', selector]);
@@ -745,20 +802,24 @@
             hash = abpSelectorRegexp.test(parsed.suffix) ? makeHash(unhide, domain, this.domainHashMask, this.procedureMask) : makeHash(unhide, domain, this.domainHashMask);
         }
         let hshash = µb.tokenHash(hostname);
-        if(parsed.type != "$") 
+        if(parsed.type == "$" && parsed.extended)  
+                out.push(['hs+', hash, hshash, parsed.suffix]);
+        else if(parsed.type == "$" && !parsed.extended)
+            out.push(['hs', hash, hshash, parsed.suffix]); 
+        else 
             out.push(['h', hash, hshash, parsed.suffix]);
-        else
-            out.push(['hs', hash, hshash, parsed.suffix]);
     };
     
     /******************************************************************************/
     
     FilterContainer.prototype.compileEntitySelector = function(hostname, parsed, out) {
         let entity = hostname.slice(0, -2);
-        if(parsed.type != "$") 
-            out.push(['e', entity, parsed.suffix]);
-        else    
-            out.push(['es', entity, parsed.suffix]);
+        if(parsed.type == "$" && parsed.extended)  
+            out.push(['es+', entity, parsed.suffix]);
+        else if(parsed.type == "$" && !parsed.extended)
+            out.push(['es', entity, parsed.suffix]); 
+        else 
+            out.push(['e', entity, parsed.suffix]);    
     };
 
     FilterContainer.prototype.appendHostnameFilters = function(compiledFilters) {
@@ -823,9 +884,11 @@
             }
             this.duplicateBuster[line] = true;
             // h	ir	twitter.com	.promoted-tweet
-            if ( fields[0] === 'h' || fields[0] === 'hs' ) { 
+            if ( fields[0] === 'h' || fields[0] === 'hs' || fields[0] === 'hs+' ) { //v19
                 let flag;
                 if(fields[0] == "hs")
+                    flag = "style";
+                else if(fields[0] == "hs+")
                     flag = "script";
                 else
                     flag = "css";
@@ -856,10 +919,12 @@
             }
     
             // entity	selector
-            if ( fields[0] === 'e' || fields[0] === 'es' ) {
+            if ( fields[0] === 'e' || fields[0] === 'es' || fields[0] === 'es+' ) {
 
                 let flag;
-                if(fields[0] == "hs")
+                if(fields[0] == "es")
+                    flag = "style";
+                else if(fields[0] == "es+")
                     flag = "script";
                 else
                     flag = "css";
@@ -877,24 +942,17 @@
             }
     
             if ( fields[0] === 'hlg0' ) {
-                this.highLowGenericHide[fields[1]] = true;
-                this.highLowGenericHideCount += 1;
+                this.highLowGenericHide.add(fields[1]);
                 continue;
             }
     
             if ( fields[0] === 'hmg0' ) {
-                if ( Array.isArray(this.highMediumGenericHide[fields[1]]) ) {
-                    this.highMediumGenericHide[fields[1]].push(fields[2]);
-                } else {
-                    this.highMediumGenericHide[fields[1]] = [fields[2]];
-                }
-                this.highMediumGenericHideCount += 1;
+                this.highMediumGenericHide.add(fields[2]);
                 continue;
             }
     
             if ( fields[0] === 'hhg0' ) {
-                this.highHighGenericHideArray.push(fields[1]);
-                this.highHighGenericHideCount += 1;
+                this.highHighGenericHide.add(fields[1]);
                 continue;
             }
     
@@ -919,13 +977,6 @@
         }
         this.hostnameFilters = {};
         this.duplicateBuster = {};
-    
-        if ( this.highHighGenericHide !== '' ) {
-            this.highHighGenericHideArray.unshift(this.highHighGenericHide);
-        }
-        this.highHighGenericHide = this.highHighGenericHideArray.join(',\n');
-        this.highHighGenericHideArray = [];
-    
         this.parser.reset();
         this.frozen = true;
     };
@@ -943,12 +994,9 @@
             hostnameFilterDataView: hf,
             entitySpecificFilters: this.entityFilters,
             lowGenericHide: {"lg": Array.from(this.lowGenericHide.lg), "lgm": Array.from(this.lowGenericHide.lgm)},
-            highLowGenericHide: this.highLowGenericHide,
-            highLowGenericHideCount: this.highLowGenericHideCount,
-            highMediumGenericHide: this.highMediumGenericHide,
-            highMediumGenericHideCount: this.highMediumGenericHideCount,
-            highHighGenericHide: this.highHighGenericHide,
-            highHighGenericHideCount: this.highHighGenericHideCount,
+            highLowGenericHide: Array.from(this.highLowGenericHide),
+            highMediumGenericHide: Array.from(this.highMediumGenericHide),
+            highHighGenericHide: Array.from(this.highHighGenericHide),
             genericDonthide: this.genericDonthide
         };
     };
@@ -964,12 +1012,9 @@
         }
         this.entityFilters = selfie.entitySpecificFilters;
         this.lowGenericHide = {"lg": new Set(selfie.lowGenericHide.lg),"lgm": new Map(selfie.lowGenericHide.lgm)};
-        this.highLowGenericHide = selfie.highLowGenericHide;
-        this.highLowGenericHideCount = selfie.highLowGenericHideCount;
-        this.highMediumGenericHide = selfie.highMediumGenericHide;
-        this.highMediumGenericHideCount = selfie.highMediumGenericHideCount;
-        this.highHighGenericHide = selfie.highHighGenericHide;
-        this.highHighGenericHideCount = selfie.highHighGenericHideCount;
+        this.highLowGenericHide = new Set(selfie.highLowGenericHide);
+        this.highMediumGenericHide = new Set(selfie.highMediumGenericHide);
+        this.highHighGenericHide = new Set(selfie.highHighGenericHide);
         this.genericDonthide = selfie.genericDonthide;
         this.frozen = true;
     };
@@ -1088,24 +1133,16 @@
         var r = {
             hide: []
         };
-    
-        if ( request.firstSurvey ) {
-            r.highGenerics = {
-                hideLow: this.highLowGenericHide,
-                hideLowCount: this.highLowGenericHideCount,
-                hideMedium: this.highMediumGenericHide,
-                hideMediumCount: this.highMediumGenericHideCount,
-                hideHigh: this.highHighGenericHide,
-                hideHighCount: this.highHighGenericHideCount
-            };
-            // https://github.com/uBlockAdmin/uBlock/issues/497
-            r.donthide = this.genericDonthide;
-        }
-    
+        let hostname = this.µburi.hostnameFromURI(request.pageURL);
+
+        let skipCosmetics = [];
+        this.retrieveFromSelectorCache(hostname, 'cosmetic', skipCosmetics);
+
         var hash, bucket;
         var hashMask = this.genericHashMask;
         var hideSelectors = r.hide;
         var selectors = request.selectors;
+        let exception = request.exception || [];
         var i = selectors.length;
         var selector;
         while ( i-- ) {
@@ -1113,20 +1150,47 @@
             if ( !selector ) {
                 continue;
             }
-            if(this.lowGenericHide.lg.has(selector)){
+            if(this.lowGenericHide.lg.has(selector) && skipCosmetics.indexOf(selector) === -1 && exception.indexOf(selector) === -1 ) {
                 hideSelectors.push(selector);
             }
             let lgmselector = this.lowGenericHide.lgm.get(selector);
             if ( lgmselector === undefined ) {
                 continue;
             }
-            else if ( typeof lgmselector === 'string' ) {
+            else if ( typeof lgmselector === 'string' && skipCosmetics.indexOf(selector) === -1 && exception.indexOf(selector) === -1) {
                 hideSelectors.push(lgmselector);
             } else {
-                hideSelectors.push(...lgmselector);
+                lgmselector.forEach(function(element) {
+                    if(skipCosmetics.indexOf(element) === -1 && exception.indexOf(selector) === -1)
+                        hideSelectors.push(element);
+                });
             }
         }
-    
+        /* Add to selector cache */ 
+        if(hideSelectors.length !== 0) {
+            this.addToSelectorCache({
+                hostname: hostname,
+                selectors: hideSelectors,
+                type: 'cosmetic'
+            });
+        }
+        r.injectedSelectors = [];
+        //https://issues.adblockplus.org/ticket/5090
+       if(vAPI.cssOriginSupport) {
+            const details = {
+                code: '',
+                cssOrigin: 'user',
+                frameId: request.frameId,
+                runAt: 'document_start'
+            };
+            if ( hideSelectors.length !== 0 ) {
+                details.code = hideSelectors.join(',\n') + '\n{display:none!important;}';
+                r.injectedSelectors = hideSelectors;
+                vAPI.insertCSS(request.tabId, details);
+                hideSelectors = [];
+            }
+        }
+       
         //quickProfiler.stop();
     
         //console.log(
@@ -1143,10 +1207,15 @@
         for(let i=0; i < r.cosmeticHide.length; i++) {
             r.cosmeticHide[i].split(";").forEach(function(element) {
                 if(element != "") {
+                    let argsEspaced = [];
                     let args = element.trim().split(/\s/);
-                    let snippet = args.shift();
+                    for(let i = 0; i < args.length; i++) {
+                        let arg = args[i].trim().replace(/"/g, '\\"');
+                        argsEspaced.push(arg);
+                    }
+                    let snippet = argsEspaced.shift();
                     if(supportedSnippet.has(snippet)) {
-                        µb.scriptlets.injectNow(context, details, snippet, args);
+                        µb.scriptlets.injectNow(context, details, snippet, argsEspaced);
                     }
                 }
             });
@@ -1179,11 +1248,16 @@
             procedureHide: [],
             cosmeticDonthide: [],
             netHide: [],
-            netCollapse: µb.userSettings.collapseBlocked
+            netCollapse: µb.userSettings.collapseBlocked,
+            cosmeticUserCss: []
         };
         if(options.skipCosmeticFiltering){
             return r;
         }
+        
+        // https://github.com/uBlockAdmin/uBlock/issues/497
+        //r.donthide = this.genericDonthide;
+
         var hash, bucket;
         let hosthashes = µb.getHostnameHashesFromLabelsBackward(hostname, domain);
 
@@ -1197,7 +1271,7 @@
         if(!this.hostnameFilterDataView.hasOwnProperty(flag)) {
             return r;
         }
-
+        
         hash = makeHash(0, domain, this.domainHashMask);
         this.hostnameFilterDataView[flag].retrieve(hosthashes, hash, r.cosmeticHide);
 
@@ -1208,6 +1282,11 @@
     
         if(flag == 'script') {
             return r;    
+        } 
+
+        if(this.hostnameFilterDataView.hasOwnProperty("style")) {
+            hash = makeHash(0, domain, this.domainHashMask);
+            this.hostnameFilterDataView["style"].retrieve(hosthashes, hash, r.cosmeticUserCss);
         }
        
         // No entity exceptions as of now
@@ -1220,14 +1299,70 @@
         if(request.procedureSelectorsOnly) {
             return r.procedureHide;
         }
-    
+        
         // https://github.com/uBlockAdmin/uBlock/issues/188
         // Special bucket for those filters without a valid domain name as per PSL
         hash = makeHash(0, this.type1NoDomainHash, this.domainHashMask);
         this.hostnameFilterDataView[flag].retrieve(hosthashes, hash, r.cosmeticDonthide);
+        
+        r.highGenerics = {
+            hideLow: Array.from(this.highLowGenericHide),
+            hideMedium: Array.from(this.highMediumGenericHide),
+            hideHigh: Array.from(this.highHighGenericHide)
+        };
+        
         this.retrieveFromSelectorCache(hostname, 'cosmetic', r.cosmeticHide);
         this.retrieveFromSelectorCache(hostname, 'net', r.netHide);
-    
+        
+        if ( r.cosmeticDonthide.length !== 0 ) {
+            let i = r.cosmeticDonthide.length;
+            while ( i-- ) {
+                let h = r.cosmeticHide.indexOf(r.cosmeticDonthide[i]);
+                if(h !== -1) {
+                    r.cosmeticHide.splice(h, 1);
+                }
+                let c = r.cosmeticUserCss.indexOf(r.cosmeticDonthide[i]);
+                if(c !== -1) {
+                    r.cosmeticUserCss.splice(c, 1);
+                }
+            }
+        }
+        r.injectedSelectors = [];
+        r.injectedUserCss = [];
+        if(vAPI.cssOriginSupport) {
+            const details = {
+                code: '',
+                cssOrigin: 'user',
+                frameId: request.frameId,
+                runAt: 'document_start'
+            };
+            if(r.highGenerics) {
+                if(r.highGenerics.hideLow.length !== 0) {
+                    r.cosmeticHide.push(r.highGenerics.hideLow.join(',\n'));
+                    r.highGenerics.hideLow = [];
+                }
+                if(r.highGenerics.hideMedium.length !== 0) {
+                    r.cosmeticHide.push(r.highGenerics.hideMedium.join(',\n'));
+                    r.highGenerics.hideMedium = [];
+                }
+                if(r.highGenerics.hideHigh.length !== 0) {
+                    r.cosmeticHide.push(r.highGenerics.hideHigh.join(',\n'));
+                    r.highGenerics.hideHigh = [];
+                }
+            }
+            if ( r.cosmeticHide.length !== 0 ) {
+                details.code = r.cosmeticHide.join(',\n') + '\n{display:none!important;}';
+                r.injectedSelectors = r.cosmeticHide;
+                vAPI.insertCSS(request.tabId, details);
+                r.cosmeticHide = [];
+            }
+            if ( r.cosmeticUserCss.length !== 0 ) {
+                details.code = r.cosmeticUserCss.join(',\n');
+                r.injectedUserCss = r.cosmeticUserCss;
+                vAPI.insertCSS(request.tabId, details);
+                r.cosmeticUserCss = [];
+            }
+        }
         //quickProfiler.stop();
     
         //console.log(

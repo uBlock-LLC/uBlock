@@ -401,13 +401,18 @@ var onMessage = function(request, sender, callback) {
     // Sync
     var response;
 
-    var pageStore;
+    var pageStore, tabId, frameId;
+ 
     if ( sender && sender.tab ) {
+        tabId = sender.tab.id;
+        frameId = sender.frameId;
         pageStore = µb.pageStoreFromTabId(sender.tab.id);
     }
 
     switch ( request.what ) {
         case 'retrieveDomainCosmeticSelectors':
+            request.tabId = tabId;
+            request.frameId = frameId;
             if ( pageStore && pageStore.getSpecificCosmeticFilteringSwitch() && !pageStore.applyDocumentFiltering ) {
                 var options = {
                     skipCosmeticFiltering: pageStore.skipCosmeticFiltering                    
@@ -498,13 +503,17 @@ var onMessage = function(request, sender, callback) {
     // Sync
     var response;
 
-    var pageStore;
+    var pageStore, tabId, frameId;
     if ( sender && sender.tab ) {
+        tabId = sender.tab.id;
+        frameId = sender.frameId;
         pageStore = µb.pageStoreFromTabId(sender.tab.id);
     }
 
     switch ( request.what ) {
         case 'retrieveGenericCosmeticSelectors':
+            request.tabId = tabId;
+            request.frameId = frameId;
             response = {
                 shutdown: !pageStore || !pageStore.getNetFilteringSwitch(),
                 result: null
@@ -524,7 +533,26 @@ var onMessage = function(request, sender, callback) {
                 response.result = filterRequests(pageStore, request);
             }
             break;
-
+        case 'injectCSS':
+            request.tabId = tabId;
+            request.frameId = frameId;
+            const details = {
+                code: '',
+                cssOrigin: 'user',
+                frameId: request.frameId,
+                runAt: 'document_start'
+            };
+            response = {
+                shutdown: !pageStore || !pageStore.getNetFilteringSwitch(),
+                result: null
+            };
+            if(!response.shutdown && !pageStore.applyDocumentFiltering) {
+                if ( request.selectors != "" ) {
+                    details.code = request.selectors + '\n{display:none!important;}';
+                    vAPI.insertCSS(request.tabId, details);
+                }
+            }
+            break;
         default:
             return vAPI.messaging.UNHANDLED;
     }
@@ -571,6 +599,11 @@ var logCosmeticFilters = function(tabId, details) {
     for ( var i = 0; i < selectors.length; i++ ) {
         µb.logger.writeOne(tabId, context, 'cb:##' + selectors[i]);
     }
+    var userStyles = details.matchedUserStyle;
+    for ( var i = 0; i < userStyles.length; i++ ) {
+        µb.logger.writeOne(tabId, context, 'cb:#@#' + userStyles[i]);
+    }
+
 };
 
 /******************************************************************************/

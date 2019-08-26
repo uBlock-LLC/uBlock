@@ -47,6 +47,17 @@ if (
         vAPI.webextFlavor = info.vendor + '-' + info.name + '-' + info.version;
     });
 }
+/*
+https://developers.chrome.com/extensions/extensionTypes#type-CSSOrigin (Chromium 66)
+https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/tabs/insertCSS > Firefox 53 
+*/
+let browserDetails = navigator.userAgent.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i);
+vAPI.cssOriginSupport = false;
+if(browserDetails.length > 0) {
+    if( (browserDetails[1] == "Firefox" && browserDetails[2] >= 53) || (browserDetails[1] == "Chrome" && browserDetails[2] >= 66)  ) {
+        vAPI.cssOriginSupport = true;
+    }
+}
 
 var noopFunc = function(){};
 
@@ -447,6 +458,20 @@ vAPI.tabs.injectScript = function(tabId, details, callback) {
     }
 };
 
+vAPI.insertCSS = function(tabId, details , callback) {
+    var onScriptExecuted = function() {
+        // https://code.google.com/p/chromium/issues/detail?id=410868#c8
+        if ( chrome.runtime.lastError ) {
+            /* noop */
+        }
+        if ( typeof callback === 'function' ) {
+            callback();
+        }
+    };
+    if ( tabId ) {
+        chrome.tabs.insertCSS(tabId, details, onScriptExecuted);
+    }
+};
 /******************************************************************************/
 
 var IconState = function(badge, img) {

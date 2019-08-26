@@ -54,6 +54,7 @@ if ( vAPI.contentscriptStartInjected ) {
 }
 vAPI.contentscriptStartInjected = true;
 vAPI.styles = vAPI.styles || [];
+vAPI.userStyles = vAPI.userStyles || [];
 vAPI.injectedProcedureCosmeticFilters = vAPI.injectedProcedureCosmeticFilters || [];
 
 /******************************************************************************/
@@ -67,62 +68,58 @@ var localMessager = vAPI.messaging.channel('contentscript-start.js');
 // These can be inserted before the DOM is loaded.
 
 var cosmeticFilters = function(details) {
-    var donthideCosmeticFilters = {};
-    var hideCosmeticFilters = {};
-    var donthide = details.cosmeticDonthide;
-    var hide = details.cosmeticHide;
-    var hideProcedureFilters = details.procedureHide || [];
-    var i;
-    if ( donthide.length !== 0 ) {
-        i = donthide.length;
-        while ( i-- ) {
-            donthideCosmeticFilters[donthide[i]] = true;
-        }
-    }
-    // https://github.com/uBlockAdmin/uBlock/issues/143
-    if ( hide.length !== 0 ) {
-        i = hide.length;
-        var selector;
-        while ( i-- ) {
-            selector = hide[i];
-            if ( donthideCosmeticFilters[selector] ) {
-                hide.splice(i, 1);
-            } else {
-                hideCosmeticFilters[selector] = true;
-            }
-        }
-    }
-    if ( hide.length !== 0 ) {
-        var text = hide.join(',\n');
-        hideElements(text);
-        var style = vAPI.specificHideStyle = document.createElement('style');
-        // The linefeed before the style block is very important: do not remove!
-        style.appendChild(document.createTextNode(text + '\n{display:none !important;}'));
-        //console.debug('µBlock> "%s" cosmetic filters: injecting %d CSS rules:', details.domain, details.hide.length, hideStyleText);
-        var parent = document.head || document.documentElement;
-        if ( parent ) {
-            parent.appendChild(style);
-            vAPI.styles.push(style);
-        }
-    }
-    vAPI.donthideCosmeticFilters = donthideCosmeticFilters;
-    vAPI.hideCosmeticFilters = hideCosmeticFilters;
+    let hide = details.cosmeticHide;
+    let userCss = details.cosmeticUserCss;
+    let injectedHide = details.injectedSelectors;
+    let injectedUserCss = details.injectedUserCss;
+
+    let hideProcedureFilters = details.procedureHide || [];
+    let highGenerics = details.highGenerics;
+    vAPI.donthideCosmeticFilters = details.cosmeticDonthide || [];
+    vAPI.cosmeticUserCss = details.cosmeticUserCss;
+    vAPI.hideCosmeticFilters = details.cosmeticHide;
+    vAPI.injectedSelectors = details.injectedSelectors;
     vAPI.hideProcedureFilters = hideProcedureFilters;
+    let highGenericsArray = [];
+    if(highGenerics) {
+        if(highGenerics.hideLow.length > 0) {
+            highGenericsArray.push(...highGenerics.hideLow);
+        }
+        if(highGenerics.hideMedium.length > 0) {
+            highGenericsArray.push(...highGenerics.hideMedium);
+        }
+        if(highGenerics.hideHigh.length > 0) {
+            highGenericsArray.push(...highGenerics.hideHigh);
+        }
+        if(highGenericsArray.length > 0) {
+            vAPI.userStyleSheet.addCssRule(highGenericsArray.join(',\n') + '\n{display:none !important;}');
+            vAPI.styles.push(highGenericsArray.join(',\n'));
+        }
+    }
+    if(userCss.length !== 0) {
+        vAPI.userStyleSheet.addCssRule(userCss.join(',\n'));
+        vAPI.userStyles.push(userCss.join(',\n'));
+    }
+    if(injectedUserCss.length !== 0) {
+        vAPI.userStyles.push(injectedUserCss.join(',\n'));
+    }
+    if ( hide.length !== 0 ) {
+        vAPI.userStyleSheet.addCssRule(hide.join(',\n') + '\n{display:none !important;}');
+        vAPI.styles.push(hide.join(',\n'));
+        hideElements(hide.concat(highGenericsArray).join(',\n'));
+    }
+    if(injectedHide.length !== 0) {
+        vAPI.styles.push(injectedHide.join(',\n'));
+    }
+    
 };
 
 var netFilters = function(details) {
-    var parent = document.head || document.documentElement;
-    if ( !parent ) {
-        return;
-    }
-    var style = document.createElement('style');
-    var text = details.netHide.join(',\n');
-    var css = details.netCollapse ?
+   var text = details.netHide.join(',\n');
+   var css = details.netCollapse ?
         '\n{display:none !important;}' :
         '\n{visibility:hidden !important;}';
-    style.appendChild(document.createTextNode(text + css));
-    parent.appendChild(style);
-    //console.debug('document.querySelectorAll("%s") = %o', text, document.querySelectorAll(text));
+   vAPI.userStyleSheet.addCssRule(text + css);
 };
 
 var filteringHandler = function(details) {
@@ -130,7 +127,7 @@ var filteringHandler = function(details) {
 
     vAPI.skipCosmeticFiltering = !details || details.skipCosmeticFiltering;
     if ( details ) {
-        if ( details.cosmeticHide.length !== 0 || details.cosmeticDonthide.length !== 0 || details.procedureHide !== 0) {
+        if ( details.cosmeticHide.length !== 0 || details.cosmeticDonthide.length !== 0 || details.procedureHide !== 0 || details.cosmeticUserCss !== 0) {
             cosmeticFilters(details);
         }
         if ( details.netHide.length !== 0 ) {
@@ -165,6 +162,7 @@ var hideElements = function(selectors) {
     var i = elems.length;
     while ( i-- ) {
         elems[i].style.setProperty('display', 'none', 'important');
+        vAPI.hiddenNodesMutation.addNodeToObserver(elems[i]);
     }
 };
 

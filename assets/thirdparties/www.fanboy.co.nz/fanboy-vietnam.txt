@@ -1,7 +1,7 @@
 [Adblock Plus 1.1]
-! Checksum: 3SIJqCYah0MLslmmjI6x2g
+! Checksum: XgxOBFbJrURrxGlKZ/47/A
 ! Title: Fanboy's Vietnamese
-! Updated: 8 Feb 2019
+! Updated: 27 Jul 2019
 ! License: http://creativecommons.org/licenses/by/3.0/
 ! Homepage: http://www.fanboy.co.nz/
 ! Expires: 90 days
@@ -328,6 +328,7 @@ _quangcao.
 ||fptad.com^$third-party
 ||gpnetsoft.com/seo.php?
 ||groupon.vn^$third-party
+||helephyra.xyz^$third-party
 ||img.lauxanh.us/server$domain=lauxanh.us
 ||lucdiamu.com^$object,third-party
 ||manhlongtranhba.net^$third-party
@@ -355,6 +356,7 @@ _quangcao.
 ||topnewsoft.com^$third-party
 ||tourdulichre.com^$third-party
 ||travel-rewards-credit-cards.com^$third-party
+||uniad.vn^$third-party
 ||upanh.com^$third-party,domain=vnsao.net
 ||upanh.com^*/ycpxp2011.gif$third-party
 ||uphinh.vn^$third-party

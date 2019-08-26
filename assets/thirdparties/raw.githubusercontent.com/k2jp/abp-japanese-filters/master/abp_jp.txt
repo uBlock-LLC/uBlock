@@ -2,9 +2,9 @@
 ! Homepage: https://github.com/k2jp/abp-japanese-filters/
 ! Title: ABP Japanese filters (ONLY FOR Japanese and experienced users: READ Support Policy)
 ! Expires: 6 hours
-! Version: 201906192138
+! Version: 201907192055
 !
-! Last modified: 2019-06-19 21:38 JST(UTC+0900)
+! Last modified: 2019-07-19 20:55 JST(UTC+0900)
 ! Change log: https://github.com/k2jp/abp-japanese-filters/wiki/FilterChangeLog
 ! Code license: GNU GPL v3: http://www.gnu.org/licenses/gpl.html
 ! Content license: Creative Commons BY-NC-SA 4.0 http://creativecommons.org/licenses/by-nc-sa/4.0/
@@ -167,7 +167,8 @@
 @@||conviva.com/crossdomain.xml|
 @@||conviva.com/lpconfig/cfg/
 ! A new rare false positive with conviva filters found at ustream.tv 2011-12-10
-@@||livepassdl.conviva.com^*/LivePassModuleMain.$object-subrequest
+! [Adblock Plus and (a little) more: Removed support for the $collapse and $object-subrequest filter options](https://adblockplus.org/development-builds/removed-support-for-the-collapse-and-object-subrequest-filter-options) 2019-07-19
+!@@||livepassdl.conviva.com^*/LivePassModuleMain.$object-subrequest
 ! False positives with combined scripts including "&ad=" 2012-04-06
 @@||cookpad.com/loading/all_in_one?
 ! False positives with random path including /ad/, reported via Issue Report, May 3, 2014
@@ -293,8 +294,8 @@
 ! False positive with questionnaires, reported via Issue Report, Mar 20, 2012
 @@||blog.with2.net/vote/
 ! False positives with combined scripts
-@@||yahoo.*/combo?*&$script,stylesheet,domain=yahoo.co.jp|yahoo.com
-@@||yahooapis.*/combo?*&$script,stylesheet,domain=yahoo.co.jp|yahoo.com
+@@||yahoo.*/combo?*&$script,stylesheet,domain=tumblr.com|yahoo.co.jp|yahoo.com
+@@||yahooapis.*/combo?*&$script,stylesheet,domain=tumblr.com|yahoo.co.jp|yahoo.com
 ! False positives with HIGHLIGHT.JS scripts, reported by @dullneko via blog comment, Aug 29, 2012
 @@||yandex.st/highlightjs/
 ! False positives with jQuery, reported by 誤ブロック via blog comment, May 26, 2013
@@ -302,7 +303,7 @@
 ! False positives with combined stylesheets or scripts at Yahoo!
 ! Merged and limited the domain, Oct 25 and 26, 2014
 ! Added support for flickr.com acquired by Yahoo!, Jun 09, 2015
-@@.yimg.*/combo?*&$script,stylesheet,domain=flickr.com|yahoo.co.jp|yahoo.com
+@@.yimg.*/combo?*&$script,stylesheet,domain=flickr.com|tumblr.com|yahoo.co.jp|yahoo.com
 ! Layout collapse and some missing images because of the URL including /ad_partner/, Jan 18, 2012
 @@||s.yimg.jp/images/webowner/ad_partner/$domain=webowner.yahoo.co.jp
 ! False positives at analytics pages inside YouTube, reported via Issue Report, Feb 27, 2012
@@ -312,7 +313,7 @@
 ! ########## Option only START ##########
 |data:text/html^$document
 |data:text/html^$popup
-|http:$image,object,object-subrequest,ping,script,subdocument,xmlhttprequest,domain=ime.nu|ime.st
+|http:$image,object,ping,script,subdocument,xmlhttprequest,domain=ime.nu|ime.st
 ! Commented out for the incompatibility with uBlock Origin, Dec 08, 2016
 ! |http:$ping
 ! |https:$ping
@@ -1103,10 +1104,10 @@
 -mixpanel.$third-party
 -mixpanel^$third-party
 -mixpanel_$third-party
--mraid-$object-subrequest,script,websocket,xmlhttprequest
--mraid.$object-subrequest,script,websocket,xmlhttprequest
--mraid^$object-subrequest,script,websocket,xmlhttprequest
--mraid_$object-subrequest,script,websocket,xmlhttprequest
+-mraid-$script,websocket,xmlhttprequest
+-mraid.$script,websocket,xmlhttprequest
+-mraid^$script,websocket,xmlhttprequest
+-mraid_$script,websocket,xmlhttprequest
 -numerik-art-
 -numerik-art.
 -numerik-art^
@@ -1252,14 +1253,14 @@
 -teasers_
 -textad.
 -utm.$script
--vast-$object-subrequest,script,websocket,xmlhttprequest
--vast.$object-subrequest,script,websocket,xmlhttprequest
--vast^$object-subrequest,script,websocket,xmlhttprequest
--vast_$object-subrequest,script,websocket,xmlhttprequest
--vpaid-$object-subrequest,script,websocket,xmlhttprequest
--vpaid.$object-subrequest,script,websocket,xmlhttprequest
--vpaid^$object-subrequest,script,websocket,xmlhttprequest
--vpaid_$object-subrequest,script,websocket,xmlhttprequest
+-vast-$script,websocket,xmlhttprequest
+-vast.$script,websocket,xmlhttprequest
+-vast^$script,websocket,xmlhttprequest
+-vast_$script,websocket,xmlhttprequest
+-vpaid-$script,websocket,xmlhttprequest
+-vpaid.$script,websocket,xmlhttprequest
+-vpaid^$script,websocket,xmlhttprequest
+-vpaid_$script,websocket,xmlhttprequest
 -yahooads-
 -yahooads.
 -yahooads^
@@ -1868,10 +1869,10 @@
 .mobifiesta.
 .mobifun.
 .movifiesta.
-.mraid-$object-subrequest,script,websocket,xmlhttprequest
-.mraid.$object-subrequest,script,websocket,xmlhttprequest
-.mraid^$object-subrequest,script,websocket,xmlhttprequest
-.mraid_$object-subrequest,script,websocket,xmlhttprequest
+.mraid-$script,websocket,xmlhttprequest
+.mraid.$script,websocket,xmlhttprequest
+.mraid^$script,websocket,xmlhttprequest
+.mraid_$script,websocket,xmlhttprequest
 .my-tv-store.
 .netflame.cc^
 .numerik-art-
@@ -2024,15 +2025,15 @@
 .teasers^
 .teasers_
 .TieupNotification.
-.vast-$object-subrequest,script,websocket,xmlhttprequest
-.vast.$object-subrequest,script,websocket,xmlhttprequest
-.vast^$object-subrequest,script,websocket,xmlhttprequest
-.vast_$object-subrequest,script,websocket,xmlhttprequest
+.vast-$script,websocket,xmlhttprequest
+.vast.$script,websocket,xmlhttprequest
+.vast^$script,websocket,xmlhttprequest
+.vast_$script,websocket,xmlhttprequest
 .vipmobile.
-.vpaid-$object-subrequest,script,websocket,xmlhttprequest
-.vpaid.$object-subrequest,script,websocket,xmlhttprequest
-.vpaid^$object-subrequest,script,websocket,xmlhttprequest
-.vpaid_$object-subrequest,script,websocket,xmlhttprequest
+.vpaid-$script,websocket,xmlhttprequest
+.vpaid.$script,websocket,xmlhttprequest
+.vpaid^$script,websocket,xmlhttprequest
+.vpaid_$script,websocket,xmlhttprequest
 .yahooads-
 .yahooads.
 .yahooads^
@@ -2958,7 +2959,7 @@
 /yie/ld/*
 /yieldbot.$third-party
 /yim.$object,script,subdocument
-/yql?$domain=yahoo.co.jp|yahoo.com
+/yql?$domain=tumblr.com|yahoo.co.jp|yahoo.com
 /ystat.
 /ywa.$script
 /z.php?id=$document
@@ -4214,14 +4215,14 @@
 ^azlink^$object,script,subdocument
 ^azlink_$object,script,subdocument
 ^banner-$popup
-^banner-$script,object-subrequest,subdocument
+^banner-$script,subdocument
 ^banner.$popup
-^banner.$script,object-subrequest,subdocument
+^banner.$script,subdocument
 ^banner^$popup
-^banner^$script,object-subrequest,subdocument
+^banner^$script,subdocument
 ^banner_$image,object,subdocument,domain=fc2.com
 ^banner_$popup
-^banner_$script,object-subrequest,subdocument
+^banner_$script,subdocument
 ^banner_iframe-
 ^banner_iframe.
 ^banner_iframe^
@@ -4239,13 +4240,13 @@
 ^bannerid^
 ^bannerid_
 ^banners-$popup
-^banners-$script,object-subrequest,subdocument
+^banners-$script,subdocument
 ^banners.$popup
-^banners.$script,object-subrequest,subdocument
+^banners.$script,subdocument
 ^banners^$popup
-^banners^$script,object-subrequest,subdocument
+^banners^$script,subdocument
 ^banners_$popup
-^banners_$script,object-subrequest,subdocument
+^banners_$script,subdocument
 ^beacon-
 ^beacon.
 ^beacon^
@@ -5040,10 +5041,10 @@
 ^mobileads.
 ^mobileads^
 ^mobileads_
-^mraid-$object-subrequest,script,websocket,xmlhttprequest
-^mraid.$object-subrequest,script,websocket,xmlhttprequest
-^mraid^$object-subrequest,script,websocket,xmlhttprequest
-^mraid_$object-subrequest,script,websocket,xmlhttprequest
+^mraid-$script,websocket,xmlhttprequest
+^mraid.$script,websocket,xmlhttprequest
+^mraid^$script,websocket,xmlhttprequest
+^mraid_$script,websocket,xmlhttprequest
 ^mtrcs-$script
 ^mtrcs.$script
 ^mtrcs^$script
@@ -5482,10 +5483,10 @@
 ^urchin.
 ^urchin^
 ^urchin_
-^vast-$object-subrequest,script,websocket,xmlhttprequest
-^vast.$object-subrequest,script,websocket,xmlhttprequest
-^vast^$object-subrequest,script,websocket,xmlhttprequest
-^vast_$object-subrequest,script,websocket,xmlhttprequest
+^vast-$script,websocket,xmlhttprequest
+^vast.$script,websocket,xmlhttprequest
+^vast^$script,websocket,xmlhttprequest
+^vast_$script,websocket,xmlhttprequest
 ^videoad-
 ^videoad.
 ^videoad^
@@ -5502,10 +5503,10 @@
 ^voluum^$document
 ^voluum_
 ^voluum_$document
-^vpaid-$object-subrequest,script,websocket,xmlhttprequest
-^vpaid.$object-subrequest,script,websocket,xmlhttprequest
-^vpaid^$object-subrequest,script,websocket,xmlhttprequest
-^vpaid_$object-subrequest,script,websocket,xmlhttprequest
+^vpaid-$script,websocket,xmlhttprequest
+^vpaid.$script,websocket,xmlhttprequest
+^vpaid^$script,websocket,xmlhttprequest
+^vpaid_$script,websocket,xmlhttprequest
 ^watchtcm^$popup
 ^xbanner-$third-party
 ^xbanner.$third-party
@@ -6179,10 +6180,10 @@ _mixpanel-$third-party
 _mixpanel.$third-party
 _mixpanel^$third-party
 _mixpanel_$third-party
-_mraid-$object-subrequest,script,websocket,xmlhttprequest
-_mraid.$object-subrequest,script,websocket,xmlhttprequest
-_mraid^$object-subrequest,script,websocket,xmlhttprequest
-_mraid_$object-subrequest,script,websocket,xmlhttprequest
+_mraid-$script,websocket,xmlhttprequest
+_mraid.$script,websocket,xmlhttprequest
+_mraid^$script,websocket,xmlhttprequest
+_mraid_$script,websocket,xmlhttprequest
 _numerik-art-
 _numerik-art.
 _numerik-art^
@@ -6343,14 +6344,14 @@ _teasers-
 _teasers.
 _teasers^
 _teasers_
-_vast-$object-subrequest,script,websocket,xmlhttprequest
-_vast.$object-subrequest,script,websocket,xmlhttprequest
-_vast^$object-subrequest,script,websocket,xmlhttprequest
-_vast_$object-subrequest,script,websocket,xmlhttprequest
-_vpaid-$object-subrequest,script,websocket,xmlhttprequest
-_vpaid.$object-subrequest,script,websocket,xmlhttprequest
-_vpaid^$object-subrequest,script,websocket,xmlhttprequest
-_vpaid_$object-subrequest,script,websocket,xmlhttprequest
+_vast-$script,websocket,xmlhttprequest
+_vast.$script,websocket,xmlhttprequest
+_vast^$script,websocket,xmlhttprequest
+_vast_$script,websocket,xmlhttprequest
+_vpaid-$script,websocket,xmlhttprequest
+_vpaid.$script,websocket,xmlhttprequest
+_vpaid^$script,websocket,xmlhttprequest
+_vpaid_$script,websocket,xmlhttprequest
 _yahooads-
 _yahooads.
 _yahooads^
@@ -7335,6 +7336,7 @@ _yahooads_
 ||ntvimg-a.akamaihd.net^
 ||serviceama-a.akamaihd.net^
 ||razorweb-a.akamaihd.net^
+||assets-momentum.akamaized.net^
 ||media-analytics.akamaized.net^
 ||akibablog.net/lilbox/
 ||akmega.ru^
@@ -7455,6 +7457,7 @@ _yahooads_
 ||amung.us/pingjs/
 ||amuseer.com^
 ||widgets.amung.us/pro.$script
+||amzonnews.club^
 ||anal-profond.net^
 ||anchorfree.net^$third-party
 ||andomedia.com^
@@ -8225,6 +8228,10 @@ _yahooads_
 ||cybermonitor.com^
 ||cyberwing.co.jp^$third-party
 ||ad.cyzo.com^
+|http://d.pr^
+|http://d.pr^$document
+|https://d.pr^
+|https://d.pr^$document
 ||d-064.com^$third-party
 ||d-suite.jp^$third-party
 ||d03x2011.com^
@@ -8330,6 +8337,7 @@ _yahooads_
 ||diegrossechance.net$popup
 ||dificaux.com^
 ||digitalworld.fr^
+||digitru.st^$third-party
 ||dimestore.com^
 ||dimprive.com^
 ||dingoads.info^$popup
@@ -8722,6 +8730,7 @@ _yahooads_
 ||fotocash.ru^$third-party
 ||fotostrana.ru^$third-party
 ||fougueuses-rencontres.com^
+||fourmtagservices.com^
 ||fout.jp^$third-party
 ||foxadd.com^
 ||foxmetrics.com^$third-party
@@ -8897,6 +8906,7 @@ _yahooads_
 ||video-stats.video.google.com^
 ||googleadservices.com^
 ||imasdk.googleapis.com^
+||googledrive.network^
 ||googleplugin.ru^
 ||googlesyndication.com^
 ||googletagmanager.com^$third-party
@@ -9673,6 +9683,7 @@ _yahooads_
 ||lzjl.com^
 ! Merged into ||*-arata.com^$third-party, Apr 17, 2017
 ! ||m-arata.com^$third-party
+||m0mentum.net^
 ||m2pub.com^
 ||m2pub.com^$popup
 ||ma-cam-live.com^
@@ -10102,6 +10113,7 @@ _yahooads_
 ||newsweekjapan.jp/images/common/sideAd.$image,object,subdocument
 ||newzia.jp^$third-party
 ||nexac.com^
+||nexage.com^$third-party
 ||nfobeat.com^
 ||ngbn.net^$third-party
 ||bc.nhk.jp^
@@ -10269,6 +10281,7 @@ _yahooads_
 ||l.player.ooyala.com^
 ||opbandit.com^$third-party
 ||open-mind.vc^
+||open8.com^$third-party
 ||openads.org^
 ! Dropped a third-party option because adwares or malwares open it directly, Apr 2, 2012
 ||openadserving.com^
@@ -10874,6 +10887,7 @@ _yahooads_
 ||sensic.net^$third-party
 ||sensis.com.au^$third-party
 ||sensismediasmart.com.au^$third-party
+||sentry.io^$third-party
 ||seogreat.net^$third-party
 ||seoparts.com^
 ||seoparts.net^$third-party
@@ -11018,6 +11032,7 @@ _yahooads_
 ||siteshots.com^$third-party
 ||sitesnapi.com^$third-party
 ||sitestat.com^$third-party
+||siteswithcontent.com^
 ||sitetag.us^$third-party
 ||sitetagger.$third-party
 ||sitewebred.info^
@@ -11258,6 +11273,7 @@ _yahooads_
 ||ad.targetingmarketplace.com^
 ||targetan.com^
 ||targetix.net^$third-party
+||taxel.jp^
 ||tbs.co.jp/rtac/
 ||tbn.ru^$third-party
 ||tchat-rose.com^
@@ -11415,6 +11431,7 @@ _yahooads_
 ||trafficmp.com^$third-party
 ||trafficreps.com^
 ||trafficrevenue.net^$third-party
+||trafficsan.com^
 ||trafficshop.com^
 ||trafficstars.com^$third-party
 ||trafficsway.com^
@@ -11883,7 +11900,7 @@ _yahooads_
 ||yahoo.*/b?
 ||yahoo.*/c?
 ||yahoo.*/gb.gif?
-||yahoo.*/p.gif?$domain=yahoo.co.jp|yahoo.com
+||yahoo.*/p.gif?$domain=tumblr.com|yahoo.co.jp|yahoo.com
 ||yahoo.*/images/rt.
 ||yahoo.*/images/rt_
 ||yahoo.*/js/geov2.$script
@@ -11937,7 +11954,7 @@ _yahooads_
 ||rdsig.yahoo.$image,object,subdocument
 ||rtb.pclick.secure.yahoo.
 ||tomlin.yahoo.
-||udc.yahoo.$domain=yahoo.co.jp|yahoo.com
+||udc.yahoo.$domain=tumblr.com|yahoo.co.jp|yahoo.com
 ||ybp.yahoo.
 ||ybx.yahoo.
 ||yeas.yahoo.
@@ -11975,30 +11992,30 @@ _yahooads_
 ||yieldtraffic.com^
 ||yieldtraffic.com^$popup
 ||yigao.com^$third-party
-||yimg.*/bdv/$domain=yahoo.co.jp|yahoo.com
-||yimg.*/images/*/campaign/$domain=yahoo.co.jp|yahoo.com
-||yimg.*/images/*/point$domain=yahoo.co.jp|yahoo.com
-||yimg.*/images/*/pr/$domain=yahoo.co.jp|yahoo.com
-||yimg.*/images/account/sp/*/reg/ccc/$domain=yahoo.co.jp|yahoo.com
+||yimg.*/bdv/$domain=tumblr.com|yahoo.co.jp|yahoo.com
+||yimg.*/images/*/campaign/$domain=tumblr.com|yahoo.co.jp|yahoo.com
+||yimg.*/images/*/point$domain=tumblr.com|yahoo.co.jp|yahoo.com
+||yimg.*/images/*/pr/$domain=tumblr.com|yahoo.co.jp|yahoo.com
+||yimg.*/images/account/sp/*/reg/ccc/$domain=tumblr.com|yahoo.co.jp|yahoo.com
 ! Commented out duplicated filters [https://github.com/k2jp/abp-japanese-filters/issues/9 reported] by [https://github.com/SMed79 SMed79], Jun 20, 2015
-! ||yimg.*/images/analytics/$domain=yahoo.co.jp|yahoo.com
+! ||yimg.*/images/analytics/$domain=tumblr.com|yahoo.co.jp|yahoo.com
 ! Moved to the Paranoid subscription to avoid a false positive blocking loading comments on each news at headlines.yahoo.co.jp. I think this is a tight-coupled bug because the filter is correctly blocking beacons or loggings. YAHOO JAPAN is essentially responsible for fixing it, May 16, 2015
-! ||yimg.*/images/ds/$domain=yahoo.co.jp|yahoo.com
-||yimg.*/images/listing/$domain=yahoo.co.jp|yahoo.com
-||yimg.*/images/market/$domain=yahoo.co.jp|yahoo.com
-||yimg.*/images/news/newsSearch/$domain=yahoo.co.jp|yahoo.com
+! ||yimg.*/images/ds/$domain=tumblr.com|yahoo.co.jp|yahoo.com
+||yimg.*/images/listing/$domain=tumblr.com|yahoo.co.jp|yahoo.com
+||yimg.*/images/market/$domain=tumblr.com|yahoo.co.jp|yahoo.com
+||yimg.*/images/news/newsSearch/$domain=tumblr.com|yahoo.co.jp|yahoo.com
 ! Commented out a filter for beacon generator to avoid ReferenceError: YAHOO is not defined @ http://i.yimg.jp/lib/news/ult_1_1-min.js:1 , Jan 17, 2014
 ! Even though this filter is commented out, the beacon server ybx.yahoo.co.jp is still blocked ;-)
-! ||yimg.*/images/rapid/$domain=yahoo.co.jp|yahoo.com
-||yimg.*/images/settlecomtd/yjbfp/$domain=yahoo.co.jp|yahoo.com
-||yimg.*/images/ycd/$domain=yahoo.co.jp|yahoo.com
-||yimg.*/images/yjcard/$domain=yahoo.co.jp|yahoo.com
-||yimg.*/js/geov*.$script,domain=yahoo.co.jp|yahoo.com
-||yimg.*/lib/*/cs_$script,domain=yahoo.co.jp|yahoo.com
-||yimg.*/lib/*/bc_$script,domain=yahoo.co.jp|yahoo.com
-||yimg.*/lib/*/sda/$script,domain=yahoo.co.jp|yahoo.com
-||yimg.*/lib/3pm/$script,domain=yahoo.co.jp|yahoo.com
-||yimg.*/lib/bc/$script,domain=yahoo.co.jp|yahoo.com
+! ||yimg.*/images/rapid/$domain=tumblr.com|yahoo.co.jp|yahoo.com
+||yimg.*/images/settlecomtd/yjbfp/$domain=tumblr.com|yahoo.co.jp|yahoo.com
+||yimg.*/images/ycd/$domain=tumblr.com|yahoo.co.jp|yahoo.com
+||yimg.*/images/yjcard/$domain=tumblr.com|yahoo.co.jp|yahoo.com
+||yimg.*/js/geov*.$script,domain=tumblr.com|yahoo.co.jp|yahoo.com
+||yimg.*/lib/*/cs_$script,domain=tumblr.com|yahoo.co.jp|yahoo.com
+||yimg.*/lib/*/bc_$script,domain=tumblr.com|yahoo.co.jp|yahoo.com
+||yimg.*/lib/*/sda/$script,domain=tumblr.com|yahoo.co.jp|yahoo.com
+||yimg.*/lib/3pm/$script,domain=tumblr.com|yahoo.co.jp|yahoo.com
+||yimg.*/lib/bc/$script,domain=tumblr.com|yahoo.co.jp|yahoo.com
 ||yimg.com/cv/$domain=yahoo.com
 ||yimg.com/iv/$domain=yahoo.com
 ||yimg.com/qb/$domain=yahoo.com
@@ -12007,7 +12024,7 @@ _yahooads_
 ||yimg.jp/iv/$domain=yahoo.co.jp
 ||yimg.jp/qb/$domain=yahoo.co.jp
 ||yimg.jp/rq/$domain=yahoo.co.jp
-! ||ads.yimg.$domain=yahoo.co.jp|yahoo.com
+! ||ads.yimg.$domain=tumblr.com|yahoo.co.jp|yahoo.com
 ||yiqiwin.com^$third-party
 ||yldbt.com^
 ||yldmgrimg.net^

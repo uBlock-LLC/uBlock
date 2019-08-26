@@ -6,10 +6,23 @@
 ! Licencijos url: http://www.gnu.org/licenses/gpl-3.0.txt
 ! Homepage: http://margevicius.lt/easylist_lithuania/
 ! Facebook: https://www.facebook.com/easylistlithuania/
-! Paskutinis atnaujinimas: 2019-02-27
-! Expires: 7 days (update frequency)
+! Paskutinis atnaujinimas: 2019-08-21
+! Expires: 30 days (update frequency)
 
+||15min.lt/static/cache/*imgad*.jpg
+||15min.lt/static/cache/*lidl*.jpg
+delfi.lt##.revolut-juosta
 laisvaslaikrastis.lt###aside-right
+||laisvaslaikrastis.lt/images/reklaminiai/
+@@||delfi.lt^$generichide
+lrytas.lt##div[data-id="19522"]
+lrytas.lt##div[data-id="19528"]
+lrytas.lt#?#div[layout*="layout-second"]>div[data-id="19539"]
+lrytas.lt##iframe[style="height: 522px; margin: 0px; border-width: 0px; padding: 0px; width: 584px;"]
+lrytas.lt##div[class*="layout"]>div[class*="left"]>div[style="width: 584px; height: 522px; display: none;"]
+delfi.lt##iframe[id="alio_block"]
+delfi.lt##iframe[src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="]
+delfi.lt##iframe[src*="alio.lt/posPages.html"]
 ###delfi-front-right-column
 ##.reklamos_nuorodos
 ##.reklamos_tarpas
@@ -106,7 +119,6 @@ laisvaslaikrastis.lt###aside-right
 @@||banners.adnet.lt/i/euro_1_490x270_3.swf
 @@||banners.adnet.lt/i/euro_game_1.js
 @@||cosmopolitan.lt^$generichide
-@@||delfi.lt^$generichide
 @@||dujuirangoskaina.lt^$document
 @@||entitlements.jwplayer.com/*.json
 @@||eurobasket.lt$generichide
@@ -284,9 +296,6 @@ danguje.lt##A[href^="/component/banners/click/"] > IMG
 danielius.net##DIV[style="width: 80%; font-size: 12px; padding: 5px; border: 1px dashed #CCF5CC; background: #F0FCF0; margin: 0 auto;"]
 day.lt##[style="line-height: 25px; margin: 15px 8px 2px auto;"]
 degalines.orlenlietuva.lt##.addsBoxFirst
-delfi.lt##iframe[id="alio_block"]
-delfi.lt##iframe[src*="alio.lt/posPages.html"]
-delfi.lt##iframe[src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="]
 democ.eu###uzdanga
 democ.eu##.fanai
 depiliacija.eu###products_page_container > *
@@ -484,11 +493,6 @@ lrt.lt##.Scrolling_banner
 lrt.lt##TD[height="118"]
 lrvalstybe.lt##.left_banners
 lrvalstybe.lt##.right_banners
-lrytas.lt##div[class*="layout"]>div[class*="left"]>div[style="width: 584px; height: 522px; display: none;"]
-lrytas.lt##div[data-id="19522"]
-lrytas.lt##div[data-id="19528"]
-lrytas.lt##iframe[style="height: 522px; margin: 0px; border-width: 0px; padding: 0px; width: 584px;"]
-lrytas.lt#?#div[layout*="layout-second"]>div[data-id="19539"]
 lrytas.lt#@#.afs_ads
 lttv.us##A[href="http://www.filmux.us"]
 lttv.us/images/300x100_5.gif
@@ -1069,7 +1073,6 @@ zurnalai.lt##IMG[alt="Informacija ir pagalba telefonu 1588"]
 ||l2j.lt/ads/
 ||l2r.xz.lt/l2rbanners/
 ||l2servers.com/promo
-||laisvaslaikrastis.lt/images/reklaminiai/
 ||laisvaslaikrastis.lt/laikrascio%20baneris.swf
 ||lapes.lt/banners/
 ||lavinantys.lt/shop/out/oxbaseshop/html/2/images

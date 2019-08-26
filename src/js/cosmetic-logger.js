@@ -44,16 +44,19 @@ if ( !vAPI ) {
 /******************************************************************************/
 
 var loggedSelectors = vAPI.loggedSelectors || {};
+var loggedUserStyle = vAPI.loggedUserStyle || {};
 
 var injectedSelectors = [];
 var reProperties = /\s*\{[^}]+\}\s*/;
 var i;
 var styles = vAPI.styles || [];
 var injectedProcedureSelector = vAPI.injectedProcedureCosmeticFilters || [];
+let injectedUserStyle = vAPI.userStyles || [];
 
 i = styles.length;
 while ( i-- ) {
-    injectedSelectors = injectedSelectors.concat(styles[i].textContent.replace(reProperties, '').split(/\s*,\n\s*/));
+    //injectedSelectors = injectedSelectors.concat(styles[i].textContent.replace(reProperties, '').split(/\s*,\n\s*/));
+    injectedSelectors = injectedSelectors.concat(styles[i].replace(reProperties, '').split(/\s*,\n\s*/));
 }
 
 if ( injectedSelectors.length === 0 ) {
@@ -61,6 +64,8 @@ if ( injectedSelectors.length === 0 ) {
 }
 
 var matchedSelectors = [];
+var matchedUserStyle = [];
+
 var selector;
 
 i = injectedSelectors.length;
@@ -84,8 +89,16 @@ for (let selector of injectedProcedureSelector) {
     matchedSelectors.push(selector);
 }
 
+for (let selector of injectedUserStyle) {
+    if ( loggedUserStyle.hasOwnProperty(selector)) {
+        continue;
+    }
+    loggedUserStyle[selector] = true;
+    matchedUserStyle.push(selector);
+}
 
 vAPI.loggedSelectors = loggedSelectors;
+vAPI.loggedUserStyle = loggedUserStyle;
 
 /******************************************************************************/
 
@@ -94,7 +107,8 @@ var localMessager = vAPI.messaging.channel('cosmetic-*.js');
 localMessager.send({
     what: 'logCosmeticFilteringData',
     pageURL: window.location.href,
-    matchedSelectors: matchedSelectors
+    matchedSelectors: matchedSelectors,
+    matchedUserStyle: matchedUserStyle
 }, function() {
     localMessager.close();
 });
