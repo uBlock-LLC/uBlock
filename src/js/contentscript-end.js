@@ -55,6 +55,8 @@ if ( vAPI.contentscriptEndInjected ) {
     return;
 }
 const MIN_INTERVAL = 500;
+vAPI.contentscriptEndInjected = true;
+vAPI.styles = vAPI.styles || [];
 const queueProcessing = function () {
     this.taskArguments = [];
     this.onComplete = this.complete.bind(this);
@@ -101,6 +103,31 @@ const queueProcessing = function () {
     }
   }
 let objQueueProcessing = new queueProcessing();
+
+// Ensure elements matching a set of selectors are visually removed
+    // from the page, by:
+    // - Modifying the style property on the elements themselves
+    // - Injecting a style tag
+
+var hideElements = function(selectors, procedure = false) {
+    // https://github.com/uBlockAdmin/uBlock/issues/207
+    // Do not call querySelectorAll() using invalid CSS selectors
+    if ( selectors.length === 0 ) {
+        return;
+    }
+    if ( document.body === null ) {
+        return;
+    }
+    // https://github.com/uBlockAdmin/uBlock/issues/158
+    // Using CSSStyleDeclaration.setProperty is more reliable
+    var elems = document.querySelectorAll(selectors);
+    var i = elems.length;
+    while ( i-- ) {
+        if(procedure === false) 
+            vAPI.hiddenNodesMutation.addNodeToObserver(elems[i]);
+        elems[i].style.setProperty('display', 'none', 'important');
+    }
+};
 
 vAPI.proceduralCosmeticFiltering = (function() {
     const abpSelectorRegexp = /:-abp-([\w-]+)\(/i;
@@ -569,7 +596,14 @@ vAPI.proceduralCosmeticFiltering = (function() {
             if(matchSelector.length > 0) {
                 vAPI.injectedProcedureCosmeticFilters.push(...matchProcSelector);
                 let text = matchSelector.join(',\n');
-                hideElements(text);
+                if(vAPI.cssOriginSupport) {
+                    messager.send({
+                        what: 'injectCSS',
+                        selectors: text
+                    });
+                } else {
+                    hideElements(text, true);
+                }
             }
             if(typeof callback === "function"){
                 callback(); 
@@ -652,7 +686,7 @@ vAPI.proceduralCosmeticFiltering = (function() {
       //this.processPattern([stylesheet]);
       objQueueProcessing.add([stylesheet]);
     }
-    var hideElements = function(selectors) {
+    /*var hideElements = function(selectors) {
       // https://github.com/uBlockAdmin/uBlock/issues/207
       // Do not call querySelectorAll() using invalid CSS selectors
       if ( selectors.length === 0 ) {
@@ -669,13 +703,12 @@ vAPI.proceduralCosmeticFiltering = (function() {
           elems[i].style.setProperty('display', 'none', 'important');
       }
       messager.send({ what: 'cosmeticFiltersActivated' });
-    };
+    };*/
     return new proceduralSelector();
   })();
 
 
-vAPI.contentscriptEndInjected = true;
-vAPI.styles = vAPI.styles || [];
+
 
 /******************************************************************************/
 /******************************************************************************/
@@ -820,7 +853,7 @@ var uBlockCollapser = (function() {
             var parent = document.body || document.documentElement;
             if ( parent ) {
                 parent.appendChild(style);
-                vAPI.styles.push(style);
+                vAPI.styles.push(selectorStr);
             }
         }
         // Renew map: I believe that even if all properties are deleted, an
@@ -944,8 +977,14 @@ var uBlockCollapser = (function() {
     var injectedSelectors = {};
     var lowGenericSelectors = [];
     var highGenerics = null;
-    var contextNodes = [document];
+    var contextNodes = [];
+    let removedNodes = false;
     var nullArray = { push: function(){} };
+
+    function hideNode(node) {
+        vAPI.hiddenNodesMutation.addNodeToObserver(node);
+        node.style.setProperty('display', 'none', 'important');
+    }
 
     var retrieveGenericSelectors = function() {
         if ( lowGenericSelectors.length !== 0 || highGenerics === null ) {
@@ -954,7 +993,8 @@ var uBlockCollapser = (function() {
                     what: 'retrieveGenericCosmeticSelectors',
                     pageURL: window.location.href,
                     selectors: lowGenericSelectors,
-                    firstSurvey: highGenerics === null
+                    firstSurvey: highGenerics === null,
+                    exception: vAPI.donthideCosmeticFilters || []
                 },
                 retrieveHandler
             );
@@ -972,40 +1012,27 @@ var uBlockCollapser = (function() {
     // likeliness to outrun contentscript-start.js, which may still be waiting
     // on a response from its own query.
     var firstRetrieveHandler = function(response) {
-        // https://github.com/uBlockAdmin/uBlock/issues/158
-        // Ensure injected styles are enforced
-        // rhill 2014-11-16: not sure this is needed anymore. Test case in
-        //  above issue was fine without the line below..
-        var selectors = vAPI.hideCosmeticFilters;
-        if ( typeof selectors === 'object' ) {
-            injectedSelectors = selectors;
-            hideElements(Object.keys(selectors));
+        var result = response && response.result;
+        var hideSelectors = [];
+        if ( result && result.hide.length ) {
+            hideSelectors.push(...result.hide);
+            vAPI.userStyleSheet.addCssRule(result.hide.join(',\n') + '\n{display:none !important;}');
         }
-        // Add exception filters into injected filters collection, in order
-        // to force them to be seen as "already injected".
-        selectors = vAPI.donthideCosmeticFilters;
-        if ( typeof selectors === 'object' ) {
-            for ( var selector in selectors ) {
-                if ( selectors.hasOwnProperty(selector) ) {
-                    injectedSelectors[selector] = true;
-                }
-            }
+        if(vAPI.hideCosmeticFilters) {
+            hideSelectors.push(...vAPI.hideCosmeticFilters);
         }
+        if ( hideSelectors.length > 0 ) {
+            var selectorStr = hideSelectors.join(',\n');
+            vAPI.styles.push(selectorStr);
+            hideElements(selectorStr);
+        }
+        if(result.injectedSelectors.length !== 0) {
+            vAPI.styles.push(result.injectedSelectors.join(',\n'));
+        }
+        contextNodes.length = 0;
+        removedNodes = false;
         // Flush dead code from memory
         firstRetrieveHandler = null;
-
-        // These are sent only once
-        var result = response && response.result;
-        if ( result ) {
-            if ( result.highGenerics ) {
-                highGenerics = result.highGenerics;
-            }
-            if ( result.donthide ) {
-                processLowGenerics(result.donthide, nullArray);
-            }
-        }
-
-        nextRetrieveHandler(response);
     };
 
     var nextRetrieveHandler = function(response) {
@@ -1014,76 +1041,44 @@ var uBlockCollapser = (function() {
             shutdownJobs.exec();
             return;
         }
-
-        //var tStart = timer.now();
-        //console.debug('µBlock> contextNodes = %o', contextNodes);
         var result = response && response.result;
         var hideSelectors = [];
         if ( result && result.hide.length ) {
-            processLowGenerics(result.hide, hideSelectors);
+            hideSelectors.push(...result.hide);
+            vAPI.userStyleSheet.addCssRule(result.hide.join(',\n') + '\n{display:none !important;}');
+            vAPI.styles.push(result.hide.join(',\n'));
         }
-        if ( highGenerics ) {
-            if ( highGenerics.hideLowCount ) {
-                processHighLowGenerics(highGenerics.hideLow, hideSelectors);
-            }
-            if ( highGenerics.hideMediumCount ) {
-                processHighMediumGenerics(highGenerics.hideMedium, hideSelectors);
-            }
-            if ( highGenerics.hideHighCount ) {
-                processHighHighGenericsAsync();
-            }
+        if(result.injectedSelectors.length !== 0) {
+            vAPI.styles.push(result.injectedSelectors.join(',\n'));
         }
-        if ( hideSelectors.length !== 0 ) {
-            addStyleTag(hideSelectors);
+        if(vAPI.hideCosmeticFilters) {
+            hideSelectors.push(...vAPI.hideCosmeticFilters);
+        }
+        if ( hideSelectors.length > 0 ) {
+            var selectorStr = hideSelectors.join(',\n');
+            if(contextNodes.length != 0 && removedNodes == false) {
+                for ( const node of contextNodes ) {
+                    if ( node.matches(selectorStr) ) {
+                        hideNode(node);
+                    }
+                    const nodes = node.querySelectorAll(selectorStr);
+                    for ( const node of nodes ) {
+                        hideNode(node);
+                    }
+                }
+            } else {
+                const nodes = document.querySelectorAll(selectorStr);
+                for ( const node of nodes ) {
+                    hideNode(node);
+                }
+            }
         }
         contextNodes.length = 0;
+        removedNodes = false;
         //console.debug('%f: uBlock: CSS injection time', timer.now() - tStart);
     };
 
     var retrieveHandler = firstRetrieveHandler;
-
-    // Ensure elements matching a set of selectors are visually removed
-    // from the page, by:
-    // - Modifying the style property on the elements themselves
-    // - Injecting a style tag
-
-    var addStyleTag = function(selectors) {
-        var selectorStr = selectors.join(',\n');
-        hideElements(selectorStr);
-        var style = document.createElement('style');
-        // The linefeed before the style block is very important: do no remove!
-        style.appendChild(document.createTextNode(selectorStr + '\n{display:none !important;}'));
-        var parent = document.body || document.documentElement;
-        if ( parent ) {
-            parent.appendChild(style);
-            vAPI.styles.push(style);
-        }
-        messager.send({
-            what: 'cosmeticFiltersInjected',
-            type: 'cosmetic',
-            hostname: window.location.hostname,
-            selectors: selectors
-        });
-        //console.debug('µBlock> generic cosmetic filters: injecting %d CSS rules:', selectors.length, text);
-    };
-
-    var hideElements = function(selectors) {
-        // https://github.com/uBlockAdmin/uBlock/issues/207
-        // Do not call querySelectorAll() using invalid CSS selectors
-        if ( selectors.length === 0 ) {
-            return;
-        }
-        if ( document.body === null ) {
-            return;
-        }
-        // https://github.com/uBlockAdmin/uBlock/issues/158
-        // Using CSSStyleDeclaration.setProperty is more reliable
-        var elems = document.querySelectorAll(selectors);
-        var i = elems.length;
-        while ( i-- ) {
-            elems[i].style.setProperty('display', 'none', 'important');
-        }
-    };
 
     // Extract and return the staged nodes which (may) match the selectors.
 
@@ -1105,141 +1100,6 @@ var uBlockCollapser = (function() {
             }
         }
         return targetNodes;
-    };
-
-    // Low generics:
-    // - [id]
-    // - [class]
-
-    var processLowGenerics = function(generics, out) {
-        var i = generics.length;
-        var selector;
-        while ( i-- ) {
-            selector = generics[i];
-            if ( injectedSelectors.hasOwnProperty(selector) ) {
-                continue;
-            }
-            injectedSelectors[selector] = true;
-            out.push(selector);
-        }
-    };
-
-    // High-low generics:
-    // - [alt="..."]
-    // - [title="..."]
-
-    var processHighLowGenerics = function(generics, out) {
-        var attrs = ['title', 'alt'];
-        var attr, attrValue, nodeList, iNode, node;
-        var selector;
-        while ( attr = attrs.pop() ) {
-            nodeList = selectNodes('[' + attr + ']');
-            iNode = nodeList.length;
-            while ( iNode-- ) {
-                node = nodeList[iNode];
-                attrValue = node.getAttribute(attr);
-                if ( !attrValue ) { continue; }
-                // Candidate 1 = generic form
-                // If generic form is injected, no need to process the specific
-                // form, as the generic will affect all related specific forms
-                selector = '[' + attr + '="' + attrValue + '"]';
-                if ( generics.hasOwnProperty(selector) ) {
-                    if ( injectedSelectors.hasOwnProperty(selector) === false ) {
-                        injectedSelectors[selector] = true;
-                        out.push(selector);
-                        continue;
-                    }
-                }
-                // Candidate 2 = specific form
-                selector = node.localName + selector;
-                if ( generics.hasOwnProperty(selector) ) {
-                    if ( injectedSelectors.hasOwnProperty(selector) === false ) {
-                        injectedSelectors[selector] = true;
-                        out.push(selector);
-                    }
-                }
-            }
-        }
-    };
-
-    // High-medium generics:
-    // - [href^="http"]
-
-    var processHighMediumGenerics = function(generics, out) {
-        var nodeList = selectNodes('a[href^="http"]');
-        var iNode = nodeList.length;
-        var node, href, pos, hash, selectors, selector, iSelector;
-        while ( iNode-- ) {
-            node = nodeList[iNode];
-            href = node.getAttribute('href');
-            if ( !href ) { continue; }
-            pos = href.indexOf('://');
-            if ( pos === -1 ) { continue; }
-            hash = href.slice(pos + 3, pos + 11);
-            selectors = generics[hash];
-            if ( selectors === undefined ) { continue; }
-            iSelector = selectors.length;
-            while ( iSelector-- ) {
-                selector = selectors[iSelector];
-                if ( injectedSelectors.hasOwnProperty(selector) === false ) {
-                    injectedSelectors[selector] = true;
-                    out.push(selector);
-                }
-            }
-        }
-    };
-
-    // High-high generics are *very costly* to process, so we will coalesce
-    // requests to process high-high generics into as few requests as possible.
-    // The gain is *significant* on bloated pages.
-
-    var processHighHighGenericsMisses = 8;
-    var processHighHighGenericsTimer = null;
-
-    var processHighHighGenerics = function() {
-        processHighHighGenericsTimer = null;
-        if ( highGenerics.hideHigh === '' ) {
-            return;
-        }
-        if ( injectedSelectors.hasOwnProperty('{{highHighGenerics}}') ) {
-            return;
-        }
-        //var tStart = timer.now();
-        if ( document.querySelector(highGenerics.hideHigh) === null ) {
-            //console.debug('%f: high-high generic test time', timer.now() - tStart);
-            processHighHighGenericsMisses -= 1;
-            // Too many misses for these nagging highly generic CSS rules,
-            // so we will just skip them from now on.
-            if ( processHighHighGenericsMisses === 0 ) {
-                injectedSelectors['{{highHighGenerics}}'] = true;
-                //console.debug('high-high generic: apparently not needed...');
-            }
-            return;
-        }
-        injectedSelectors['{{highHighGenerics}}'] = true;
-        // We need to filter out possible exception cosmetic filters from
-        // high-high generics selectors.
-        var selectors = highGenerics.hideHigh.split(',\n');
-        var i = selectors.length;
-        var selector;
-        while ( i-- ) {
-            selector = selectors[i];
-            if ( injectedSelectors.hasOwnProperty(selector) ) {
-                selectors.splice(i, 1);
-            } else {
-                injectedSelectors[selector] = true;
-            }
-        }
-        if ( selectors.length !== 0 ) {
-            addStyleTag(selectors);
-        }
-    };
-
-    var processHighHighGenericsAsync = function() {
-        if ( processHighHighGenericsTimer !== null ) {
-            clearTimeout(processHighHighGenericsTimer);
-        }
-        processHighHighGenericsTimer = setTimeout(processHighHighGenerics, 300);
     };
 
     // Extract all ids: these will be passed to the cosmetic filtering
@@ -1350,6 +1210,7 @@ var uBlockCollapser = (function() {
 
     // Added node lists will be cumulated here before being processed
     var addedNodeLists = [];
+    let removedNodeLists = [];
     var addedNodeListsTimer = null;
     var collapser = uBlockCollapser;
 
@@ -1369,8 +1230,19 @@ var uBlockCollapser = (function() {
                 collapser.iframesFromNode(node);
             }
         }
+        while ( nodeList = removedNodeLists.pop() ) {
+            iNode = nodeList.length;
+            while ( iNode-- ) {
+                node = nodeList[iNode];
+                if ( node.nodeType !== 1 ) {
+                    removedNodes = true;
+                    break;
+                }
+            }
+        }
+       
         addedNodeListsTimer = null;
-        if ( contextNodes.length !== 0 ) {
+        if (!(contextNodes.length === 0 && removedNodes === false)) {
             idsFromNodeList(selectNodes('[id]'));
             classesFromNodeList(selectNodes('[class]'));
             retrieveGenericSelectors();
@@ -1390,6 +1262,10 @@ var uBlockCollapser = (function() {
             nodeList = mutations[iMutation].addedNodes;
             if ( nodeList.length !== 0 ) {
                 addedNodeLists.push(nodeList);
+            }
+            nodeList = mutations[iMutation].removedNodes;
+            if ( nodeList.length !== 0 ) {
+                removedNodeLists.push(nodeList);
             }
         }
         if ( addedNodeListsTimer === null ) {

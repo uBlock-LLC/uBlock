@@ -33,7 +33,14 @@
 
 var vAPI = self.vAPI = self.vAPI || {};
 var chrome = self.chrome;
-
+let browserDetails = navigator.userAgent.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i);
+vAPI.hideNodes = vAPI.hideNodes || new Set();
+vAPI.cssOriginSupport = false;
+if(browserDetails.length > 0) {
+    if( (browserDetails[1] == "Firefox" && browserDetails[2] >= 53) || (browserDetails[1] == "Chrome" && browserDetails[2] >= 66)  ) {
+        vAPI.cssOriginSupport = true;
+    }
+}
 // https://github.com/uBlockAdmin/uBlock/issues/456
 // Already injected?
 if ( vAPI.vapiClientInjected ) {
@@ -46,6 +53,78 @@ vAPI.sessionId = String.fromCharCode(Date.now() % 25 + 97) +
     Math.random().toString(36).slice(2);
 vAPI.chrome = true;
 
+const userStyleSheet = function() {
+    this.style;
+    this.cssRules = new Map();
+}
+userStyleSheet.prototype.addStyleElement = function() {
+    this.style = document.createElement('style');
+    const parent = document.head || document.documentElement;
+    if ( parent === null ) { return; }
+    parent.appendChild(this.style);
+}
+userStyleSheet.prototype.addCssRule = function(cssRule) {
+    if(cssRule == '' || this.cssRules.has(cssRule)) return;
+    if(this.style === undefined) { 
+        this.addStyleElement();
+    }
+    const sheet = this.style.sheet;
+    if ( !sheet ) { return; }
+    const len = sheet.cssRules.length;
+    sheet.insertRule(cssRule, len);
+    this.cssRules.set(cssRule, sheet.cssRules[len]);
+}
+vAPI.userStyleSheet = new userStyleSheet();
+
+if(vAPI.cssOriginSupport === true) {
+    vAPI.hiddenNodesMutation = (function() {
+        return {
+            addNodeToObserver: function(node) {
+                //console.log("do nothing");
+            }
+        };    
+    })();    
+} else {
+    vAPI.hiddenNodesMutation = (function() {
+        let nodeObserverTimer = undefined;
+        let hiddenNodeObserverAsync = function() {
+            for ( let node of vAPI.hideNodes ) {
+                node.style.setProperty('display', 'none', 'important');
+            }
+            vAPI.hideNodes.clear();
+            nodeObserverTimer = undefined;
+        }
+        let hiddenNodeObserver = new MutationObserver(function(mutations) {
+            for ( const mutation of mutations ) {
+                if(mutation.target.style.display != "none")
+                    vAPI.hideNodes.add(mutation.target);
+                else
+                    vAPI.hideNodes.delete(mutation.target);
+            }
+            if (
+                vAPI.hideNodes.size !== 0 &&
+                nodeObserverTimer === undefined
+            ) {
+                nodeObserverTimer = setTimeout(hiddenNodeObserverAsync, 1);
+            }
+        });
+        return {
+            addNodeToObserver: function(node) {
+                if ( node.hasAttribute("uBlockHide") === false ) {
+                    node.setAttribute('uBlockHide', '');
+                    vAPI.hideNodes.add(node);
+                    hiddenNodeObserver.observe(
+                        node,
+                        { 
+                            attributes: true,
+                            attributeFilter: [ 'style' ] 
+                        }
+                    );
+                }
+            }
+        };    
+    })();
+}
 /******************************************************************************/
 
 if (!chrome.runtime) {

@@ -2,7 +2,7 @@
     "manifest_version": 2,
 
     "name": "uBlock",
-    "version": "0.9.5.19",
+    "version": "0.9.5.20",
     
     "default_locale": "en",
     "description": "__MSG_extShortDesc__",
@@ -44,7 +44,7 @@
             "run_at": "document_idle"
         }
     ],
-    "minimum_chrome_version": "22.0",
+    "minimum_chrome_version": "49.0",
     "options_page": "dashboard.html",
     "options_ui": {
         "page": "options_ui.html"
