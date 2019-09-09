@@ -1,9 +1,9 @@
 ![Adblock Plus 2.0]
-! Checksum: 30Qgh806OBHJpk82WMzcxw
+! Checksum: VxVYGOU9C+MsX7YOXdx2Dg
 ! Title: AdGuard Tracking Protection filter
 ! Description: The most comprehensive list of various online counters and web analytics tools. Use this filter if you do not want your actions on the Internet to be tracked.
-! Version: 2.0.8.64
-! TimeUpdated: 2019-08-21T17:30:39+03:00
+! Version: 2.0.8.96
+! TimeUpdated: 2019-09-06T16:30:38+03:00
 ! Expires: 2 days (update frequency)
 ! Homepage: http://adguard.com/filters.html#privacy
 ! License: http://creativecommons.org/licenses/by-sa/3.0/
@@ -123,6 +123,8 @@ vol.az###footer > .column-one-fourth[-ext-has=".line > span:contains(Sayğac)"]
 ! https://github.com/AdguardTeam/AdguardFilters/issues/5449
 donnerwetter.de##.col-xs-12 > div.block.prepend-top[-ext-has='> div.blocktitle-brand > h2 > span.blocktitle-brand:contains(weitere Wetter-Nachrichten)']
 !
+novate.ru#?##right > div.bordered:has(> script:contains(relap))
+novate.ru#?##right > h2:contains(Рекомендуем)
 luxhard.com#?##sidebar-primary > .widget-container:has(a[href^="https://metrika.yandex.ru/stat/"])
 specialcom.net###sidebar > div.widget:has(span#openstat1)
 kinoman.me###extra_block > div.extra_mod > div.extra_mod:has(> div.extra_mod_title:contains(Счетчики))
@@ -145,6 +147,10 @@ journal-plaza.net##.rightside div.block.bnavi[-ext-has="h3.dtitle:contains(Сч�
 ! ||e.crashlytics.com^
 ! ||settings.crashlytics.com^
 !
+||px.staticfiles.at^^$third-party
+||vast.videocdn.tv^$third-party
+||wapempire.com^$third-party
+||chali.info^$third-party
 ||ulogin-stats.ru^$third-party
 ||stat.enter-system.com^$third-party
 ||t.hoood.info^
@@ -2552,10 +2558,6 @@ journal-plaza.net##.rightside div.block.bnavi[-ext-has="h3.dtitle:contains(Сч�
 ||statok.net^$third-party
 ||statowl.com^$third-party
 ||stats-analytics.info^$third-party
-||stats.cz^$third-party
-||stats.de^$third-party
-||stats.fr^$third-party
-||stats.lt^$third-party
 ||stats2.com^$third-party
 ||stats21.com^$third-party
 ||stats2513.com^$third-party
@@ -3409,9 +3411,11 @@ nethunt.com/api/v1/track/email/$image
 ||collection-endpoint-staging.herokuapp.com^
 ! end:
 !
+! This rule breaks Australian sites
 !+ NOT_PLATFORM(ios, ext_safari, ext_android_cb)
-||tags.news.com.au^
+||tags.news.com.au^$~script
 !
+||spr.welt.de^
 ||analytics-ingress-global.bitmovin.com^
 ||logs.insight.rapid7.com^
 ||count.rtl.de^
@@ -5049,7 +5053,13 @@ _tracking.php?b=
 ! The site should be carefully checked when you add this rule
 ||tags.tiqcdn.com/utag/*/prod/utag.js$domain=radissonhotels.com
 !
+||welt.de/assets/resources/webtrekk^
+||movie2.kinoche.ru/iframe.js?id=$third-party
+||articles2.marketrealist.com/aptrk^
+||addthisedge.com/live/boost/*/_ate.track
+||macworld.com/www/js/analytics/tracking.js
 ||sheego.de/request/pvp.php
+||yastatic.net/s3/distribution/yanalytics/yanalytics.js
 ||c0.froala.com/i?
 ||streamlava.cc/stats^
 ||pjstat.com^$third-party
@@ -5883,7 +5893,7 @@ m.lenta.ru##.b-footer_counters
 ||r.nnm.me/api/server
 ||88688.ru/api/geoip/
 ||openculture.com/wp-admin/admin-ajax.php*^action=rxn_
-||googletagservices.com/tag/js/gpt.js$domain=sinoptik.ua|gutefrage.net|qtv.ua|dt.ua|ngs.ru|unian.net|easybib.com|bohenon.com|linuxtopia.org|newsroom.kh.ua
+||googletagservices.com/tag/js/gpt.js$domain=sinoptik.ua|gutefrage.net|qtv.ua|dt.ua|ngs.ru|unian.net|easybib.com|bohenon.com|linuxtopia.org|newsroom.kh.ua|hclips.com|noticierodigital.com|northumberlandgazette.co.uk|mywebtimes.com
 ||imagecrest.com/asset/view/stats.php
 ||uaswitcher.org/logic/page/data
 ||success.trendmicro.com/jslibrary/*/NetworkTracking.js
@@ -6212,7 +6222,6 @@ dreamprogs.net##td[width="88"][height="31"]
 ||expedia.com^*/logexperiments
 ||extra.cz/counter.php?id=
 ||facebook.com/impression.php
-||facebook.com/sem_campaigns/sem_pixel_test/
 ||facebook.com/tr/?
 ||facebook.com/tr?
 ||facebook.com^*/impression_logging/
@@ -6643,6 +6652,47 @@ link.gmapp*.net$image
 !-------------- Whitelist ------------------------------------------------------!
 !-------------------------------------------------------------------------------!
 !
+! https://github.com/AdguardTeam/AdguardFilters/issues/40042
+@@||dpm.demdex.net/id^$domain=priceless.com
+@@||omtrdc.net/rest/v*/delivery?client=$domain=priceless.com
+! https://github.com/AdguardTeam/AdguardFilters/issues/39990
+@@||cdn.amplitude.com/libs/amplitude-*-min.gz.js$domain=agroros.ru
+! https://github.com/AdguardTeam/AdguardFilters/issues/39966
+@@||omtrdc.net/rest/v*/delivery?client=$domain=hpe.com
+! https://github.com/AdguardTeam/AdguardFilters/issues/39931
+@@||dpm.demdex.net/id^$domain=rogers.com
+@@||omtrdc.net/rest/v*/delivery?client=$domain=rogers.com
+! https://github.com/AdguardTeam/AdguardFilters/issues/39923
+@@||omtrdc.net/id^$domain=vodafone.cz
+@@||omtrdc.net/rest/v*/delivery?client=$domain=vodafone.cz
+@@||vodafonecz.demdex.net/id^$domain=vodafone.cz
+! https://github.com/AdguardTeam/AdguardFilters/issues/39886
+@@||google-analytics.com/analytics.js$domain=keepassium.com
+! https://github.com/AdguardTeam/AdguardFilters/issues/39733
+@@||omtrdc.net/id^$domain=officeworks.com.au
+@@||omtrdc.net/rest/v*/delivery?client=$domain=officeworks.com.au
+@@||dpm.demdex.net/id^$domain=officeworks.com.au
+! https://github.com/AdguardTeam/AdguardFilters/issues/39871
+@@||omtrdc.net/rest/v*/delivery?client=$domain=westjet.com
+@@||dpm.demdex.net/id^$domain=westjet.com
+! https://github.com/AdguardTeam/AdguardFilters/issues/39751
+@@||reutersmedia.net/resources_v*/js/rcom-scroll-tracker.js$domain=reuters.com
+! https://github.com/AdguardTeam/AdguardFilters/issues/39399
+@@||tt.omtrdc.net/rest/*/delivery$domain=baynews9.com
+! https://github.com/AdguardTeam/AdguardFilters/issues/39122
+@@||js.honeybadger.io/v*/honeybadger.min.js$domain=player.tubia.com
+! haz.de - delayed display of content
+@@||google-analytics.com/analytics.js$domain=haz.de
+@@||google-analytics.com/gtm/js?id=$domain=haz.de
+! https://github.com/AdguardTeam/AdguardFilters/issues/39175
+@@||tt.omtrdc.net/rest/*/delivery?client=$domain=skrill.com
+@@||dpm.demdex.net/id^$domain=skrill.com
+! https://github.com/AdguardTeam/AdguardFilters/issues/34604
+@@||ups.com/*/tracking.cgi
+! https://github.com/AdguardTeam/AdguardFilters/issues/39075
+@@||tt.omtrdc.net/rest/*/delivery?client=$domain=nzz.ch
+! https://github.com/AdguardTeam/AdguardFilters/issues/39051
+@@||cdn.segment.com/analytics.js/*/analytics.min.js$domain=surfline.com
 ! https://github.com/AdguardTeam/AdguardFilters/issues/38938
 @@||mc.yandex.ru/metrika/watch.js$domain=istiklal.com.tr
 ! https://github.com/AdguardTeam/AdguardFilters/issues/38393
@@ -6655,6 +6705,8 @@ link.gmapp*.net$image
 ! https://github.com/AdguardTeam/AdguardFilters/issues/10417
 @@||googletagmanager.com/gtm.js$domain=puhutv.com
 @@||google-analytics.com/analytics.js$domain=puhutv.com
+! https://github.com/AdguardTeam/AdguardFilters/issues/38422
+@@||omtrdc.net/rest/v*/delivery?client=$domain=thankyou.com
 ! https://github.com/AdguardTeam/AdguardFilters/issues/37773
 @@||googletagmanager.com/gtm.js$domain=elderscrollsonline.com
 @@||google-analytics.com/analytics.js$domain=elderscrollsonline.com
@@ -6756,7 +6808,6 @@ link.gmapp*.net$image
 ! https://github.com/AdguardTeam/AdguardFilters/issues/35324
 @@||sb.scorecardresearch.com/beacon.js$domain=ntvspor.net
 ! https://github.com/AdguardTeam/AdguardFilters/issues/35208
-@@||tags.news.com.au/prod/heartbeat/v*/VideoHeartbeat.min.js$domain=dailytelegraph.com.au
 @@||cdn-gl.imrworldwide.com/novms/*/ggng*.js$domain=dailytelegraph.com.au
 ! https://github.com/AdguardTeam/AdguardFilters/issues/34934
 @@||google-analytics.com/analytics.js$domain=polygon.com
@@ -6775,14 +6826,11 @@ link.gmapp*.net$image
 @@||scdn.cxense.com/cx.js$domain=sbs.com.au
 @@||nexus.ensighten.com/sbs/sbsprod/$domain=sbs.com.au
 ! https://github.com/AdguardTeam/AdguardFilters/issues/34540
-! https://github.com/AdguardTeam/AdguardFilters/issues/34522
-@@||tags.news.com.au/prod/heartbeat/v*/VideoHeartbeat.min.js$domain=news.com.au
 ! https://github.com/AdguardTeam/AdguardFilters/issues/34387
 @@||scdn.cxense.com/cx.js$domain=digi24.ro
 ! https://github.com/AdguardTeam/AdguardFilters/issues/34315
 @@||naver.net/wcslog.js$domain=itemmania.com
 ! https://github.com/AdguardTeam/AdguardFilters/issues/34137
-@@||tags.news.com.au/prod/heartbeat/v*/VideoHeartbeat.min.js$domain=heraldsun.com.au
 @@||cdn-gl.imrworldwide.com/novms/*/ggng*.js$domain=heraldsun.com.au
 ! https://github.com/AdguardTeam/AdguardFilters/issues/34135
 @@||cdn-gl.imrworldwide.com/novms/*/ggng*.js$domain=news.com.au
@@ -6816,8 +6864,6 @@ link.gmapp*.net$image
 @@||googletagmanager.com/gtm.js$domain=capital.fr
 ! t-online.de - broken links in article
 @@||googletagmanager.com/gtm.js$domain=t-online.de
-! https://github.com/AdguardTeam/AdguardFilters/issues/30787
-@@||tags.news.com.au/prod/tad/tad.js$domain=news.com.au
 ! ntvplus.tv - fixing player
 @@||google-analytics.com/analytics.js$domain=ntvplus.tv
 ! https://github.com/AdguardTeam/AdguardFilters/issues/32097
@@ -7074,8 +7120,6 @@ link.gmapp*.net$image
 ! https://github.com/AdguardTeam/AdguardFilters/issues/20391
 @@||google-analytics.com/analytics.js$domain=earthclassmail.com
 @@||google-analytics.com/plugins/ua/ec.js$domain=earthclassmail.com
-! avgle.com - fake video after a while
-@@||s10.histats.com/js15_as.js$domain=avgle.com
 ! https://github.com/AdguardTeam/AdguardFilters/issues/19887
 @@||mc.yandex.ru/metrika/watch.js$domain=iz.ru
 ! https://github.com/AdguardTeam/AdguardFilters/issues/19787

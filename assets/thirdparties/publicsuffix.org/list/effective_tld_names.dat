@@ -7062,7 +7062,7 @@ org.zw
 
 // newGTLDs
 
-// List of new gTLDs imported from https://www.icann.org/resources/registries/gtlds/v2/gtlds.json on 2019-08-08T16:16:58Z
+// List of new gTLDs imported from https://www.icann.org/resources/registries/gtlds/v2/gtlds.json on 2019-08-30T19:02:57Z
 // This list is auto-generated, don't edit it manually.
 // aaa : 2015-02-26 American Automobile Association, Inc.
 aaa
@@ -7967,9 +7967,6 @@ duck
 // dunlop : 2015-07-02 The Goodyear Tire & Rubber Company
 dunlop
 
-// duns : 2015-08-06 The Dun & Bradstreet Corporation
-duns
-
 // dupont : 2015-06-25 E. I. du Pont de Nemours and Company
 dupont
 
@@ -8858,6 +8855,9 @@ lixil
 // llc : 2017-12-14 Afilias Limited
 llc
 
+// llp : 2019-08-26 Dot Registry LLC
+llp
+
 // loan : 2014-11-20 dot Loan Limited
 loan
 
@@ -9503,7 +9503,7 @@ reit
 // reliance : 2015-04-02 Reliance Industries Limited
 reliance
 
-// ren : 2013-12-12 Beijing Qianxiang Wangjing Technology Development Co., Ltd.
+// ren : 2013-12-12 ZDNS International Limited
 ren
 
 // rent : 2014-12-04 XYZ.COM LLC
@@ -12778,6 +12778,7 @@ i234.me
 myds.me
 synology.me
 vpnplus.to
+direct.quickconnect.to
 
 // TAIFUN Software AG : http://taifun-software.de
 // Submitted by Bjoern Henke <dev-server@taifun-software.de>

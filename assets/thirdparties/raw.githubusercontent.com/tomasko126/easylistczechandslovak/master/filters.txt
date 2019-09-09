@@ -1,7 +1,7 @@
 [Adblock Plus 2.0]
 ! Homepage: http://adblock.sk
 ! Title: Easylist Czech and Slovak filter list
-! Last change: 02/07/2019
+! Last change: 07/09/2019
 ! List maintainers: tomasko126, Aslanex, vobruba-martin, Moskoe, Fanboy
 ! GitHub repository: https://github.com/tomasko126/easylistczechandslovak
 ! GitHub contributors: https://github.com/tomasko126/easylistczechandslovak/graphs/contributors
@@ -47,12 +47,10 @@
 /stabilka_
 /stabilky/*
 _clickthru.swf?
-@@/moje-inzeraty/
-@@/moje-konto/inzeraty/
 !
 ! ---------- Czech 1st party blocking rules ---------- !
 !
-/templates/drbna/javascripts/modal.js^$domain=budejckadrbna.cz|brnenskadrbna.cz|olomouckadrbna.cz|libereckadrbna.cz|drbna.cz|jihlavskadrbna.cz
+/templates/drbna/javascripts/modal.js^$domain=budejckadrbna.cz|brnenskadrbna.cz|olomouckadrbna.cz|libereckadrbna.cz|drbna.cz|jihlavskadrbna.cz|plzenskadrbna.cz
 ||*.war-forum.net/images/sh/
 ||1gr.cz/js/uni/oldback/logo.png$script,domain=idnes.cz
 ||1.im.cz/ad/$image
@@ -66,7 +64,6 @@ _clickthru.swf?
 ||bannery.ccb.cz^
 ||bcastgw.livebox.cz/TA3_VOD_COM/
 ||cn130.com/wp-content/uploads/an-temp/
-||cryweb.github.io^
 ||cviceni-doma.cz/images/*banner
 ||cztorrent.net/images/bannery/
 ||digitalnitelevize.cz/obrazky/reklamni_odkazy/
@@ -74,7 +71,6 @@ _clickthru.swf?
 ||espoluprace.cz/affiliate/
 ||fdb.cz/ad/
 ||filmporno.cz/media/banners/
-||g.cz^$subdocument,domain=g.cz
 ||gjc.mall.tv^
 ||hcdukla.cz/adds/
 ||hcmotor.cz/adds/
@@ -177,7 +173,6 @@ _clickthru.swf?
 ||mojanitra.sk/banery/
 ||mojanitra.sk//images/banery/
 ||mojevideo.sk/star.jpg
-||onlinefilmy.tv/*bg*.jpg
 ||onlinovky.sk/bannery/
 ||ourphorum.com/images/banner
 ||pricemania.sk/pictures/banners/
@@ -196,7 +191,6 @@ _clickthru.swf?
 ||sktorrent.eu/torrent/images/sperkyvandama/
 ||sktorrent.eu/torrent/images/stylando/
 ||sktorrent.eu/torrent/images/zamok/
-||spartak.sk/pics-new2/reklamy/
 ||ta3.com/api/v1/livebox/video/
 ||tu-ke.com/ali-jewelry.jpg
 ||tu-ke.com/certovskezlavy.jpg
@@ -263,7 +257,6 @@ _clickthru.swf?
 ||out-ng.sklik.cz^$third-party
 ||out.sklik.cz^$third-party
 ||pizzamodena.cz^$third-party
-||potenza.cz^$third-party
 ||productads.cz^$third-party
 ||r.i0.cz^$third-party
 ||reklamy.s3.amazonaws.com^$third-party
@@ -273,6 +266,7 @@ _clickthru.swf?
 ||sys.starnets.io^$third-party
 ||trackad.cz^$third-party
 ||xzone.cz^$third-party
+||yottlyscript.com^$third-party
 ||zombiezone.cz^$third-party
 ||zumail.cz^$third-party
 !
@@ -300,7 +294,6 @@ _clickthru.swf?
 @@||optika-opti.cz/wp-content/uploads/*/reklama_*.jpg$image
 @@||pise.cz^$generichide
 @@||static.cz.prg.cmestatic.com/static/cz/shared/js/advert.js$domain=nova.cz
-@@||reklama-*.cz
 @@||www.top-reklama.sk^$~third-party
 @@||warforum.cz/ads.js
 @@||api.youradio.cz/v2/ads/preroll$xmlhttprequest
@@ -430,15 +423,14 @@ autozine.cz##.wrap + div:not(#footer)
 blog.cz###mainBanner
 bohemians.cz###reklama_uvod
 mrk.cz###banner-top
-budejckadrbna.cz,brnenskadrbna.cz,olomouckadrbna.cz,libereckadrbna.cz,drbna.cz,jihlavskadrbna.cz##div[id^="banner"]
-budejckadrbna.cz,brnenskadrbna.cz,olomouckadrbna.cz,libereckadrbna.cz,drbna.cz,jihlavskadrbna.cz##div[class^="banner"]
-budejckadrbna.cz,brnenskadrbna.cz,olomouckadrbna.cz,libereckadrbna.cz,drbna.cz,jihlavskadrbna.cz##div[id="ads"]
-budejckadrbna.cz,brnenskadrbna.cz,olomouckadrbna.cz,libereckadrbna.cz,drbna.cz,jihlavskadrbna.cz##div:-abp-has(> div > a[href*="proclick.html"])
+budejckadrbna.cz,brnenskadrbna.cz,olomouckadrbna.cz,libereckadrbna.cz,drbna.cz,jihlavskadrbna.cz,plzenskadrbna.cz##div[id^="banner"]
+budejckadrbna.cz,brnenskadrbna.cz,olomouckadrbna.cz,libereckadrbna.cz,drbna.cz,jihlavskadrbna.cz,plzenskadrbna.cz##div[class^="banner"]
+budejckadrbna.cz,brnenskadrbna.cz,olomouckadrbna.cz,libereckadrbna.cz,drbna.cz,jihlavskadrbna.cz,plzenskadrbna.cz##div[id="ads"]
+budejckadrbna.cz,brnenskadrbna.cz,olomouckadrbna.cz,libereckadrbna.cz,drbna.cz,jihlavskadrbna.cz,plzenskadrbna.cz##div:-abp-has(> div > a[href*="proclick.html"])
 businessworld.cz,computerworld.cz##.square_banner
 businessworld.cz,computerworld.cz,pcworld.cz###skyscraper
 busportal.cz###sideScrapperLayout
 busportal.cz##div[id*="Banner"]
-cervenykostelec.cz##.sliderbubble-right
 ceskenoviny.cz##.hypertexty
 cesky-jazyk.cz##.cornerbox
 cesky-jazyk.cz##.heurekaIframeHeader
@@ -491,8 +483,6 @@ forum.root.cz##.body_message--ad
 fotoaparat.cz##div._banner
 fotoradce.cz###reklamad-vlevo
 fotoradce.cz###reklamavlevo
-g.cz###block-g-advert-d-leaderboard
-g.cz##.advert-fallback
 grunex.com##a[href^="https://sda.online-systemy.cz"]
 grunex.com##[class*="sda"]:not(.post-content)
 hcdukla.cz##div.bottom-partners
@@ -516,6 +506,7 @@ kladenskelisty.cz##.rleft
 kladenskelisty.cz##.rright
 kladenskelisty.cz##.tree
 kniha.cz##div[id^="banner"]
+kupi.cz##.middle_it_bricks
 lamer.cz,moda.cz##.square
 letemsvetemapplem.eu###branding_conts
 letemsvetemapplem.eu##.headerbanner
@@ -532,6 +523,7 @@ matematika.cz###rbackground-link
 matematika.cz##div[id*="reklama"]
 mediar.cz##.banns-group
 medop.cz###block-nodesinblock-0
+menicka.cz##.header_banner
 mesec.cz##.CAN_ad
 meteoprog.cz##div[id^="mp_banner_"]
 minecrafak.cz###poutak
@@ -666,7 +658,6 @@ hnonline.sk##[id^="banner-"]
 hnonline.sk##.s-branding
 hnonline.sk##stripemark
 lepsiebyvanie.centrum.sk##.tip
-mail.zoznam.sk###box3
 michalovskespravy.sk###footer
 michalovskespravy.sk###headerSlideContent1
 michalovskespravy.sk###ocko
@@ -677,10 +668,6 @@ narodnablockovaloteria.tipos.sk###banners
 nitralive.sk###bannertop
 nitralive.sk###reklama02
 nitralive.sk##.bannergroup
-onlinefilmy.tv###bg_left
-onlinefilmy.tv###bg_right
-onlinefilmy.tv##.ads
-onlinefilmy.tv,onlinevidea.tv##.ads_new
 pcrevue.sk##.m_top_m_15.metro
 pcrevue.sk##.col_12_of_12.col > .row > .col_12_of_12.col > .widget
 pokec.azet.sk##.c_banner300x300
