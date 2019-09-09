@@ -1,5 +1,5 @@
 ! #8479
-||reutersmedia.net/resources/r/?o=$image,domain=reuters.com
+||reutersmedia.net/resources/r/?q=$image,domain=reuters.com
 
 ! #9276
 yandex.com#$#hide-if-contains ad li.serp-item 'li.serp-item div.label'
@@ -18,7 +18,7 @@ cnet.com##div[id^="-erzzrwp_lod_tqclxp_/9375"]
 cnet.com###glade-aslot-1
 cnet.com##[data-ad-cid]
 cnet.com##.sticky-leader
-chowhound.com##div[id^="-ftbbtyr_nqf_vsenzr_1597"]
+chowhound.com##div[id^="-fweewbu_qti_yvhqcu_4820"]
 everydayhealth.com##div[class^="-ffi-"]
 edmunds.com##.slick-slider
 edmunds.com##div[class^="-nburlt-burmna"]
@@ -26,8 +26,7 @@ edmunds.com##div[id^="-ntbbtyr_nqf_vsenzr_08871194"]
 gamepedia.com##div[id^="cdm-zone"]
 gamespot.com##div[id^="-mzhhzex_twl_byktfx_/7153"]
 klbjfm.com##div[class^="-baiieo-"]
-metacritic.com##div[id^="-ptbbtyr_nqf_vsenzr_/1597"]
-metacritic.com##div[id^="-oksskpi_ehw_mjveqi_/2608"]
+metacritic.com##div[id^="-pvddvat_psh_xugpbt_/3719"]
 metacritic.com##a[href^="https://www.gamespot.com/amazon-prime-day-deals/"]
 medicinenet.com##.stickyColRight
 medicinenet.com##.stickyColLeft
@@ -42,8 +41,8 @@ thoughtcatalog.com##.ThoughtCatalog_728x90_Homepage_Top_Prebid
 thoughtcatalog.com###ThoughtCatalog_728x90_Homepage_Top_1
 tv.com###headerleader
 tv.com###leader_bottom
-tv.com##div[id^="-eweewbu_qti_yvhqcu_/4820"]
-tvguide.com##div[id^="-mowwotm_ila_qnzium_/6042"]
+tv.com##div[id^="-ezhhzex_twl_byktfx_/7153"]
+tvguide.com##div[id^="-mrzzrwp_lod_tqclxp_/9375"]
 webmd.com##div[id^="-bxffxcv_ruj_zwirdv_/1089101"]
 webmd.com##.container.global-container-1
 webmd.com,thoughtcatalog.com,mcall.com###mys-wrapper
@@ -92,7 +91,7 @@ msn.com##[data-aailza="sponsored.stripe.shopping_stripe"]
 msn.com##[data-aaicprtzy="aside"]
 msn.com##[data-aaiveaz*="/msn-adblocker-"]
 metrolyrics.com##div[id^="-nksskpi_ehw_mjveqi_/2608"]
-baggersmag.com##div[id^="-emuumrk_gjy_olxgsk_/2303"]
+baggersmag.com##div[id^="-eowwotm_ila_qnzium_/4525"]
 
 ! #9274
 ||readlightnovel.org^$csp=script-src 'self' *
@@ -244,8 +243,8 @@ justjared.com,pockettactics.com#$#abort-on-property-read PerformanceLongTaskTimi
 ||d2kz60b0gq4lg.cloudfront.net^$script,domain=psychologyjunkie.com
 ||g01.ign.com^$script
 gfycat.com#$#abort-current-inline-script Math
-hodgepodgehippie.com,yummytummyaarthi.com,spring.org.uk,greenarrowtv.com,tamaratattles.com,goodnewsnetwork.org,entertainment-focus.com,bike-urious.com,alifeinbalance.net#$#abort-on-property-read g00gletag
-heysigmund.com,pinoyrecipe.net#$#abort-current-inline-script document.head.appendChild
+ultimateninjablazingx.com,utahsweetsavings.com,usersub.com,thechroniclesofhome.com,theavtimes.com,tastefullyeclectic.com,stevivor.com,redcarpet-fashionawards.com,prepared-housewives.com,mjsbigblog.com,lizs-early-learning-spot.com,knowyourphrase.com,hodgepodgehippie.com,yummytummyaarthi.com,spring.org.uk,greenarrowtv.com,tamaratattles.com,goodnewsnetwork.org,entertainment-focus.com,bike-urious.com,alifeinbalance.net#$#abort-on-property-read g00gletag
+katiescucina.com,heysigmund.com,pinoyrecipe.net#$#abort-current-inline-script document.head.appendChild
 
 ! #10409
 biter.tv,byter.tv,uploadmp4.com#$#abort-on-property-write adcashMacros

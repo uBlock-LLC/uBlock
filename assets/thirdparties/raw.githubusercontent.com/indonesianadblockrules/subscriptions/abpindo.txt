@@ -1,7 +1,7 @@
 [Adblock Plus 2.0]
-! Checksum: VENUReD9JW/qGgWfC4HcJg
+! Checksum: CZC0BfhTrJVp3ddH+DrJzQ
 ! Title: ABPindo
-! Last modified: 2019 September 08, 11:17:33
+! Last modified: 2019 September 09, 19:22:54
 ! Expires: 4 days (update frequency)
 ! Homepage: http://abpindo.blogspot.com/
 ! Licence: https://raw.githubusercontent.com/ABPindo/indonesianadblockrules/master/LICENSE
@@ -235,6 +235,7 @@
 ||pondokiklan.com^$third-party
 ||popclck.net^$popup,third-party
 ||popunderjs.club^$popup,third-party
+||presbanise.pw^$third-party
 ||promobagus.com^$third-party
 ||promosi365.me^$popup,third-party
 ||promotioncamp.com^$third-party
@@ -625,7 +626,6 @@ iklan300x250.gif|
 ||idxxi.*/wp-content/uploads/*.gif$image
 ||imagebam.com/*.gif$image,domain=www.ganool.li
 ||images.gameweb.co.id/gw/ads/
-||img.akubebas.com/images/*.gif$image
 ||img.sukipli.com/*.gif$image,third-party
 ||imgur.com/*.gif$image,domain=abgbugil.net|ayononton.co|capcus.net|cinemaindo.web.id|ibugil.net|indobugil.net|kabar2.com|kikil.net|ngobrolbola.com|sodasusu.com|zonalendir.net
 ||impulse.forkcdn.com/impulse3/config/impulse.js
@@ -956,8 +956,6 @@ resep.web.id###googlebox
 cinemaindo.web.id,layarkaca21.com,layarkaca21.net,layarkaca21.web.id,lk21.org###hbanner
 cinema-indo.com,nonton21.net,nontonmovie.web.id###hbanner:nth-of-type(1)
 indosiar.com###headerbanner
-indoxx1.com,indoxxi.top,indoxxi.tv###home-bnner-content
-indoxx1.com,indoxxi.top###home-bnner2-content
 topfilmz.com###idb3
 lensaindonesia.com###idcomboard1.com-728x90
 lensaindonesia.com###idcomright1.com-300x250
@@ -1115,8 +1113,8 @@ ainimeindo.com##.adsbawah1
 ainimeindo.com##.adsbawah2
 woof.tube#@#.adsbox
 www.eramuslim.com##.adsbyadop
-aktual.id,datasekolah.co.id#@#.adsbygoogle
 apkmod.id,nama.web.id,paraedu.id,radarlombok.co.id,www.eramuslim.com##.adsbygoogle
+aktual.id,datasekolah.co.id#@#.adsbygoogle
 www.pontianakpost.co.id##.adsense
 www.ganol.si##.adsincenter
 kshowid.com##.adssingle
@@ -1248,6 +1246,7 @@ bioskop168.co,semi168.club##.home.border
 filmace21.net##.idmupi-topbanner
 layarlebar21.id##.idmuvi-afterplayer
 mangaku.in##.iframeiklan
+animanganews.com#@#.iklan
 kosmo.com.my##.iklan-puff
 kosmo.com.my##.iklanBox
 suki48.web.id##.iklanSUKI
@@ -1385,7 +1384,6 @@ bagas31.com##a[href^="http://anizan.slask.pl/go.php"]
 01nonton.com,123drakor.com,46.166.167.16,bioskop168.co,bioskop168.online,bioskop168.pro,bioskop45.com,bioskopbokep21.com,bokepml.online,bokepngetop.com,bokeponline.download,dewamovie.tv,drakorindo.tv,filmbioskop21.co,filmroster.tv,gandhool.net,ganoolmovie.video,gudangmovies21.cc,idbioskop.com,indomovies.club,indomv.net,indoxx1.club,layarkacaxxi.id,layarmovie21.co,layarxxi.online,lk21.cam,lk21.rip,lk21.web.id,meownime.id,nekopoi.care,nekopoi.cash,nekopoi.lol,nonton-streaming.com,nonton33.net,nonton789.com,nontonani.me,nontondrama.me,nontongratis88.com,nontonmovie81.com,nontonsub.co,nontonsub.com,ns21.me,sashahillfilm.com,satujiwa.net,semprot.com,semprotku.com,sinemaindo.web.id,sukamovie.mobi,thirdstarfilm.com,zonabola.id##a[href^="http://bit.ly/"]
 kazefuri.web.id##a[href^="http://cocobet."]
 bokepml.online,lk21.web.id,nonton33.net##a[href^="http://goo.gl/"]
-lk21c.fun##a[href^="http://rebrand.ly/"]
 nontoncinema.org##a[href^="http://referral."]
 lk21xxi.net##a[href^="http://totalgame.online"]
 filmterbaru.id##a[href^="http://www.apktiga.com/p/start-download-reayus.html"]
@@ -1418,6 +1416,7 @@ bioskop90.*###floating_banner_left
 bioskopbokep21.*##a[href^="http://bit.ly/"]
 bioskopgaul.*###adsimgxatas
 bioskopkeren.*##a[href^="https://bit.ly/"]
+bioskopkeren.*,lk21c.fun##a[href^="http://rebrand.ly/"]
 bioskopxxi.*##.ujipopup
 ceriwis.net##body > div:nth-of-type(2) > .page > .paddingmobile > .hideviews.bannerslot1
 ceriwis.net##body > div:nth-of-type(2) > .page > .paddingmobile > .mainContainer > .mainContent > .hideviews.bannerslot1
@@ -1485,6 +1484,8 @@ indomv.*##a[href^="http://bit.ly/"]
 indoxx1.*###col
 indoxx1.*###tengah
 indoxx1.*##div.content-kuss
+indoxx1.*,indoxxi.top###home-bnner2-content
+indoxx1.*,indoxxi.top,indoxxi.tv###home-bnner-content
 indoxxi.*###home-bnner-content
 indoxxi.*###home-bnner2-content
 indoxxi.*###jwflag
@@ -1587,6 +1588,7 @@ zonabola.*##a[href^="http://bit.ly/"]
 @@||asiancine.com^$generichide
 @@||bagilagi.com^$generichide
 @@||biargreget.top^$generichide
+@@||bloggerku.com/safelink/2.0/script.js$script,domain=animanganews.com
 @@||bloggerku.com/safelink/2.0/script.js?$script,domain=njiir.com
 @@||blogrp.me/webroot/js/ads.js$script,~third-party
 @@||cat3movie.us^$generichide
@@ -4362,6 +4364,12 @@ zonabola.*##a[href^="http://bit.ly/"]
 ! *** abpindo_annoyance_general_hide.txt ***
 ###judi
 ###togel
+##[href^="http://sebariklanbaris."]
+##[href^="http://vipbandar855."]
+##[href^="http://www.aseangrup."]
+##[href^="http://www.asuspoker."]
+##[href^="http://www.crownvvip."]
+##[href^="https://liga95."]
 ##[src="http://livesgp."]
 ##a[href$="/77megabet"]
 ##a[href$="/adscantikqq"]
@@ -5878,6 +5886,7 @@ zonabola.*##a[href^="http://bit.ly/"]
 ##img[alt="Bandar Bola"]
 ##img[alt="Bandar Judi Online"]
 ##img[alt="Bandar Togel"]
+##img[alt="Bandar855"]
 ##img[alt="BandarCapsa"]
 ##img[alt="BandarQ Online"]
 ##img[alt="BandarQ"]
@@ -6087,6 +6096,7 @@ zonabola.*##a[href^="http://bit.ly/"]
 ##img[title="Agen togel"]
 ##img[title="AgenQQ"]
 ##img[title="BANDAR BOLA"]
+##img[title="BANDAR855"]
 ##img[title="BANDARQ ONLINE"]
 ##img[title="BANDARQ"]
 ##img[title="Bandar Bakong"]

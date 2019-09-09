@@ -11,11 +11,11 @@
         "group": "regions",
         "homeURL": "https://raw.githubusercontent.com/cjx82630/cjxlist/master/cjxlist.txt"
         },
-    "dl.dropboxusercontent.com/u/1289327/abpxfiles/filtri.txt": {
+    "raw.githubusercontent.com/gioxx/filtri.txt": {
         "off": true,
         "title": "ITA: ABP X Files",
         "group": "regions",
-        "homeURL": "https://dl.dropboxusercontent.com/u/1289327/abpxfiles/filtri.txt"
+        "homeURL": "https://raw.githubusercontent.com/gioxx/xfiles/master/filtri.txt"
         },
     "easylist-downloads.adblockplus.org/advblock.txt": {
         "off": true,
@@ -147,11 +147,11 @@
         "group": "regions",
         "homeURL": "https://gitcdn.xyz/repo/farrokhi/adblock-iran/master/filter.txt"
         },    
-    "liste-ar-adblock.googlecode.com/hg/Liste_AR.txt": {
+    "easylist-downloads.adblockplus.org/Liste_AR.txt": {
         "off": true,
         "title": "ara: Liste AR",
         "group": "regions",
-        "homeURL": "https://liste-ar-adblock.googlecode.com/hg/Liste_AR.txt"
+        "homeURL": "https://easylist-downloads.adblockplus.org/Liste_AR.txt"
         },
     "margevicius.lt/easylistlithuania.txt": {
         "off": true,
@@ -171,11 +171,11 @@
         "group": "ads",
         "homeURL": "https://pgl.yoyo.org/adservers/serverlist.php?hostformat=hosts&showintro=1&mimetype=plaintext"
         },
-    "raw.githubusercontent.com/AdBlockPlusIsrael/EasyListHebrew/master/EasyListHebrew.txt": {
+    "raw.githubusercontent.com/EasyListHebrew/master/EasyListHebrew.txt": {
         "off": true,
         "title": "ISR: EasyList Hebrew",
         "group": "regions",
-        "homeURL": "https://raw.githubusercontent.com/AdBlockPlusIsrael/EasyListHebrew/master/EasyListHebrew.txt"
+        "homeURL": "https://raw.githubusercontent.com/easylist/EasyListHebrew/master/EasyListHebrew.txt"
         },
     "raw.githubusercontent.com/polish-adblock-filters/adblock.txt": {
         "off": true,

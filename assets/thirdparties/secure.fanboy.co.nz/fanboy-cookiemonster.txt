@@ -1,8 +1,8 @@
 [Adblock Plus 2.0]
-! Checksum: Cis4dIZHgWBOvvtLgnSrJw
-! Version: 201909090941
+! Checksum: MTFMuFJRsPyUjuEi9KkfbA
+! Version: 201909091241
 ! Title: Fanboy's Cookie List
-! Last modified: 09 Sep 2019 09:41 UTC
+! Last modified: 09 Sep 2019 12:41 UTC
 ! Expires: 4 days (update frequency)
 ! Homepage: https://easylist.to/
 ! License: http://creativecommons.org/licenses/by/3.0/

@@ -1,9 +1,9 @@
 ![Adblock Plus 2.0]
-! Checksum: VxVYGOU9C+MsX7YOXdx2Dg
+! Checksum: 2eoIpyen0uM3zxzL0qGysQ
 ! Title: AdGuard Tracking Protection filter
 ! Description: The most comprehensive list of various online counters and web analytics tools. Use this filter if you do not want your actions on the Internet to be tracked.
-! Version: 2.0.8.96
-! TimeUpdated: 2019-09-06T16:30:38+03:00
+! Version: 2.0.8.98
+! TimeUpdated: 2019-09-09T14:30:34+03:00
 ! Expires: 2 days (update frequency)
 ! Homepage: http://adguard.com/filters.html#privacy
 ! License: http://creativecommons.org/licenses/by-sa/3.0/
@@ -5053,6 +5053,7 @@ _tracking.php?b=
 ! The site should be carefully checked when you add this rule
 ||tags.tiqcdn.com/utag/*/prod/utag.js$domain=radissonhotels.com
 !
+||analytics.supplyframe.com/trackingservlet/
 ||welt.de/assets/resources/webtrekk^
 ||movie2.kinoche.ru/iframe.js?id=$third-party
 ||articles2.marketrealist.com/aptrk^
@@ -6652,6 +6653,9 @@ link.gmapp*.net$image
 !-------------- Whitelist ------------------------------------------------------!
 !-------------------------------------------------------------------------------!
 !
+! https://github.com/AdguardTeam/AdguardFilters/issues/40121
+@@||dpm.demdex.net/id^$domain=3m.com
+@@||omtrdc.net/rest/v*/delivery?client=$domain=3m.com
 ! https://github.com/AdguardTeam/AdguardFilters/issues/40042
 @@||dpm.demdex.net/id^$domain=priceless.com
 @@||omtrdc.net/rest/v*/delivery?client=$domain=priceless.com

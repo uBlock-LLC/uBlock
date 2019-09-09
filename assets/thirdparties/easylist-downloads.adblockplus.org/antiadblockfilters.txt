@@ -1,8 +1,8 @@
 [Adblock Plus 2.0]
-! Checksum: 4GmvbbhYrO779yxMnUg2Mw
-! Version: 201909090950
+! Checksum: KAZXHpwJjUVQlep3lQzyQQ
+! Version: 201909091300
 ! Title: Adblock Warning Removal List
-! Last modified: 09 Sep 2019 09:50 UTC
+! Last modified: 09 Sep 2019 13:00 UTC
 ! Expires: 1 days (update frequency)
 ! Homepage: https://easylist.to/
 !

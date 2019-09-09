@@ -1,9 +1,9 @@
 ![Adblock Plus 2.0]
-! Checksum: S3lCAgER6eG41dTlQGrwNg
+! Checksum: OSvAwcoHqITjPzbu6j1/EA
 ! Title: AdGuard Turkish filter
 ! Description: Filter list that specifically removes ads on websites in Turkish language.
-! Version: 2.0.9.20
-! TimeUpdated: 2019-09-09T11:30:02+03:00
+! Version: 2.0.9.23
+! TimeUpdated: 2019-09-09T15:30:02+03:00
 ! Expires: 2 days (update frequency)
 ! Homepage: http://adguard.com/filters.html#turkish
 ! License: http://creativecommons.org/licenses/by-sa/3.0/
@@ -1124,6 +1124,7 @@ turkanime.tv##td[valign="top"][style="padding-top:10px; padding-left:5px; width:
 !
 !
 ! https://github.com/AdguardTeam/AdguardFilters/issues/39485
+! https://github.com/AdguardTeam/AdguardFilters/issues/39547
 ! https://github.com/AdguardTeam/AdguardFilters/issues/39339
 ! https://github.com/AdguardTeam/AdguardFilters/issues/39349
 ! https://github.com/AdguardTeam/AdguardFilters/issues/39338
@@ -1947,12 +1948,17 @@ sosyobilgi.com###ust > div[class="anamenu2"]
 andronova.net##.tb-block > img[alt="müşteri hizmetleri"][class^="td-animation-stack-type"]
 tabletpc.com.tr##.rbAdv
 ahmetturan.org##center > a[href][onclick][style^="width"]
+||ajansblue.net^$domain=turkcealtyazilipornom.com
+turkcealtyazilipornom.com##a[href^="http://ajansblue.net/"]
 ||kentyasam.com/960x120.png
 fullkurulum.com##center > a[href^="http://bc.vc/"] > img
 ||loginhere.info/24agustos.js
+||hood.ninja^$domain=torntube.com
+torntube.com##.wrap > h1[style^="color:red;"]
+||fakings.com/images/revive/pepeporn/
 ||cdn*.reallycdn.com/ax.js
 porno62.net##.post > p[style^="background-color: #FFFF00"]
-fullindir.me,indirful.com##.code-block > p > strong > a[href][rel="nofollow noopener"]
+indirful.com,fullindir.me,indirful.com##.code-block > p > strong > a[href][rel="nofollow noopener"]
 roseline.club,altporno.xyz##div[class*="-icerikten-"]
 /porno.gif$domain=altporno.xyz|roseline.club
 /dmn.php$domain=altporno.xyz|roseline.club
@@ -2351,7 +2357,7 @@ doeda.com##center > p[style="background-color: #e7e7e7; color: #F00; font-weight
 cagdaskocaeli.com.tr,kocaelihaberdunyasi.com##.rek
 batikaradeniz.net,kocaelidenge.com##div[class*="reklam"]
 /img/rek^$domain=kocaelihaberdunyasi.com|cagdaskocaeli.com.tr
-tanisgazetesi.com.tr,elbistankaynarca.com,guncelkocaeli.com,enkocaeli.com##.rkm
+hbrma.com,tanisgazetesi.com.tr,elbistankaynarca.com,guncelkocaeli.com,enkocaeli.com##.rkm
 birhayalinpesinde.com##.thecontent > div.code-block > a[data-wpel-link="external"] > img
 ||birhayalinpesinde.com/wp-content/uploads/2019/03/tatildukkani.gif
 bursahayat.com.tr###ilangovtr

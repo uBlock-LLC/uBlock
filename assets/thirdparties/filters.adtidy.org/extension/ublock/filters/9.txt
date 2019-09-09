@@ -1,9 +1,9 @@
 ![Adblock Plus 2.0]
-! Checksum: tdcpCrV8PmFogTCTI3eGqw
+! Checksum: sgFnx75NORIocUkNAc5h+A
 ! Title: AdGuard Spanish/Portuguese filter
 ! Description: Filter list that specifically removes ads on websites in Spanish and Portuguese languages.
-! Version: 2.0.4.56
-! TimeUpdated: 2019-09-04T12:02:25+03:00
+! Version: 2.0.4.57
+! TimeUpdated: 2019-09-09T15:30:54+03:00
 ! Expires: 2 days (update frequency)
 ! Homepage: http://adguard.com/filters.html#spanish
 ! License: http://creativecommons.org/licenses/by-sa/3.0/
@@ -1299,6 +1299,7 @@ http://adw.
 !-------------------- Specific rules --------------------!
 !--------------------------------------------------------!
 !
+heavenmanga.com##iframe[src="http://inkanime.com/taboola.php"]
 superflix.net##aside.widget-area > #custom_html-16
 comandotorrents.com##center > a[href][target="_blank"] > img
 ||sdks.shopifycdn.com^$domain=superflix.net

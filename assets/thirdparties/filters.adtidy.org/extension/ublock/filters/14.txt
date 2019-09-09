@@ -1,9 +1,9 @@
 ![Adblock Plus 2.0]
-! Checksum: Wad+EY1P/4cOcvw9FDwUFg
+! Checksum: vNF0ZXKxj28iIsb/4wJUcw
 ! Title: AdGuard Annoyances filter
 ! Description: Blocks irritating elements on web pages including cookie notices, third-party widgets and in-page pop-ups.
-! Version: 2.0.28.6
-! TimeUpdated: 2019-09-09T12:30:07+03:00
+! Version: 2.0.28.10
+! TimeUpdated: 2019-09-09T15:30:07+03:00
 ! Expires: 2 days (update frequency)
 ! Homepage: http://adguard.com/filters.html#annoyances
 ! License: http://creativecommons.org/licenses/by-sa/3.0/
@@ -110,7 +110,7 @@ windowsobraz.com##.marquee
 ! https://github.com/AdguardTeam/AdguardFilters/issues/34346
 anidub.me,anidub.tv##.foothead
 ! https://github.com/AdguardTeam/AdguardFilters/issues/38034
-seskocaeli.com##.okudunuzmu
+dizifilmdergisi.com,kocaelitv.com.tr,turizmhabermerkezi.net,bulten.gen.tr,seskocaeli.com##.okudunuzmu
 ! https://github.com/AdguardTeam/AdguardFilters/issues/35009
 ! https://github.com/AdguardTeam/AdguardFilters/issues/35117
 qyer.com##.advertising
@@ -1536,7 +1536,7 @@ rawstory.com##div[class$="-email-signup-container"]
 rawstory.com###mc_embed_signup_scroll
 itsfoss.com##.optin-monster-api
 tribalfootball.com##.mc_embed_signup
-economist.com##.newsletter-form
+gitlab.com,economist.com##.newsletter-form
 highsnobiety.com##.newsletter-interstitial
 livemint.com##.subscribe-box
 mybroadband.co.za##.follow-subscribe
@@ -5211,10 +5211,15 @@ andoveradvertiser.co.uk,asianimage.co.uk,banburycake.co.uk,barryanddistrictnews.
 ! ###gdpr
 escortbook.com,looper.com,fromdoctopdf.com,learnersdictionary.com,spanishdict.com,merriam-webster.com,digi24.ro,antena3.ro,wikihow.com.tr,wikihow.cz,wikihow.it,wikihow.jp,wikihow.vn,wikihow.com,mobil.se,digisport.ro,periscope-solutions.com###gdpr
 !
+hackaday.com##.cookie-notifications
+grammarbank.com##.eucookiebar
 tarifikolay.com###warnings > .personal-data-usage
+cfos.de#$#.fade { display: none!important; }
+cfos.de#$#body { overflow: visible!important; }
 burgan.com.tr###footer_cerez_politikasi
 meinestadt.de###ms_cookie_ok
 filmin.es##.alert-fixed[data-init="js-accept-cookies"]
+ultimaker.com##.preferences-bar
 baxov.net###gdpr-popup
 userbenchmark.com###notForm > div[id="notForm:userNot"] > .nb-parent
 vodafone.cz##.vf-gdpr-settings
@@ -6230,7 +6235,7 @@ ign.com,extremetech.com##.privacy-content
 globport.com###kbCookiePolicy
 lwowecki.info###cookies_accepted
 loveair.pl###ci-rodo
-mp.pl,arcelik.com.tr###privacy-policy
+mymemory.translated.net,mp.pl,arcelik.com.tr###privacy-policy
 lapeyre.fr##.consentement_cookie
 serato.com###cookie-info-banner
 check24.de##.c24-cookie
@@ -6869,7 +6874,7 @@ netto-online.de###cookie-stick2
 drive.be###cnilZone
 br-klassik.de,br.de###brCookieBanner
 plus.net##.cf__main-block
-downdetector.com,esquire.com,pcmag.com,ign.com,speedtest.net###_evidon-barrier-wrapper
+geek.com,downdetector.com,esquire.com,pcmag.com,ign.com,speedtest.net###_evidon-barrier-wrapper
 superuser.com,askubuntu.com,stackexchange.com,stackoverflow.com,serverfault.com###js-gdpr-consent-banner
 itv.com##.js-site-alert
 independent.ie###gdpr18
@@ -9307,6 +9312,7 @@ sodapdf.com##.be-tooltip
 !
 egyptianstreets.com###newsletterModal
 egyptianstreets.com##.modal-backdrop
+gitlab.com###sticky-banner
 novate.ru##.top_window
 rambler.ru#?##main > footer+div[class]:has(> div[class] > div:contains(стартовой страницей))
 nosteamgames.ro###main_content_section > #drop[style*="z-index:"]
@@ -10042,7 +10048,7 @@ masmotors.ru###block-webform-client-block-5816.block-webform
 masmotors.ru###block-webform-client-block-7622.block-webform
 itcrumbs.ru##.check-also-right
 hse24.de##div#hse-modal[data-src="/cmsresources/html-layer/include-snippet-first-visit-newsletter-registation.html"]
-tedavievde.com###yanilgi
+lojistiknews.com,yenimuhalefet.com,tedavievde.com###yanilgi
 delo.ua###formEmail
 themarker.com,haaretz.co.il##.modal-wrapper.js-subscription-popups
 babaszoba.hu#$#body.modal-open { overflow: visible!important; }
@@ -10134,7 +10140,7 @@ yeniisfikirleri.net##.scrollbox-popup
 euroinvision.ru###fancybox-overlay
 euroinvision.ru##.fancybox-desktop[style*="width: 420px; height: auto;"]
 aksamhaberleri.com.tr###socialslide
-haberaramizda.com,airlinehaber.com,guneydoguguncel.com###ilgisistemi
+haber1461.com,boyabatsonhaber.com,haberaramizda.com,airlinehaber.com,guneydoguguncel.com###ilgisistemi
 konhaber.com###alertHaber
 camgirlbay.net,camwhores.video,camwhores.tv,cambabe.me##.hola_top_element
 ||creativecommons.org/wp-content/uploads/pum/
@@ -10158,7 +10164,7 @@ blogthetech.com##.td-more-articles-box
 rasthaber.com##.notification-box
 photoshoplady.com##.wph-modal
 birsence.com##.td-more-articles-box
-batikaradeniz.net,larende.com,gazeteyenigun.com.tr,iskilipinsesi.com,gazete365.com,canakkaletv.com.tr,haber16.com,projemlak.com,turgutluyanki.com,teknolojic.com##.kosehbr
+izmiredair.com,kulishaber.com.tr,uretenankara.com,gunedogushaber.com,murekkephaber.com,edirnegazetesi.com.tr,abdpost.com,saatbasihaber.com,izmirhabermerkezi.com,ihbarajans.com,batialanya.com,mahalligundem.com,ashaber.com,thecruiselife.com.tr,ekrangazetesi.com,mansetizmir.com,denizliekspres.com.tr,banazguncelhaber.com,sakaryahaber.com,akdenizbulten.com,borsa365.com,haberankara.com,bakirkoygazetesi.com,ankaraport.net,aksehirpostasi.com,ilerigazetem.com,oncusehir.com,karamanca.net,kanalege.com.tr,turizmnews.com,sakinca.com,cayyolu.com.tr,trakyanews.com,ekonomidunya.com,spilhaber.com,marasnews.com,elazighakimiyethaber.com,tokathaber.com.tr,yeniakcakocahaber.com,gundogumu.com,batikaradeniz.net,larende.com,gazeteyenigun.com.tr,iskilipinsesi.com,gazete365.com,canakkaletv.com.tr,haber16.com,projemlak.com,turgutluyanki.com,teknolojic.com##.kosehbr
 dermoloji.com##.greensboro-background
 palitranews.az###exestylepopupdiv
 azertag.az##.notification-container
@@ -10205,7 +10211,7 @@ materikelas.com###sidebar > #text-7 #box-message
 crazymailing.com##.fb_block
 bbs.tianya.cn##.barcode-float
 thejewishvoice.com,proiezionidiborsa.it###snppopup-exit
-derstarih.com,justnerd.it,unikampus.net##.more-stories.right
+campaigntr.com,ogrenio.com,derstarih.com,justnerd.it##.more-stories.right
 vucutgelistirmehareketleri.org##.tavsiyekonu
 glavbukh.ru#$#body { overflow: visible!important; }
 glavbukh.ru#$#div[class^="GbShadow"] { display: none!important; }
@@ -10236,7 +10242,7 @@ budsgunshop.com##.overlay
 budsgunshop.com##.popupboxnewoffer
 aliexpress.com##.ui-alluser-layer-dialog
 leventisikli.com##.td-more-articles-box
-fisiltimedyahaber.com,koroglugazetesi.com,ukraynahayat.com###socialslide
+superkulup.com,capakcurgazetesi.com.tr,adanaulus.com,kanal42haber.com,turkiyeaktuel.com,medyayenigun.net,tarsusbeyazhaber.com,gercekkarabuk.com,superligyolu.com,guclukarabuk.com,mebajans.com,haberege.com.tr,kibrisgercek.com,keyfgazetesi.com,pasada.com.tr,medyahanesi.com,fisiltimedyahaber.com,koroglugazetesi.com,ukraynahayat.com###socialslide
 52av.tv###fwin_popad_7ree
 eodev.com##.sg-overlay
 gearpatrol.com##.frame-container.picreel-element
@@ -10346,7 +10352,7 @@ reklamkutuphanesi.com##.td-more-articles-box
 monster.de###topPopupEmailCardViewWidget
 ||fastpic.ru/chrome.php
 megaresheba.ru,gdz.ru##.popUp-subscribe
-kompkimi.ru,yesilist.com,hvg.hu,penzcentrum.hu,markimarta.ru,vucutgelistirmehareketleri.org,yumurtaliekmek.com,wealthmagnate.com,polatbuyukarslan.com###upprev_box
+kayiprihtim.com,tahtakepce.com,kadinlararasinda.com,rehabasogul.com,kompkimi.ru,yesilist.com,hvg.hu,penzcentrum.hu,markimarta.ru,vucutgelistirmehareketleri.org,yumurtaliekmek.com,wealthmagnate.com,polatbuyukarslan.com###upprev_box
 ln-cc.com##.b-email_popup-notification
 petri.com##.bottom-interstitial
 trendus.com##.popup-wrapper
@@ -10607,7 +10613,7 @@ hdkinoshka.net,timeallnews.ru###bg_popup
 expertreviews.co.uk,autoexpress.co.uk,alphr.com,itpro.co.uk###block-dennis-newsletter-newsletter-block
 softpedia.com###bottombubble
 androidcanavari.net###cboxOverlay
-atifzafrak.com,kadinlarkulubu.com,besttechinfo.com,maksatbilgi.com,gamesforpublic.de,filmlinks4u.is,formatatmak.com,gaste.org,geziseli.com,gozdehaber.org,haberdan.com,sarkidinle.gen.tr,z-news.link###check-also-box
+kadinbilgiportali.com,sagligimicinhersey.com,sosyalmedyapazarlama.com,rockistasyonu.com,bs16.com,akittv.com.tr,hukukbook.com,baskadunyalardavar.com,hukukiterimler.com,havadiskibris.com,asksozlerimiz.com,hukukiblog.com,ankaram.net,kliniksaglik.com,ciltbilgi.com,kitapkafalar.com,iyiyemektarifleri.net,bodrumguncelhaber.com,codewk.com,elitbursa.com,gggmedya.com,trafiksozluk.com,kahvve.com,finanssepeti.com,borsarti.com,atifzafrak.com,kadinlarkulubu.com,besttechinfo.com,maksatbilgi.com,gamesforpublic.de,filmlinks4u.is,formatatmak.com,gaste.org,geziseli.com,gozdehaber.org,haberdan.com,sarkidinle.gen.tr,z-news.link###check-also-box
 fishki.net###chrome_popup
 bilecikhaber.com.tr,konyahaber.com###cm-social-overlay
 androidcanavari.net,dnepr24.com.ua###colorbox
@@ -11290,6 +11296,8 @@ bomb01.com#$#.modal-open { overflow: visible!important; }
 ||torrentmegafilme.net/wp-content/plugins/smio-push-notification/js/frontend_webpush.js
 uol.com.br##.webalert_container
 lanacion.com.ar##.notificacion-modal
+||pornl.com/ps/index.js
+||sw.wpu.sh/script/main.js$domain=hclips.com
 /sw.js$domain=avtoblog.ua|tmearn.com
 /push.js$domain=acunn.com|tsn.ua|sputnik.by|nation-news.ru
 lifehacker.ru###lh-push-app
@@ -11415,7 +11423,7 @@ indiatimes.com###pushSec
 24tv.ua###pushSubscribeModal
 ntv.ru###push_alert
 qrz.ru###qrzpush-prompt-widget
-amasyagazetesi.com,aksamhaberleri.com.tr,karabuknethaber.com,fisiltimedyahaber.com,ukraynahayat.com,koroglugazetesi.com,habertam.com,nededik.com##.alerttt
+macadogru.com.tr,kanal42haber.com,brtv.com.tr,kanalurfa.com,tarsusbeyazhaber.com,kibrisgercek.com,tekkocaeli.com,parlamentohaber.com,medyahanesi.com,amasyagazetesi.com,aksamhaberleri.com.tr,karabuknethaber.com,fisiltimedyahaber.com,ukraynahayat.com,koroglugazetesi.com,habertam.com,nededik.com##.alerttt
 trinixy.ru##.b-notification-push
 gittigidiyor.com##.gg-subscribe-container
 anews.com.tr,yeniasir.com.tr,aspor.com.tr,fotomac.com.tr,fikriyat.com,ahaber.com.tr,sabah.com.tr,takvim.com.tr##.notBar
@@ -12788,7 +12796,7 @@ newsweek.com##iframe[src="http://sns.europe.newsweek.com/newsletter?popup=1"]
 !--- CSS ---
 fmoviez.org#$#html { -webkit-touch-callout: default!important; -moz-user-select: text!important; -webkit-user-select: text!important; -ms-user-select: text!important; -o-user-select: text!important; user-select: text!important; -khtml-user-select: text!important; }
 dzelectronic.com#$#body { -webkit-touch-callout: default!important; -moz-user-select: text!important; -webkit-user-select: text!important; -ms-user-select: text!important; -o-user-select: text!important; user-select: text!important; -khtml-user-select: text!important; }
-hulkpop.com#$#body.unselectable { -webkit-touch-callout: default!important; -moz-user-select: text!important; -webkit-user-select: text!important; -ms-user-select: text!important; -o-user-select: text!important; user-select: text!important; -khtml-user-select: text!important; }
+audioreview.m1001.coreserver.jp,hulkpop.com#$#body.unselectable { -webkit-touch-callout: default!important; -moz-user-select: text!important; -webkit-user-select: text!important; -ms-user-select: text!important; -o-user-select: text!important; user-select: text!important; -khtml-user-select: text!important; }
 droidtk.com#$#body[data-protect="true"] { -webkit-touch-callout: default!important; -moz-user-select: text!important; -webkit-user-select: text!important; -ms-user-select: text!important; -o-user-select: text!important; user-select: text!important; -khtml-user-select: text!important; }
 toptech360.com,devicespecifications.com,apkinstaller.com,androidmtk.com,serial-key.com,sjcrack.com,themeslide.com,openssource.biz,kinogo-net-2017.ru,kinogo-online.online,kino-zal.net,lavka-invaitov.ru#$#body * { -webkit-touch-callout: default!important; -moz-user-select: text!important; -webkit-user-select: text!important; -ms-user-select: text!important; -o-user-select: text!important; user-select: text!important; -khtml-user-select: text!important; }
 catekno.com#$#img { -webkit-touch-callout: default!important; -webkit-user-select: text!important; }
