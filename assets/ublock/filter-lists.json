@@ -123,17 +123,17 @@
         "group": "multipurpose",
         "homeURL": "https://hosts-file.net/.%5Cad_servers.txt"
         },
-    "adblock.ee/list.php": {
+    "http://adblock.ee/list.php": {
         "off": true,
         "title": "EST: Eesti saitidele kohandatud filter",
         "group": "regions",
-        "homeURL": "https://adblock.ee/list.php"
+        "homeURL": ""
         },
-    "easylist-downloads.adblockplus.org/antiadblockfilters.txt": {
+    "https://easylist-downloads.adblockplus.org/antiadblockfilters.txt": {
         "off": true,
         "title": "Adblock Warning Removal List",
         "group": "ads",
-        "homeURL": "https://easylist-downloads.adblockplus.org/antiadblockfilters.txt"
+        "homeURL": ""
         },
     "raw.githubusercontent.com/indonesianadblockrules/subscriptions/abpindo.txt": {
         "off": true,
