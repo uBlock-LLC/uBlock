@@ -1,8 +1,8 @@
 [Adblock Plus 1.1]
-! Checksum: 2yEnkRlckViQtOBbO4sSVA
-! Version: 201908220631
+! Checksum: EqbiWKwGZT7lKfs6nw4qFw
+! Version: 201909091301
 ! Title: EasyPrivacy
-! Last modified: 22 Aug 2019 06:31 UTC
+! Last modified: 09 Sep 2019 13:01 UTC
 ! Expires: 1 days (update frequency)
 ! Homepage: https://easylist.to/
 ! Licence: https://easylist.to/pages/licence.html
@@ -406,6 +406,7 @@
 /adb/track.php?
 /adb1.gif?
 /adb_iub.js
+/adblock_logging.
 /AdBlockDetection/scriptForGA.
 /AdCookies.js
 /AdCount/*
@@ -445,8 +446,10 @@
 /admp-
 /adobe-analytics.
 /adobe-analytics/*
+/adobe/app-measurement.
 /adobe/AppMeasurement-
 /adobe/VideoHeartbeat-
+/adobe/visitor-
 /AdobeAnalyticsSDK.
 /AdobeCustomVideoMeasurement.swf
 /adonis_event/*
@@ -528,6 +531,7 @@
 /ajx/ptrack/*
 /akam/*/pixel_
 /akam/10/*
+/akam/11/*
 /akamai/pixy.gif
 /akamai_analytics_
 /AkamaiAnalytics.
@@ -580,11 +584,13 @@
 /analytics-ingress-
 /analytics-js.
 /analytics-js/*
+/analytics-min.js
 /analytics-ping.
 /analytics-plugin/*
 /analytics-post-
 /analytics-savebt?
 /analytics-scripts.
+/analytics-sendEvent
 /analytics-social.
 /analytics-tag.
 /analytics-v1.
@@ -659,6 +665,7 @@
 /analytics/tagx-
 /analytics/tealium-
 /analytics/timeme.
+/analytics/timing
 /analytics/tms_
 /analytics/tools_
 /analytics/track-
@@ -739,6 +746,7 @@
 /api/v1/metrics
 /api/v1/pixel?
 /api/v1/stat?
+/api/v2/collector
 /api/x.gif?
 /apilog?
 /apis/cpt.php?
@@ -991,6 +999,8 @@
 /caos-analytics/*
 /capture_client.js
 /CaptureStat.
+/caulytracker2.
+/caulytracker_
 /cbanalytics.
 /CBM.Tracking.js?
 /cbs1x1.gif?
@@ -1066,6 +1076,7 @@
 /cim_tns/spring.js
 /citycounter.
 /cjtracker2.
+/ckaudience/*
 /ckimg_1x1.gif?
 /cklink.gif?
 /cklog.js
@@ -1184,6 +1195,7 @@
 /col2/*&sa=
 /col2/*&ss=
 /collect-*/jsEvent.js
+/collect.gif?
 /collect.php?data=
 /collect/kf?
 /collect/pageview?
@@ -1772,6 +1784,7 @@
 /gatrackingcampaigns/*
 /gatrackthis.
 /gatrackwww.
+/gciAnalytics.
 /gClickTracking.
 /gcount.pl?
 /gcui_vidtracker/*
@@ -2084,6 +2097,9 @@
 /inpl.measure.
 /insales_counter.
 /insert_impressions.
+/insight_web.
+/insights-emitter.
+/insights-emitter/*
 /InsightTrk/*
 /insightXe.js
 /insitemetrics/*
@@ -2436,10 +2452,12 @@
 /merise.gif?
 /meta-analytics/*
 /meta-tracker/*
+/metaTag.min.js
 /metatraffic/track.asp?
 /metricool.js
 /metrics-backend/*
 /metrics-ga.
+/metrics-logger.
 /metrics-UGA.
 /metrics-VarysMetrics.
 /metrics.xml
@@ -2573,6 +2591,7 @@
 /newlog.php?
 /newrelic-gpt.
 /newrelic.js
+/newrelic.min.js
 /newrelicKpis-
 /newrelicKpisFooter-
 /newscount/*
@@ -2761,6 +2780,7 @@
 /pageviews_counter.
 /PageviewsTracker.
 /pap.swf?
+/parsely.js
 /particles/analytics.
 /partner/transparent_pixel-$image
 /partner_tracking_
@@ -2780,6 +2800,7 @@
 /pg_pixel?
 /pgtracking.
 /pgtrackingV3.
+/PhoenixGoogleAnalytics.
 /php-stats.js
 /php-stats.php?
 /php-stats.phpjs.php?
@@ -2947,6 +2968,7 @@
 /processUserCookie.htm?
 /processUserCookie?
 /prod-analytics.
+/prod-client-js-logger/*
 /prodtracker?
 /profile_tracker.
 /promo_tracking/*
@@ -3255,7 +3277,7 @@
 /servlet/Cookie?
 /session-hit.
 /session-tracker/tracking-
-/session/preparecookies?
+/session/preparecookies?$domain=~mytoys.de
 /sessioncam.min.$script
 /sessioncam.recorder.js
 /sessioncam/*
@@ -3552,6 +3574,7 @@
 /stracking.js
 /sTrackStats.
 /stream/log.html?
+/streamsense.min.js
 /stt/track.
 /stt/track/*
 /stwc-counter/*
@@ -3591,6 +3614,7 @@
 /tagcommander.js
 /tagcommander_
 /tagging?type=
+/tagmanager/event?
 /tagmanager/pptm.
 /tagmgmt/bootstrap.
 /tagomnitureengine.js
@@ -3601,7 +3625,6 @@
 /tagx.js
 /tailtarget.js
 /targetemsecure.
-/targeting/render.
 /taxtag.js
 /tblz_sailthru/*
 /tbuy/tracker/*
@@ -3684,6 +3707,7 @@
 /track-event.
 /track-internal-links.
 /track-opening/*
+/track-page-view.
 /track-referrals.js
 /track.ads/*
 /track.ashx?*=http
@@ -3750,6 +3774,7 @@
 /track_in_overwatch.gif?
 /track_js/?
 /track_metric/*
+/track_outbound_
 /track_pageview?
 /track_proxy?
 /track_social.
@@ -4174,6 +4199,7 @@
 /viewtracking.aspx?
 /viewTracking.min.js
 /viglink_
+/vimn_tracking.
 /vip-analytics.
 /viperbar/stats.php?
 /visci-interface.
@@ -4340,6 +4366,7 @@
 /wp-content/tracker.
 /wp-counter.php
 /wp-js/analytics.
+/wp-pixels/*
 /wp-powerstat/*
 /wp-rum/*
 /wp-slimstat/*
@@ -4496,8 +4523,10 @@
 ?event=advert_
 ?event=General.track
 ?event=log&
+?event=pageview&
 ?event=performancelogger:
 ?event=pixel.
+?eventType=*&url=
 ?eventtype=impression&pid=
 ?eventtype=request&pid=
 ?googleTrack=
@@ -4655,6 +4684,12 @@ _xiti_js-
 _zag_cookie.
 cgi-bin/counter
 ||meetrics.netbb-
+! washingtonpost
+/feature-loader/render.
+/magnet/render.
+/re-engage/render.
+/targeting/render.
+/vissense.js
 ! Mining
 -coin-hive.js
 -coin-hive/$script
@@ -4864,6 +4899,7 @@ _mongo_stats/
 ||a-counters.com^$third-party
 ||a-pagerank.net^$third-party
 ||a013.com^$third-party
+||a4b-tracking.com^$third-party
 ||a8.net^$third-party
 ||a8ww.net^$third-party
 ||aaddzz.com^$third-party
@@ -5247,6 +5283,7 @@ _mongo_stats/
 ||celebrus.com^$third-party
 ||center.io^$third-party
 ||centraltag.com^$third-party
+||ceros.com^$third-party
 ||cetrk.com^$third-party
 ||cformanalytics.com^$third-party
 ||cftrack.com^$third-party
@@ -5419,6 +5456,7 @@ _mongo_stats/
 ||cya2.net^$third-party
 ||cybermonitor.com^$third-party
 ||cytoclause.com^$third-party
+||czx5eyk0exbhwp43ya.biz^$third-party
 ||d-1.co^$third-party
 ||d41.co^$third-party
 ||dable.io^$third-party
@@ -5526,6 +5564,7 @@ _mongo_stats/
 ||e-webtrack.net^$third-party
 ||e-zeeinternet.com^$third-party
 ||earnitup.com^$third-party
+||easy-hit-counter.com^$third-party
 ||easy-hit-counters.com^$third-party
 ||easycounter.com^$third-party
 ||easyhitcounters.com^$third-party
@@ -5624,6 +5663,7 @@ _mongo_stats/
 ||extole.com^$third-party
 ||extole.io^$third-party
 ||extreme-dm.com^$third-party
+||extreme-ip-lookup.com^$third-party
 ||eyein.com^$third-party
 ||eyereturn.com^$third-party
 ||ezec.co.uk^$third-party
@@ -5733,6 +5773,7 @@ _mongo_stats/
 ||fyreball.com^$third-party
 ||gameanalytics.com^$third-party
 ||gammachug.com^$third-party
+||gatorleads.co.uk^$third-party
 ||gaug.es^$third-party
 ||gbotvisit.com^$third-party
 ||gear5.me^$third-party
@@ -5742,6 +5783,7 @@ _mongo_stats/
 ||geni.us^$third-party
 ||genieesspv.jp^$third-party
 ||geobytes.com^$third-party
+||geoedge.be^$third-party
 ||geoip-db.com^$third-party
 ||geoplugin.net^$third-party
 ||georiot.com^$third-party
@@ -5944,6 +5986,7 @@ _mongo_stats/
 ||inspectlet.com^$third-party
 ||instadia.net^$third-party
 ||instana.io^$third-party
+||instant.page^$third-party
 ||instapage.com^$third-party,domain=~pagedemo.co
 ||instore.biz^$third-party
 ||integritystat.com^$third-party
@@ -5987,6 +6030,7 @@ _mongo_stats/
 ||iprotrk.com^$third-party
 ||ipstat.com^$third-party
 ||ipv6monitoring.eu^$third-party
+||iqdata.ai^$third-party
 ||iqfp1.com^$third-party
 ||irelandmetrix.ie^$third-party
 ||ironbeast.io^$third-party
@@ -6390,7 +6434,7 @@ _mongo_stats/
 ||online-right-now.net^$third-party
 ||onlinepbx.ru^$third-party
 ||onlysix.co.uk^$third-party
-||onthe.io^$script,third-party
+||onthe.io^$third-party
 ||opbandit.com^$third-party
 ||openclick.com^$third-party
 ||openhit.com^$third-party
@@ -6725,6 +6769,7 @@ _mongo_stats/
 ||searchplow.com^$third-party
 ||secure-pixel.com^$third-party
 ||securepaths.com^$third-party
+||securitytrfx.com^$third-party
 ||sedotracker.com^$third-party
 ||seehits.com^$third-party
 ||seewhy.com^$third-party
@@ -6850,6 +6895,7 @@ _mongo_stats/
 ||spectate.com^$third-party
 ||speed-trap.com^$third-party
 ||speedcurve.com^$third-party
+||sphereup.com^$third-party
 ||spklw.com^$third-party
 ||splittag.com^$third-party
 ||splurgi.com^$third-party
@@ -6917,6 +6963,7 @@ _mongo_stats/
 ||statuncore.com^$third-party
 ||stcllctrs.com^$third-party
 ||stcounter.com^$third-party
+||steadfastsystem.com^$third-party
 ||steelhousemedia.com^$third-party
 ||stellaservice.com^$third-party
 ||stippleit.com^$third-party
@@ -8053,6 +8100,7 @@ _mongo_stats/
 ||balancebreath.com^$third-party
 ||bh8yx.xyz^$third-party
 ||broaddoor.com^$third-party
+||cannontwin.com^$third-party
 ||caringzinc.com^$third-party
 ||carscannon.com^$third-party
 ||consciouscabbage.com^$third-party
@@ -8070,6 +8118,7 @@ _mongo_stats/
 ||forecasttiger.com^$third-party
 ||frailoffer.com^$third-party
 ||giddycoat.com^$third-party
+||giraffepiano.com^$third-party
 ||gorgeousground.com^$third-party
 ||greyinstrument.com^$third-party
 ||hammerhearing.com^$third-party
@@ -9023,6 +9072,7 @@ _mongo_stats/
 ||blogtraffic.sg^$third-party
 ! Slovak
 ||algopine.com^$third-party
+||data.caroda.io^$third-party
 ||idot.cz^$third-party
 ||pocitadlo.sk^$third-party
 ||toplist.sk^$third-party
@@ -9270,6 +9320,7 @@ _mongo_stats/
 ||amp-error-reporting.appspot.com^
 ||amplify.outbrain.com^$third-party
 ||amplifypixel.outbrain.com^
+||ampproject.org^*/ww.js
 ||ams.addflow.ru^
 ||an.yandex.ru^
 ||analytic.pho.fm^
@@ -9514,7 +9565,6 @@ _mongo_stats/
 ||breakingburner.com/stats.html?
 ||breakmedia.com/track.jpg?
 ||bright.bncnt.com^
-||browser.sentry-cdn.com^
 ||browserscope.org/user/beacon/
 ||bs.yandex.ru^
 ||btn.clickability.com^
@@ -9722,6 +9772,7 @@ _mongo_stats/
 ||crowdskout.com/analytics.js
 ||crowdskout.com/skout.js
 ||crowdskout.com^*/page-view
+||crta.dailymail.co.uk^
 ||csi.gstatic.com^
 ||csp-collector.appspot.com^
 ||csp.archant.co.uk^
@@ -9840,6 +9891,7 @@ _mongo_stats/
 ||d81mfvml8p5ml.cloudfront.net^
 ||d8rk54i4mohrb.cloudfront.net^
 ||d9lq0o81skkdj.cloudfront.net^
+||dadi.technology^$third-party
 ||dagda.vilynx.com^
 ||daq0d0aotgq0f.cloudfront.net^
 ||data.alexa.com^
@@ -9867,6 +9919,7 @@ _mongo_stats/
 ||dealer.com^*/tracking/
 ||dealerfire.com/analytics/
 ||deb.gs/track/
+||deepknow.egoid.me^
 ||delivra.com/tracking/$third-party
 ||dell.com/TAG/tag.aspx?$third-party
 ||delvenetworks.com/player/plugins/analytics/
@@ -9882,7 +9935,7 @@ _mongo_stats/
 ||directnews.co.uk/feedtrack/
 ||dirt.dennis.co.uk^
 ||discovery.com^*/events
-||disqus.com/api/ping?$third-party
+||disqus.com/api/ping
 ||disqus.com/event.js?$script
 ||disqus.com/stats.html
 ||distillery.wistia.com^
@@ -9895,6 +9948,7 @@ _mongo_stats/
 ||dmdentertainment.com^*/video_debug.gif?
 ||dn-net.com/cc.js
 ||dn34cbtcv9mef.cloudfront.net^
+||dna8twue3dlxq.cloudfront.net^
 ||dnn506yrbagrg.cloudfront.net^
 ||domodomain.com^*/ddsense.aspx?
 ||doug1izaerwt3.cloudfront.net^
@@ -9935,6 +9989,7 @@ _mongo_stats/
 ||edrone.me/trace?
 ||edrta.mol.im^
 ||edw.insideline.com^$third-party
+||egmontpublishing.dk/tracking/
 ||elb.amazonaws.com/?page=$image
 ||elb.amazonaws.com/g.aspx?surl=
 ||elb.amazonaws.com/partner.gif?
@@ -10018,6 +10073,7 @@ _mongo_stats/
 ||feedblitz.com^*.gif?$third-party
 ||feedcat.net/button/
 ||filament-stats.herokuapp.com^
+||files-hawk.co.uk/hl/hawklinks.js
 ||filesonic.com/referral/$third-party
 ||fitanalytics.com/metrics/
 ||flashi.tv/histats.php?
@@ -10030,6 +10086,7 @@ _mongo_stats/
 ||flocktory.com^*/tracks/
 ||fluidsurveys-com.fs.cm^$third-party
 ||flux.com/geo.html?
+||fog.pixual.co^
 ||followistic.com/widget/stat/
 ||footballmedia.com/tracking/
 ||forms.aweber.com^*/displays.htm?id=
@@ -10130,6 +10187,7 @@ _mongo_stats/
 ||haymarket.com/injector/deliver/
 ||heals.msgfocus.com^$third-party
 ||hearstmags.com^*/hdm-lib_hearstuser_proxy.html$third-party
+||hearstnp.com/treg.js
 ||heg-cp.com/upm/$third-party
 ||hello.staticstuff.net^
 ||hellobar.com/ping?
@@ -10280,6 +10338,7 @@ _mongo_stats/
 ||link.informer.com^
 ||link.tym.cool^
 ||linkbucks.com/visitScript/
+||linkdeli.com/widget.js
 ||linkedin.com/emimp/$image
 ||links.voyeurweb.com^
 ||linkwithin.com/pixel.png
@@ -10309,6 +10368,7 @@ _mongo_stats/
 ||log.kibboko.com^
 ||log.kukuplay.com^$third-party
 ||log.liverail.com^
+||log.mediacategory.com^
 ||log.olark.com^
 ||log.outbrain.com^
 ||log.outbrainimg.com^
@@ -10565,6 +10625,7 @@ _mongo_stats/
 ||pix.speedbit.com^$third-party
 ||pixel-a.basis.net^
 ||pixel-xpanama.netdna-ssl.com^
+||pixel.blivenyc.com^
 ||pixel.cdnwidget.com^
 ||pixel.colorupmedia.com^
 ||pixel.condenastdigital.com^
@@ -10777,6 +10838,7 @@ _mongo_stats/
 ||smrt.as^
 ||snaps.vidiemi.com^$third-party
 ||snazzyspace.com/generators/viewer-counter/counter.php$third-party
+||snowplow.swm.digital^
 ||soccer.ru/counter/
 ||socialreader.com^*?event=email_open^$image
 ||sohu.com/stat/
@@ -10942,6 +11004,7 @@ _mongo_stats/
 ||taboolasyndication.com^*/log/
 ||tag-abe.cartrawler.com^
 ||tag.aticdn.net^
+||tag.aumago.com^
 ||tag.brandcdn.com^
 ||tag.email-attitude.com^
 ||tag.myplay.com^
@@ -10983,6 +11046,7 @@ _mongo_stats/
 ||tm-awx.com/felix.min.js
 ||tm.tradetracker.net^
 ||tm.vendemore.com^
+||toast.com/log
 ||top-fwz1.mail.ru^
 ||topix.net/t6track/
 ||totallylayouts.com/hit-counter/$third-party
@@ -11000,6 +11064,8 @@ _mongo_stats/
 ||tr.interlake.net^
 ||tr.webantenna.info^
 ||tr1.mailperformance.com^
+||tra.pmdstatic.net^
+||tra.scds.pmdstatic.net^
 ||trace.qq.com^$third-party
 ||track.99acres.com^
 ||track.addevent.com^
@@ -11078,6 +11144,7 @@ _mongo_stats/
 ||trackicollect.ibase.fr^$third-party
 ||tracking.*.miui.com^
 ||tracking.adalyser.com^
+||tracking.aegpresents.com^
 ||tracking.allposters.com^
 ||tracking.badgeville.com^$third-party
 ||tracking.bidmizer.com^$third-party
@@ -11131,6 +11198,7 @@ _mongo_stats/
 ||tracking2.interweave.com^$third-party
 ||trackingapi.cloudapp.net^
 ||trackingdev.nixxie.com^
+||trackjs.com/agent/$script,third-party
 ||trackjs.com/usage.gif?
 ||trackla.stackla.com^
 ||tracksys.developlabs.net^
@@ -11139,6 +11207,7 @@ _mongo_stats/
 ||traffic.prod.cobaltgroup.com^
 ||traffic.shareaholic.com^
 ||trafficfuelpixel.s3-us-west-2.amazonaws.com^
+||trafficmanager.anyclip.com^
 ||trakksocial.googlecode.com^$third-party
 ||traq.li/tracker/
 ||travel-assets.com/datacapture/
@@ -11172,7 +11241,6 @@ _mongo_stats/
 ||try.abtasty.com^$third-party
 ||ts.tradetracker.net^
 ||tsk5.com/17*?*=ex-
-||tt.onthe.io^
 ||ttdetect.staticimgfarm.com^
 ||ttwbs.channelintelligence.com^$third-party
 ||turner.com^*/1pixel.gif?
@@ -11310,6 +11378,7 @@ _mongo_stats/
 ||woolik.com^*^tracker^
 ||wordpress.com/geo/
 ||worldssl.net/reporting.js$third-party
+||wp.com/i/mu.gif$image
 ||wpdigital.net/metrics/
 ||ws.amazon.com/widgets/*=gettrackingid|
 ||ws.audioeye.com^
@@ -11328,6 +11397,7 @@ _mongo_stats/
 ||yellowbrix.com/images/content/cimage.gif?
 ||yellowpages.com^*.gif?tid$third-party
 ||yext.com/plpixel?
+||yimg.com/ss/vops.js
 ||yimg.com/wi/ytc.js
 ||yimg.com^*/l?ig=$image
 ||ypcdn.com/*/webyp?
@@ -11394,6 +11464,7 @@ _mongo_stats/
 ||ctr.nmg.de^$third-party
 ||d.adrolays.de^
 ||d.nativendo.de^
+||d.omsnative.de^
 ||data.econa.com^
 ||datacomm.ch^*/count.cgi?
 ||et.twyn.com^
@@ -11600,7 +11671,6 @@ _mongo_stats/
 ||t.planvip.fr^$third-party
 ||tag.leadplace.fr^
 ||tmgr.ccmbg.com^
-||tra.pmdstatic.net^
 ||track.byzon.swelen.net^$third-party
 ||track.laredoute.fr^$image
 ||trackcustomer.laredoute.com^$image
@@ -11902,6 +11972,7 @@ _mongo_stats/
 ||log.cizion.com^
 ||log2.adop.cc^
 ||recobell.io/rest/logs?
+||teralog.techhub.co.kr^
 ||tracking.adweb.co.kr^$third-party
 ! Latvian
 ||counter.hackers.lv^
@@ -12237,6 +12308,7 @@ _mongo_stats/
 ||allmovieportal.com/hostpagescript.js
 ||allvoices.com/track_page
 ||alot.com/tb/cookiewriter.php?
+||als-svc.nytimes.com^
 ||amazon.*/action-impressions/
 ||amazon.*/ajax/counter?
 ||amazon.*/batch/*uedata=$image
@@ -12263,6 +12335,7 @@ _mongo_stats/
 ||analytics.archive.org^
 ||analytics.bloomberg.com^
 ||analytics.brave.com^
+||analytics.chase.com^
 ||analytics.ecosia.org^
 ||analytics.eip.telegraph.co.uk^
 ||analytics.femalefirst.co.uk^
@@ -12537,6 +12610,7 @@ _mongo_stats/
 ||chanel.com/js/flashtrack.js
 ||channel4.com/foresee_c4/
 ||charter.com/static/scripts/mock/tracking.js
+||chase.com/activity$image
 ||cheapflights.com/ic/*.gif?
 ||cheapsalesconsulting.com/adaptive.php?
 ||cheezburger.com/api/visitor
@@ -12948,6 +13022,7 @@ _mongo_stats/
 ||gardenweb.com^*/iv_footer.js
 ||gardenweb.com^*/iv_header.js
 ||gateway.reddit.com|
+||gc.newsweek.com^
 ||gcpdata.telegraph.co.uk^
 ||geek.com/js/zdgurgle/
 ||geico.com/vs/track2.js?
@@ -12992,7 +13067,7 @@ _mongo_stats/
 ||glassmoni.researchgate.net^
 ||glean.pop6.com^
 ||global.canon^*/analytics.js
-||global.ssl.fastly.net^$script,domain=sainsburys.co.uk
+||global.ssl.fastly.net^$script,domain=jsonline.com|lohud.com|radiotimes.com|sainsburys.co.uk
 ||globes.co.il/ga.asp
 ||globes.co.il/shared/s.ashx?
 ||globester.com^*/track.js
@@ -13112,6 +13187,7 @@ _mongo_stats/
 ||ibm.com/common/stats/
 ||ibm.com/gateway/?
 ||ibs.indiatimes.com^
+||ibt.com/front/js/counter.js
 ||ibtimes.com/player/stats.swf$object-subrequest
 ||icq.com/search/js/stats.js
 ||id.allegisgroup.com^
@@ -13506,6 +13582,7 @@ _mongo_stats/
 ||nexon.net/tagging/
 ||next.co.uk/log.php
 ||nfl.com/imp?
+||nfltags.com/omniture/atm/$domain=nfl.com
 ||nhk.jp^*/bc.gif?
 ||nih.gov/medlineplus/images/mplus_en_survey.js
 ||nih.gov/share/scripts/survey.js
@@ -13847,6 +13924,7 @@ _mongo_stats/
 ||satellite-tv-guides.com/stat/
 ||sayac.hurriyettv.com^
 ||sb.vevo.com^
+||sc.cc.com^
 ||scdn.co/build/js/tracking-
 ||sciencedaily.com/blank.htm
 ||sciencedaily.com/cache.php?
@@ -14114,6 +14192,7 @@ _mongo_stats/
 ||stats.blogg.se^
 ||stats.break.com^
 ||stats.cardschat.com^
+||stats.cheddar.com^
 ||stats.christianpost.com^
 ||stats.clear-media.com^
 ||stats.dnaindia.com^
@@ -14282,6 +14361,7 @@ _mongo_stats/
 ||tkpi.delta.com^
 ||tmagazine.com/js/track_
 ||tnla.thenewslens.com^
+||tongji.meizu.com^
 ||tools.ranker.com^
 ||top.wn.com^
 ||topix.com/t6track/
@@ -14375,6 +14455,7 @@ _mongo_stats/
 ||tracking.tidalhifi.com^
 ||tracking.times247.com^
 ||tracking.ukwm.co.uk^
+||tracking.unitednaturals.com^
 ||tracking.unrealengine.com^
 ||tracking.ustream.tv^
 ||tracking.yourfilehost.com^
@@ -14398,6 +14479,7 @@ _mongo_stats/
 ||tripadvisor.com/uvpages/page_moniker.html
 ||trivago.com/check-session-state?
 ||trivago.com/tracking/
+||trk.flazio.com^
 ||trk.freepik.com^
 ||trove.com/identity/public/visitor/
 ||trovus.co.uk/tracker/
@@ -14481,6 +14563,7 @@ _mongo_stats/
 ||v.fwmrm.net/ad/*slotImpression
 ||v.oui.sncf^
 ||validome.org/valilogger/track.js
+||vanityfair.com/user-context?referrer
 ||vator.tv/tracking/
 ||vbs.tv/tracker.html
 ||vcstar.com/metrics/
@@ -14588,6 +14671,7 @@ _mongo_stats/
 ||wikihow.com/visit_info
 ||wikihow.com/x/collect?
 ||wikimedia.org/wiki/Special:RecordImpression?
+||wikimonde.com/h.php
 ||wikinvest.com/plugin/api.php?*=metricld&
 ||wikio.com/shopping/tracking/hit.jsp?
 ||wikipedia.org/beacon/
@@ -15133,6 +15217,7 @@ $csp=worker-src 'none',domain=alltube.pl|alltube.tv|animeteatr.ru|annuaire-bleu.
 ||track.cinestar.de^
 ||track.derbund.ch^
 ||track.express.de^
+||track.mopo.de^
 ||trackerstatistik.init-ag.de^
 ||tracking.autoscout24.com^
 ||tracking.beilagen-prospekte.de^
@@ -15591,7 +15676,6 @@ $csp=worker-src 'none',domain=alltube.pl|alltube.tv|animeteatr.ru|annuaire-bleu.
 ||cgi.tbs.co.jp^
 ||count.upc.rakuten.co.jp^
 ||dmm.com/analytics/
-||dmm.com^*/dmm.tracking.
 ||goo.ne.jp^*/vltracedmd.js
 ||i2i.jp/bin/
 ||ln.ameba.jp^
@@ -15631,6 +15715,7 @@ $csp=worker-src 'none',domain=alltube.pl|alltube.tv|animeteatr.ru|annuaire-bleu.
 ||seoul.co.kr/weblog/
 ||sp.naver.com^
 ||track.tiara.daum.net^
+||tracker.cauly.co.kr^
 ||veta.naver.com^
 ||wcs.naver.com^
 ||weblog.eseoul.go.kr^
@@ -15748,6 +15833,8 @@ $csp=worker-src 'none',domain=alltube.pl|alltube.tv|animeteatr.ru|annuaire-bleu.
 ||tracker.tiu.ru^
 ||vedomosti.ru/boom?
 ||vesti.ru/counter/
+||yandex.ru/clck/click
+||yandex.ru/clck/jclck/
 ||yast.rutube.ru^
 ! Serbian
 ||trak-analytics.blic.rs^
@@ -15928,10 +16015,10 @@ $csp=worker-src 'none',domain=alltube.pl|alltube.tv|animeteatr.ru|annuaire-bleu.
 @@||addgene.org/headers/blat/js/analyze.js
 @@||adidas.com^*/adidasAnalytics.js?
 @@||adobedtm.com/launch-$script
-@@||adobedtm.com^*/mbox-contents-$script,domain=absa.co.za|fcbarcelona.com|lenovo.com|newyorker.com|oprah.com|pnc.com|vanityfair.com|wired.com
+@@||adobedtm.com^*/mbox-contents-$script,domain=absa.co.za|fcbarcelona.com|lenovo.com|newyorker.com|nfl.com|oprah.com|pnc.com|vanityfair.com|wired.com
 @@||adobedtm.com^*/s-code-$script
 @@||adobedtm.com^*/satellite-$script
-@@||adobedtm.com^*/satelliteLib-$script,domain=absa.co.za|aeroplan.com|argos.co.uk|collegeboard.org|crackle.com|crimewatchdaily.com|directline.com|fcbarcelona.com|jeep.com|laredoute.co.uk|laredoute.com|lenovo.com|lowes.com|malaysiaairlines.com|mastercard.us|mathworks.com|monoprice.com|nbcnews.com|newyorker.com|oprah.com|pnc.com|realtor.com|redbull.tv|repco.co.nz|searspartsdirect.com|smooth.com.au|sonycrackle.com|stuff.co.nz|subaru.com|timewarnercable.com|trip-planner.australia.com|vanityfair.com|wired.com
+@@||adobedtm.com^*/satelliteLib-$script,domain=absa.co.za|aeroplan.com|argos.co.uk|collegeboard.org|crackle.com|crimewatchdaily.com|directline.com|fcbarcelona.com|jeep.com|laredoute.co.uk|laredoute.com|lenovo.com|lowes.com|malaysiaairlines.com|mastercard.us|mathworks.com|monoprice.com|nbcnews.com|newyorker.com|nfl.com|oprah.com|pnc.com|realtor.com|redbull.tv|repco.co.nz|searspartsdirect.com|smooth.com.au|sonycrackle.com|stuff.co.nz|subaru.com|timewarnercable.com|trip-planner.australia.com|vanityfair.com|wired.com
 @@||adobetag.com/d2/$script,domain=thestar.com
 @@||adobetag.com^*/amc.js$script
 @@||adobetag.com^*/sitecatalyst.js$domain=hbf.com.au|seattlepi.com|tv.com
@@ -15954,6 +16041,7 @@ $csp=worker-src 'none',domain=alltube.pl|alltube.tv|animeteatr.ru|annuaire-bleu.
 @@||amazonaws.com/visitorsegment/shared/resources/$script,domain=washingtonpost.com
 @@||amctv.com^*/comscore.js
 @@||amctv.com^*/google-analytics.js$domain=amctv.com
+@@||ampproject.org/v0/amp-geo-$script,domain=tasty.co
 @@||ampush.io/js/tracker.js$domain=tunein.com
 @@||analytics.atomiconline.com/services/jquery.js
 @@||analytics.edgekey.net/js/brightcove-csma.js$domain=news.com.au
@@ -15992,6 +16080,7 @@ $csp=worker-src 'none',domain=alltube.pl|alltube.tv|animeteatr.ru|annuaire-bleu.
 @@||atlanticbb.net/images/track/track.gif?$xmlhttprequest
 @@||atptour.com/assets/atpwt/scripts/util/googleAnalytics.js
 @@||att.com/scripts/adobe/virtual/detm-container-hdr.js
+@@||att.com/ui/*/jsnlog.js
 @@||att.com/webtrends/scripts/dcs_tag.js
 @@||audi.co.uk^*/js/tracking/$script
 @@||autoscout24.net/unifiedtracking/ivw.js
@@ -16026,6 +16115,7 @@ $csp=worker-src 'none',domain=alltube.pl|alltube.tv|animeteatr.ru|annuaire-bleu.
 @@||blogsmithmedia.com^*/gravity-beacon.js$domain=engadget.com
 @@||bolha.com/clicktracker/
 @@||bonappetit.com^*/cn-fe-stats/$script
+@@||booking.octopuspms.com/tb/Scripts/GoogleAnalytics.js$domain=hjorthsbadehotel.dk
 @@||bookmate.com^*/impressions?$xmlhttprequest
 @@||bootcamp.mit.edu/js/angulartics-google-analytics.min.js
 @@||borderfree.com/assets/utils/google-analytics.js$~third-party
@@ -16033,7 +16123,6 @@ $csp=worker-src 'none',domain=alltube.pl|alltube.tv|animeteatr.ru|annuaire-bleu.
 @@||boxberry.ru/local/templates/site-boxberry/js/tracking_service.js$xmlhttprequest
 @@||boxtops4education.com^*/ntpagetag.js
 @@||britishairways.com/cms/global/scripts/applications/tracking/visualsciences.js
-@@||browser.sentry-cdn.com^$script,domain=sliver.tv|wearegifted.co.uk
 @@||browserscope.org/user/beacon/*?callback=$script,domain=jsperf.com
 @@||bt.com^*/touchclarity/homepage/omtr_tc.js
 @@||btstatic.com/tag.js$domain=macys.com
@@ -16069,6 +16158,7 @@ $csp=worker-src 'none',domain=alltube.pl|alltube.tv|animeteatr.ru|annuaire-bleu.
 @@||chartbeat.com/*/chartbeat/$~third-party
 @@||chartbeat.com/js/chartbeat.js$domain=indiatimes.com|m.tmz.com|salon.com|zap2it.com
 @@||chatzy.com/?jsonp:$script
+@@||chessfriends.com/js/live/GoogleAnalytics.js?$~third-party
 @@||chobani.com/js/tracking.js
 @@||cincinnatibell.net/images/track/track.gif?$xmlhttprequest
 @@||cio.com/js/demandbase.js?
@@ -16118,6 +16208,7 @@ $csp=worker-src 'none',domain=alltube.pl|alltube.tv|animeteatr.ru|annuaire-bleu.
 @@||csid.com/wp-content/plugins/bwp-minify/min/?*/google-analyticator/$script
 @@||csoonline.com/js/demandbase.js
 @@||ctv.ca/players/mediaplayer/*/comscorebeacon.js
+@@||cvs.com/shop-assets/js/VisitorAPI.js
 @@||cxense.com/cx.js$domain=brandonsun.com|channelnewsasia.com|winnipegfreepress.com
 @@||d1l6p2sc9645hc.cloudfront.net/tracker.js|
 @@||d1z2jf7jlzjs58.cloudfront.net/p.js$script,domain=nfl.com
@@ -16169,7 +16260,7 @@ $csp=worker-src 'none',domain=alltube.pl|alltube.tv|animeteatr.ru|annuaire-bleu.
 @@||emjcd.com^$image,domain=catalogfavoritesvip.com|freeshipping.com|freeshippingbymastercard.com|freeshippingrewards.com|habandvipplus.com|inthecompanyofdogsvip.com|naturesjewelryvip.com|northstylevip.com|pyramidcollectionvip.com|serengeticatalogvip.com|travelplus.com
 @@||ensighten.com/crossdomain.xml$object-subrequest
 @@||ensighten.com/libs/flowplayer/ensightenplugin.swf$object-subrequest
-@@||ensighten.com^*/Bootstrap.js$domain=americanexpress.com|caranddriver.com|cart.autodesk.com|citizensbank.com|dell.com|france24.com|homedepot.com|hp.com|rfi.fr|sbs.com.au|sfgate.com|staples.com|t-mobile.com|target.com|verizonwireless.com|williamhill.com|zales.com
+@@||ensighten.com^*/Bootstrap.js$domain=americanexpress.com|capitalone.com|caranddriver.com|cart.autodesk.com|citizensbank.com|dell.com|france24.com|homedepot.com|hp.com|rfi.fr|sbs.com.au|sfgate.com|staples.com|t-mobile.com|target.com|verizonwireless.com|williamhill.com|zales.com
 @@||ensighten.com^*/code/$script
 @@||ensighten.com^*/scode/$script,domain=norton.com
 @@||ensighten.com^*/serverComponent.php?$script
@@ -16245,7 +16336,7 @@ $csp=worker-src 'none',domain=alltube.pl|alltube.tv|animeteatr.ru|annuaire-bleu.
 @@||google.com/js/gweb/analytics/$domain=google.com
 @@||google.com/js/gweb/analytics/autotrack.js$domain=gradleplease.appspot.com
 @@||google.com/js/gweb/analytics/doubletrack.js$domain=android.com
-@@||googletagmanager.com/gtm.js?$domain=action.com|adsoup.com|airasia.com|asus.com|bhaskar.com|broadcom.com|complex.com|computerworlduk.com|desigual.com|drumstick.com|ebuyer.com|elevationscu.com|gamepix.com|git-tower.com|google.com|itv.com|jobs.net|keygames.com|magicjack.com|moviefone.com|nestio.com|newsy.com|onesignal.com|optus.com.au|rebtel.com|rockstargames.com|rollingstone.com|rozetka.com.ua|sixflags.com|support.amd.com|talktalk.co.uk|techradar.com|toto.co.jp|trademe.nz|usmagazine.com
+@@||googletagmanager.com/gtm.js?$domain=action.com|adsoup.com|airasia.com|asus.com|bhaskar.com|broadcom.com|complex.com|computerworlduk.com|desigual.com|drumstick.com|ebuyer.com|elevationscu.com|gamepix.com|git-tower.com|google.com|itv.com|jobs.net|keygames.com|magicjack.com|moviefone.com|nestio.com|newsy.com|nfl.com|onesignal.com|optus.com.au|rebtel.com|rockstargames.com|rollingstone.com|rozetka.com.ua|sixflags.com|support.amd.com|talktalk.co.uk|techradar.com|toto.co.jp|trademe.nz|usmagazine.com
 @@||googletagmanager.com/gtm.js?id=GTM-5D256R&l=aedataLayer^
 @@||googletagservices.com/tag/js/gpt.js$domain=speedtest.net
 @@||gorillanation.com/js/triggertag.js$domain=comingsoon.net|playstationlifestyle.net
@@ -16264,6 +16355,7 @@ $csp=worker-src 'none',domain=alltube.pl|alltube.tv|animeteatr.ru|annuaire-bleu.
 @@||highcharts.com^*/heatmap.js
 @@||hj.flxpxl.com^*.js?r=*&m=*&a=$domain=twitch.tv
 @@||hlserve.com/beacon?$domain=walmart.com
+@@||hmhco.com/one/js/conf/trackjs.config.$script,~third-party,xmlhttprequest
 @@||homedepot.com/static/scripts/resxclsa.js
 @@||hostlogr.com/etc/geo.php?
 @@||hotmail.com/mail/*/i2a.js
@@ -16337,6 +16429,7 @@ $csp=worker-src 'none',domain=alltube.pl|alltube.tv|animeteatr.ru|annuaire-bleu.
 @@||lufthansa.com^*/mmcore.js
 @@||luminate.com/order/$subdocument
 @@||lynda.com^*/px.gif?$image
+@@||macworld.com/get_site_data$xmlhttprequest,domain=macworld.com
 @@||magnify.net^*/magnify_stats.js
 @@||mail-www.baynote.net^$domain=mail.com
 @@||mail.biz.rr.com/images/portal/blank.gif$domain=mail.biz.rr.com
@@ -16416,6 +16509,8 @@ $csp=worker-src 'none',domain=alltube.pl|alltube.tv|animeteatr.ru|annuaire-bleu.
 @@||newsinc.com^*/getPlacements.js?pid=$xmlhttprequest,domain=csmonitor.com
 @@||newyorker.com^*/cn-fe-stats/$script
 @@||next.co.uk/Scripts/GoogleAnalytics.js?
+@@||nfltags.com/omniture/$script,domain=nfl.com
+@@||nhl.com/components/shared/omniture-tracking-scripts/newRelic.js
 @@||nike.com/checkout/analytics/js/analyticFunctions.js$domain=nike.com
 @@||nintendo.com/nclood/*/bundles/analytics.min.js$domain=nintendo.com
 @@||nokia.com/b/ss/$image,domain=here.com
@@ -16526,7 +16621,7 @@ $csp=worker-src 'none',domain=alltube.pl|alltube.tv|animeteatr.ru|annuaire-bleu.
 @@||samepage.io/assets/lib/google-analytics/GoogleAnalytics.js?
 @@||sbphototours.com/includes/AWStats.js$~third-party
 @@||sbstatic.com.au/js/tealium.js$domain=sportsbet.com.au
-@@||scorecardresearch.com/beacon.js$domain=agame.com|allmusic.com|amctv.com|apl.tv|babycenter.com|bonappetit.com|calgaryherald.com|canada.com|cbc.ca|dailymail.co.uk|deviantart.com|discovery.com|doctoroz.com|edmontonjournal.com|fastcompany.com|financialpost.com|firstwefeast.com|hitfix.com|huffingtonpost.com|investigationdiscovery.com|landandfarm.com|last.fm|leaderpost.com|m.tmz.com|montrealgazette.com|nationalpost.com|newsday.com|ottawacitizen.com|outsideonline.com|radaronline.com|salon.com|sci2.tv|syfy.com|theprovince.com|thestar.com|thestarphoenix.com|thinkatheist.com|tlc.com|tmz.com|v3.co.uk|vancouversun.com|windsorstar.com
+@@||scorecardresearch.com/beacon.js$domain=agame.com|allmusic.com|amctv.com|apl.tv|babycenter.com|bonappetit.com|calgaryherald.com|canada.com|cbc.ca|dailymail.co.uk|dailymotion.com|deviantart.com|discovery.com|doctoroz.com|edmontonjournal.com|fastcompany.com|financialpost.com|firstwefeast.com|hitfix.com|huffingtonpost.com|investigationdiscovery.com|landandfarm.com|last.fm|leaderpost.com|m.tmz.com|montrealgazette.com|nationalpost.com|newsday.com|ottawacitizen.com|outsideonline.com|radaronline.com|salon.com|sci2.tv|syfy.com|theprovince.com|thestar.com|thestarphoenix.com|thinkatheist.com|tlc.com|tmz.com|v3.co.uk|vancouversun.com|windsorstar.com
 @@||scorecardresearch.com/c2/plugins/streamsense_plugin_html5.js
 @@||scorecardresearch.com/c2/plugins/streamsense_plugin_theplatform.js
 @@||scorecardresearch.com/crossdomain.xml$domain=rte.ie
@@ -16739,7 +16834,7 @@ $csp=worker-src 'none',domain=alltube.pl|alltube.tv|animeteatr.ru|annuaire-bleu.
 ! Chrome bug (Endless loading causing site to crash https://forums.lanik.us/viewtopic.php?f=64&t=25152)
 @@||aplus.com/p.gif?$~third-party
 ! Preliminarily whitelisting Omniture s_code tracking pixels (script versions H.25 - H.25.2) due to breakage (https://adblockplus.org/forum/viewtopic.php?f=10&t=11378) if blocking the script causes issues
-@@||112.2o7.net/b/ss/$image,domain=espn.com.br|nissan-global.com
+@@||112.2o7.net/b/ss/$image,domain=espn.com.br|mtv.co.uk|nissan-global.com
 @@||122.2o7.net/b/ss/$image,domain=billetnet.dk|billettservice.no|citibank.co.in|goal.com|lippupalvelu.fi|pcworld.com|riverisland.com|techhive.com|ticketmaster.ae|ticketmaster.co.uk|ticketmaster.de|ticketmaster.ie|ticketmaster.nl|ticnet.se
 @@||amazoncustomerservice.d2.sc.omtrdc.net/b/ss/*/H.25.1/$image
 @@||castorama.fr/b/ss/$image
@@ -16914,6 +17009,7 @@ $csp=worker-src 'none',domain=alltube.pl|alltube.tv|animeteatr.ru|annuaire-bleu.
 @@||tv5.org/cms/javascript/*/sitestat.js
 @@||tv5monde.com/cms/javascript/*/sitestat.js
 @@||ubicast.tv/statics/mediaserver/player/statistics.js
+@@||vuplay.co.uk/stats/adobe/*/VisitorAPI.js$script,domain=radioplus.be
 ! Bulgarian
 @@||google-analytics.com/analytics.js$domain=novatv.bg
 ! Chinese
@@ -17065,6 +17161,7 @@ $csp=worker-src 'none',domain=alltube.pl|alltube.tv|animeteatr.ru|annuaire-bleu.
 ! Norwegian
 @@||adobedtm.com^*/satelliteLib-$script,domain=elkjop.no
 @@||cloudfront.net/autoTracker.min.js$domain=direkte.vg.no
+@@||epub.ekh.no/*/static/analytics.js
 @@||google-analytics.com/analytics.js$domain=tv3play.no
 @@||klpinteraktiv.klp.no^*/Tracking.js?
 ! Polish
@@ -17128,12 +17225,14 @@ $csp=worker-src 'none',domain=alltube.pl|alltube.tv|animeteatr.ru|annuaire-bleu.
 ! Spanish
 @@||acb.com/javascripts/jv_feeder_stats.js
 @@||adobedtm.com^*/mbox-contents-$script,domain=fcbarcelona.cat|fcbarcelona.es
-@@||adobedtm.com^*/satelliteLib-$script,domain=crackle.com.ar|crackle.com.ec|crackle.com.mx|crackle.com.pe|crackle.com.py|fcbarcelona.cat|fcbarcelona.es|laredoute.es
+@@||adobedtm.com^*/satelliteLib-$script,domain=crackle.com.ar|crackle.com.ec|crackle.com.mx|crackle.com.pe|crackle.com.py|fcbarcelona.cat|fcbarcelona.es|laredoute.es|vtr.com
+@@||ampproject.org/v0/amp-analytics-$script,domain=cnnespanol.cnn.com
 @@||ara.cat/static/BB3Core/images/pixel.gif?hash=$image,domain=ara.cat
 @@||c5n.com^*/angulartics-google-analytics.min.js
 @@||cloudfront.net/libs/amplitude-$script,domain=elconfidencial.com
 @@||eldiario.es/static/BBTCore/images/pixel.gif?hash=$image,domain=eldiario.es
 @@||estafeta.com/shared/js/tracking.js
+@@||googletagmanager.com/gtm.js$script,domain=tn.com.ar
 @@||gruposantander.es^*/scripts/log.js
 @@||metrics.el-mundo.net/b/ss/$image,domain=expansion.com
 @@||playty.com/bower_components/angulartics-google-analytics/dist/angulartics-ga.min.js

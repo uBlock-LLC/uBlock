@@ -43,6 +43,9 @@
     const reAdguardExtCssSyntax = /(?:\[-ext-|:)(has|contains)/; 
     const reAdguardExtCssSyntaxParser = /(?:\[-ext-|:)(has|contains)/g; 
     const reAdguardCssSyntax = /.+?\s*\{.*\}\s*$/; 
+    const pseudoClassReg = /:(?!(only|first|last|nth|nth-last)-(child|of-type))([\w-]+)\(/; 
+    const reprocSelector = /(:-abp-contains|:-abp-properties|:-abp-has|:matches-css|:matches-css-after|:matches-css-before)\(/i;
+ 
 
     
     /******************************************************************************/
@@ -450,6 +453,7 @@
         this.hostnameFilterDataView = {}; 
         this.hostnameFilterByteLength = {}; 
         this.entityFilters = {};
+        this.pseudoClassExpression = false; 
     };
     
     /******************************************************************************/
@@ -629,7 +633,7 @@
             try {
                 this.div.matches(s);
             } catch (e) {
-                console.error('uBlock> invalid cosmetic filter:', s);
+                //console.error('uBlock> invalid cosmetic filter:', s);
                 return false;
             }
             return true;
@@ -639,7 +643,7 @@
             return true;
         };
     }
-    
+
     /******************************************************************************/
     const isValidStyle = function(css) { 
         if (css.indexOf('\\') !== -1 || css.indexOf("url(") !== -1) {
@@ -652,6 +656,103 @@
         return true;
     };
 
+    FilterContainer.prototype.parseContent = function(content, startIndex) { 
+        let parens = 1;
+        let i = startIndex;
+        for (; i < content.length; i++) {
+            let c = content[i];
+            if (c == "\\") {
+                i++;
+            }
+            else if (c == "(")
+                parens++;
+            else if (c == ")") {
+                parens--;
+            if (parens == 0)
+                break;
+            }
+        }
+        if (parens > 0)
+            return null;
+        return {text: content.substring(startIndex, i), end: i};
+    } 
+
+    const normalizedOperators = new Set(['-abp-contains', '-abp-has', '-abp-properties' , 'matches-css', 'matches-css-after', 'matches-css-before']);
+    const shortNames = new Map([
+        ["pseudoCls", "ps"],
+        ["prefix", "pf"],
+        ["selectorText", "st"],
+        ["_innerSelectors", "_is"],
+        ["maybeContainsSiblingCombinators", "csc"],
+        ["hasParallelSiblingSelector", "pss"]
+    ]);
+
+    FilterContainer.prototype.parseProcedure = function(expression) { 
+        let tasks = [], prefix, remaining, parsed, selectorText, isValid = true, procSelector = null, pseudoClass = null;
+        let matches = pseudoClassReg.exec(expression);
+        if(!matches) {
+            return [true,   
+                        [{   
+                            ["plain"]: {
+                                [shortNames.get('pseudoCls')]: null, 
+                                [shortNames.get('prefix')]: "",
+                                [shortNames.get('selectorText')]: expression,
+                                [shortNames.get('_innerSelectors')]: null,
+                                [shortNames.get('maybeContainsSiblingCombinators')]: /[~+]/.test(expression),
+                                [shortNames.get('hasParallelSiblingSelector')]: false
+                            }
+                        }]
+                    ];
+        } 
+        prefix = expression.substring(0,matches.index);
+        remaining = expression.substring(matches.index + matches[0].length);
+        parsed = this.parseContent(remaining, 0);
+        if(parsed == null) 
+            return [false, []];
+        
+        selectorText = parsed.text;
+        pseudoClass = (matches[3] == "matches-css-after" ?  ":after" : (matches[3] == "matches-css-before" ?  ":before" : null ));
+       
+       if(matches[3] == "-abp-has") {
+            [isValid, procSelector] = this.parseProcedure(selectorText);
+        } else if(normalizedOperators.has(matches[3])) {
+            isValid = true;
+        } else {
+            isValid = false;
+            return [isValid, []];
+        }
+        if(isValid) {
+            tasks.push({
+                [matches[3]]: {
+                    [shortNames.get('pseudoCls')]: pseudoClass, 
+                    [shortNames.get('prefix')]: prefix,
+                    [shortNames.get('selectorText')]: procSelector === null ? selectorText : null,
+                    [shortNames.get('_innerSelectors')]: procSelector,
+                    [shortNames.get('hasParallelSiblingSelector')]: false
+                }
+            });
+            let suffixtext = remaining.substring(parsed.end + 1);
+            if (suffixtext != "") {
+                let suffix;
+                [isValid, suffix] = this.parseProcedure(suffixtext);
+                if(isValid) {
+                    if(Object.keys(suffix).length == 1) {
+                        if(Object.keys(suffix)[0] == "plain" && suffix["plain"].maybeContainsSiblingCombinators) {
+                            for (let task of tasks) {
+                                if(Object.keys(task)[0] == "-abp-has" || Object.keys(task)[0] == "-abp-contains" ||  Object.keys(task)[0] == "-abp-properties") {
+                                    task[Object.keys(task)[0]].hasParallelSiblingSelector = true;
+                                }
+                            }
+                        }
+                    }
+                    tasks.push(...suffix);
+                }
+                else 
+                    tasks = [];
+            }
+        } 
+        return [isValid, tasks];
+    }
     FilterContainer.prototype.compile = function(s, out) {
         let parsed = this.parser.parse(s);
         
@@ -670,14 +771,21 @@
         }
         
         let isValid;
+        this.pseudoClassExpression = false;
         if(this.parser.type == "$" && this.parser.extended) { 
             isValid = true;
         } else if(this.parser.type == "$" && !this.parser.extended) {
-            let matches = /.+?\s*\{(.*)\}\s*$/.exec(parsed.suffix);
-            isValid = isValidStyle(matches[1].trim());
+            let matches = /(.+?)\s*\{(.*)\}\s*$/.exec(parsed.suffix);
+            isValid = this.isValidSelector(matches[1].trim()) && isValidStyle(matches[2].trim());
         }
         else {
-            isValid = abpSelectorRegexp.test(parsed.suffix) ? true : this.isValidSelector(parsed.suffix); 
+            isValid = this.isValidSelector(parsed.suffix);
+            if(!isValid && reprocSelector.test(parsed.suffix)) { 
+                let tasks;
+                [isValid, tasks] = this.parseProcedure(parsed.suffix);
+                this.pseudoClassExpression = true;
+                parsed.suffix = JSON.stringify(tasks);
+            }
         }
         // For hostname- or entity-based filters, class- or id-based selectors are
         // still the most common, and can easily be tested using a plain regex.
@@ -685,6 +793,7 @@
             this.reClassOrIdSelector.test(parsed.suffix) === false &&
             isValid === false
         ) {
+            console.error('uBlock> invalid cosmetic filter:', s);
             return true;
         }
     
@@ -799,7 +908,7 @@
         if ( domain === '' ) {
             hash = unhide === 0 ? makeHash(0, this.type0NoDomainHash, this.domainHashMask) : makeHash(0, this.type1NoDomainHash, this.domainHashMask);
         } else {
-            hash = abpSelectorRegexp.test(parsed.suffix) ? makeHash(unhide, domain, this.domainHashMask, this.procedureMask) : makeHash(unhide, domain, this.domainHashMask);
+            hash = this.pseudoClassExpression ? makeHash(unhide, domain, this.domainHashMask, this.procedureMask) : makeHash(unhide, domain, this.domainHashMask);
         }
         let hshash = µb.tokenHash(hostname);
         if(parsed.type == "$" && parsed.extended)  
@@ -1157,8 +1266,9 @@
             if ( lgmselector === undefined ) {
                 continue;
             }
-            else if ( typeof lgmselector === 'string' && skipCosmetics.indexOf(selector) === -1 && exception.indexOf(selector) === -1) {
-                hideSelectors.push(lgmselector);
+            else if ( typeof lgmselector === 'string') {
+                if(skipCosmetics.indexOf(selector) === -1 && exception.indexOf(selector) === -1)
+                    hideSelectors.push(lgmselector);
             } else {
                 lgmselector.forEach(function(element) {
                     if(skipCosmetics.indexOf(element) === -1 && exception.indexOf(selector) === -1)
@@ -1268,8 +1378,12 @@
             }
         }
 
-        if(!this.hostnameFilterDataView.hasOwnProperty(flag)) {
-            return r;
+        if(!this.hostnameFilterDataView.hasOwnProperty(flag)) { 
+            if(request.procedureSelectorsOnly) {
+                return JSON.stringify(r.procedureHide);
+            } else {
+                return r;
+            }
         }
         
         hash = makeHash(0, domain, this.domainHashMask);

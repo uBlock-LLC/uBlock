@@ -1,9 +1,9 @@
 ![Adblock Plus 2.0]
-! Checksum: cEsb8qCuYxEMKfQIt5c4iw
+! Checksum: ySF+T8gsVCt7LIfC3bI3Gw
 ! Title: AdGuard Japanese filter
 ! Description: Filter that enables ad blocking on websites in Japanese language.
-! Version: 2.0.2.14
-! TimeUpdated: 2019-08-20T00:02:37+03:00
+! Version: 2.0.2.23
+! TimeUpdated: 2019-09-09T13:30:48+03:00
 ! Expires: 2 days (update frequency)
 ! Homepage: http://adguard.com/filters.html#japanese
 ! License: http://creativecommons.org/licenses/by-sa/3.0/
@@ -368,20 +368,6 @@
 !
 ! These rules are against all kinds of ad blocking reinjection/circumvention scripts
 !
-!--- antiblock.org g207---
-@@||jpidols.tv^$generichide
-@@||jpidols.tv/wp-content/uploads/*.png#
-@@||cowboy.blog.jp^$generichide
-@@||eikaiwamastery.blogspot.com^$generichide
-@@||halchim.jp^$generichide
-@@||gtoys.blog48.fc2.com^$generichide
-@@||akb48gnittimatome.com^$generichide
-@@||omutulove.blog.fc2.com^$generichide
-@@||omutulove.seesaa.net^$generichide
-@@||kamikiyuki.hatenablog.com^$generichide
-@@||wakudan.seesaa.net^$generichide
-!
-!
 ! https://github.com/AdguardTeam/AdguardFilters/issues/35930
 ! https://github.com/AdguardTeam/AdguardFilters/issues/36696
 itpassportsiken.com#$?#.adsbygoogle { remove: true; }
@@ -413,8 +399,9 @@ video.tv-tokyo.co.jp#@##adspace
 avgirl.online#@#.google-ad
 ! https://github.com/AdguardTeam/AdguardFilters/issues/7918
 !! for safety due to possible ban
-@@||avgle.com/video/$genericblock,generichide
-@@||avgle.com/embed/$genericblock,generichide
+! disabled these rules and `@@||s10.histats.com/js15_as.js$domain=avgle.com` in https://forum.adguard.com/index.php?threads/34852/
+!@@||avgle.com/video/$genericblock,generichide
+!@@||avgle.com/embed/$genericblock,generichide
 !!
 avgle.com#@#.adsBox
 avgle.com#@#.pub_300x250
@@ -486,7 +473,6 @@ nasubiblog.com,kyukyoku-matome.com##.widget_pc_ad
 @@||mushinavi.com^$generichide
 ! https://github.com/AdguardTeam/AdguardFilters/issues/9057
 off-soft.net#@#.adsbygoogle
-! https://github.com/AdguardTeam/AdguardFilters/issues/9055
 ! https://github.com/AdguardTeam/AdguardFilters/issues/9050
 anipo.jp#@#.adbanner
 !---------------------------------------------------------------------------!
@@ -608,6 +594,7 @@ momon-ga.com##.repo-title:has(> strong)
 !
 ! https://github.com/AdguardTeam/AdguardFilters/issues/21092
 ! https://github.com/AdguardTeam/AdguardFilters/issues/11687
+! https://forum.adguard.com/index.php?threads/34852/
 !
 !-------------------
 !-------CSS---------
@@ -710,6 +697,11 @@ _ds_adtag_
 ! Section contains rules for specific websites
 !
 ! /banner/banner_ - if it is necessary, make this rule domain specific
+audioreview.m1001.coreserver.jp###side-fixed > #custom_html-23
+audioreview.m1001.coreserver.jp###list > .posts-list-upper-widget
+audioreview.m1001.coreserver.jp###side-fixed a[href^="//af.moshimo.com/af/c/click?"]
+kashi-mo.com##.rectangle_bnr
+headlines.yahoo.co.jp###lrec
 ||vipsister23.com/vipsister.html
 yomiuri.co.jp###rt_popup_overlay_yolyp_popup
 yomiuri.co.jp###yolyp_popup
@@ -771,8 +763,6 @@ karapaia.com##.ads
 hoikuen-ranking.com##.banner
 oricon.co.jp##aside.top-inline-banner
 oricon.co.jp##aside.block-header-banner
-.info/*/*/*/*/$domain=avgle.com
-/:\/\/sub\.avgle\.com\/.+\/[0-9a-h]{20,}\.js/$domain=avgle.com
 erogazo-ngo.com##p > a[rel="nofollow"]
 erogazo-ngo.com##a[href^="http://newmofu.doorblog.jp/archives/"]
 dot.asahi.com##section.gAreaTrendAd
@@ -957,9 +947,6 @@ watch.impress.co.jp##.ad.billboard
 ||juicyads.com^$domain=adserver.juicyads.com
 ||ads.adxadserv.com^$domain=adserver.juicyads.com
 gagetmatome.com###ad-bottom-oya
-||rationalan.pro^$domain=avgle.com
-/sound?cver*refer*avgle.com$popup
-||avgle.com$popup,domain=avgle.com
 ||blog.livedoor.jp/diet2channel/js/adarea.js
 jin115.com##.dix_ad_n
 vippers.jp##.ad
@@ -977,17 +964,11 @@ sponichi.co.jp###annex_pc_entertainment_mid_rect
 alba.co.jp##.kakomi_gr
 mukulog.com###mybox > .ad
 dengekionline.com###rectangleBanner
-$popup,domain=avgle.com,third-party
 itmedia.co.jp##iframe[id^="cxWidget_"]
 tvbok.com##a[href^="https://rpx.a8.net"]
 tvbok.com###left_fix_out #left_box3
 tvbok.com###right_2nd > .right_box2
 dlbooks.to##div[id^="ad_"]
-avgle.com##.container > div[style*="overflow: hidden"]
-||avgle.com/images/av/*.mp4
-||avgle.com/templates/frontend/videojs-aortsyxr.js
-avgle.com##body > div[style*="z-index"]:not([id]):not([class])
-||static.avgle.com/media/av^
 bookbang.jp###footer_ban
 evidus.com##.module__adheadion
 nicovideo.jp##.realdabista_banner
@@ -1327,13 +1308,32 @@ yahoo.co.jp##ul[class^="sponsor"]
 ||xrea.com/banner
 ||y-bbs.net/k/
 ||yahoo.co.jp/js/sq.js
-||yimg.jp/bdv/$image,object,subdocument
 ||yimg.jp/images/*img/banner
 ||yjaxc.yahoo.co.jp^
 ||yomiuri.co.jp/ad/
 ||zenback.jp^*/tracking.html
 !
+||avgle.com/avideos.js
+||avgle.com/images.php
+||sub2.avgle.com/67/1d/ba/671dbadbf37814e321f252eac8aa2500.js
+avgle.com##.col-sm-5 > a[class="btn btn-primary"][target="_blank"]
+avgle.com##div[class*="__bn-container"]
+avgle.com##.well#ps32-container
+avgle.com###aoverlay
+.info/*/*/*/*/$domain=avgle.com
+/:\/\/sub\.avgle\.com\/.+\/[0-9a-h]{20,}\.js/$domain=avgle.com
+||rationalan.pro^$domain=avgle.com
+/sound?cver*refer*avgle.com$popup
+||avgle.com$popup,domain=avgle.com
+$popup,domain=avgle.com,third-party
+avgle.com##.container > div[style*="overflow: hidden"]
+||avgle.com/images/av/*.mp4
+||avgle.com/templates/frontend/videojs-aortsyxr.js
+avgle.com##body > div[style*="z-index"]:not([id]):not([class])
+||static.avgle.com/media/av^
 !
+!+ NOT_OPTIMIZED
+||yimg.jp/bdv/
 ! https://github.com/AdguardTeam/AdguardFilters/issues/35721
 ! https://github.com/AdguardTeam/AdguardFilters/issues/28910
 ! https://github.com/AdguardTeam/AdguardFilters/issues/20703
@@ -1357,6 +1357,8 @@ gtoys.blog48.fc2.com###adright
 !
 ! White list. Fixing filtration errors(false-positive)
 !
+! https://github.com/AdguardTeam/AdguardFilters/issues/39382
+@@||s.yimg.jp/bdv/yahoo/darla/*/js/darla-secure-*.js$domain=mail.yahoo.co.jp
 ! https://github.com/AdguardTeam/AdguardFilters/issues/28607
 @@||fresheye.com^$domain=m-search.sponichi.co.jp
 ! https://github.com/AdguardTeam/AdguardFilters/issues/24764

@@ -2,16 +2,16 @@
 #
 # For more information about this list, see: https://pgl.yoyo.org/adservers/
 # ----
-# last updated:   Wed, 14 Aug 2019 10:13:56 GMT
-# entries:        3021
+# last updated:   Fri, 06 Sep 2019 11:50:09 GMT
+# entries:        3022
 # format:         hosts (hosts -- in hosts file format)
 # credits:        Peter Lowe - pgl@yoyo.org - https://pgl.yoyo.org/ - https://twitter.com/pgl
-# this URL:       http://pgl.yoyo.org/adservers/serverlist.php?hostformat=hosts&showintro=1&mimetype=plaintext
+# this URL:       https://pgl.yoyo.org/adservers/serverlist.php?hostformat=hosts&showintro=1&mimetype=plaintext
 # Patreon:        https://patreon.com/blocklist
 # other formats:  https://pgl.yoyo.org/adservers/formats.php
 # policy:         https://pgl.yoyo.org/adservers/policy.php
 #
-# start date:    Fri, 27 Aug 1999 00:00:00
+# start date:    Tue, 14 Sep 1999 00:00:00
 127.0.0.1 101com.com
 127.0.0.1 101order.com
 127.0.0.1 123found.com
@@ -45,7 +45,6 @@
 127.0.0.1 7search.com
 127.0.0.1 82o9v830.com
 127.0.0.1 99count.com
-127.0.0.1 a-ads.com
 127.0.0.1 a.aproductmsg.com
 127.0.0.1 a.consumer.net
 127.0.0.1 a.mktw.net
@@ -69,6 +68,7 @@
 127.0.0.1 absurdwater.com
 127.0.0.1 abz.com
 127.0.0.1 ac.rnm.ca
+127.0.0.1 acceptable.a-ads.com
 127.0.0.1 acridtwist.com
 127.0.0.1 actionsplash.com
 127.0.0.1 actualdeals.com
@@ -91,6 +91,7 @@
 127.0.0.1 ad-up.com
 127.0.0.1 ad.100.tbn.ru
 127.0.0.1 ad.71i.de
+127.0.0.1 ad.a-ads.com
 127.0.0.1 ad.a8.net
 127.0.0.1 ad.abcnews.com
 127.0.0.1 ad.abctv.com
@@ -373,7 +374,6 @@
 127.0.0.1 ads.batpmturner.com
 127.0.0.1 ads.belointeractive.com
 127.0.0.1 ads.berlinonline.de
-127.0.0.1 ads.betanews.com
 127.0.0.1 ads.betfair.com
 127.0.0.1 ads.bigchurch.com
 127.0.0.1 ads.bigfoot.com
@@ -479,7 +479,6 @@
 127.0.0.1 ads.guardianunlimited.co.uk
 127.0.0.1 ads.guru3d.com
 127.0.0.1 ads.harpers.org
-127.0.0.1 ads.harvard.edu
 127.0.0.1 ads.hbv.de
 127.0.0.1 ads.hearstmags.com
 127.0.0.1 ads.heartlight.org
@@ -690,7 +689,7 @@
 127.0.0.1 ads8.com
 127.0.0.1 adsafeprotected.com
 127.0.0.1 adsatt.abc.starwave.com
-127.0.0.1 Adsatt.ABCNews.starwave.com
+127.0.0.1 adsatt.abcnews.starwave.com
 127.0.0.1 adsatt.espn.go.com
 127.0.0.1 adsatt.espn.starwave.com
 127.0.0.1 Adsatt.go.starwave.com
@@ -1112,7 +1111,6 @@
 127.0.0.1 bigclicks.com
 127.0.0.1 billboard.cz
 127.0.0.1 biosda.com
-127.0.0.1 bitads.net
 127.0.0.1 bitmedianetwork.com
 127.0.0.1 bizad.nikkeibp.co.jp
 127.0.0.1 bizible.com
@@ -1134,7 +1132,6 @@
 127.0.0.1 blushingboundary.com
 127.0.0.1 bm.annonce.cz
 127.0.0.1 bn.bfast.com
-127.0.0.1 boersego-ads.de
 127.0.0.1 boilingbeetle.com
 127.0.0.1 boilingumbrella.com
 127.0.0.1 boomads.com
@@ -1230,6 +1227,8 @@
 127.0.0.1 claria.com
 127.0.0.1 clearcomb.com
 127.0.0.1 clevernt.com
+127.0.0.1 click.a-ads.com
+127.0.0.1 click.absoluteagency.com
 127.0.0.1 click.fool.com
 127.0.0.1 click.kmindex.ru
 127.0.0.1 click2freemoney.com
@@ -1397,6 +1396,7 @@
 127.0.0.1 deepintent.com
 127.0.0.1 defectivesun.com
 127.0.0.1 delegatediscussion.com
+127.0.0.1 deloo.de
 127.0.0.1 deloton.com
 127.0.0.1 demandbase.com
 127.0.0.1 demdex.net
@@ -1597,7 +1597,6 @@
 127.0.0.1 freepay.com
 127.0.0.1 freeskreen.com
 127.0.0.1 freestats.com
-127.0.0.1 freestats.tv
 127.0.0.1 freewebcounter.com
 127.0.0.1 freshmarketer.com
 127.0.0.1 frightenedpotato.com
@@ -1837,7 +1836,6 @@
 127.0.0.1 kliks.nl
 127.0.0.1 kmpiframe.keepmeposted.com.mt
 127.0.0.1 knifeoctopus.com
-127.0.0.1 kniverto.com
 127.0.0.1 knorex.com
 127.0.0.1 komoona.com
 127.0.0.1 kompasads.com
@@ -2042,6 +2040,7 @@
 127.0.0.1 mopub.com
 127.0.0.1 mouseflow.com
 127.0.0.1 mousestats.com
+127.0.0.1 movad.net
 127.0.0.1 mowfruit.com
 127.0.0.1 mpstat.us
 127.0.0.1 mr-rank.de
@@ -2070,7 +2069,6 @@
 127.0.0.1 mytop-in.net
 127.0.0.1 mytrafficads.com
 127.0.0.1 myvisualiq.net
-127.0.0.1 mzbcdn.net
 127.0.0.1 n69.com
 127.0.0.1 naj.sk
 127.0.0.1 nastydollars.com
@@ -2276,7 +2274,6 @@
 127.0.0.1 possibleboats.com
 127.0.0.1 postback.iqm.com
 127.0.0.1 postrelease.com
-127.0.0.1 potenza.cz
 127.0.0.1 pr-star.de
 127.0.0.1 praddpro.de
 127.0.0.1 prchecker.info
@@ -2303,7 +2300,6 @@
 127.0.0.1 promos.bwin.it
 127.0.0.1 promos.fling.com
 127.0.0.1 promote.pair.com
-127.0.0.1 promotion-campaigns.com
 127.0.0.1 pronetadvertising.com
 127.0.0.1 propellerads.com
 127.0.0.1 proper.io
@@ -2375,6 +2371,7 @@
 127.0.0.1 ratings.lycos.com
 127.0.0.1 rayjump.com
 127.0.0.1 rb1.design.ru
+127.0.0.1 re-directme.com
 127.0.0.1 reachjunction.com
 127.0.0.1 reactx.com
 127.0.0.1 readgoldfish.com
@@ -2395,6 +2392,7 @@
 127.0.0.1 record.bonniergaming.com
 127.0.0.1 record.mrwin.com
 127.0.0.1 redirectvoluum.com
+127.0.0.1 redshell.io
 127.0.0.1 referralware.com
 127.0.0.1 referrer.disqus.com
 127.0.0.1 reflectivereward.com
@@ -2613,6 +2611,7 @@
 127.0.0.1 stat24.com
 127.0.0.1 stat24.meta.ua
 127.0.0.1 statcounter.com
+127.0.0.1 static.a-ads.com
 127.0.0.1 static.fmpub.net
 127.0.0.1 static.itrack.it
 127.0.0.1 staticads.btopenworld.com
@@ -2714,6 +2713,7 @@
 127.0.0.1 tfag.de
 127.0.0.1 theadex.com
 127.0.0.1 theadhost.com
+127.0.0.1 thebugs.ws
 127.0.0.1 therapistla.com
 127.0.0.1 thinkablerice.com
 127.0.0.1 thirdrespect.com
@@ -2818,6 +2818,7 @@
 127.0.0.1 traktrafficflow.com
 127.0.0.1 tranquilside.com
 127.0.0.1 travis.bosscasinos.com
+127.0.0.1 treasuredata.com
 127.0.0.1 trekdata.com
 127.0.0.1 tremendoustime.com
 127.0.0.1 trendcounter.com
@@ -2888,6 +2889,7 @@
 127.0.0.1 visistat.com
 127.0.0.1 visit.webhosting.yahoo.com
 127.0.0.1 visitbox.de
+127.0.0.1 visitpath.com
 127.0.0.1 visual-pagerank.fr
 127.0.0.1 visualrevenue.com
 127.0.0.1 vivtracking.com
@@ -3028,7 +3030,6 @@
 127.0.0.1 zeus.developershed.com
 127.0.0.1 zeusclicks.com
 127.0.0.1 zlp6s.pw
-127.0.0.1 zm232.com
 127.0.0.1 zmedia.com
 127.0.0.1 zqtk.net
 127.0.0.1 zy16eoat1w.com

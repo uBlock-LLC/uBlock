@@ -139,17 +139,24 @@ vAPI.proceduralCosmeticFiltering = (function() {
       
         if (selector[0] == ">") {
             selector = ":scope" + selector;
-    
-        if (scopeSupported) {
-          return all ? subtree.querySelectorAll(selector) :
-            subtree.querySelector(selector);
+            if (scopeSupported) {
+                try {
+                    return all ? subtree.querySelectorAll(selector) :
+                                subtree.querySelector(selector);
+                } catch(e) {
+                    return null;
+                }
+            }
+            if (scopeSupported == null)
+                return tryQuerySelector(subtree, selector, all);
+            return null;
         }
-        if (scopeSupported == null)
-          return tryQuerySelector(subtree, selector, all);
-        return null;
-      }
-      return all ? subtree.querySelectorAll(selector) :
-        subtree.querySelector(selector);
+        try {
+            return all ? subtree.querySelectorAll(selector) :
+                        subtree.querySelector(selector);
+        } catch(e) {
+            return null;
+        }
     }
     /* Scriptlet below borrowed from: https://github.com/adblockplus/adblockpluscore/blob/3e16d3602509b2dbb2238ab1ebcbc5e5b5993862/lib/common.js#L40 */
     function filterToRegExp(text, captureAll = false) {
@@ -276,7 +283,13 @@ vAPI.proceduralCosmeticFiltering = (function() {
             if (typeof styleFilter === 'undefined') {
                 continue;
             }
-            selectors.push(styleFilter[filter]);
+            if(styleFilter.hasOwnProperty(filter)) {
+                if(Array.isArray(styleFilter[filter])) {
+                    selectors.push(...styleFilter[filter]);
+                } else {
+                    selectors.push(styleFilter[filter]);
+                }
+            }
           }
           return selectors;
         };
@@ -352,10 +365,10 @@ vAPI.proceduralCosmeticFiltering = (function() {
         }
         return combineSelectors;
     }
-    var hasSelector = function(hasSelector, prefix) {
+    var hasSelector = function(hasSelector, prefix, hasParallelSiblingSelector = false) {
         this.prefix = prefix;
         this._innerSelectors = hasSelector;
-        this.hasParallelSiblingSelector = false;
+        this.hasParallelSiblingSelector = hasParallelSiblingSelector;
         this.dependsOnDOM = true;
     }
     hasSelector.prototype = {
@@ -373,6 +386,7 @@ vAPI.proceduralCosmeticFiltering = (function() {
         },
         getSelectors: function(rootnode, selectors, targets) {
             var nodes = prime(rootnode,this.prefix);
+            if(nodes == null) return;
             var matchSelector = [];
             var lastRoot = null;
             for ( var node of nodes ) {
@@ -401,10 +415,10 @@ vAPI.proceduralCosmeticFiltering = (function() {
             return;
         }
     }
-    var containSelector = function(selectorText, prefix) {
+    var containSelector = function(selectorText, prefix, hasParallelSiblingSelector  = false) {
         this.prefix = prefix;
         this._regexp = makeRegExpParameter(selectorText);
-        this.hasParallelSiblingSelector = false;
+        this.hasParallelSiblingSelector = hasParallelSiblingSelector;
         this.dependsOnCharacterData = true;
         this.dependsOnDOM = true;
     }
@@ -413,6 +427,7 @@ vAPI.proceduralCosmeticFiltering = (function() {
             var matchSelector = [];
             let lastRoot = null;
             var nodes = prime(rootnode, this.prefix);
+            if(nodes == null) return;
             for ( var node of nodes ) {
                 if (lastRoot && lastRoot.contains(node) && !this.hasParallelSiblingSelector){
                     continue;
@@ -423,6 +438,29 @@ vAPI.proceduralCosmeticFiltering = (function() {
                 }
                 lastRoot = node;
                 if (this._regexp && this._regexp.test(node.textContent)) {
+                    matchSelector.push(makeSelector(node));
+                }
+            }
+            if(matchSelector.length > 0) 
+                selectors.set('contains',matchSelector);
+            return;
+        }
+    }
+    var matchCSSSelector = function(selectorText, prefix, temp , pseudoClass) {
+        this.prefix = prefix;
+        this.pseudoClass = pseudoClass;
+        let matches = /([^:]+):(.*)/g.exec(selectorText);
+        this.propertName = matches[1];
+        this._regexp = makeRegExpParameter(matches[2].trim());
+    }
+    matchCSSSelector.prototype = {
+        getSelectors: function(rootnode, selectors) {
+            var matchSelector = [];
+            var nodes = prime(rootnode, this.prefix);
+            if(nodes == null) return;
+            for ( var node of nodes ) {
+                const style = window.getComputedStyle(node, this.pseudoClass);
+                if ( style !== null && this._regexp && this._regexp.test(style[this.propertName])) {
                     matchSelector.push(makeSelector(node));
                 }
             }
@@ -443,10 +481,10 @@ vAPI.proceduralCosmeticFiltering = (function() {
             return;
         }
     }
-    var propsSelector = function(propertyExpression, prefix) {
+    var propsSelector = function(propertyExpression, prefix, hasParallelSiblingSelector = false) {
         this.prefix = prefix;
         this.propertyExpression = propertyExpression;
-        this.hasParallelSiblingSelector = false;
+        this.hasParallelSiblingSelector = hasParallelSiblingSelector;
         this.dependsOnStyles = true;
         this.dependsOnDOM = true;
         styleObserver.registerStyleFilter(propertyExpression);
@@ -455,6 +493,7 @@ vAPI.proceduralCosmeticFiltering = (function() {
         getSelectors: function(rootnode, selectors, targets) {
             var matchSelector = [];
             var nodes = prime(rootnode, this.prefix);
+            if(nodes == null) return;
             var styleSelectors = styleObserver.getSelector(this.propertyExpression);
             if (styleSelectors.length === 0)
                 return;
@@ -478,80 +517,53 @@ vAPI.proceduralCosmeticFiltering = (function() {
         }
     }
     var proceduralSelector = function() {
-        this.operatorMap = new Map([['has', hasSelector], ['contains', containSelector], ['properties', propsSelector]]);
+        this.operatorMap = new Map([['plain', plainSelector],['-abp-has', hasSelector],['has', hasSelector], ['-abp-contains', containSelector],['contains', containSelector], ['matches-css', matchCSSSelector], ['matches-css-after', matchCSSSelector], ['matches-css-before', matchCSSSelector], ['-abp-properties', propsSelector]]);
         this.patterns = [];
     }
     proceduralSelector.prototype = {
-        parseProcedure : function(expression, prefix = "") {
+        buildFunction(s) { 
             let tasks = [];
-            let matches = abpSelectorRegexp.exec(expression);
-            if(!matches) {
-                return [new plainSelector(expression)];
-            } 
-            var prefix = expression.substring(0,matches.index);
-            let remaining = expression.substring(matches.index + matches[0].length);
-            let parsed = this.parseContent(remaining,0);
-            let selectorText = parsed.text;
-            if(matches[1] == "properties") {
-                tasks.push(new (this.operatorMap.get(matches[1]))(selectorText,prefix));
-            }
-            else if(matches[1] == "has") {
-                let procSelector = this.parseProcedure(selectorText, prefix);
-                tasks.push(new (this.operatorMap.get(matches[1]))(procSelector,prefix));
-            }
-            else if(matches[1] == "contains") {
-                tasks.push(new (this.operatorMap.get(matches[1]))(selectorText,prefix));
-            }
-            else {
-                console.error(new SyntaxError("Failed to parse uBlock."));
-                return null;
-            }
-            let suffixtext = remaining.substring(parsed.end + 1);
-            if (suffixtext != "") {
-                let suffix = this.parseProcedure(suffixtext);
-                if(suffix.length == 1 && suffix[0] instanceof plainSelector && suffix[0].maybeContainsSiblingCombinators) {
-                    for (let task of tasks) {
-                        if(task instanceof hasSelector || task instanceof containSelector ||  task instanceof proceduralSelector) {
-                            task.hasParallelSiblingSelector = true;
-                        }
+            let selectorText = "";
+            for (var property in s) {
+                let cls = new (this.operatorMap.get(property))(s[property].st, s[property].pf, s[property].pss, s[property].ps);
+                if(property == "plain") {
+                    tasks.push(cls);
+                    selectorText += s[property].st;
+                    return [tasks, selectorText];
+                }
+                selectorText += s[property].pf + ':' + property + '(';
+                let inner = s[property]._is
+                if(inner) {
+                    cls["_innerSelectors"] = [];
+                    for(let i = 0; i < inner.length; i++) {
+                        let [innerTasks, innerSelectorText] = this.buildFunction(inner[i]);
+                        selectorText += innerSelectorText;
+                        cls["_innerSelectors"].push(...innerTasks);
                     }
+                } else {
+                    selectorText += s[property].st;
                 }
-                tasks.push(...suffix);
+                selectorText += ")";
+                tasks.push(cls);
             }
-            return tasks;
+            return [tasks, selectorText];
         },
-        parseContent: function(content, startIndex) {
-            let parens = 1;
-            let quote = null;
-            let i = startIndex;
-            for (; i < content.length; i++) {
-                let c = content[i];
-                if (c == "\\") {
-                i++;
-                }
-                else if (quote) {
-                if (c == quote)
-                    quote = null;
-                }
-                else if (c == "'" || c == '"')
-                quote = c;
-                else if (c == "(")
-                parens++;
-                else if (c == ")") {
-                parens--;
-                if (parens == 0)
-                    break;
-                }
+        decompile(s) { 
+            let ss = JSON.parse(s);
+            let tasks = [];
+            let selectorText = "";
+            for(let i = 0; i < ss.length; i++) {
+                let [innerTasks, innerSelectorText] = this.buildFunction(ss[i]);
+                tasks.push(...innerTasks);
+                selectorText += innerSelectorText;
             }
-            if (parens > 0)
-                return null;
-            return {text: content.substring(startIndex, i), end: i};
-        },
+            return [tasks, selectorText];
+        }, 
         applyPatterns: function(patterns) {
             this.patterns = [];
             for (let selector of patterns) {
-                var tasks = this.parseProcedure(selector,"");
-                this.patterns.push([selector, tasks]);
+                let [tasks, selectorText]  = this.decompile(selector);
+                this.patterns.push([selectorText, tasks]);
             } 
             if(this.patterns.length > 0) {
                 this.processPattern();
@@ -571,7 +583,7 @@ vAPI.proceduralCosmeticFiltering = (function() {
                 styleObserver.readStyleSheet(stylesheet);
             }
   
-           var matchSelector = [];
+            var matchSelector = [];
             var matchProcSelector = [];
             let mutationTargets = this.extractMutationTargets(mutations);
             var mutations = mutations;
@@ -686,24 +698,6 @@ vAPI.proceduralCosmeticFiltering = (function() {
       //this.processPattern([stylesheet]);
       objQueueProcessing.add([stylesheet]);
     }
-    /*var hideElements = function(selectors) {
-      // https://github.com/uBlockAdmin/uBlock/issues/207
-      // Do not call querySelectorAll() using invalid CSS selectors
-      if ( selectors.length === 0 ) {
-          return;
-      }
-      if ( document.body === null ) {
-          return;
-      }
-      // https://github.com/uBlockAdmin/uBlock/issues/158
-      // Using CSSStyleDeclaration.setProperty is more reliable
-      var elems = document.querySelectorAll(selectors);
-      var i = elems.length;
-      while ( i-- ) {
-          elems[i].style.setProperty('display', 'none', 'important');
-      }
-      messager.send({ what: 'cosmeticFiltersActivated' });
-    };*/
     return new proceduralSelector();
   })();
 
