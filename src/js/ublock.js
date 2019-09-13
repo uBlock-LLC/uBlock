@@ -494,9 +494,7 @@ https://github.com/darkskyapp/string-hash/blob/master/index.js
     },
     checkSize: function() {
         if (this.pos !== 0 && this.pos > this.buffer.byteLength) {
-            throw new Error(
-            `StaticDataView too small: ${this.buffer.byteLength}, but required ${this.pos - 1} bytes`,
-            );
+            console.error(`StaticDataView too small: ${this.buffer.byteLength}, but required ${this.pos - 1} bytes`);
         }
     },
     setPos: function(pos){
@@ -509,7 +507,7 @@ https://github.com/darkskyapp/string-hash/blob/master/index.js
         this.pos += byteLength;
         const str = String.fromCharCode.apply(
         null,
-        this.buffer.subarray(this.pos - byteLength, this.pos),
+        this.buffer.subarray(this.pos - byteLength, this.pos)
         );
         if (punyEncoded) {
             return punycode.decode(str);
@@ -521,7 +519,7 @@ https://github.com/darkskyapp/string-hash/blob/master/index.js
         const view = new Uint32Array(
         this.buffer.buffer,
         this.pos + this.buffer.byteOffset,
-        desiredSize,
+        desiredSize
         );
         this.pos += desiredSize * 4;
         return view;
