@@ -196,25 +196,6 @@
 µBlock.getAvailableLists = function(callback) {
     var availableLists = {};
     var relocationMap = {};
-    let tempFLChangeMap = new Map([
-        ["assets/thirdparties/abp-filters-anti-cv/english.txt", "assets/thirdparties/raw.githubusercontent.com/abp-filters-anti-cv/english.txt"],
-        ["assets/thirdparties/adblock-nocoin-list/nocoin.txt", "assets/thirdparties/raw.githubusercontent.com/adblock-nocoin-list/nocoin.txt"],
-        ["assets/thirdparties/cjxlist1.googlecode.com/svn/cjxlist.txt", "assets/thirdparties/raw.githubusercontent.com/cjx82630/cjxlist/cjxlist.txt"],
-        ["assets/thirdparties/dl.dropboxusercontent.com/u/1289327/abpxfiles/filtri.txt", "assets/thirdparties/raw.githubusercontent.com/gioxx/filtri.txt"],
-        ["assets/thirdparties/gitorious.org/adblock-latvian/adblock-latvian/raw/master_lists/latvian-list.txt", "assets/thirdparties/adblock-latvian/latvian-list.txt"],
-        ["assets/thirdparties/home.fredfiber.no/langsholt/adblock.txt", "assets/thirdparties/raw.githubusercontent.com/DandelionSprout/adfilt/NorwegianList.txt"],
-        ["assets/thirdparties/indonesianadblockrules.googlecode.com/hg/subscriptions/abpindo.txt", "assets/thirdparties/raw.githubusercontent.com/indonesianadblockrules/subscriptions/abpindo.txt"],
-        ["assets/thirdparties/liste-ar-adblock.googlecode.com/hg/Liste_AR.txt", "assets/thirdparties/easylist-downloads.adblockplus.org/Liste_AR.txt"],
-        ["assets/thirdparties/raw.githubusercontent.com/AdBlockPlusIsrael/EasyListHebrew/master/EasyListHebrew.txt", "assets/thirdparties/raw.githubusercontent.com/EasyListHebrew/master/EasyListHebrew.txt"],
-        ["assets/thirdparties/raw.githubusercontent.com/adblockpolska/Adblock_PL_List/master/adblock_polska.txt", "assets/thirdparties/raw.githubusercontent.com/polish-adblock-filters/adblock.txt"],
-        ["assets/thirdparties/raw.githubusercontent.com/wiltteri/wiltteri.txt/master/wiltteri.txt", "assets/thirdparties/raw.githubusercontent.com/finnish-easylist-addition/Finland_adb.txt"],
-        ["assets/thirdparties/spam404bl.com/spam404scamlist.txt", "assets/thirdparties/raw.githubusercontent.com/Spam404/lists/adblock-list.txt"],
-        ["assets/thirdparties/www.fanboy.co.nz/fanboy-korean.txt", "assets/thirdparties/raw.githubusercontent.com/adblock-korea-contrib/filter.txt"],
-        ["assets/thirdparties/www.fanboy.co.nz/fanboy-swedish.txt", "assets/thirdparties/raw.githubusercontent.com/Frellwits-filter-lists/Frellwits-Swedish-Filter.txt"],
-        ["assets/thirdparties/www.fanboy.co.nz/fanboy-vietnam.txt", "assets/thirdparties/raw.githubusercontent.com/abpvn/abpvn.txt"],
-        ["assets/thirdparties/www.zoso.ro/pages/rolist.txt", "assets/thirdparties/raw.githubusercontent.com/ROad-Block/road-block-filters-light.txt"]
-    ]);
-
     var locationOfAA = 'assets/thirdparties/easylist-downloads.adblockplus.org/exceptionrules.txt';
     var fixLocation = function(location) {
         // https://github.com/uBlockAdmin/uBlock/issues/418
@@ -243,9 +224,6 @@
                 if ( off && lists.hasOwnProperty(location) ) {
                     off = lists[location].off === true;
                 }
-            }
-            if(tempFLChangeMap.has(location)) {
-                location = tempFLChangeMap.get(location);
             }
             availableEntry = availableLists[location];
             if ( availableEntry === undefined ) {

@@ -548,7 +548,7 @@ var onMessage = function(request, sender, callback) {
             };
             if(!response.shutdown && !pageStore.applyDocumentFiltering) {
                 if ( request.selectors != "" ) {
-                    details.code = request.selectors + '\n{display:none!important;}';
+                    details.code = request.selectors;
                     vAPI.insertCSS(request.tabId, details);
                 }
             }

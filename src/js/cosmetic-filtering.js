@@ -93,6 +93,7 @@
             [ ':contains',      ["(", ")", [1, -1], ":-abp-contains"] ]
         ]);
         this.extended = false; 
+        this.snippet = false;
         return this;
     };
     
@@ -125,6 +126,21 @@
         }
         return str;
     }
+    FilterParser.prototype.convertuBOStyleToABP = function(suffix, spos) {
+        let stylePrefix = suffix.slice(0, spos);
+        let styleSuffix = suffix.slice(spos);
+        let style = /:style\(([^)]+)\)/.exec(styleSuffix)[1];
+        return `${stylePrefix} {${style}}`; 
+    }
+    FilterParser.prototype.convertuBOJsToABP = function(suffix) {
+        let invalid = false;
+        let arrParams = /^\+js\(([^)]+)\)/.exec(suffix)[1].replace(/,[\s]+/gi," ").replace(".js","").split(" ");
+        let snippetName = arrParams[0];
+        if(!supportedSnippet.has(snippetName)) {
+            invalid = true;
+        }
+        return [invalid, arrParams.join(" ")];
+    }
     FilterParser.prototype.parse = function(s) {
         // important!
         this.reset();
@@ -154,21 +170,32 @@
         if ( this.suffix.charAt(1) === '[' && this.suffix.slice(2, 9) === 'href^="' ) {
             this.suffix = this.suffix.slice(1);
         }
+        
         this.type = matches[2].charAt(1); 
         if(reAdguardExtCssSyntax.test(this.suffix)) { 
             this.suffix = this.convertAdGuardRule(this.suffix);
         }
-        
+        let spos = this.suffix.indexOf(":style");
+        if(spos !== -1) {
+            this.suffix = this.convertuBOStyleToABP(this.suffix, spos);
+            this.type = '$';
+        }
+        if(/^\+js\(/.test(this.suffix)) {
+            [this.invalid, this.suffix] = this.convertuBOJsToABP(this.suffix);
+            if(this.invalid) return this;
+            this.type = '$';
+        }
         if(this.type == "$") { 
             if(reAdguardCssSyntax.test(this.suffix)) {
-                this.extended = false;
+                if(reprocSelector.test(this.suffix))
+                    this.extended = true;
             } else {
                 let m = /([^\s]+)/.exec(this.suffix);
                 if(!supportedSnippet.has(m[0])) {
                     this.invalid = true;
                     return this;
                 }
-                this.extended = true;
+                this.snippet = true;
             }
         }
         this.unhide = this.type === '@' ? 1 : 0;
@@ -677,13 +704,13 @@
         return {text: content.substring(startIndex, i), end: i};
     } 
 
-    const normalizedOperators = new Set(['-abp-contains', '-abp-has', '-abp-properties' , 'matches-css', 'matches-css-after', 'matches-css-before']);
+    const normalizedOperators = new Set(['-abp-contains', '-abp-has', '-abp-properties' , 'matches-css', 'matches-css-after', 'matches-css-before', 'not']);
     const shortNames = new Map([
         ["pseudoCls", "ps"],
         ["prefix", "pf"],
         ["selectorText", "st"],
         ["_innerSelectors", "_is"],
-        ["maybeContainsSiblingCombinators", "csc"],
+        ["startsWithSiblingOperator", "sso"],
         ["hasParallelSiblingSelector", "pss"]
     ]);
 
@@ -691,6 +718,7 @@
         let tasks = [], prefix, remaining, parsed, selectorText, isValid = true, procSelector = null, pseudoClass = null;
         let matches = pseudoClassReg.exec(expression);
         if(!matches) {
+            this.shouldObserveAttributes = !this.shouldObserveAttributes ? /[#.]|\[.+\]/.test(expression) : true;
             return [true,   
                         [{   
                             ["plain"]: {
@@ -698,7 +726,7 @@
                                 [shortNames.get('prefix')]: "",
                                 [shortNames.get('selectorText')]: expression,
                                 [shortNames.get('_innerSelectors')]: null,
-                                [shortNames.get('maybeContainsSiblingCombinators')]: /[~+]/.test(expression),
+                                [shortNames.get('startsWithSiblingOperator')]: /^\s*[+~]/.test(expression),
                                 [shortNames.get('hasParallelSiblingSelector')]: false
                             }
                         }]
@@ -713,7 +741,12 @@
         selectorText = parsed.text;
         pseudoClass = (matches[3] == "matches-css-after" ?  ":after" : (matches[3] == "matches-css-before" ?  ":before" : null ));
        
-       if(matches[3] == "-abp-has") {
+        if(matches[3] == "-abp-contains")
+            this.shouldObserveCharacterData = true; 
+        
+        this.shouldObserveAttributes = !this.shouldObserveAttributes ? /[#.]|\[.+\]/.test(prefix) : true;
+
+        if(matches[3] == "-abp-has" || matches[3] == "not") {
             [isValid, procSelector] = this.parseProcedure(selectorText);
         } else if(normalizedOperators.has(matches[3])) {
             isValid = true;
@@ -728,6 +761,7 @@
                     [shortNames.get('prefix')]: prefix,
                     [shortNames.get('selectorText')]: procSelector === null ? selectorText : null,
                     [shortNames.get('_innerSelectors')]: procSelector,
+                    [shortNames.get('startsWithSiblingOperator')]: /^\s*[+~]/.test(prefix),
                     [shortNames.get('hasParallelSiblingSelector')]: false
                 }
             });
@@ -736,11 +770,11 @@
                 let suffix;
                 [isValid, suffix] = this.parseProcedure(suffixtext);
                 if(isValid) {
-                    if(Object.keys(suffix).length == 1) {
-                        if(Object.keys(suffix)[0] == "plain" && suffix["plain"].maybeContainsSiblingCombinators) {
+                    if(suffix.length > 0) {
+                        if(Object.values(suffix[0])[0][shortNames.get('startsWithSiblingOperator')]) {
                             for (let task of tasks) {
-                                if(Object.keys(task)[0] == "-abp-has" || Object.keys(task)[0] == "-abp-contains" ||  Object.keys(task)[0] == "-abp-properties") {
-                                    task[Object.keys(task)[0]].hasParallelSiblingSelector = true;
+                                if(Object.keys(task)[0] != "plain") {
+                                    task[Object.keys(task)[0]][shortNames.get('hasParallelSiblingSelector')] = true;
                                 }
                             }
                         }
@@ -772,11 +806,25 @@
         
         let isValid;
         this.pseudoClassExpression = false;
-        if(this.parser.type == "$" && this.parser.extended) { 
-            isValid = true;
-        } else if(this.parser.type == "$" && !this.parser.extended) {
-            let matches = /(.+?)\s*\{(.*)\}\s*$/.exec(parsed.suffix);
-            isValid = this.isValidSelector(matches[1].trim()) && isValidStyle(matches[2].trim());
+        this.shouldObserveAttributes = false;
+        this.shouldObserveCharacterData = false; 
+
+        if(this.parser.type == "$") {
+            if(this.parser.snippet)
+                isValid = true;
+            else if(this.parser.extended) {
+                let matches = /(.+?)\s*\{(.*)\}\s*$/.exec(parsed.suffix);
+                isValid = this.isValidSelector(matches[1].trim());
+                if(!isValid && reprocSelector.test(matches[1].trim()) && isValidStyle(matches[2].trim())) { 
+                    let tasks;
+                    [isValid, tasks] = this.parseProcedure(matches[1].trim());
+                    this.pseudoClassExpression = true;
+                    parsed.suffix = JSON.stringify({'tasks': tasks, 'style': matches[2].trim(), 'attr': this.shouldObserveAttributes, 'data': this.shouldObserveCharacterData});
+                }
+            } else {
+                let matches = /(.+?)\s*\{(.*)\}\s*$/.exec(parsed.suffix);
+                isValid = this.isValidSelector(matches[1].trim()) && isValidStyle(matches[2].trim());
+            }
         }
         else {
             isValid = this.isValidSelector(parsed.suffix);
@@ -784,7 +832,7 @@
                 let tasks;
                 [isValid, tasks] = this.parseProcedure(parsed.suffix);
                 this.pseudoClassExpression = true;
-                parsed.suffix = JSON.stringify(tasks);
+                parsed.suffix = JSON.stringify({'tasks': tasks, 'style': "",  'attr': this.shouldObserveAttributes, 'data': this.shouldObserveCharacterData});
             }
         }
         // For hostname- or entity-based filters, class- or id-based selectors are
@@ -911,9 +959,9 @@
             hash = this.pseudoClassExpression ? makeHash(unhide, domain, this.domainHashMask, this.procedureMask) : makeHash(unhide, domain, this.domainHashMask);
         }
         let hshash = µb.tokenHash(hostname);
-        if(parsed.type == "$" && parsed.extended)  
+        if(parsed.type == "$" && parsed.snippet)  
                 out.push(['hs+', hash, hshash, parsed.suffix]);
-        else if(parsed.type == "$" && !parsed.extended)
+        else if(parsed.type == "$")
             out.push(['hs', hash, hshash, parsed.suffix]); 
         else 
             out.push(['h', hash, hshash, parsed.suffix]);
@@ -923,9 +971,9 @@
     
     FilterContainer.prototype.compileEntitySelector = function(hostname, parsed, out) {
         let entity = hostname.slice(0, -2);
-        if(parsed.type == "$" && parsed.extended)  
+        if(parsed.type == "$" && parsed.snippet)  
             out.push(['es+', entity, parsed.suffix]);
-        else if(parsed.type == "$" && !parsed.extended)
+        else if(parsed.type == "$")
             out.push(['es', entity, parsed.suffix]); 
         else 
             out.push(['e', entity, parsed.suffix]);    
@@ -1359,9 +1407,11 @@
             cosmeticDonthide: [],
             netHide: [],
             netCollapse: µb.userSettings.collapseBlocked,
-            cosmeticUserCss: []
+            cosmeticUserCss: [],
+            shouldObserveAttributes: false,
+            shouldObserveCharacterData: false
         };
-        if(options.skipCosmeticFiltering){
+        if(options.skipCosmeticFiltering) {
             return r;
         }
         
@@ -1401,6 +1451,9 @@
         if(this.hostnameFilterDataView.hasOwnProperty("style")) {
             hash = makeHash(0, domain, this.domainHashMask);
             this.hostnameFilterDataView["style"].retrieve(hosthashes, hash, r.cosmeticUserCss);
+
+            hash = makeHash(0, domain, this.domainHashMask, this.procedureMask);
+            this.hostnameFilterDataView["style"].retrieve(hosthashes, hash, r.procedureHide);
         }
        
         // No entity exceptions as of now
@@ -1410,8 +1463,17 @@
         hash = makeHash(0, domain, this.domainHashMask, this.procedureMask);
         this.hostnameFilterDataView[flag].retrieve(hosthashes, hash, r.procedureHide);
 
+        if(r.procedureHide.length > 0) {
+            r.shouldObserveAttributes = r.procedureHide.some(selector => selector.indexOf("\"attr\":true") !== -1);
+            r.shouldObserveCharacterData = r.procedureHide.some(selector => selector.indexOf("\"data\":true") !== -1);
+        }
+
         if(request.procedureSelectorsOnly) {
-            return r.procedureHide;
+            return  { 
+                        procedureHide :r.procedureHide,
+                        shouldObserveAttributes: r.shouldObserveAttributes,
+                        shouldObserveCharacterData: r.shouldObserveCharacterData
+                    };
         }
         
         // https://github.com/uBlockAdmin/uBlock/issues/188

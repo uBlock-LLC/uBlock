@@ -757,7 +757,7 @@ https://github.com/darkskyapp/string-hash/blob/master/index.js
             reParams.lastIndex = 0;
             let matches;
             while ( matches = reParams.exec(scriptlets)) {
-                scriptlets = scriptlets.replace(matches[0], args[matches[2] - 1]);
+                scriptlets = scriptlets.replace(matches[0], args[matches[2] - 1] === undefined ? null : args[matches[2] - 1]);
             }
             return scriptlets;
         }
