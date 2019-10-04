@@ -56,6 +56,9 @@ vAPI.contentscriptStartInjected = true;
 vAPI.styles = vAPI.styles || [];
 vAPI.userStyles = vAPI.userStyles || [];
 vAPI.injectedProcedureCosmeticFilters = vAPI.injectedProcedureCosmeticFilters || [];
+vAPI.shouldObserveAttributes = false;
+vAPI.shouldObserveCharacterData = false;
+
 
 /******************************************************************************/
 
@@ -80,6 +83,8 @@ var cosmeticFilters = function(details) {
     vAPI.hideCosmeticFilters = details.cosmeticHide;
     vAPI.injectedSelectors = details.injectedSelectors;
     vAPI.hideProcedureFilters = hideProcedureFilters;
+    vAPI.shouldObserveAttributes = details.shouldObserveAttributes;
+    vAPI.shouldObserveCharacterData = details.shouldObserveCharacterData;
     let highGenericsArray = [];
     if(highGenerics) {
         if(highGenerics.hideLow.length > 0) {

@@ -91,8 +91,8 @@ return {
 
     // read-only
     systemSettings: {
-        compiledMagic: 'wertpszukpslklk',
-        selfieMagic: 'werthiasrslklk'
+        compiledMagic: 'wertpszukpslfds',
+        selfieMagic: 'werthiasrslfds'
     },
     restoreBackupSettings: {
         lastRestoreFile: '',

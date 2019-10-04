@@ -14,7 +14,7 @@
     
     var randomNo = Math.floor(Math.random() * 2116316160 + 60466176).toString(36);
 
-    function abortCurrentInlineScript(api, search = null) {
+    function abortCurrentInlineScript(api, search = "null") {
         let names =  api.split("."); 
         let base = window;
         let property;
@@ -28,7 +28,7 @@
         var descriptor = Object.getOwnPropertyDescriptor(base, lastproperty);
         if ( descriptor && descriptor.get !== undefined ) { return; } 
         
-        let re = search ? strToRegex(search) : null;
+        let re = search != "null" ? strToRegex(search) : null;
         let rid = randomNo;
         let us = document.currentScript;
         var value = base[lastproperty];

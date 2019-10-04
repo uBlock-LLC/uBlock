@@ -2,7 +2,7 @@
     "manifest_version": 2,
 
     "name": "uBlock",
-    "version": "0.9.5.21",
+    "version": "0.9.5.22",
     
     "default_locale": "en",
     "description": "__MSG_extShortDesc__",
@@ -17,7 +17,7 @@
         "default_popup": "popup.html"
     },
 
-    "author": "The uBlock Development Team",
+    "author": "All uBlock contributors",
     "background": {
         "page": "background.html"
     },

@@ -133,6 +133,7 @@ vAPI.proceduralCosmeticFiltering = (function() {
     const abpSelectorRegexp = /:-abp-([\w-]+)\(/i;
     let scopeSupported = true;
     const incompletePrefixRegexp = /[\s>+~]$/;
+    const reSiblingOperator = /^\s*[+~]/;
     let reRegexRule = /^\/(.*)\/$/;
     /* Scriptlet below borrowed from: https://github.com/adblockplus/adblockpluscore/blob/3e16d3602509b2dbb2238ab1ebcbc5e5b5993862/lib/content/elemHideEmulation.js#L175 */
     function scopedQuerySelector(subtree, selector, all) {
@@ -211,10 +212,13 @@ vAPI.proceduralCosmeticFiltering = (function() {
       return indexOf(node.parentNode.children, node) + 1;
     }
     /* Scriptlet below borrowed from: https://github.com/adblockplus/adblockpluscore/blob/3e16d3602509b2dbb2238ab1ebcbc5e5b5993862/lib/content/elemHideEmulation.js#L63 */
-    function makeSelector(node, selector = "") {
+    function makeSelector(node, selector = "", hassibling = false) {
         if (node == null)
             return null;
         if (!node.parentElement) {
+            if(hassibling) {
+                return selector;  
+            }
             let newSelector = ":root";
             if (selector)
                 newSelector += " > " + selector;
@@ -223,6 +227,9 @@ vAPI.proceduralCosmeticFiltering = (function() {
         let idx = positionInParent(node);
         if (idx > 0) {
             let newSelector = `${node.tagName}:nth-child(${idx})`;
+            if(hassibling) {
+                return newSelector;  
+            }
             if (selector)
                 newSelector += " > " + selector;
             return makeSelector(node.parentElement, newSelector);
@@ -347,29 +354,52 @@ vAPI.proceduralCosmeticFiltering = (function() {
             readStyleSheet: readStyleSheet
         };
     })();
-    const getCombineSelectors = function(selectors) {
-        let arrSelector = [];
-        let productOfSelectors = [];
-        let combineSelectors = [];
-        for (var value of selectors.values()) {
-            Array.isArray(value) ? arrSelector.push([...value]) : arrSelector.push([value]);
-        }
-        if(arrSelector.length > 1) {
-            productOfSelectors = cartesianProductOf(...arrSelector)
-            for ( var arrayOfCombineSelector of productOfSelectors ) {
-                let combineSelector = arrayOfCombineSelector.join("");
-                combineSelectors.push(combineSelector);
-            }
-        } else {
-            combineSelectors = arrSelector[0];
-        }
-        return combineSelectors;
+    const getSiblingNodes = function(node, combineSelector) {
+        let parent = node.parentElement;
+        let idx = positionInParent(node);
+        let nodes = parent.querySelectorAll(
+            `:scope > :nth-child(${idx})${combineSelector}`
+        );
+        return nodes;
     }
-    var hasSelector = function(hasSelector, prefix, hasParallelSiblingSelector = false) {
+    const getPrefixNodes = function(rootnode, selectors, prefix) {
+        let nodes, bracket = false;
+        if(rootnode != "" && reSiblingOperator.test(prefix)) {
+            nodes = getSiblingNodes(rootnode, prefix);
+            bracket = true;
+        }
+        else if(selectors.size > 0 && reSiblingOperator.test(prefix)) {
+            let nd = new Set();
+            let arr = Array.from(selectors).pop()[1];
+            for(let i = 0; i <  arr.length; i++) {
+                let ns = prime(rootnode, arr[i] + prefix);
+                for ( let node of ns ) {
+                    if(!nd.has(node))
+                        nd.add(node);
+                }
+            }
+            if(nd.size > 0)
+                nodes = Array.from(nd);
+            else
+                nodes = null;
+        }  else {
+            nodes = prime(rootnode, prefix);
+        }
+        return [nodes, bracket];
+    }
+    const removeQuotes = function (input) {
+        if (typeof input !== "string" || input.indexOf("url(\"") < 0) {
+            return input;
+        }
+        return input.replace(/url\(\"(.*?)\"\)/g, "url($1)");
+    };
+    var hasSelector = function(selector, prefix, hasParallelSiblingSelector = false, result = true) {
         this.prefix = prefix;
-        this._innerSelectors = hasSelector;
+        this.prefixStartsWithSiblingOperator = reSiblingOperator.test(prefix);  
+        this._innerSelectors = selector;
         this.hasParallelSiblingSelector = hasParallelSiblingSelector;
         this.dependsOnDOM = true;
+        this.result = result;
     }
     hasSelector.prototype = {
         get maybeContainsSiblingCombinators() {
@@ -385,11 +415,15 @@ vAPI.proceduralCosmeticFiltering = (function() {
           return this._innerSelectors.some(selector => selector.dependsOnStyles);
         },
         getSelectors: function(rootnode, selectors, targets) {
-            var nodes = prime(rootnode,this.prefix);
-            if(nodes == null) return;
-            var matchSelector = [];
-            var lastRoot = null;
-            for ( var node of nodes ) {
+            let [nodes, bracket] = getPrefixNodes(rootnode, selectors, this.prefix);
+            let hassibling = this.prefixStartsWithSiblingOperator && bracket; 
+            if(nodes == null) {
+                selectors.set('selector',[]);
+                return;
+            }
+            let matchSelector = [];
+            let lastRoot = null;
+            for ( let node of nodes ) {
                 if (lastRoot && lastRoot.contains(node) && !this.hasParallelSiblingSelector) {
                     continue;
                 }
@@ -399,24 +433,28 @@ vAPI.proceduralCosmeticFiltering = (function() {
                 }
                 let iselectors = new Map();
                 evaluate(this._innerSelectors, 0, node, iselectors, targets);
-                if(iselectors.size > 0) {
-                    let combineSelectors = getCombineSelectors(iselectors);
-                    for ( var combineSelector of combineSelectors ) {
-                        if(scopedQuerySelector(node, combineSelector,false)) {
-                            matchSelector.push(makeSelector(node));
-                            lastRoot = node;
-                            break;
-                        }
-                    }
+                let arr = Array.from(iselectors).pop()[1];
+                if(arr.length > 0 && this.result == null) {
+                    matchSelector.push(makeSelector(node, "", hassibling));
+                    lastRoot = node;
+                } else if(arr.length == 0 && this.result == false ) {
+                    matchSelector.push(makeSelector(node, "", hassibling));
+                    lastRoot = node;
                 }
             }
-            if(matchSelector.length > 0) 
-                selectors.set('has',matchSelector);
+            selectors.set('selector',matchSelector);    
             return;
         }
     }
+    var notSelector = function(selector, prefix, hasParallelSiblingSelector = false) {
+        hasSelector.call(this, selector, prefix, hasParallelSiblingSelector, false);
+    };
+    notSelector.prototype = Object.create(hasSelector.prototype);
+    notSelector.prototype.constructor = notSelector;
+    
     var containSelector = function(selectorText, prefix, hasParallelSiblingSelector  = false) {
         this.prefix = prefix;
+        this.prefixStartsWithSiblingOperator = reSiblingOperator.test(this.prefix);
         this._regexp = makeRegExpParameter(selectorText);
         this.hasParallelSiblingSelector = hasParallelSiblingSelector;
         this.dependsOnCharacterData = true;
@@ -424,12 +462,16 @@ vAPI.proceduralCosmeticFiltering = (function() {
     }
     containSelector.prototype = {
         getSelectors: function(rootnode, selectors, targets) {
-            var matchSelector = [];
+            let matchSelector = [];
             let lastRoot = null;
-            var nodes = prime(rootnode, this.prefix);
-            if(nodes == null) return;
-            for ( var node of nodes ) {
-                if (lastRoot && lastRoot.contains(node) && !this.hasParallelSiblingSelector){
+            let [nodes, bracket] = getPrefixNodes(rootnode, selectors, this.prefix);
+            let hassibling = this.prefixStartsWithSiblingOperator && bracket; 
+            if(nodes == null) {
+                selectors.set('selector',[]);
+                return;
+            }
+            for ( let node of nodes ) {
+                if (lastRoot && lastRoot.contains(node) && !this.hasParallelSiblingSelector) {
                     continue;
                 }
                 if (targets && !targets.some(target => node.contains(target) ||
@@ -437,52 +479,77 @@ vAPI.proceduralCosmeticFiltering = (function() {
                     continue;
                 }
                 lastRoot = node;
+                
                 if (this._regexp && this._regexp.test(node.textContent)) {
-                    matchSelector.push(makeSelector(node));
+                    matchSelector.push(makeSelector(node, "", hassibling));
                 }
             }
-            if(matchSelector.length > 0) 
-                selectors.set('contains',matchSelector);
+            selectors.set('selector',matchSelector);
             return;
         }
     }
-    var matchCSSSelector = function(selectorText, prefix, temp , pseudoClass) {
+    var matchCSSSelector = function(selectorText, prefix,  hasParallelSiblingSelector  = false , pseudoClass) {
         this.prefix = prefix;
+        this.prefixStartsWithSiblingOperator = reSiblingOperator.test(prefix);
         this.pseudoClass = pseudoClass;
+        this.hasParallelSiblingSelector = hasParallelSiblingSelector;
         let matches = /([^:]+):(.*)/g.exec(selectorText);
         this.propertName = matches[1];
         this._regexp = makeRegExpParameter(matches[2].trim());
     }
     matchCSSSelector.prototype = {
-        getSelectors: function(rootnode, selectors) {
-            var matchSelector = [];
-            var nodes = prime(rootnode, this.prefix);
-            if(nodes == null) return;
-            for ( var node of nodes ) {
+        getSelectors: function(rootnode, selectors, targets) {
+            let matchSelector = [];
+            let [nodes, bracket] = getPrefixNodes(rootnode, selectors, this.prefix);
+            if(nodes == null) {
+                selectors.set('selector',[]);
+                return;
+            }
+            let hassibling = this.prefixStartsWithSiblingOperator && bracket; 
+            for ( let node of nodes ) {
+                if (targets && !targets.some(target => node.contains(target) ||
+                                               target.contains(node))) {
+                    continue;
+                }
                 const style = window.getComputedStyle(node, this.pseudoClass);
-                if ( style !== null && this._regexp && this._regexp.test(style[this.propertName])) {
-                    matchSelector.push(makeSelector(node));
+                if ( style !== null && this._regexp && this._regexp.test(removeQuotes(style[this.propertName]))) {
+                    matchSelector.push(makeSelector(node, "", hassibling));
                 }
             }
-            if(matchSelector.length > 0) 
-                selectors.set('contains',matchSelector);
+            selectors.set('selector',matchSelector);
             return;
         }
     }
     var plainSelector = function(selectorText) {
         this.selector = selectorText;
+        this.prefixStartsWithSiblingOperator = reSiblingOperator.test(selectorText);
         this.maybeContainsSiblingCombinators = /[~+]/.test(selectorText);
         this.maybeDependsOnAttributes = /[#.]|\[.+\]/.test(selectorText);
         this.dependsOnDOM = true;
     }
     plainSelector.prototype =  {
-        getSelectors: function(input, selectors) {
-            selectors.set('plain',[this.selector]);
+        getSelectors: function(input, selectors, targets) {
+            let matchSelector = [];
+            let [nodes, bracket] = getPrefixNodes(input, selectors, this.selector);
+            if(nodes == null) {
+                selectors.set('selector',[]);
+                return;
+            }
+            let hassibling = this.prefixStartsWithSiblingOperator && bracket; 
+            for ( let node of nodes ) {
+                if (targets && !targets.some(target => node.contains(target) ||
+                                               target.contains(node))) {
+                    continue;
+                }
+                matchSelector.push(makeSelector(node, "", hassibling));
+            }
+            selectors.set('selector',matchSelector);
             return;
         }
     }
     var propsSelector = function(propertyExpression, prefix, hasParallelSiblingSelector = false) {
         this.prefix = prefix;
+        this.prefixStartsWithSiblingOperator = reSiblingOperator.test(prefix);
         this.propertyExpression = propertyExpression;
         this.hasParallelSiblingSelector = hasParallelSiblingSelector;
         this.dependsOnStyles = true;
@@ -491,33 +558,45 @@ vAPI.proceduralCosmeticFiltering = (function() {
     }
     propsSelector.prototype = {
         getSelectors: function(rootnode, selectors, targets) {
-            var matchSelector = [];
-            var nodes = prime(rootnode, this.prefix);
-            if(nodes == null) return;
-            var styleSelectors = styleObserver.getSelector(this.propertyExpression);
-            if (styleSelectors.length === 0)
+            let matchSelector = [];
+            let [nodes, bracket] = getPrefixNodes(rootnode, selectors, this.prefix);
+            if(nodes == null) {
+                selectors.set('selector',[]);
                 return;
+            } 
+            let styleSelectors = styleObserver.getSelector(this.propertyExpression);
+            if (styleSelectors.length === 0) {
+                selectors.set('selector',[]);
+                return;
+            }
             let lastRoot = null;    
-            for ( var node of nodes ) {
+            let hassibling = this.prefixStartsWithSiblingOperator && bracket; 
+            for ( let node of nodes ) {
                 if (lastRoot && lastRoot.contains(node) && !this.hasParallelSiblingSelector) {
                     continue;
                 }
-                for (var i = 0, length = styleSelectors.length; i < length; i++) {
-                    var stypleSelector = styleSelectors[i];
+                if (targets && !targets.some(target => node.contains(target) ||
+                    target.contains(node))) {
+                    continue;
+                }
+                for (let i = 0, length = styleSelectors.length; i < length; i++) {
+                    let stypleSelector = styleSelectors[i];
+                    let pos = stypleSelector.lastIndexOf("::");
+                    if (pos != -1)
+                        stypleSelector = stypleSelector.substring(0, pos);
                     if (node.matches(stypleSelector)) {   
-                        matchSelector.push(makeSelector(node));
+                        matchSelector.push(makeSelector(node, "", hassibling));
                         lastRoot = node;
                         break;
                     }
                 }
             }
-            if(matchSelector.length > 0) 
-                selectors.set('properties',matchSelector);
+            selectors.set('selector',matchSelector);
             return;        
         }
     }
     var proceduralSelector = function() {
-        this.operatorMap = new Map([['plain', plainSelector],['-abp-has', hasSelector],['has', hasSelector], ['-abp-contains', containSelector],['contains', containSelector], ['matches-css', matchCSSSelector], ['matches-css-after', matchCSSSelector], ['matches-css-before', matchCSSSelector], ['-abp-properties', propsSelector]]);
+        this.operatorMap = new Map([['plain', plainSelector],['-abp-has', hasSelector],['has', hasSelector],['not', notSelector], ['-abp-contains', containSelector],['contains', containSelector], ['matches-css', matchCSSSelector], ['matches-css-after', matchCSSSelector], ['matches-css-before', matchCSSSelector], ['-abp-properties', propsSelector]]);
         this.patterns = [];
     }
     proceduralSelector.prototype = {
@@ -552,18 +631,18 @@ vAPI.proceduralCosmeticFiltering = (function() {
             let ss = JSON.parse(s);
             let tasks = [];
             let selectorText = "";
-            for(let i = 0; i < ss.length; i++) {
-                let [innerTasks, innerSelectorText] = this.buildFunction(ss[i]);
+            for(let i = 0; i < ss.tasks.length; i++) {
+                let [innerTasks, innerSelectorText] = this.buildFunction(ss.tasks[i]);
                 tasks.push(...innerTasks);
                 selectorText += innerSelectorText;
             }
-            return [tasks, selectorText];
+            return [tasks, selectorText, ss.style];
         }, 
         applyPatterns: function(patterns) {
             this.patterns = [];
             for (let selector of patterns) {
-                let [tasks, selectorText]  = this.decompile(selector);
-                this.patterns.push([selectorText, tasks]);
+                let [tasks, selectorText, style]  = this.decompile(selector);
+                this.patterns.push([selectorText, tasks, style]);
             } 
             if(this.patterns.length > 0) {
                 this.processPattern();
@@ -584,37 +663,55 @@ vAPI.proceduralCosmeticFiltering = (function() {
             }
   
             var matchSelector = [];
+            var matchStyleSelector = [];
             var matchProcSelector = [];
             let mutationTargets = this.extractMutationTargets(mutations);
             var mutations = mutations;
   
-            for (let [selector, tasks] of patterns) {
+            for (let [selector, tasks, style] of patterns) {
                 let patternHasSiblingCombinator = tasks.some(task => task.maybeContainsSiblingCombinators);
                 let selectors = new Map();
                 if(tasks != null) {
                     evaluate(tasks, 0, "", selectors, (patternHasSiblingCombinator) ? null : mutationTargets);
                 }
                 if(selectors.size > 0) {
-                    let combineSelectors = getCombineSelectors(selectors);
-                    for ( var combineSelector of combineSelectors ) {
-                        if(scopedQuerySelector(document, combineSelector,false)) {
-                            if(!matchProcSelector.includes(selector))
-                                matchProcSelector.push(selector);
-                                matchSelector.push(combineSelector);
+                    let arr = Array.from(selectors).pop()[1];
+                    for(let i = 0; i <  arr.length; i++) {
+                        let rselector = arr[i];
+                        if(style != "") {
+                            selector = `${selector} {${style}}`;
+                            matchStyleSelector.push(`${rselector} {${style}}`);
+                        } else {
+                            matchSelector.push(rselector);
                         }
+                        if(!matchProcSelector.includes(selector))
+                            matchProcSelector.push(selector);
                     }
                 }
             }
-            if(matchSelector.length > 0) {
+            if(matchProcSelector.length > 0)
                 vAPI.injectedProcedureCosmeticFilters.push(...matchProcSelector);
+
+            if(matchSelector.length > 0) {
                 let text = matchSelector.join(',\n');
                 if(vAPI.cssOriginSupport) {
                     messager.send({
                         what: 'injectCSS',
-                        selectors: text
+                        selectors: text + '\n{display:none!important;}'
                     });
                 } else {
                     hideElements(text, true);
+                }
+            }
+            if(matchStyleSelector.length > 0) {
+                let text = matchStyleSelector.join(',\n');
+                if(vAPI.cssOriginSupport) {
+                    messager.send({
+                        what: 'injectCSS',
+                        selectors: text 
+                    });
+                } else {
+                    vAPI.userStyleSheet.addCssRule(text);
                 }
             }
             if(typeof callback === "function"){
@@ -663,14 +760,6 @@ vAPI.proceduralCosmeticFiltering = (function() {
                 }
             }
             return [...targets];
-        },
-        /* Scriptlet below borrowed from: https://github.com/adblockplus/adblockpluscore/blob/3e16d3602509b2dbb2238ab1ebcbc5e5b5993862/lib/content/elemHideEmulation.js#L596 */
-        shouldObserveAttributes: function() {
-            return this.patterns.some(([selector, tasks]) => tasks.some(task => task.maybeDependsOnAttributes));
-        },
-        /* Scriptlet below borrowed from: https://github.com/adblockplus/adblockpluscore/blob/3e16d3602509b2dbb2238ab1ebcbc5e5b5993862/lib/content/elemHideEmulation.js#L601 */
-        shouldObserveCharacterData: function() {
-            return this.patterns.some(([selector, tasks]) => tasks.some(task => task.dependsOnCharacterData));
         }
     }
     var evaluate = function(tasks, index, rootnode, selectors, targets) {
@@ -695,8 +784,7 @@ vAPI.proceduralCosmeticFiltering = (function() {
     function onLoad(event) {
       let stylesheet = event.target.sheet;
       if (stylesheet)
-      //this.processPattern([stylesheet]);
-      objQueueProcessing.add([stylesheet]);
+          objQueueProcessing.add([stylesheet]);
     }
     return new proceduralSelector();
   })();
@@ -1148,6 +1236,108 @@ var uBlockCollapser = (function() {
             }
         }
     };
+    const domObserver = (function() {
+        // https://github.com/uBlockAdmin/uBlock/issues/618
+        // Following is to observe dynamically added iframes:
+        // - On Firefox, the iframes fails to fire a `load` event
+        let ignoreTags = {
+            'link': true,
+            'script': true,
+            'style': true
+        };
+    
+        // Added node lists will be cumulated here before being processed
+        let addedNodeLists = [];
+        let removedNodeLists = [];
+        let addedNodeListsTimer = null;
+        let collapser = uBlockCollapser;
+        let treeObserver;
+    
+        const treeMutationObservedHandler = function(mutations) {
+            var nodeList, iNode, node;
+            while ( nodeList = addedNodeLists.pop() ) {
+                iNode = nodeList.length;
+                while ( iNode-- ) {
+                    node = nodeList[iNode];
+                    if ( node.nodeType !== 1 ) {
+                        continue;
+                    }
+                    if ( ignoreTags.hasOwnProperty(node.localName) ) {
+                        continue;
+                    }
+                    contextNodes.push(node);
+                    collapser.iframesFromNode(node);
+                }
+            }
+            while ( nodeList = removedNodeLists.pop() ) {
+                iNode = nodeList.length;
+                while ( iNode-- ) {
+                    node = nodeList[iNode];
+                    if ( node.nodeType !== 1 ) {
+                        removedNodes = true;
+                        break;
+                    }
+                }
+            }
+           
+            addedNodeListsTimer = null;
+            if (!(contextNodes.length === 0 && removedNodes === false)) {
+                idsFromNodeList(selectNodes('[id]'));
+                classesFromNodeList(selectNodes('[class]'));
+                retrieveGenericSelectors();
+                messager.send({ what: 'cosmeticFiltersActivated' });
+            }
+            if(mutations.length != 0)
+                objQueueProcessing.add(null, mutations);
+        };
+    
+        // https://github.com/uBlockAdmin/uBlock/issues/205
+        // Do not handle added node directly from within mutation observer.
+        const treeMutationObservedHandlerAsync = function(mutations) {
+            var iMutation = mutations.length;
+            var nodeList;
+            while ( iMutation-- ) {
+                nodeList = mutations[iMutation].addedNodes;
+                if ( nodeList.length !== 0 ) {
+                    addedNodeLists.push(nodeList);
+                }
+                nodeList = mutations[iMutation].removedNodes;
+                if ( nodeList.length !== 0 ) {
+                    removedNodeLists.push(nodeList);
+                }
+            }
+            if ( addedNodeListsTimer === null ) {
+                // I arbitrarily chose 100 ms for now:
+                // I have to compromise between the overhead of processing too few
+                // nodes too often and the delay of many nodes less often.
+                addedNodeListsTimer = setTimeout(treeMutationObservedHandler, 100, mutations);
+            }
+        };
+        const changeMutationObserverOptions = function(options) {
+            treeObserver.observe(document.body, options);
+        };
+        const isObserverSet = function() {
+            return treeObserver !== undefined ? true : false;
+        }
+        const startMutationObsever = function() {
+            if ( treeObserver !== undefined) { return; }
+            treeObserver = new MutationObserver(treeMutationObservedHandlerAsync);
+            treeObserver.observe(document.body, {
+                childList: true,
+                subtree: true,
+                attributes: vAPI.shouldObserveAttributes,
+                characterData: vAPI.shouldObserveCharacterData
+            });
+            // https://github.com/gorhill/uMatrix/issues/144
+            shutdownJobs.add(function() {
+                treeObserver.disconnect();
+                if ( addedNodeListsTimer !== null ) {
+                    clearTimeout(addedNodeListsTimer);
+                }
+            });
+        }
+        return {startMutationObsever, changeMutationObserverOptions, isObserverSet};
+    })();
 
     // Start cosmetic filtering.
 
@@ -1160,9 +1350,17 @@ var uBlockCollapser = (function() {
     } else {
         var localMessager = vAPI.messaging.channel('contentscript-start.js');
         var proceduresHandler = function(details) {
-            if(details.length > 0) {
-                vAPI.hideProcedureFilters = details;
-                vAPI.proceduralCosmeticFiltering.applyPatterns(vAPI.hideProcedureFilters);
+            vAPI.hideProcedureFilters = details.procedureHide;
+            vAPI.shouldObserveAttributes = details.shouldObserveAttributes;
+            vAPI.shouldObserveCharacterData = details.shouldObserveCharacterData;
+            vAPI.proceduralCosmeticFiltering.applyPatterns(vAPI.hideProcedureFilters);
+            if(domObserver.isObserverSet()) {
+                domObserver.changeMutationObserverOptions({
+                    childList: true,
+                    subtree: true,
+                    attributes: vAPI.shouldObserveAttributes,
+                    characterData: vAPI.shouldObserveCharacterData
+                });
             }
             localMessager.close();
         }
@@ -1175,9 +1373,11 @@ var uBlockCollapser = (function() {
             },
             proceduresHandler
         );
-        
     }
-
+    if ( !document.body || !document.querySelector('script') ) {
+        return;
+    }
+    domObserver.startMutationObsever();
 
     //console.debug('%f: uBlock: survey time', timer.now() - tStart);
 
@@ -1188,104 +1388,7 @@ var uBlockCollapser = (function() {
     // Observe changes in the DOM only if...
     // - there is a document.body
     // - there is at least one `script` tag
-    if ( !document.body || !document.querySelector('script') ) {
-        return;
-    }
-
-    // https://github.com/uBlockAdmin/uBlock/issues/618
-    // Following is to observe dynamically added iframes:
-    // - On Firefox, the iframes fails to fire a `load` event
-
-    var ignoreTags = {
-        'link': true,
-        'script': true,
-        'style': true
-    };
-
-    // Added node lists will be cumulated here before being processed
-    var addedNodeLists = [];
-    let removedNodeLists = [];
-    var addedNodeListsTimer = null;
-    var collapser = uBlockCollapser;
-
-    var treeMutationObservedHandler = function(mutations) {
-        var nodeList, iNode, node;
-        while ( nodeList = addedNodeLists.pop() ) {
-            iNode = nodeList.length;
-            while ( iNode-- ) {
-                node = nodeList[iNode];
-                if ( node.nodeType !== 1 ) {
-                    continue;
-                }
-                if ( ignoreTags.hasOwnProperty(node.localName) ) {
-                    continue;
-                }
-                contextNodes.push(node);
-                collapser.iframesFromNode(node);
-            }
-        }
-        while ( nodeList = removedNodeLists.pop() ) {
-            iNode = nodeList.length;
-            while ( iNode-- ) {
-                node = nodeList[iNode];
-                if ( node.nodeType !== 1 ) {
-                    removedNodes = true;
-                    break;
-                }
-            }
-        }
-       
-        addedNodeListsTimer = null;
-        if (!(contextNodes.length === 0 && removedNodes === false)) {
-            idsFromNodeList(selectNodes('[id]'));
-            classesFromNodeList(selectNodes('[class]'));
-            retrieveGenericSelectors();
-            messager.send({ what: 'cosmeticFiltersActivated' });
-        }
-        if(mutations.length != 0)
-            //vAPI.proceduralCosmeticFiltering.processPattern(null, mutations);
-            objQueueProcessing.add(null, mutations);
-    };
-
-    // https://github.com/uBlockAdmin/uBlock/issues/205
-    // Do not handle added node directly from within mutation observer.
-    var treeMutationObservedHandlerAsync = function(mutations) {
-        var iMutation = mutations.length;
-        var nodeList;
-        while ( iMutation-- ) {
-            nodeList = mutations[iMutation].addedNodes;
-            if ( nodeList.length !== 0 ) {
-                addedNodeLists.push(nodeList);
-            }
-            nodeList = mutations[iMutation].removedNodes;
-            if ( nodeList.length !== 0 ) {
-                removedNodeLists.push(nodeList);
-            }
-        }
-        if ( addedNodeListsTimer === null ) {
-            // I arbitrarily chose 100 ms for now:
-            // I have to compromise between the overhead of processing too few
-            // nodes too often and the delay of many nodes less often.
-            addedNodeListsTimer = setTimeout(treeMutationObservedHandler, 100, mutations);
-        }
-    };
-
-    // https://github.com/uBlockAdmin/httpswitchboard/issues/176
-    var treeObserver = new MutationObserver(treeMutationObservedHandlerAsync);
-    treeObserver.observe(document.body, {
-        childList: true,
-        subtree: true,
-        attributes: vAPI.proceduralCosmeticFiltering.shouldObserveAttributes(),
-        characterData: vAPI.proceduralCosmeticFiltering.shouldObserveCharacterData()
-    });
-
-    // https://github.com/gorhill/uMatrix/issues/144
-    shutdownJobs.add(function() {
-        treeObserver.disconnect();
-        if ( addedNodeListsTimer !== null ) {
-            clearTimeout(addedNodeListsTimer);
-        }
-    });
+    
 })();
 
 /******************************************************************************/
