@@ -3,6 +3,10 @@
     "message":"म्यूब्लॉक",
     "description":"extension name."
   },
+  "extShortName": {
+    "message": "uBlock",
+    "description": "extension short name."
+  },
   "extShortDesc":{
     "message":"शेवटी, एक कार्यक्षम ब्लॉकर क्रोमियम आधारित ब्राउझरांसाठी. सीपीयू आणि मेमरी वर सोपे जातो.",
     "description":"this will be in the chrome web store: must be 132 characters or less"

@@ -3,6 +3,10 @@
     "message": "uBlock",
     "description": "extension name."
   },
+  "extShortName": {
+    "message": "uBlock",
+    "description": "extension short name."
+  },
   "extShortDesc": {
     "message": "Endlich ein effizienter Blocker. Prozessor-freundlich und bescheiden beim Speicherbedarf.",
     "description": "this will be in the chrome web store: must be 132 characters or less"

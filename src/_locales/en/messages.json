@@ -1,7 +1,11 @@
 {
   "extName":{
-    "message":"uBlock",
+    "message":"uBlock - free ad blocker",
     "description":"extension name."
+  },
+  "extShortName": {
+    "message": "uBlock",
+    "description": "extension short name."
   },
   "extShortDesc":{
     "message":"A fast, effective, and lean ad blocker. Blocks ads, trackers, and protects your privacy.",

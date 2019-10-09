@@ -3,6 +3,10 @@
     "message":"uBlock",
     "description":"extension name."
   },
+  "extShortName": {
+    "message": "uBlock",
+    "description": "extension short name."
+  },
   "extShortDesc":{
     "message":"이 확장기능은 효율적인 차단기입니다. CPU와 메모리에 주는 부담이 적습니다.",
     "description":"this will be in the chrome web store: must be 132 characters or less"

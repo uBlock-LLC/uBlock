@@ -3,6 +3,10 @@
     "message":"uBlock",
     "description":"extension name."
   },
+  "extShortName": {
+    "message": "uBlock",
+    "description": "extension short name."
+  },
   "extShortDesc":{
     "message":"Cuối cùng, đã có một công cụ chặn quảng cáo hiệu quả, tiêu tốn ít CPU và bộ nhớ.",
     "description":"this will be in the chrome web store: must be 132 characters or less"
