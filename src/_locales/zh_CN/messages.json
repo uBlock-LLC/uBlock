@@ -3,6 +3,10 @@
     "message": "uBlock",
     "description": "extension name."
   },
+  "extShortName": {
+    "message": "uBlock",
+    "description": "extension short name."
+  },
   "extShortDesc": {
     "message": "一款高效的请求过滤工具。占用极低的内存和CPU。",
     "description": "this will be in the chrome web store: must be 132 characters or less"

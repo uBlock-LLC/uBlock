@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
 
-    "name": "uBlock",
+    "name": "__MSG_extName__",
     "version": "0.9.5.7",
 
     "applications": {
@@ -24,7 +24,7 @@
         "default_popup": "popup.html"
     },
 
-    "author": "The uBlock Development Team",
+    "author": "All uBlock contributors",
     "background": {
         "page": "background.html"
     },
@@ -51,7 +51,7 @@
             "run_at": "document_idle"
         }
     ],
-    "minimum_chrome_version": "22.0",
+    "minimum_chrome_version": "49.0",
     "options_ui": {
         "page": "options_ui.html"
     },
@@ -65,5 +65,5 @@
         "webRequestBlocking",
         "<all_urls>"
     ],
-    "short_name": "uBlock"
+    "short_name": "__MSG_extShortName__"
 }

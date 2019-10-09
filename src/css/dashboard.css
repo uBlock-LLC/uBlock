@@ -80,7 +80,7 @@ iframe {
     #dashboard-nav-widgets {
         padding: 0;
         }
-    [data-i18n="extName"] {
+    [data-i18n="extShortName"] {
         display: none;
         }
     .tabButton {

@@ -3,6 +3,10 @@
     "message": "uBlock",
     "description": "extension name."
   },
+  "extShortName": {
+    "message": "uBlock",
+    "description": "extension short name."
+  },
   "extShortDesc": {
     "message": "Voici un bloqueur de nuisances efficace, qui ne sollicitera pas outre mesure votre processeur et votre mémoire vive.",
     "description": "this will be in the chrome web store: must be 132 characters or less"

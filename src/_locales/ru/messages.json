@@ -3,6 +3,10 @@
     "message": "uBlock",
     "description": "extension name."
   },
+  "extShortName": {
+    "message": "uBlock",
+    "description": "extension short name."
+  },
   "extShortDesc": {
     "message": "Наконец-то, эффективный блокировщик для браузеров, не нагружающий ЦП и оперативную память.",
     "description": "this will be in the chrome web store: must be 132 characters or less"

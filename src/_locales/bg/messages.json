@@ -3,6 +3,10 @@
     "message":"uBlock",
     "description":"extension name."
   },
+  "extShortName": {
+    "message": "uBlock",
+    "description": "extension short name."
+  },
   "extShortDesc":{
     "message":"Най-накрая, ефективен рекламен блокер с малки изисквания за процесор и памет.",
     "description":"this will be in the chrome web store: must be 132 characters or less"
