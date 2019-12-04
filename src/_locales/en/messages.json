@@ -8,7 +8,7 @@
     "description": "extension short name."
   },
   "extShortDesc":{
-    "message":"A fast, effective, and lean ad blocker. Blocks ads, trackers, and protects your privacy.",
+    "message":"A fast, effective, and free ad blocker.",
     "description":"this will be in the chrome web store: must be 132 characters or less"
   },
   "dashboardName":{
@@ -534,5 +534,9 @@
   "dummy":{
     "message":"This entry must be the last one",
     "description":"so we dont need to deal with comma for last entry"
+  },
+  "rateus": {
+    "message": "Rate Us!",
+    "description": "English: Rate Us!"
   }
 }

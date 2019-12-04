@@ -534,5 +534,9 @@
   "dummy":{
     "message":"ఇది అంతిమంగా వుండాల్సిన నమోదు",
     "description":"so we dont need to deal with comma for last entry"
+  },
+  "rateus": {
+    "message": "Rate Us!",
+    "description": "English: Rate Us!"
   }
 }

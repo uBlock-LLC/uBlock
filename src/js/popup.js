@@ -741,6 +741,10 @@ var getPopupData = function(tabId) {
     messager.send({ what: 'getPopupData', tabId: tabId }, onDataReceived);
 };
 
+var redirectToReviewPage = function() {
+    window.open("https://chrome.google.com/webstore/detail/ublock-free-ad-blocker/"+ location.host +"/reviews", "_blank");
+}
+
 /******************************************************************************/
 
 // Make menu only when popup html is fully loaded
@@ -763,6 +767,7 @@ uDom.onLoad(function () {
     uDom('#saveRules').on('click', saveFirewallRules);
     uDom('#flushRules').on('click', flushFirewallRules);
     uDom('[data-i18n="popupAnyRulePrompt"]').on('click', toggleMinimize);
+    uDom('#rateus').on('click', redirectToReviewPage);
 });
 
 /******************************************************************************/

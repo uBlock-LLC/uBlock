@@ -534,5 +534,9 @@
   "dummy": {
     "message": "此条目必须是最后一个",
     "description": "so we dont need to deal with comma for last entry"
+  },
+  "rateus": {
+    "message": "Rate Us!",
+    "description": "English: Rate Us!"
   }
 }
