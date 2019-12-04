@@ -534,5 +534,9 @@
   "dummy":{
     "message":"Denne oppføringen må være den siste",
     "description":"so we dont need to deal with comma for last entry"
+  },
+  "rateus": {
+    "message": "Rate Us!",
+    "description": "English: Rate Us!"
   }
 }

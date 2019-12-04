@@ -411,3 +411,8 @@ body.dirty #refresh:hover {
 #flushRules:hover {
     opacity: 1;
     }
+#rateus {
+    color: #1e90ff;
+    margin-bottom: 0px;
+    cursor: pointer;
+    }

@@ -534,5 +534,9 @@
   "dummy":{
     "message":"これは最後のエントリである必要があります",
     "description":"so we dont need to deal with comma for last entry"
+  },
+  "rateus": {
+    "message": "Rate Us!",
+    "description": "English: Rate Us!"
   }
 }
