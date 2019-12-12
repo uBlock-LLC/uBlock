@@ -205,71 +205,6 @@
     var availableLists = {};
     var relocationMap = {};
     var locationOfAA = 'acceptable-ads';
-    let tempFLChangeMap = new Map([
-        ["adblock.gardar.net/is.abp.txt", "ISL"],
-        ["raw.githubusercontent.com/cjx82630/cjxlist/cjxlist.txt", "CHN-01"],
-        ["raw.githubusercontent.com/gioxx/filtri.txt", "ITA-01"],
-        ["easylist-downloads.adblockplus.org/advblock.txt", "RUS-01"],
-        ["easylist-downloads.adblockplus.org/bitblock.txt", "RUS-02"],
-        ["easylist-downloads.adblockplus.org/easylist.txt", "easylist"],
-        ["easylist-downloads.adblockplus.org/exceptionrules.txt", "acceptable-ads"],
-        ["raw.githubusercontent.com/abp-filters-anti-cv/english.txt", "abp-anti-circumvension"],
-        ["raw.githubusercontent.com/adblock-nocoin-list/nocoin.txt", "cryptocurrency"],
-        ["easylist-downloads.adblockplus.org/easylist_noelemhide.txt", "easylist-noelemhide"],
-        ["easylist-downloads.adblockplus.org/easylistchina.txt", "CHN-02"],
-        ["easylist-downloads.adblockplus.org/easylistdutch.txt", "NLD"],
-        ["easylist-downloads.adblockplus.org/easylistgermany.txt", "DEU"],
-        ["easylist-downloads.adblockplus.org/easylistitaly.txt", "ITA"],
-        ["easylist-downloads.adblockplus.org/easyprivacy.txt", "easyprivacy"],
-        ["easylist-downloads.adblockplus.org/fanboy-annoyance.txt", "fanboy-annoyance"],
-        ["easylist-downloads.adblockplus.org/fanboy-social.txt", "fanboy-social"],
-        ["easylist-downloads.adblockplus.org/liste_fr.txt", "FRA"],
-        ["adblock-latvian/latvian-list.txt", "LVA"],
-        ["raw.githubusercontent.com/DandelionSprout/adfilt/NorwegianList.txt", "NOR-DNK-ISL"],
-        ["hosts-file.net/ad-servers", "hpHosts"],
-        ["http://adblock.ee/list.php", "EST"],
-        ["https://easylist-downloads.adblockplus.org/antiadblockfilters.txt", "adblock-warning-rm"],
-        ["raw.githubusercontent.com/indonesianadblockrules/subscriptions/abpindo.txt", "IDN-MYS"],
-        ["gitcdn.xyz/adblock-iran/filter.txt", "IRN"],
-        ["easylist-downloads.adblockplus.org/Liste_AR.txt", "ARA"],
-        ["margevicius.lt/easylistlithuania.txt", "LTU"],
-        ["mirror1.malwaredomains.com/files/justdomains", "malware-01"],
-        ["pgl.yoyo.org/as/serverlist", "peter-lowe-ad"],
-        ["raw.githubusercontent.com/EasyListHebrew/master/EasyListHebrew.txt", "ISR"],
-        ["raw.githubusercontent.com/polish-adblock-filters/adblock.txt", "POL-01"],
-        ["raw.githubusercontent.com/polish-privacy-filters/anti-adblock.txt", "POL-02"],
-        ["raw.githubusercontent.com/k2jp/abp-japanese-filters/master/abp_jp.txt", "JPN"],
-        ["raw.githubusercontent.com/szpeter80/hufilter/master/hufilter.txt", "HUN"],
-        ["raw.githubusercontent.com/tomasko126/easylistczechandslovak/master/filters.txt", "CZE-SVK"],
-        ["raw.githubusercontent.com/finnish-easylist-addition/Finland_adb.txt", "FIN"],
-        ["someonewhocares.org/hosts/hosts", "dan-pollock"],
-        ["raw.githubusercontent.com/Spam404/lists/adblock-list.txt", "Spam404"],
-        ["stanev.org/abp/adblock_bg.txt", "BGR"],
-        ["winhelp2002.mvps.org/hosts.txt", "mvps"],
-        ["www.fanboy.co.nz/enhancedstats.txt", "fanboy-enhanced-tracking"],
-        ["www.fanboy.co.nz/fanboy-antifacebook.txt", "fanboy-antifacebook"],
-        ["raw.githubusercontent.com/adblock-korea-contrib/filter.txt", "KOR-01"],
-        ["raw.githubusercontent.com/YousList/youslist.txt", "KOR-02"],
-        ["raw.githubusercontent.com/Frellwits-filter-lists/Frellwits-Swedish-Filter.txt", "SWE"],
-        ["filters.adtidy.org/extension/ublock/filters/9.txt", "SPA-POR"],
-        ["raw.githubusercontent.com/easylist-thailand/easylist-thailand.txt", "THA"],
-        ["easylist-downloads.adblockplus.org/easylistspanish.txt", "SPA"],
-        ["www.fanboy.co.nz/fanboy-ultimate.txt", "fanboy-ultimate"],
-        ["raw.githubusercontent.com/abpvn/abpvn.txt", "VIE"],
-        ["www.malwaredomainlist.com/hostslist/hosts.txt", "malware-02"],
-        ["www.void.gr/kargig/void-gr-filters.txt", "GRC"],
-        ["raw.githubusercontent.com/ROad-Block/road-block-filters-light.txt", "ROU"],
-        ["filters.adtidy.org/extension/ublock/filters/2_without_easylist.txt", "adguard-base"],
-        ["filters.adtidy.org/extension/ublock/filters/3.txt", "adguard-spyware"],
-        ["filters.adtidy.org/extension/ublock/filters/14.txt", "adguard-annoyance"],
-        ["filters.adtidy.org/extension/ublock/filters/4.txt", "adguard-social"],
-        ["secure.fanboy.co.nz/fanboy-cookiemonster.txt", "fanboy-cookiemonster"],
-        ["s3.amazonaws.com/lists.disconnect.me/simple_malvertising.txt", "disconnect"],
-        ["filters.adtidy.org/extension/ublock/filters/7.txt", "JPN-01"],
-        ["filters.adtidy.org/extension/ublock/filters/1.txt", "RUS"],
-        ["filters.adtidy.org/extension/ublock/filters/13.txt", "TUR"]
-    ]);
-
     // selected lists
     var onSelectedListsLoaded = function(store) {
         var µb = µBlock;
@@ -289,18 +224,7 @@
                     off = lists[location].off === true;
                 }
             }
-            location = location.replace('assets/thirdparties/','');
-            if(tempFLChangeMap.has(location)) {
-                let tmpLocation = location;
-                location = tempFLChangeMap.get(location);
-                if(off === false) {
-                    if ( /^[a-z]+:\/\//.test(tmpLocation) ) {
-                        µb.purgeFilterList(tmpLocation);
-                    } else {
-                        µb.purgeFilterList('assets/thirdparties/' + tmpLocation);
-                    }
-                }
-            }
+
             availableEntry = availableLists[location];
             if ( availableEntry === undefined ) {
                 µb.purgeFilterList(location);

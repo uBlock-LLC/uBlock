@@ -105,9 +105,7 @@ return {
     // as per list headers.
     updateAssetsEvery: 97 * oneHour,
     projectServerRoot: 'https://raw.githubusercontent.com/uBlock-LLC/uBlock/master/',
-    donationUrl: 'https://www.ublock.org/donate/',
     pslPath: 'assets/thirdparties/publicsuffix.org/list/effective_tld_names.dat',
-
     // permanent lists
     permanentLists: {
         // User
