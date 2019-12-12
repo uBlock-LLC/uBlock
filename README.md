@@ -10,9 +10,6 @@
             <a href="https://travis-ci.org/uBlock-LLC/uBlock">
                   <img src="https://travis-ci.org/uBlock-LLC/uBlock.svg?branch=master" alt="Build status">
             </a>
-            <a href="https://www.ublock.org/donate">
-                  <img src="https://raw.githubusercontent.com/uBlock-LLC/uBlock/master/doc/img/oncedonate.png" alt="Support development">
-            </a>
       </td>
       </tr>
       <tr>
@@ -105,7 +102,7 @@ Being lean and efficient doesn't mean blocking less<br>
 
 Some users might want to check out [uBlock Origin](https://github.com/gorhill/uBlock): a noteworthy personal fork of uBlock from @gorhill with a slightly different featureset.
 
-uBlock is a general-purpose content blocker, which means it can be used to block ads as well as other forms of content on webpages. uBlock can also be used to help users neutralize privacy-invading trackers. uBlock blocks ads through its support of the [Adblock Plus filter syntax](https://adblockplus.org/en/filters). uBlock [extends](https://github.com/uBlock-LLC/uBlock/wiki/Filter-syntax-extensions) the syntax and is designed to work with custom rules and filters. If uBlock is useful to you, [donations to support development are much appreciated](https://www.ublock.org/donate/).
+uBlock is a general-purpose content blocker, which means it can be used to block ads as well as other forms of content on webpages. uBlock can also be used to help users neutralize privacy-invading trackers. uBlock blocks ads through its support of the [Adblock Plus filter syntax](https://adblockplus.org/en/filters). uBlock [extends](https://github.com/uBlock-LLC/uBlock/wiki/Filter-syntax-extensions) the syntax and is designed to work with custom rules and filters.
 
 ** Please note [recent news](https://www.ublock.org/announcement/) about the status of the uBlock project as of June 22, 2018.**
 

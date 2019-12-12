@@ -742,7 +742,10 @@ var getPopupData = function(tabId) {
 };
 
 var redirectToReviewPage = function() {
-    window.open("https://chrome.google.com/webstore/detail/ublock-free-ad-blocker/"+ location.host +"/reviews", "_blank");
+    if(vAPI.browserInfo.flavor == "Chrome")
+        window.open("https://chrome.google.com/webstore/detail/ublock-free-ad-blocker/"+ location.host +"/reviews", "_blank");
+    else if(vAPI.browserInfo.flavor == "Firefox") 
+        window.open("https://addons.mozilla.org/en-US/firefox/addon/ublock/", "_blank");
 }
 
 /******************************************************************************/
