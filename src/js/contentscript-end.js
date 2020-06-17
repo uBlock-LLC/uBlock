@@ -37,7 +37,7 @@ if ( document instanceof HTMLDocument === false ) {
     return false;
 }
 
-if ( !vAPI ) {
+if ( !window.vAPI ) {
     //console.debug('contentscript-end.js > vAPI not found');
     return;
 }
