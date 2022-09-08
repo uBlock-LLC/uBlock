@@ -1,3 +1,10 @@
+>
+> Future releases of uBlock will be made available on our website at https://ublock.org
+> 
+
+<br/>
+<br/>
+
 <table width="100%">
       <tr>
       <td align="left" width="70">
